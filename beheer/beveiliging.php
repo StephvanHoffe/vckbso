@@ -2,7 +2,7 @@
 /* Beveiligingsstatus (beheerder): staat alles goed? Met concrete actiepunten. */
 require __DIR__ . '/inc/bootstrap.php';
 
-vereis_beheerder();
+vereis_recht('instellingen');
 
 // Einde van de beveiligingsupdates per PHP-versie (bron: php.net/supported-versions)
 const PHP_ONDERSTEUND_TOT = ['8.2' => '2026-12-31', '8.3' => '2027-12-31', '8.4' => '2028-12-31', '8.5' => '2029-12-31'];
@@ -15,7 +15,7 @@ $voeg = function (string $status, string $onderwerp, string $uitleg) use (&$punt
 $voeg(is_https() ? 'ok' : (is_lokaal() ? 'let op' : 'probleem'), 'Beveiligde verbinding (https)', is_https() ? 'Alle verkeer is versleuteld.' : 'Lokaal testen zonder https. Op de echte omgeving is https verplicht.');
 
 $sleutelOk = trim((string) cfg('sleutel', '')) !== '';
-$voeg($sleutelOk ? 'ok' : 'probleem', 'Versleuteling van gevoelige gegevens', $sleutelOk ? 'Bijzonderheden, observaties, berichten, verzoeken, foto\'s en exports worden versleuteld opgeslagen met een eigen sleutel.' : 'Ontwikkelmodus: de sleutel staat in de datamap. Zet een eigen sleutel in config.php.');
+$voeg($sleutelOk ? 'ok' : 'probleem', 'Versleuteling van gevoelige gegevens', $sleutelOk ? 'Bijzonderheden, observaties, berichten, verzoeken, foto\'s, bonnetjes en exports worden versleuteld opgeslagen met een eigen sleutel.' : 'Ontwikkelmodus: de sleutel staat in de datamap. Zet een eigen sleutel in config.php.');
 
 $data = realpath(data_dir()) ?: data_dir();
 $webroot = realpath((string) ($_SERVER['DOCUMENT_ROOT'] ?? '')) ?: '';
@@ -34,8 +34,14 @@ $oudersMfa = (int) waarde("SELECT COUNT(*) FROM gebruikers WHERE rol = 'ouder' A
 $ouders = (int) waarde("SELECT COUNT(*) FROM gebruikers WHERE rol = 'ouder' AND status != 'gestopt'");
 $voeg('ok', 'Tweestapsverificatie ouders', instelling('mfa_ouders') === 'verplicht' ? 'Verplicht voor ouders.' : "Aanbevolen; {$oudersMfa} van {$ouders} ouders gebruiken het.");
 
-$zonderGroep = rijen("SELECT g.naam FROM gebruikers g WHERE g.rol = 'medewerker' AND g.status != 'gestopt' AND NOT EXISTS (SELECT 1 FROM medewerker_groepen m WHERE m.gebruiker_id = g.id AND (m.tot IS NULL OR m.tot >= ?))", [vandaag()]);
-$voeg($zonderGroep ? 'let op' : 'ok', 'Toegang per groep', $zonderGroep ? 'Deze medewerkers zijn aan geen groep gekoppeld en zien dus geen kinderen: ' . implode(', ', array_column($zonderGroep, 'naam')) . '.' : 'Elke medewerker ziet alleen de kinderen in de eigen groep(en).');
+$zonderGroep = rijen("SELECT g.naam FROM gebruikers g WHERE g.rol IN ('beheerder', 'medewerker') AND g.status != 'gestopt'
+    AND EXISTS (SELECT 1 FROM team_rechten r WHERE r.gebruiker_id = g.id AND r.recht IN ('vandaag', 'agenda', 'kinderen', 'ouders', 'berichten', 'fotos'))
+    AND NOT EXISTS (SELECT 1 FROM team_rechten r WHERE r.gebruiker_id = g.id AND r.recht = 'alle_groepen')
+    AND NOT EXISTS (SELECT 1 FROM medewerker_groepen m WHERE m.gebruiker_id = g.id AND (m.tot IS NULL OR m.tot >= ?))", [vandaag()]);
+$metAlles = (int) waarde("SELECT COUNT(*) FROM gebruikers g WHERE g.rol IN ('beheerder', 'medewerker') AND g.status != 'gestopt' AND EXISTS (SELECT 1 FROM team_rechten r WHERE r.gebruiker_id = g.id AND r.recht = 'alle_groepen')");
+$voeg($zonderGroep ? 'let op' : 'ok', 'Toegang per groep', $zonderGroep ? 'Deze collega\'s zijn aan geen groep gekoppeld en zien dus geen kinderen: ' . implode(', ', array_column($zonderGroep, 'naam')) . '.' : 'Wie niet alle groepen mag zien, ziet alleen de kinderen in de eigen groep(en). ' . $metAlles . ' ' . ($metAlles === 1 ? 'collega ziet' : "collega's zien") . ' alle groepen.');
+$teamBeheer = (int) waarde("SELECT COUNT(*) FROM gebruikers g JOIN team_rechten r ON r.gebruiker_id = g.id AND r.recht = 'team' WHERE g.status = 'actief'");
+$voeg($teamBeheer >= 2 ? 'ok' : 'let op', 'Rechten per persoon', ($teamBeheer >= 2 ? $teamBeheer . " collega's kunnen" : 'Maar één collega kan') . ' het team en de rechten beheren.' . ($teamBeheer < 2 ? ' Geef liefst een tweede collega het onderdeel Team, voor als de eerste er niet is.' : ''));
 
 $teControleren = (int) waarde("SELECT COUNT(*) FROM kind_verzorgers v JOIN kinderen k ON k.id = v.kind_id WHERE v.gezag = 1 AND v.gezag_gecontroleerd_op IS NULL AND k.actief = 1");
 $voeg($teControleren ? 'let op' : 'ok', 'Gezag gecontroleerd', $teControleren ? "Bij {$teControleren} verzorger(s) is het opgegeven gezag nog niet gecontroleerd. Zij kunnen niet namens het kind beslissen tot dat is gebeurd." : 'Bij alle verzorgers met gezag is dat gecontroleerd.');

@@ -68,12 +68,6 @@ function is_team(?array $gebruiker = null): bool
     return $gebruiker !== null && in_array($gebruiker['rol'], ['beheerder', 'medewerker'], true);
 }
 
-function is_beheerder(?array $gebruiker = null): bool
-{
-    $gebruiker ??= huidige_gebruiker();
-    return $gebruiker !== null && $gebruiker['rol'] === 'beheerder';
-}
-
 function is_ouder(?array $gebruiker = null): bool
 {
     $gebruiker ??= huidige_gebruiker();
@@ -105,11 +99,6 @@ function vereis_login(array $rollen = []): array
 function vereis_team(): array
 {
     return vereis_login(['beheerder', 'medewerker']);
-}
-
-function vereis_beheerder(): array
-{
-    return vereis_login(['beheerder']);
 }
 
 /** Alleen een relatief pad binnen de beheeromgeving als terug-adres. */

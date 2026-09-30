@@ -6,6 +6,9 @@
 require __DIR__ . '/inc/bootstrap.php';
 
 $gebruiker = vereis_login();
+if (is_team($gebruiker)) {
+    vereis_recht('agenda');
+}
 
 if (is_ouder($gebruiker)) {
     agenda_ouder($gebruiker);
@@ -286,7 +289,7 @@ function agenda_team(): void
     <a class="btn btn--secondary btn--mini" href="agenda.php?week=<?= e(date('Y-m-d', strtotime($maandag . ' +7 days'))) ?>"><?= icoon('arrow') ?><span class="visually-hidden">Volgende week</span></a>
   </div>
 <?php if (!$groepen): ?>
-  <p class="leeg"><?= is_beheerder() ? 'Er zijn nog geen groepen. <a href="groepen.php">Maak eerst een groep aan.</a>' : 'Je bent nog niet aan een groep gekoppeld. Vraag de beheerder om je te koppelen.' ?></p>
+  <p class="leeg"><?= team_mag('groepen') ? 'Er zijn nog geen groepen. <a href="groepen.php">Maak eerst een groep aan.</a>' : 'Je bent nog niet aan een groep gekoppeld. Vraag de beheerder om je te koppelen.' ?></p>
 <?php else: ?>
   <div class="tabel week">
     <table>

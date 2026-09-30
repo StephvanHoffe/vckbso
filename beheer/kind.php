@@ -2,7 +2,7 @@
 /*
  * Kinddossier en kindvolgsysteem.
  * Team (binnen de eigen groepen): gegevens, aanwezigheid, observaties per ontwikkelgebied.
- * Beheerder: ook groep, verzorgers en het controleren van gezag.
+ * Met het recht klanten beheren: ook groep, verzorgers en het controleren van gezag.
  * Verzorger: inzien met het recht "dossier"; wijzigen en toestemming geven alleen
  * met gecontroleerd gezag.
  */
@@ -12,7 +12,11 @@ $gebruiker = vereis_login();
 $kind = kind_met_toegang(get_int('id'), 'dossier');
 $kind = ontsleutel_kolommen($kind, ['bijzonderheden', 'ophaalpersonen'], true);
 $team = is_team($gebruiker);
-$beheerder = is_beheerder($gebruiker);
+if ($team) {
+    vereis_recht('kinderen');
+}
+// Gegevens, gezag en verzorgers beheren: met het recht klanten beheren
+$beheerder = team_mag('klanten_beheren', $gebruiker);
 $magBeslissen = !$team && mag_namens_kind((int) $kind['id'], (int) $gebruiker['id']);
 $terug = 'kind.php?id=' . (int) $kind['id'];
 $onderwerp = 'kind:' . (int) $kind['id'];
@@ -45,8 +49,8 @@ if (is_post()) {
             if (!geldige_datum($velden['geboortedatum'])) {
                 $fouten['geboortedatum'] = 'Vul een geldige geboortedatum in.';
             }
-            if ($velden['groep_id'] !== null && !groep($velden['groep_id'])) {
-                $fouten['groep'] = 'Deze groep bestaat niet.';
+            if ($velden['groep_id'] !== null && (!groep($velden['groep_id']) || !team_mag_groep($velden['groep_id']))) {
+                $fouten['groep'] = 'Kies een van de groepen waar je toegang toe hebt.';
             }
         }
         if (!$fouten) {
@@ -307,7 +311,7 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
 <?php if ($team): ?>
           <div class="btn-group" style="margin-top: var(--space-2xs)">
             <form class="inline-form" method="post" action="<?= e($terug) ?>"><?= csrf_veld() ?><input type="hidden" name="actie" value="observatie_delen"><input type="hidden" name="observatie" value="<?= (int) $obs['id'] ?>"><button class="link-button" type="submit"><?= $obs['gedeeld'] ? 'Niet meer delen' : 'Delen met ouders' ?></button></form>
-<?php if ((int) $obs['auteur_id'] === (int) $gebruiker['id'] || is_beheerder($gebruiker)): ?>
+<?php if ((int) $obs['auteur_id'] === (int) $gebruiker['id'] || $beheerder): ?>
             <form class="inline-form" method="post" action="<?= e($terug) ?>" data-bevestig="Deze observatie verwijderen?"><?= csrf_veld() ?><input type="hidden" name="actie" value="observatie_verwijderen"><input type="hidden" name="observatie" value="<?= (int) $obs['id'] ?>"><button class="link-button" type="submit"><?= icoon('trash') ?>Verwijderen</button></form>
 <?php endif; ?>
           </div>

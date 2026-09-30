@@ -89,7 +89,7 @@ function factuur_met_toegang(int $factuurId): array
 {
     $gebruiker = vereis_login();
     $factuur = rij('SELECT f.*, g.naam, g.email, g.straat, g.postcode, g.plaats, g.mandaat_status, g.mandaat_rekening FROM facturen f JOIN gebruikers g ON g.id = f.ouder_id WHERE f.id = ?', [$factuurId]);
-    if (!$factuur || (!is_beheerder($gebruiker) && (int) $factuur['ouder_id'] !== (int) $gebruiker['id'])) {
+    if (!$factuur || (!team_mag('facturen', $gebruiker) && (int) $factuur['ouder_id'] !== (int) $gebruiker['id'])) {
         niet_gevonden();
     }
     return $factuur;

@@ -367,11 +367,11 @@ function niet_gevonden(string $tekst = 'Deze pagina of dit item bestaat niet (me
     exit;
 }
 
-function geen_toegang(): never
+function geen_toegang(string $uitleg = 'Je hebt geen toegang tot deze pagina.'): never
 {
     http_response_code(403);
     pagina_begin('Geen toegang');
-    echo '<div class="panel"><h1>Geen toegang</h1><p>Je hebt geen toegang tot deze pagina.</p><p><a class="btn" href="index.php">Naar het overzicht</a></p></div>';
+    echo '<div class="panel"><h1>Geen toegang</h1><p>' . e($uitleg) . '</p><p><a class="btn" href="index.php">Naar het overzicht</a></p></div>';
     pagina_einde();
     exit;
 }

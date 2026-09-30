@@ -34,6 +34,9 @@ if (is_post() && $code !== '') {
             $naam, $email, password_hash((string) $_POST['wachtwoord'], PASSWORD_DEFAULT), nu(),
         ]);
         $id = laatste_id();
+        foreach (alle_rechten() as $recht) {
+            q('INSERT INTO team_rechten (gebruiker_id, recht) VALUES (?, ?)', [$id, $recht]);
+        }
         log_actie('Beheeromgeving geïnstalleerd', $email, $id);
         log_in_als($id);
         flash('succes', 'Welkom! De beheeromgeving is klaar. Begin met de instellingen en maak daarna de groepen aan.');

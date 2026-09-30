@@ -2,7 +2,8 @@
 /* Acties van het team in de agenda: aanwezig, opgehaald, ziek, afmelden, toevoegen en dagen aanpassen. */
 require __DIR__ . '/inc/bootstrap.php';
 
-$gebruiker = vereis_team();
+// Aanwezigheid en inschrijvingen: vanuit Vandaag of de Agenda
+$gebruiker = vereis_recht('vandaag', 'agenda');
 if (!is_post()) {
     redirect('agenda.php');
 }

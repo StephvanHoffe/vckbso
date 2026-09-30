@@ -7,6 +7,9 @@ require __DIR__ . '/inc/bootstrap.php';
 
 $gebruiker = vereis_login();
 $team = is_team($gebruiker);
+if ($team) {
+    vereis_recht('berichten');
+}
 
 if ($team) {
     $ouderId = get_int('ouder') ?: (int) invoer('ouder');

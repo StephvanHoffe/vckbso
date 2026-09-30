@@ -3,6 +3,9 @@
 require __DIR__ . '/inc/bootstrap.php';
 
 $gebruiker = vereis_login();
+if (is_team($gebruiker)) {
+    vereis_recht('kinderen');
+}
 
 /* ---------- Ouder ---------- */
 if (is_ouder($gebruiker)) {
@@ -94,14 +97,14 @@ if (is_ouder($gebruiker)) {
 
 if (is_post()) {
     csrf_controleer();
-    // Kinderen indelen in een groep doet de beheerder (die ziet alle kinderen)
-    vereis_beheerder();
+    // Kinderen indelen in een groep: met het recht klanten beheren
+    vereis_recht('klanten_beheren');
     $kind = rij('SELECT * FROM kinderen WHERE id = ? AND geanonimiseerd_op IS NULL', [(int) invoer('kind')]);
-    if (!$kind) {
+    if (!$kind || !team_mag_kind($kind)) {
         niet_gevonden();
     }
     $groepId = invoer('groep') === '' ? null : (int) invoer('groep');
-    if ($groepId !== null && !groep($groepId)) {
+    if ($groepId !== null && (!groep($groepId) || !team_mag_groep($groepId))) {
         niet_gevonden();
     }
     q('UPDATE kinderen SET groep_id = ? WHERE id = ?', [$groepId, $kind['id']]);
@@ -115,7 +118,7 @@ $zoek = get_str('zoek');
 $metGestopt = get_str('alle') === '1';
 $waar = ['k.geanonimiseerd_op IS NULL', groep_voorwaarde('k.groep_id')];
 $params = [];
-if ($filterGroep === 'geen' && is_beheerder($gebruiker)) {
+if ($filterGroep === 'geen' && team_groep_ids($gebruiker) === null) {
     $waar[] = 'k.groep_id IS NULL';
 } elseif (ctype_digit($filterGroep)) {
     $waar[] = 'k.groep_id = ?';
@@ -152,7 +155,7 @@ pagina_kop('Kinderen', 'Alle kinderen met hun groep. Klik op een naam voor het d
       <label for="groep">Groep</label>
       <select id="groep" name="groep">
         <option value="">Alle groepen</option>
-<?php if (is_beheerder($gebruiker)): ?>
+<?php if (team_groep_ids($gebruiker) === null): ?>
         <option value="geen"<?= $filterGroep === 'geen' ? ' selected' : '' ?>>Nog geen groep</option>
 <?php endif; ?>
 <?php foreach (rijen('SELECT * FROM groepen WHERE ' . groep_voorwaarde('id') . ' ORDER BY naam') as $groep): ?>
@@ -175,9 +178,9 @@ pagina_kop('Kinderen', 'Alle kinderen met hun groep. Klik op een naam voor het d
         <tr>
           <th scope="row"><a href="kind.php?id=<?= (int) $kind['id'] ?>"><?= e(kindnaam($kind)) ?></a><?= $kind['actief'] ? '' : ' ' . status_badge('gestopt') ?></th>
           <td><?= leeftijd($kind['geboortedatum']) ?? '' ?></td>
-          <td><a href="ouder.php?id=<?= (int) $kind['ouder_id'] ?>"><?= e($kind['oudernaam']) ?></a><?= $kind['ouderstatus'] === 'nieuw' ? ' ' . status_badge('nieuw') : '' ?></td>
+          <td><?= link_als('ouders', 'ouder.php?id=' . (int) $kind['ouder_id'], e($kind['oudernaam'])) ?><?= $kind['ouderstatus'] === 'nieuw' ? ' ' . status_badge('nieuw') : '' ?></td>
           <td>
-<?php if (!is_beheerder($gebruiker)): ?>
+<?php if (!team_mag('klanten_beheren', $gebruiker)): ?>
             <?= e($kind['groepnaam'] ?? '-') ?>
 <?php else: ?>
             <form class="inline-form groepkeuze" method="post">

@@ -2,12 +2,13 @@
 /* Eén ouder (klant): gegevens, aanmelding goedkeuren, kinderen indelen, facturen (team). */
 require __DIR__ . '/inc/bootstrap.php';
 
-$gebruiker = vereis_team();
+$gebruiker = vereis_recht('ouders');
 $ouder = rij("SELECT * FROM gebruikers WHERE id = ? AND rol = 'ouder'", [get_int('id')]);
 if (!$ouder || !team_mag_ouder((int) $ouder['id'])) {
     niet_gevonden();
 }
-$beheerder = is_beheerder($gebruiker);
+// Klantbeheer (activeren, stoppen, gegevens, wissen): met het recht klanten beheren
+$beheerder = team_mag('klanten_beheren', $gebruiker);
 $terug = 'ouder.php?id=' . (int) $ouder['id'];
 $onderwerp = 'gebruiker:' . (int) $ouder['id'];
 $fouten = [];
@@ -27,8 +28,7 @@ $zonderGezag = array_filter($kinderen, fn ($k) => (int) $k['ouder_id'] === (int)
 
 if (is_post()) {
     csrf_controleer();
-    // Klantbeheer (activeren, stoppen, gegevens, groepen, wissen) is voor de beheerder
-    vereis_beheerder();
+    vereis_recht('klanten_beheren');
     $actie = invoer('actie');
 
     if ($actie === 'activeren' && $ouder['status'] !== 'actief' && $zonderGezag) {
@@ -73,7 +73,8 @@ if (is_post()) {
     } elseif ($actie === 'groep') {
         $kind = rij('SELECT * FROM kinderen WHERE id = ? AND ouder_id = ?', [(int) invoer('kind'), $ouder['id']]);
         $groepId = invoer('groep') === '' ? null : (int) invoer('groep');
-        if ($kind && ($groepId === null || groep($groepId))) {
+        // Alleen binnen de eigen groepen (tenzij alle groepen)
+        if ($kind && team_mag_kind($kind) && ($groepId === null || (groep($groepId) && team_mag_groep($groepId)))) {
             q('UPDATE kinderen SET groep_id = ? WHERE id = ?', [$groepId, $kind['id']]);
             log_actie('Kind ingedeeld', $groepId ? groep($groepId)['naam'] : 'geen groep', null, 'wijziging', 'kind:' . $kind['id']);
             flash('succes', $kind['voornaam'] . ' is ingedeeld.');
@@ -92,7 +93,7 @@ if (is_post()) {
 }
 
 log_inzage('Oudergegevens bekeken', $onderwerp);
-$facturen = is_beheerder($gebruiker) ? rijen('SELECT * FROM facturen WHERE ouder_id = ? ORDER BY datum DESC LIMIT 12', [$ouder['id']]) : [];
+$facturen = team_mag('facturen', $gebruiker) ? rijen('SELECT * FROM facturen WHERE ouder_id = ? ORDER BY datum DESC LIMIT 12', [$ouder['id']]) : [];
 $gewensteDagen = array_map(fn ($d) => WEEKDAGEN[(int) $d] ?? '', array_filter(explode(',', $ouder['gewenste_dagen'])));
 
 pagina_begin($ouder['naam'], 'ouders.php');
@@ -147,7 +148,7 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
 <?php endforeach; ?>
       </ul>
     </section>
-<?php if (is_beheerder($gebruiker)): ?>
+<?php if (team_mag('facturen', $gebruiker)): ?>
     <section class="panel" aria-labelledby="facturen-titel">
       <div class="panel__kop"><h2 id="facturen-titel">Facturen</h2><a href="facturen.php">Alle facturen</a></div>
 <?php if (!$facturen): ?>

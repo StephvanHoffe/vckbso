@@ -399,6 +399,39 @@ function migreer(PDO $pdo): void
                 }
             }
         },
+
+        // Rechten per persoon (per menuonderdeel) en de financiële administratie
+        4 => function (PDO $pdo): void {
+            $pdo->exec(<<<'SQL'
+                CREATE TABLE team_rechten (
+                    gebruiker_id INTEGER NOT NULL REFERENCES gebruikers(id) ON DELETE CASCADE,
+                    recht TEXT NOT NULL,
+                    PRIMARY KEY (gebruiker_id, recht)
+                );
+                CREATE TABLE boekingen (
+                    id INTEGER PRIMARY KEY,
+                    soort TEXT NOT NULL CHECK (soort IN ('inkomst', 'uitgave')),
+                    datum TEXT NOT NULL,
+                    categorie TEXT NOT NULL,
+                    omschrijving TEXT NOT NULL DEFAULT '',
+                    bedrag_cent INTEGER NOT NULL CHECK (bedrag_cent > 0),
+                    bijlage TEXT,
+                    bijlage_naam TEXT,
+                    bijlage_type TEXT,
+                    aangemaakt_door INTEGER REFERENCES gebruikers(id) ON DELETE SET NULL,
+                    aangemaakt_op TEXT NOT NULL,
+                    gewijzigd_op TEXT
+                );
+                CREATE INDEX boekingen_datum ON boekingen(datum);
+                SQL);
+            // Wat iemand nu mag, blijft zo: beheerders alles, medewerkers het vaste pakket voor begeleiders
+            $insert = $pdo->prepare('INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) VALUES (?, ?)');
+            foreach ($pdo->query("SELECT id, rol FROM gebruikers WHERE rol IN ('beheerder', 'medewerker')")->fetchAll(PDO::FETCH_ASSOC) as $persoon) {
+                foreach ($persoon['rol'] === 'beheerder' ? alle_rechten() : RECHTEN_BEGELEIDER as $recht) {
+                    $insert->execute([$persoon['id'], $recht]);
+                }
+            }
+        },
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

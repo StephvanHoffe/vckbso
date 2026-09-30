@@ -2,7 +2,7 @@
 /* Groepen beheren: naam, maximale groepsgrootte, dagen en tijden (beheerder). */
 require __DIR__ . '/inc/bootstrap.php';
 
-vereis_beheerder();
+vereis_recht('groepen');
 
 const GROEP_KLEUREN = ['sun' => 'Geel', 'mint' => 'Mintgroen', 'coral' => 'Koraal', 'sand' => 'Zand', 'primary' => 'Terracotta'];
 

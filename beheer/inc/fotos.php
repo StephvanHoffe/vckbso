@@ -130,8 +130,11 @@ function foto_met_toegang(int $fotoId): array
         niet_gevonden();
     }
     if (is_team($gebruiker)) {
+        if (!team_mag('fotos', $gebruiker) && !team_mag('kinderen', $gebruiker)) {
+            niet_gevonden();
+        }
         $magZien = waarde('SELECT 1 FROM foto_kinderen fk JOIN kinderen k ON k.id = fk.kind_id WHERE fk.foto_id = ? AND ' . groep_voorwaarde('k.groep_id'), [$fotoId])
-            || (is_beheerder($gebruiker));
+            || team_groep_ids($gebruiker) === null;
     } else {
         $magZien = waarde('SELECT 1 FROM foto_kinderen fk JOIN kind_verzorgers v ON v.kind_id = fk.kind_id WHERE fk.foto_id = ? AND v.gebruiker_id = ? AND v.recht_fotos = 1', [$fotoId, $gebruiker['id']]);
     }

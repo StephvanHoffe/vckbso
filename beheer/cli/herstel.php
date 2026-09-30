@@ -6,7 +6,7 @@
  *
  * Daarna (met de website even offline):
  *   1. Zet de huidige datamap opzij (niet weggooien).
- *   2. Zet de uitgepakte bestanden (beheer.sqlite en fotos/) in de datamap.
+ *   2. Zet de uitgepakte bestanden (beheer.sqlite, fotos/ en bijlagen/) in de datamap.
  *   3. Gebruik het NIEUWSTE verwijderregister (verwijderregister.jsonl): uit de
  *      opzij gezette datamap als dat er nog is, anders dat uit de back-up.
  *   4. Draai: php beheer/cli/onderhoud.php --na-herstel

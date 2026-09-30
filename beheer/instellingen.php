@@ -2,7 +2,7 @@
 /* Instellingen (beheerder): bedrijfsgegevens voor facturen, tarief en afmeldtijd. */
 require __DIR__ . '/inc/bootstrap.php';
 
-vereis_beheerder();
+vereis_recht('instellingen');
 
 $velden = [
     'bedrijfsnaam' => 'Naam van de BSO',

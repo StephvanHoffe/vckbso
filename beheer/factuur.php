@@ -2,7 +2,10 @@
 /* Eén factuur bekijken en printen. Ouders kunnen een open of mislukte factuur los betalen. */
 require __DIR__ . '/inc/bootstrap.php';
 
-$gebruiker = vereis_login(['beheerder', 'ouder']);
+$gebruiker = vereis_login();
+if (is_team($gebruiker)) {
+    vereis_recht('facturen');
+}
 $factuur = factuur_met_toegang(get_int('id'));
 
 // Terug van een losse betaling: status meteen ophalen
@@ -36,7 +39,7 @@ if (is_post() && is_ouder($gebruiker)) {
 $regels = rijen('SELECT * FROM factuurregels WHERE factuur_id = ? ORDER BY id', [$factuur['id']]);
 
 pagina_begin('Factuur ' . $factuur['nummer'], 'facturen.php');
-echo '<a class="terug-link niet-printen" href="facturen.php' . (is_beheerder($gebruiker) ? '?periode=' . e($factuur['periode']) : '') . '">' . icoon('back') . 'Alle facturen</a>';
+echo '<a class="terug-link niet-printen" href="facturen.php' . (is_team($gebruiker) ? '?periode=' . e($factuur['periode']) : '') . '">' . icoon('back') . 'Alle facturen</a>';
 ?>
 <article class="panel factuur" aria-labelledby="factuur-titel">
   <div class="factuur__kop">
@@ -89,7 +92,7 @@ echo '<a class="terug-link niet-printen" href="facturen.php' . (is_beheerder($ge
   <p><?= $factuur['status'] === 'mislukt' ? 'Het automatisch afschrijven is niet gelukt.' : 'Er is (nog) geen machtiging voor automatische incasso.' ?>
 <?php if (instelling('iban') !== ''): ?> Je kunt het bedrag overmaken naar <?= e(instelling('iban')) ?> t.n.v. <?= e(instelling('statutaire_naam')) ?>, onder vermelding van <?= e($factuur['nummer']) ?>.<?php endif; ?></p>
 <?php endif; ?>
-<?php if ($factuur['notitie'] !== '' && is_beheerder($gebruiker)): ?>
+<?php if ($factuur['notitie'] !== '' && is_team($gebruiker)): ?>
   <p class="muted"><?= e($factuur['notitie']) ?></p>
 <?php endif; ?>
   <div class="btn-group niet-printen" style="margin-top: var(--space-l)">

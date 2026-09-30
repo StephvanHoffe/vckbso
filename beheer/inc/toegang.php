@@ -43,7 +43,7 @@ const GEZAG_BRONNEN = [
 
 /* ---------- Team: groepen ---------- */
 
-/** Groep-id's die de medewerker mag zien, of null voor "alle" (beheerder). */
+/** Groep-id's die het teamlid mag zien, of null voor "alle" (recht alle_groepen). */
 function team_groep_ids(?array $gebruiker = null): ?array
 {
     static $cache = [];
@@ -51,7 +51,7 @@ function team_groep_ids(?array $gebruiker = null): ?array
     if (!$gebruiker || !is_team($gebruiker)) {
         return [];
     }
-    if (is_beheerder($gebruiker)) {
+    if (team_mag('alle_groepen', $gebruiker)) {
         return null;
     }
     return $cache[$gebruiker['id']] ??= array_map('intval', array_column(rijen(

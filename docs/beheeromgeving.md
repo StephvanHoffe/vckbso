@@ -14,17 +14,19 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | Berichten heen en weer, bijvoorbeeld bij ziekte | `berichten.php` | Per gezin één gesprek met het team. Ouders kunnen hun kind ook ziek melden voor een of meer dagen; die dagen worden dan automatisch afgemeld. |
 | Overzicht welke kinderen wanneer komen, met maximale groepsgrootte | `agenda.php`, `index.php`, `groepen.php` | Per groep een maximum. Weekoverzicht met bezetting per dag (kleur bij bijna vol en vol) en een dagoverzicht met namen, allergieën en knoppen voor binnen, opgehaald, ziek en afmelden. |
 | Digitale agenda die twee kanten op werkt | `agenda.php` | Ouders kiezen zelf dagen (los of vaste weekdagen voor een periode) en melden af tot een ingestelde tijd op de dag zelf. Vol? Dan op de wachtlijst; bij een afmelding schuift de volgende automatisch door en krijgt een bericht. Het team kan ook zelf kinderen toevoegen, afmelden, boven het maximum plaatsen, een dag sluiten of de groepsgrootte voor één dag aanpassen. Ouders krijgen daar automatisch bericht van. |
+| Financiële inkomsten en uitgaven inzien | `financien.php` | Per jaar of maand: inkomsten, uitgaven, resultaat en wat nog te ontvangen is, een grafiek per maand en een verdeling per categorie. Betaalde facturen tellen automatisch mee als inkomsten; overige inkomsten en alle uitgaven voer je in, met een bonnetje (pdf of foto). Export als CSV voor de boekhouder. Zie [Financiën](#financiën). |
+| Collega's aanmaken en per persoon rechten geven | `medewerkers.php` (Team) | Per collega staat elk menuonderdeel aan of uit, plus de groepen en twee extra rechten. Zie [Rechten per persoon](#rechten-per-persoon). |
 
 ## De verplichte eisen en hoe ze zijn ingevuld
 
 | Eis | Invulling |
 |---|---|
-| **Toegang per rol**: medewerkers zien alleen de kinderen waarvoor zij toegang nodig hebben | Elke medewerker is gekoppeld aan een of meer groepen (Team → Groepen), eventueel tijdelijk tot een einddatum (bijvoorbeeld voor een invaller). Kinderen, dossiers, ouders, berichten, foto's, de agenda en het dagoverzicht tonen alleen de eigen groepen. Een kind uit een andere groep geeft "niet gevonden". Kinderen zonder groep (nieuwe aanmeldingen), facturen, instellingen, het logboek en privacyverzoeken zijn alleen voor de beheerder. |
+| **Toegang per rol**: medewerkers zien alleen de kinderen waarvoor zij toegang nodig hebben | Per collega staat elk onderdeel van de beheeromgeving aan of uit (zie [Rechten per persoon](#rechten-per-persoon)); wat uit staat, is ook niet te openen. Daarnaast is elke collega gekoppeld aan een of meer groepen, eventueel tijdelijk tot een einddatum (bijvoorbeeld voor een invaller). Kinderen, dossiers, ouders, berichten, foto's, de agenda en het dagoverzicht tonen alleen de eigen groepen; een kind uit een andere groep geeft "niet gevonden". Alleen wie het extra recht "Alle groepen" heeft, ziet alle kinderen, ook nieuwe aanmeldingen zonder groep. |
 | **Toegang per organisatie**: gegevens van meerdere opvangorganisaties strikt gescheiden | Elke organisatie krijgt een eigen domein, database, fotomap, sessiemap, encryptiesleutel, back-upsleutel en eventueel Mollie-account (zie [Meerdere organisaties](#meerdere-organisaties)). Er is geen gedeelde database waarin een fout filter gegevens kan laten doorlekken. Een onbekend domein krijgt geen toegang; twee organisaties met dezelfde map of sleutel weigert het systeem. |
 | **Persoonlijke accounts** | Iedereen logt in met een eigen e-mailadres. Team en tweede verzorgers worden per persoon uitgenodigd met een eenmalige link. Er zijn geen gedeelde accounts. |
 | **Meervoudige authenticatie** | Tweestapsverificatie met een authenticator-app (TOTP) en 10 eenmalige herstelcodes. Verplicht voor het hele team (kan niet worden overgeslagen); voor ouders aanbevolen of verplicht, naar keuze van de beheerder. Een code werkt maar één keer. |
 | **Versleuteling** | Https met HSTS. Gevoelige velden (bijzonderheden en allergieën, ophaalpersonen, observaties, berichten, privacyverzoeken, het MFA-geheim) en alle foto's en exports worden versleuteld opgeslagen (libsodium, XSalsa20-Poly1305) met een sleutel die niet in de database staat. Wachtwoorden en herstelcodes alleen als hash. |
-| **Veilige back-ups** | `php beheer/cli/backup.php` maakt dagelijks een versleutelde back-up (XChaCha20-Poly1305, eigen sleutel) van database, foto's en verwijderregister. Back-ups worden na 30 dagen automatisch verwijderd. |
+| **Veilige back-ups** | `php beheer/cli/backup.php` maakt dagelijks een versleutelde back-up (XChaCha20-Poly1305, eigen sleutel) van database, foto's, bonnetjes en verwijderregister. Back-ups worden na 30 dagen automatisch verwijderd. |
 | **Bijgewerkte software** | PHP 8.2 of hoger, geen pakketten van derden (alleen één meegeleverde QR-bibliotheek). De pagina Beveiligingsstatus waarschuwt als de PHP-versie binnen drie maanden geen beveiligingsupdates meer krijgt. |
 | **Controleerbaarheid** | Het logboek registreert inzage (dossier bekeken, foto's, berichten, facturen), wijzigingen, exports, inloggen en beveiligingsacties, per kind of ouder te filteren. Elke regel is met een hashketen aan de vorige gekoppeld: aanpassen of weghalen valt op bij "Controleer logboek". Het logboek zelf is als CSV te exporteren (dat wordt ook gelogd). Bewaartermijn standaard 24 maanden. |
 | **Ouderrechten: inzage, correctie, verwijdering** | Onder **Mijn privacy** downloadt een ouder direct de eigen gegevens (en die van kinderen waarover gecontroleerd gezag bestaat), en dient verzoeken in: inzage, correctie, verwijdering, beperking, bezwaar of overdracht. De beheerder handelt ze af onder **Privacyverzoeken**, met de wettelijke termijn van een maand in beeld, een volledige export (ook interne notities en wie het dossier heeft ingezien) en knoppen om een kinddossier of oudergegevens te wissen. Gegevens die wettelijk bewaard moeten worden (de financiële administratie) blijven staan. |
@@ -32,11 +34,47 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | **Bewaarbeleid per gegevenscategorie** | Per categorie een eigen termijn (zie [Bewaartermijnen](#bewaartermijnen)), dagelijks automatisch uitgevoerd. Ontwikkelingsgegevens gaan snel weg na vertrek, de financiële administratie blijft 7 jaar. |
 | **Verwijderen, ook in de back-upcyclus** | Back-ups vervallen na 30 dagen, dus gewiste gegevens zijn uiterlijk dan ook uit de back-ups verdwenen. Handmatige verwijderingen komen in een verwijderregister (alleen soort en nummer); na het terugzetten van een back-up voert `onderhoud.php --na-herstel` ze opnieuw uit. |
 
-### Rollen
+### Rechten per persoon
 
-- **Ouder of verzorger**: de kinderen waaraan diegene gekoppeld is, met de rechten die per kind zijn ingesteld. De contracthouder ziet ook de facturen.
-- **Medewerker (begeleider)**: alleen de kinderen, ouders, berichten en foto's van de eigen groep(en). Vandaag-overzicht, agenda en kindvolg. Geen facturen, instellingen, logboek of privacyverzoeken.
-- **Beheerder**: alles, plus groepen, facturen, het team, instellingen, het logboek, privacyverzoeken en het controleren van gezag.
+Onder **Team** zet je per collega elk menuonderdeel aan of uit. Een onderdeel dat uit staat, verdwijnt uit het menu én is niet te openen: de pagina's controleren het zelf (anders "Geen toegang").
+
+| Onderdeel | Wat je ermee kunt |
+|---|---|
+| Vandaag | Wie er vandaag komt, aanwezigheid en ziekmeldingen |
+| Agenda | Week- en dagoverzicht, inschrijven, afmelden en dagen aanpassen |
+| Kinderen | Kinddossiers en het kindvolgsysteem |
+| Ouders | Contactgegevens van ouders en verzorgers |
+| Berichten | Berichten en ziekmeldingen van ouders |
+| Foto's | Foto's delen met ouders |
+| Groepen | Groepen en maximale groepsgrootte |
+| Facturen | Facturen maken en incasso starten |
+| Financiën | Inkomsten, uitgaven en bonnetjes |
+| Team | Collega's uitnodigen en rechten geven |
+| Privacyverzoeken | Privacyverzoeken van ouders afhandelen |
+| Instellingen | Instellingen, logboek en beveiligingsstatus |
+
+Daarnaast twee extra rechten:
+
+- **Alle groepen**: ziet alle kinderen en ouders, ook van kinderen die nog niet in een groep zitten. Zonder dit recht alleen de gekoppelde groepen.
+- **Klanten beheren**: aanmeldingen activeren, gegevens van kinderen wijzigen, gezag vastleggen, verzorgers koppelen, kinderen indelen en klanten stoppen of hun gegevens wissen. Werkt samen met Ouders en Kinderen.
+
+Snelknoppen: **Alles aan** (beheerder), **Begeleider** (Vandaag, Agenda, Kinderen, Ouders, Berichten en Foto's; wat medewerkers vóór deze wijziging ook konden) en **Alles uit**. Bij de invoering hebben bestaande beheerders alle rechten gekregen en bestaande medewerkers het pakket voor begeleiders, dus niemand verloor of kreeg toegang.
+
+Zo raak je nooit buitengesloten: je kunt je eigen toegang tot Team niet uitzetten, en er blijft altijd minstens één actieve collega die het team beheert. Iemand zonder onderdelen ziet na het inloggen een uitleg; iemand zonder Vandaag komt op het eerste onderdeel dat wel aan staat. Elke wijziging staat in het logboek (soort Beveiliging).
+
+**Ouders en verzorgers** zien in Mijn BSO alleen de kinderen waaraan ze gekoppeld zijn, met de rechten die per kind zijn ingesteld. De contracthouder ziet ook de facturen.
+
+## Financiën
+
+Onder **Financiën** zie je per jaar of per maand wat er binnenkwam en wat eruit ging (kasbasis):
+
+- **Inkomsten**: betaalde facturen tellen automatisch mee, op de dag van betaling. Andere inkomsten (bijvoorbeeld een subsidie of een bijdrage die buiten Mijn BSO is betaald) voer je zelf in.
+- **Uitgaven**: voer je zelf in, met categorie, datum, bedrag, omschrijving en eventueel een bonnetje (pdf, jpg of png, maximaal 10 MB). Bonnetjes worden versleuteld opgeslagen.
+- **Overzicht**: tegels met inkomsten, uitgaven, resultaat en wat nog te ontvangen is (openstaande facturen), een grafiek per maand (ook als tabel), en een verdeling per categorie.
+- **Export**: "Exporteren voor de boekhouder" geeft een CSV-bestand (puntkomma's, opent in Excel) met alle boekingen en betaalde facturen van de gekozen periode. Elke export komt in het logboek.
+- Boekingen en bonnetjes horen bij de financiële administratie: ze worden net zo lang bewaard als de facturen (minimaal 7 jaar) en daarna automatisch verwijderd.
+
+Bedragen voer je in zoals ze op de bon staan. Financiën houdt btw niet apart bij; laat de boekhouder bepalen hoe de export wordt verwerkt.
 
 ### Een nieuwe klant, stap voor stap
 
@@ -60,7 +98,7 @@ De beheerder stelt de termijnen in onder **Instellingen → Bewaartermijnen**. D
 | Berichten en ziekmeldingen | 24 maanden na verzenden | Verwijderd |
 | Aanmeldingen die niet tot plaatsing leidden | 6 maanden | Account en kinderen verwijderd |
 | Account en contactgegevens van gestopte klanten | 3 maanden na vertrek | Gewist; naam en adres blijven bij de facturen |
-| Financiële administratie (facturen, betalingen, opvangdagen) | 7 jaar | Verwijderd. Korter dan 7 jaar kan niet (fiscale bewaarplicht) |
+| Financiële administratie (facturen, betalingen, opvangdagen, boekingen en bonnetjes onder Financiën) | 7 jaar | Verwijderd. Korter dan 7 jaar kan niet (fiscale bewaarplicht) |
 | Logboek | 24 maanden | Verwijderd |
 | Exports voor een inzageverzoek | 30 dagen | Verwijderd |
 | Back-ups | 30 dagen | Verwijderd |
@@ -94,7 +132,7 @@ Bewaar de back-ups op een andere plek dan de server (in de EU) en de back-upsleu
 Eén installatie kan meerdere opvangorganisaties bedienen. Zet ze in `config.php` onder `organisaties` (zie `config.voorbeeld.php`). Per organisatie:
 
 - eigen domein(en) in `hosts`: het domein bepaalt de organisatie, een onbekend domein krijgt "niet gevonden";
-- eigen `data_dir` (database, foto's, exports, sessies, verwijderregister) en eigen `sleutel`;
+- eigen `data_dir` (database, foto's, bonnetjes, exports, sessies, verwijderregister) en eigen `sleutel`;
 - eigen back-upmap en back-upsleutel, eventueel een eigen Mollie-account en e-mailafzender.
 
 Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php beheer/cli/backup.php --organisatie=vck`.
@@ -111,7 +149,7 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
 | `beheer/*.php` | De pagina's |
 | `beheer/inc/` | Gedeelde code: configuratie, organisaties, versleuteling, database, inloggen, tweestapsverificatie, toegang, agenda, berichten, facturen, Mollie, e-mail, foto's, exports, bewaarbeleid, opmaak. Niet rechtstreeks bereikbaar. |
 | `beheer/cli/` | Opdrachtregel: back-up, herstel en dagelijks onderhoud. Niet via de website bereikbaar. |
-| `beheer/data/` | Standaard-datamap: database, foto's, exports, sessies en `mail.log`. Niet rechtstreeks bereikbaar. Staat niet in git. Liefst buiten de webroot zetten. |
+| `beheer/data/` | Standaard-datamap: database, foto's, bonnetjes, exports, sessies en `mail.log`. Niet rechtstreeks bereikbaar. Staat niet in git. Liefst buiten de webroot zetten. |
 | `beheer/assets/vendor/` | Meegeleverde QR-code-bibliotheek (MIT-licentie) |
 | `beheer/config.voorbeeld.php` | Voorbeeld van de configuratie |
 | `tools/beheer-demodata.php` | Vult een lege test-omgeving met verzonnen demogegevens |
@@ -191,6 +229,8 @@ Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met b
 - [ ] KvK-, LRK- en IBAN-nummer invullen (Instellingen). Het LRK-nummer moet op de factuur staan voor de kinderopvangtoeslag.
 - [ ] Afmeldtijd bevestigen (nu 12:00 uur op de dag zelf).
 - [ ] Btw-regel op de factuur laten controleren door de boekhouder (nu: "Kinderopvang is vrijgesteld van btw").
+- [ ] Categorieën van Financiën afstemmen met de boekhouder (`beheer/inc/financien.php`), en bepalen of btw apart moet worden bijgehouden.
+- [ ] Per collega de rechten nalopen onder Team: wie mag Facturen, Financiën, Privacyverzoeken en Klanten beheren?
 - [ ] Werkafspraak voor het controleren van gezag: welk bewijs vraag je (uittreksel gezagsregister, geboorteakte, beschikking) en wie controleert het?
 
 **Privacy (AVG)**

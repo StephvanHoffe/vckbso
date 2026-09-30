@@ -7,7 +7,7 @@
  */
 require __DIR__ . '/inc/bootstrap.php';
 
-$gebruiker = vereis_beheerder();
+$gebruiker = vereis_recht('verzoeken');
 $verzoek = get_int('id') ? rij('SELECT v.*, g.naam AS aanvrager, g.email AS aanvrager_email FROM avg_verzoeken v LEFT JOIN gebruikers g ON g.id = v.gebruiker_id WHERE v.id = ?', [get_int('id')]) : null;
 if (get_int('id') && !$verzoek) {
     niet_gevonden();

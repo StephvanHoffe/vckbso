@@ -43,12 +43,16 @@ db()->exec('VACUUM INTO ' . db()->quote($kopie));
 
 // 2. Welke bestanden gaan mee?
 $bestanden = ['beheer.sqlite' => $kopie];
-$fotomap = data_dir() . '/fotos';
-if (is_dir($fotomap)) {
-    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fotomap, FilesystemIterator::SKIP_DOTS));
+// Foto's en bonnetjes (Financiën); beide al versleuteld op schijf
+foreach (['fotos', 'bijlagen'] as $submap) {
+    $bronmap = data_dir() . '/' . $submap;
+    if (!is_dir($bronmap)) {
+        continue;
+    }
+    $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($bronmap, FilesystemIterator::SKIP_DOTS));
     foreach ($iterator as $bestand) {
         if ($bestand->isFile()) {
-            $bestanden['fotos/' . substr($bestand->getPathname(), strlen($fotomap) + 1)] = $bestand->getPathname();
+            $bestanden[$submap . '/' . substr($bestand->getPathname(), strlen($bronmap) + 1)] = $bestand->getPathname();
         }
     }
 }

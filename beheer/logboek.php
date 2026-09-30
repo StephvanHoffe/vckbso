@@ -6,7 +6,7 @@
  */
 require __DIR__ . '/inc/bootstrap.php';
 
-vereis_beheerder();
+vereis_recht('instellingen');
 
 $soort = array_key_exists(get_str('soort'), LOG_SOORTEN) ? get_str('soort') : '';
 $onderwerp = preg_match('/^(kind|gebruiker):\d+$/', get_str('onderwerp')) ? get_str('onderwerp') : '';
@@ -32,7 +32,9 @@ if (get_str('csv') === '1') {
     $uit = fopen('php://temp', 'w+');
     fputcsv($uit, ['wanneer', 'soort', 'actie', 'details', 'onderwerp', 'wie', 'rol', 'ip'], ';');
     foreach (rijen($sql . ' LIMIT 50000', $params) as $r) {
-        fputcsv($uit, [$r['aangemaakt_op'], $r['soort'], $r['actie'], $r['details'], $r['onderwerp'], $r['naam'] ?? '', $r['rol'] ?? '', $r['ip']], ';');
+        // Tekst die met = + - @ begint, zou Excel als formule uitvoeren
+        $veilig = fn (?string $t): string => preg_match('/^[=+\-@\t\r]/', (string) $t) ? "'" . $t : (string) $t;
+        fputcsv($uit, [$r['aangemaakt_op'], $r['soort'], $veilig($r['actie']), $veilig($r['details']), $r['onderwerp'], $veilig($r['naam'] ?? ''), $r['rol'] ?? '', $r['ip']], ';');
     }
     rewind($uit);
     stuur_download((string) stream_get_contents($uit), 'logboek-' . date('Y-m-d') . '.csv', 'text/csv');

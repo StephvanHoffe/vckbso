@@ -83,6 +83,18 @@ if (is_ouder($gebruiker)) {
 
 /* ---------- Team ---------- */
 
+// Vandaag staat uit voor deze persoon? Dan naar het eerste onderdeel dat wel aan staat.
+if (!team_mag('vandaag', $gebruiker)) {
+    $eerste = eerste_pagina($gebruiker);
+    if ($eerste !== null) {
+        redirect($eerste);
+    }
+    pagina_begin('Welkom');
+    pagina_kop("Hoi {$voornaam}!", 'Je account is klaar, maar er staan nog geen onderdelen voor je aan. Vraag een collega die het team beheert om de onderdelen aan te zetten die je nodig hebt.');
+    pagina_einde();
+    exit;
+}
+
 $datum = vandaag();
 $groepen = zichtbare_groepen();
 $totaal = $ziek = $wacht = 0;
@@ -93,21 +105,25 @@ foreach ($groepen as $groep) {
         $wacht += aantal_wachtlijst((int) $groep['id'], $datum);
     }
 }
-// Nieuwe aanmeldingen en kinderen zonder groep: alleen de beheerder (intake)
-$nieuw = is_beheerder($gebruiker) ? rijen("SELECT g.*, (SELECT COUNT(*) FROM kinderen k WHERE k.ouder_id = g.id) AS aantal_kinderen FROM gebruikers g WHERE g.rol = 'ouder' AND g.status = 'nieuw' ORDER BY g.aangemaakt_op") : [];
-$ongelezen = ongelezen_voor_team();
-$zonderGroep = is_beheerder($gebruiker) ? (int) waarde("SELECT COUNT(*) FROM kinderen k JOIN gebruikers g ON g.id = k.ouder_id WHERE k.groep_id IS NULL AND k.actief = 1 AND g.status = 'actief'") : 0;
+// Nieuwe aanmeldingen en kinderen zonder groep: voor wie klanten beheert (intake)
+$klantbeheer = team_mag('klanten_beheren', $gebruiker) && team_mag('ouders', $gebruiker);
+$nieuw = $klantbeheer ? rijen("SELECT g.*, (SELECT COUNT(*) FROM kinderen k WHERE k.ouder_id = g.id) AS aantal_kinderen FROM gebruikers g WHERE g.rol = 'ouder' AND g.status = 'nieuw' ORDER BY g.aangemaakt_op") : [];
+$ongelezen = team_mag('berichten', $gebruiker) ? ongelezen_voor_team() : 0;
+$zonderGroep = $klantbeheer && team_mag('kinderen', $gebruiker) && team_groep_ids($gebruiker) === null ? (int) waarde("SELECT COUNT(*) FROM kinderen k JOIN gebruikers g ON g.id = k.ouder_id WHERE k.groep_id IS NULL AND k.actief = 1 AND g.status = 'actief'") : 0;
 
 pagina_begin('Vandaag', 'index.php');
 pagina_kop("Hoi {$voornaam}!", 'Vandaag is het ' . e(datum_nl($datum, 'EEEE d MMMM')) . '.',
-    '<a class="btn btn--secondary btn--small" href="agenda.php">' . icoon('calendar') . 'Weekoverzicht</a><a class="btn btn--small" href="fotos.php">' . icoon('camera') . "Foto's delen</a>");
+    (team_mag('agenda', $gebruiker) ? '<a class="btn btn--secondary btn--small" href="agenda.php">' . icoon('calendar') . 'Weekoverzicht</a>' : '')
+    . (team_mag('fotos', $gebruiker) ? '<a class="btn btn--small" href="fotos.php">' . icoon('camera') . "Foto's delen</a>" : ''));
 ?>
 <ul class="tegels">
-  <li><a class="tegel" href="agenda.php?datum=<?= e($datum) ?>" style="--tegel-bg: var(--color-mint-soft)"><span class="tegel__getal"><?= $totaal ?></span><span class="tegel__label">kinderen vandaag</span></a></li>
+  <li><<?= team_mag('agenda', $gebruiker) ? 'a class="tegel" href="agenda.php?datum=' . e($datum) . '"' : 'span class="tegel"' ?> style="--tegel-bg: var(--color-mint-soft)"><span class="tegel__getal"><?= $totaal ?></span><span class="tegel__label">kinderen vandaag</span></<?= team_mag('agenda', $gebruiker) ? 'a' : 'span' ?>></li>
   <li><span class="tegel" style="--tegel-bg: var(--color-coral-soft)"><span class="tegel__getal"><?= $ziek ?></span><span class="tegel__label">ziek gemeld</span></span></li>
   <li><span class="tegel" style="--tegel-bg: var(--color-sun-soft)"><span class="tegel__getal"><?= $wacht ?></span><span class="tegel__label">op de wachtlijst</span></span></li>
+<?php if (team_mag('berichten', $gebruiker)): ?>
   <li><a class="tegel" href="berichten.php"><span class="tegel__getal"><?= $ongelezen ?></span><span class="tegel__label">ongelezen <?= $ongelezen === 1 ? 'bericht' : 'berichten' ?></span></a></li>
-<?php if (is_beheerder($gebruiker)): ?>
+<?php endif; ?>
+<?php if ($klantbeheer): ?>
   <li><a class="tegel" href="ouders.php?status=nieuw"><span class="tegel__getal"><?= count($nieuw) ?></span><span class="tegel__label">nieuwe <?= count($nieuw) === 1 ? 'aanmelding' : 'aanmeldingen' ?></span></a></li>
 <?php endif; ?>
 </ul>
@@ -132,8 +148,8 @@ pagina_kop("Hoi {$voornaam}!", 'Vandaag is het ' . e(datum_nl($datum, 'EEEE d MM
 <?php endif; ?>
 <h2 class="visually-hidden">Groepen vandaag</h2>
 <?php
-if (!$groepen && !is_beheerder($gebruiker)) {
-    echo '<div class="panel"><p class="leeg">Je bent nog niet aan een groep gekoppeld, dus je ziet nog geen kinderen. Vraag de beheerder om je aan je groep(en) te koppelen.</p></div>';
+if (!$groepen && team_groep_ids($gebruiker) !== null) {
+    echo '<div class="panel"><p class="leeg">Je bent nog niet aan een groep gekoppeld, dus je ziet nog geen kinderen. Vraag een collega die het team beheert om je aan je groep(en) te koppelen.</p></div>';
 } elseif (!in_array(weekdag($datum), [1, 2, 3, 4, 5], true)) {
     echo '<div class="panel"><p class="leeg">Het is weekend, de BSO is dicht. <a href="agenda.php">Bekijk de agenda van volgende week</a>.</p></div>';
 } else {

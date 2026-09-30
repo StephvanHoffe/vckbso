@@ -151,6 +151,13 @@ body.beheer {
   scrollbar-width: thin;
 }
 
+@media (min-width: 64em) {
+  .app-nav ul {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
 .app-nav a {
   display: inline-flex;
   align-items: center;
@@ -1276,4 +1283,403 @@ code {
   background: #fff;
   font-size: var(--step-0);
   text-align: center;
+}
+
+/* ---------- Team: rechten per collega ---------- */
+
+.collega {
+  display: grid;
+  gap: var(--space-s);
+}
+
+.collega__kop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2xs) var(--space-m);
+}
+
+.collega__naam {
+  margin: 0;
+  font-size: var(--step-1);
+}
+
+.collega__info {
+  margin: 0.15rem 0 0;
+  font-size: var(--step--1);
+  overflow-wrap: anywhere;
+}
+
+.collega__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.collega__onderdelen {
+  margin: 0;
+  font-size: var(--step--1);
+}
+
+.rechten {
+  display: grid;
+  gap: var(--space-xs);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.rechten__snel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-s);
+  font-size: var(--step--1);
+}
+
+.rechten__snel .link-button {
+  min-height: 2.25rem;
+}
+
+.rechten__lijst {
+  display: grid;
+  /* Zoveel kolommen als er ruimte is, niet de schermbreedte */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 0.4rem var(--space-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Schakelaar: een gewoon selectievakje, opgemaakt als aan/uit-knop */
+.schakel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: start;
+  align-items: center;
+  column-gap: 0.75rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-m);
+  background: var(--color-surface-alt);
+}
+
+.schakel input {
+  position: relative;
+  grid-row: 1 / span 2;
+  align-self: start;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 1.6rem;
+  margin: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-text-muted);
+  cursor: pointer;
+  appearance: none;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.schakel input::before {
+  content: "";
+  position: absolute;
+  top: 0.2rem;
+  left: 0.2rem;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-s);
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.schakel input:checked {
+  background: var(--color-primary-strong);
+}
+
+.schakel input:checked::before {
+  transform: translateX(1.15rem);
+}
+
+.schakel input:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.schakel label {
+  display: inline-flex;
+  justify-self: start;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.4em;
+  margin: 0;
+  text-align: left;
+  font-weight: var(--font-weight-strong);
+  cursor: pointer;
+}
+
+.schakel__uitleg {
+  grid-column: 2;
+  color: var(--color-text-muted);
+  font-size: var(--step--1);
+  line-height: 1.35;
+}
+
+@media (forced-colors: active) {
+  .schakel input {
+    border: 2px solid ButtonText;
+  }
+
+  .schakel input:checked {
+    background: Highlight;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .schakel input,
+  .schakel input::before {
+    transition: none;
+  }
+}
+
+/* ---------- Financiën ---------- */
+
+.getal {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.tegels--bedragen .tegel__getal {
+  font-size: var(--step-2);
+  font-variant-numeric: normal;
+  overflow-wrap: anywhere;
+}
+
+.financien__uitleg {
+  margin: calc(var(--space-s) * -1) 0 var(--space-l);
+  font-size: var(--step--1);
+}
+
+.bedrag--in {
+  color: var(--color-success);
+  font-weight: var(--font-weight-strong);
+}
+
+.bedrag--uit {
+  font-weight: var(--font-weight-strong);
+}
+
+.bonnetje {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font-size: var(--step--1);
+  overflow-wrap: anywhere;
+}
+
+/* Grafiek: kleuren gecontroleerd op onderscheid (ook bij kleurenblindheid) en contrast */
+.grafiek,
+.legenda {
+  --reeks-in: #0e8a6a;
+  --reeks-uit: #c8553d;
+}
+
+.legenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs) var(--space-m);
+  margin: 0 0 var(--space-xs);
+  padding: 0;
+  list-style: none;
+  font-size: var(--step--1);
+}
+
+.legenda li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.legenda__sleutel {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 3px;
+}
+
+.legenda__sleutel--in {
+  background: var(--reeks-in);
+}
+
+.legenda__sleutel--uit {
+  background: var(--reeks-uit);
+}
+
+.grafiek {
+  position: relative;
+  overflow-x: auto;
+  margin-bottom: var(--space-s);
+}
+
+.grafiek__svg {
+  display: block;
+  width: 100%;
+  min-width: 38rem;
+  height: auto;
+}
+
+.grafiek__raster {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.grafiek__basis {
+  stroke: var(--color-text-muted);
+  stroke-width: 1;
+}
+
+.grafiek__as {
+  fill: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.grafiek__kolom--in {
+  fill: var(--reeks-in);
+}
+
+.grafiek__kolom--uit {
+  fill: var(--reeks-uit);
+}
+
+.grafiek__vlak {
+  fill: transparent;
+}
+
+.grafiek__maand {
+  cursor: default;
+  outline: none;
+}
+
+.grafiek__maand:hover .grafiek__vlak,
+.grafiek__maand:focus .grafiek__vlak {
+  fill: var(--color-surface-alt);
+}
+
+.grafiek__maand:focus-visible .grafiek__vlak {
+  stroke: var(--color-focus);
+  stroke-width: 2;
+}
+
+.grafiek-tip {
+  position: absolute;
+  z-index: 5;
+  display: grid;
+  gap: 0.15rem;
+  min-width: 11rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-m);
+  font-size: var(--step--1);
+  pointer-events: none;
+}
+
+.grafiek-tip[hidden] {
+  display: none;
+}
+
+.grafiek-tip__titel {
+  font-weight: var(--font-weight-strong);
+}
+
+.grafiek-tip__rij {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.grafiek-tip__rij strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.grafiek-tip__sleutel {
+  width: 0.9rem;
+  height: 2px;
+  border-radius: 1px;
+}
+
+@media (forced-colors: active) {
+  .grafiek__kolom--in,
+  .legenda__sleutel--in {
+    fill: CanvasText;
+    background: CanvasText;
+  }
+
+  .grafiek__kolom--uit,
+  .legenda__sleutel--uit {
+    fill: GrayText;
+    background: GrayText;
+  }
+}
+
+/* Verdeling per categorie: één kleur per lijst, de lengte is het aandeel */
+.verdeling {
+  display: grid;
+  gap: var(--space-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.verdeling__regel {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-s);
+  margin-bottom: 0.3rem;
+}
+
+.verdeling__regel strong {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.verdeling__balk {
+  height: 0.5rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  overflow: hidden;
+}
+
+.verdeling__vulling {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+}
+
+.verdeling__vulling--in {
+  background: #0e8a6a;
+}
+
+.verdeling__vulling--uit {
+  background: #c8553d;
+}
+
+.boeking__kop {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 var(--space-s);
+}
+
+.boeking__kop .bedrag {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (min-width: 64em) {
+  .boeking__kop {
+    min-width: 16rem;
+  }
 }

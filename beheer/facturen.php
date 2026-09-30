@@ -5,7 +5,10 @@
  */
 require __DIR__ . '/inc/bootstrap.php';
 
-$gebruiker = vereis_login(['beheerder', 'ouder']);
+$gebruiker = vereis_login();
+if (is_team($gebruiker)) {
+    vereis_recht('facturen');
+}
 
 /* ---------- Ouder ---------- */
 if (is_ouder($gebruiker)) {

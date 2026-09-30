@@ -83,6 +83,63 @@
     knop.addEventListener("click", function () { window.print(); });
   });
 
+  /* Rechten van een collega: snel alles aan, het pakket voor begeleiders of alles uit */
+  document.querySelectorAll("[data-rechten-form]").forEach(function (form) {
+    form.querySelectorAll("[data-rechten-snel]").forEach(function (el) { el.hidden = false; });
+    form.addEventListener("click", function (event) {
+      var knop = event.target.closest("[data-rechten-preset]");
+      if (!knop) return;
+      var keuze = knop.getAttribute("data-rechten-preset");
+      form.querySelectorAll("input[name='rechten[]']").forEach(function (vakje) {
+        vakje.checked = keuze === "alles" || (keuze === "begeleider" && vakje.getAttribute("data-begeleider") === "1");
+      });
+    });
+  });
+
+  /* Grafiek Financiën: per maand een tooltip met beide bedragen (muis en toetsenbord) */
+  document.querySelectorAll("[data-grafiek]").forEach(function (grafiek) {
+    var tip = document.createElement("div");
+    tip.className = "grafiek-tip";
+    tip.hidden = true;
+    tip.setAttribute("aria-hidden", "true");
+    grafiek.appendChild(tip);
+    function rij(tekst, bedrag, kleur) {
+      var r = document.createElement("div");
+      r.className = "grafiek-tip__rij";
+      var sleutel = document.createElement("span");
+      sleutel.className = "grafiek-tip__sleutel";
+      sleutel.style.background = kleur;
+      var waarde = document.createElement("strong");
+      waarde.textContent = bedrag;
+      r.append(sleutel, waarde, document.createTextNode(" " + tekst));
+      return r;
+    }
+    function toon(maand) {
+      var stijl = getComputedStyle(grafiek);
+      tip.textContent = "";
+      var titel = document.createElement("div");
+      titel.className = "grafiek-tip__titel";
+      titel.textContent = maand.getAttribute("data-tip-titel");
+      tip.append(titel, rij("inkomsten", maand.getAttribute("data-tip-in"), stijl.getPropertyValue("--reeks-in")), rij("uitgaven", maand.getAttribute("data-tip-uit"), stijl.getPropertyValue("--reeks-uit")));
+      tip.hidden = false;
+      var vak = grafiek.getBoundingClientRect();
+      var m = maand.getBoundingClientRect();
+      var links = m.left - vak.left + grafiek.scrollLeft + m.width / 2 - tip.offsetWidth / 2;
+      tip.style.left = Math.max(0, Math.min(links, grafiek.scrollWidth - tip.offsetWidth)) + "px";
+      tip.style.top = "0px";
+    }
+    grafiek.addEventListener("pointerover", function (event) {
+      var maand = event.target.closest(".grafiek__maand");
+      if (maand) toon(maand);
+    });
+    grafiek.addEventListener("pointerleave", function () { tip.hidden = true; });
+    grafiek.addEventListener("focusin", function (event) {
+      var maand = event.target.closest(".grafiek__maand");
+      if (maand) toon(maand);
+    });
+    grafiek.addEventListener("focusout", function () { tip.hidden = true; });
+  });
+
   /* Alle kinderen van een groep in één keer aanvinken */
   document.querySelectorAll("[data-alles-aan]").forEach(function (knop) {
     knop.hidden = false;

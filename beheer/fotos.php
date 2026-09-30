@@ -6,6 +6,9 @@
 require __DIR__ . '/inc/bootstrap.php';
 
 $gebruiker = vereis_login();
+if (is_team($gebruiker)) {
+    vereis_recht('fotos');
+}
 
 /* ---------- Ouder ---------- */
 if (is_ouder($gebruiker)) {
@@ -58,7 +61,7 @@ if (is_post()) {
 
     if (invoer('actie') === 'verwijderen') {
         $foto = foto_met_toegang((int) invoer('foto'));
-        if (is_beheerder($gebruiker) || (int) $foto['geupload_door'] === (int) $gebruiker['id']) {
+        if (team_mag('klanten_beheren', $gebruiker) || (int) $foto['geupload_door'] === (int) $gebruiker['id']) {
             foreach (rijen('SELECT kind_id FROM foto_kinderen WHERE foto_id = ?', [$foto['id']]) as $rij) {
                 log_actie('Foto verwijderd', 'foto ' . $foto['id'], null, 'wijziging', 'kind:' . $rij['kind_id']);
             }
@@ -66,7 +69,7 @@ if (is_post()) {
             registreer_verwijdering('foto', (int) $foto['id'], 'verwijderd door team');
             flash('succes', 'De foto is verwijderd.');
         } else {
-            flash('fout', 'Alleen wie de foto heeft geplaatst of de beheerder kan hem verwijderen.');
+            flash('fout', 'Alleen wie de foto heeft geplaatst, of een collega die klanten beheert, kan hem verwijderen.');
         }
         redirect(veilig_terug(invoer('terug', 'fotos.php')));
     }

@@ -1,8 +1,11 @@
 <?php
-/* Download van een export bij een privacyverzoek. Alleen voor de aanvrager (na afronden) en de beheerder. */
+/* Download van een export bij een privacyverzoek. Alleen voor de aanvrager (na afronden) en wie privacyverzoeken afhandelt. */
 require __DIR__ . '/inc/bootstrap.php';
 
-$gebruiker = vereis_login(['beheerder', 'ouder']);
+$gebruiker = vereis_login();
+if (is_team($gebruiker)) {
+    vereis_recht('verzoeken');
+}
 $verzoek = rij('SELECT * FROM avg_verzoeken WHERE id = ?', [get_int('verzoek')]);
 if (!$verzoek || !$verzoek['export_bestand'] || $verzoek['export_verloopt_op'] < nu()) {
     niet_gevonden('Deze export bestaat niet (meer). Exports zijn ' . EXPORT_GELDIG_DAGEN . ' dagen beschikbaar.');

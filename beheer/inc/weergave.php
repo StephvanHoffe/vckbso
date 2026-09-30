@@ -10,7 +10,7 @@ declare(strict_types=1);
 function toon_dagoverzicht(string $datum, array $groepen, string $terug): void
 {
     if (!$groepen) {
-        echo '<div class="panel"><p class="leeg">Er zijn nog geen groepen. ' . (is_beheerder() ? '<a href="groepen.php">Maak eerst een groep aan.</a>' : 'Vraag de beheerder om groepen aan te maken.') . '</p></div>';
+        echo '<div class="panel"><p class="leeg">Er zijn nog geen groepen. ' . (team_mag('groepen') ? '<a href="groepen.php">Maak eerst een groep aan.</a>' : 'Vraag een collega met toegang tot Groepen om groepen aan te maken.') . '</p></div>';
         return;
     }
     foreach ($groepen as $groep) {
@@ -36,7 +36,7 @@ function toon_dagoverzicht(string $datum, array $groepen, string $terug): void
 <?php foreach ($dag['kinderen'] as $rij): ?>
     <li class="kindrij kindrij--<?= e($rij['status']) ?>">
       <div>
-        <div class="kindrij__naam"><a href="kind.php?id=<?= (int) $rij['kind_id'] ?>"><?= e(kindnaam($rij)) ?></a> <?= status_badge($rij['status']) ?>
+        <div class="kindrij__naam"><?= link_als('kinderen', 'kind.php?id=' . (int) $rij['kind_id'], e(kindnaam($rij))) ?> <?= status_badge($rij['status']) ?>
 <?php if ($rij['aanwezig_om']): ?> <span class="badge badge--bevestigd"><?= icoon('check') ?>Binnen <?= e(tijd_nl($rij['aanwezig_om'])) ?></span><?php endif; ?>
 <?php if ($rij['opgehaald_om']): ?> <span class="badge"><?= icoon('home') ?>Opgehaald <?= e(tijd_nl($rij['opgehaald_om'])) ?></span><?php endif; ?>
         </div>
@@ -161,6 +161,10 @@ function groep_opties(?int $gekozen, bool $leegToegestaan = true, string $leegLa
 {
     $html = $leegToegestaan ? '<option value="">' . e($leegLabel) . '</option>' : '';
     foreach (rijen('SELECT * FROM groepen ORDER BY actief DESC, naam') as $groep) {
+        // Het team kiest alleen uit de groepen waar het toegang toe heeft
+        if (is_team() && !team_mag_groep((int) $groep['id'])) {
+            continue;
+        }
         $html .= '<option value="' . (int) $groep['id'] . '"' . ((int) $gekozen === (int) $groep['id'] ? ' selected' : '') . '>' . e($groep['naam']) . ($groep['actief'] ? '' : ' (niet actief)') . '</option>';
     }
     return $html;

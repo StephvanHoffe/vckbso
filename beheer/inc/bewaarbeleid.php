@@ -21,7 +21,7 @@ const BEWAARTERMIJNEN = [
     'bewaar_berichten_maanden' => ['Berichten en ziekmeldingen', 'maanden', 'na verzenden'],
     'bewaar_aanmeldingen_maanden' => ['Aanmeldingen die niet tot plaatsing leidden', 'maanden', 'na aanmelden'],
     'bewaar_account_maanden' => ['Account en contactgegevens van gestopte klanten', 'maanden', 'na vertrek; naam en adres blijven bij de facturen'],
-    'bewaar_financieel_jaren' => ['Financiële administratie: facturen, betalingen en de opvangdagen waarop ze zijn gebaseerd', 'jaar', 'fiscale bewaarplicht'],
+    'bewaar_financieel_jaren' => ['Financiële administratie: facturen, betalingen, de opvangdagen waarop ze zijn gebaseerd, en de boekingen en bonnetjes onder Financiën', 'jaar', 'fiscale bewaarplicht'],
     'bewaar_logboek_maanden' => ['Logboek: inzage, wijzigingen, exports en inloggen', 'maanden', ''],
 ];
 
@@ -83,6 +83,10 @@ function voer_bewaarbeleid_uit(): array
     $telling['facturen'] = q('DELETE FROM facturen WHERE datum < ?', [substr($grens, 0, 10)])->rowCount();
     q('DELETE FROM betalingen WHERE aangemaakt_op < ?', [$grens]);
     $telling['opvangdagen'] = q('DELETE FROM inschrijvingen WHERE datum < ?', [substr($grens, 0, 10)])->rowCount();
+    foreach (rijen('SELECT bijlage FROM boekingen WHERE datum < ? AND bijlage IS NOT NULL', [substr($grens, 0, 10)]) as $boeking) {
+        verwijder_bijlage($boeking['bijlage']);
+    }
+    $telling['boekingen'] = q('DELETE FROM boekingen WHERE datum < ?', [substr($grens, 0, 10)])->rowCount();
     // Geanonimiseerde kinderen zonder opvangdagen en gewiste accounts zonder facturen hebben geen functie meer
     q('DELETE FROM kinderen WHERE geanonimiseerd_op IS NOT NULL AND NOT EXISTS (SELECT 1 FROM inschrijvingen i WHERE i.kind_id = kinderen.id)');
     $telling['accounts_verwijderd'] = q("DELETE FROM gebruikers WHERE rol = 'ouder' AND gewist_op IS NOT NULL

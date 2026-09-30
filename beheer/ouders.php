@@ -2,7 +2,7 @@
 /* Ouders (klanten): lijst met status en machtiging (team). */
 require __DIR__ . '/inc/bootstrap.php';
 
-$gebruiker = vereis_team();
+$gebruiker = vereis_recht('ouders');
 
 $status = get_str('status', 'actief');
 $zoek = get_str('zoek');
@@ -33,7 +33,7 @@ pagina_kop('Ouders', 'Alle klanten met hun kinderen, status en machtiging. Nieuw
 <section class="panel" aria-labelledby="lijst-titel">
   <h2 id="lijst-titel" class="visually-hidden">Lijst met ouders</h2>
   <ul class="kind-tabs" aria-label="Filter op status">
-<?php foreach ((is_beheerder($gebruiker) ? ['nieuw' => 'Nieuwe aanmeldingen'] : []) + ['actief' => 'Actief', 'gestopt' => 'Gestopt', 'alle' => 'Alle'] as $sleutel => $label): ?>
+<?php foreach ((team_mag('klanten_beheren', $gebruiker) ? ['nieuw' => 'Nieuwe aanmeldingen'] : []) + ['actief' => 'Actief', 'gestopt' => 'Gestopt', 'alle' => 'Alle'] as $sleutel => $label): ?>
     <li><a href="ouders.php?status=<?= $sleutel ?>"<?= $status === $sleutel ? ' aria-current="true"' : '' ?>><?= e($label) ?><?= $sleutel !== 'alle' ? ' (' . ($aantallen[$sleutel] ?? 0) . ')' : '' ?></a></li>
 <?php endforeach; ?>
   </ul>

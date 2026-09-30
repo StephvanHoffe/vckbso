@@ -52,8 +52,14 @@ if (!actieve_groepen()) {
     q("INSERT INTO groepen (naam, omschrijving, max_kinderen, dagen, begintijd, eindtijd, kleur) VALUES ('De Bengels', 'Onderbouw', 8, '1,2,3,4,5', '14:00', '17:00', 'sun'), ('De Kanjers', 'Bovenbouw', 10, '1,2,4', '14:00', '17:00', 'mint')");
 }
 $groepen = actieve_groepen();
-// De begeleider werkt in de eerste groep
+// De begeleider werkt in de eerste groep; de beheerder mag alles
 q('INSERT OR IGNORE INTO medewerker_groepen (gebruiker_id, groep_id) VALUES (?, ?)', [$begeleider, $groepen[0]['id']]);
+foreach (alle_rechten() as $recht) {
+    q('INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) VALUES (?, ?)', [$beheerder, $recht]);
+}
+foreach (RECHTEN_BEGELEIDER as $recht) {
+    q('INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) VALUES (?, ?)', [$begeleider, $recht]);
+}
 
 // Gezinnen met kinderen (verzonnen namen)
 $gezinnen = [
@@ -99,6 +105,24 @@ foreach ($kinderen as $n => $kind) {
 $ouderNoor = (int) $kinderen[0]['ouder_id'];
 nieuw_bericht($ouderNoor, $ouderNoor, null, 'bericht', 'Hoi! Noor wordt vandaag om 16:30 opgehaald door oma.', true, false);
 q("INSERT INTO observaties (kind_id, auteur_id, datum, gebied, tekst, gedeeld, aangemaakt_op) VALUES (?, ?, ?, 'motoriek', ?, 1, ?)", [$kinderen[0]['id'], $begeleider, vandaag(), versleutel('Oefende vandaag fanatiek met touwtjespringen en kan nu tien keer achter elkaar!'), nu()]);
+
+// Financiën: een paar verzonnen voorbeelduitgaven in de afgelopen maanden
+$voorbeelden = [
+    ['huur', 'Huur ruimte (voorbeeld)', 150000],
+    ['eten', 'Boodschappen fruit en brood (voorbeeld)', 18450],
+    ['materiaal', 'Knutselmateriaal (voorbeeld)', 6275],
+    ['activiteiten', 'Uitje kinderboerderij (voorbeeld)', 9500],
+];
+for ($m = 3; $m >= 0; $m--) {
+    foreach ($voorbeelden as $i => [$categorie, $omschrijving, $bedrag]) {
+        if ($m === 0 && $i > 1) {
+            continue;
+        }
+        q("INSERT INTO boekingen (soort, datum, categorie, omschrijving, bedrag_cent, aangemaakt_door, aangemaakt_op) VALUES ('uitgave', ?, ?, ?, ?, ?, ?)", [
+            date('Y-m-d', strtotime("first day of -{$m} month +" . (2 + $i * 5) . ' days')), $categorie, $omschrijving, $bedrag + $m * 125, $beheerder, nu(),
+        ]);
+    }
+}
 
 echo "Demogegevens aangemaakt.\n";
 echo "Inloggen met wachtwoord \"" . DEMO_WACHTWOORD . "\":\n";
