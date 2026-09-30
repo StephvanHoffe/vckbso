@@ -14,7 +14,7 @@ Bouw een complete, responsive website voor **BSO VCK** (bso) in Amsterdam.
 - **Doelgroep:** Particulieren. (Drukke-) ouders met kinderen die een buitenschoolse opvang nodig hebben.
 - **Werkgebied:** Lokaal (Amsterdam)
 - **Doelen van de website:** Nieuwe klanten werven, informatie geven en professionele uitstraling
-- **Belangrijkste actie:** Langskomen. De hoofdknop "Kom langs" staat in de header en terug op elke pagina, als een knop naar het adres met routebeschrijving.
+- **Belangrijkste actie:** Aanmelden. De hoofdknop "Aanmelden" staat in de header en terug op elke pagina, als een knop naar de aanmeldpagina. Langskomen blijft mogelijk via een tekstlink naar het adres met routebeschrijving. (Gewijzigd op 30 september 2026; oorspronkelijk was de hoofdknop "Kom langs".)
 - **Kernboodschap (hero-kop op de homepage):** "Dat wij de leukste/gezelligste/sportiefste BSO zijn met oprechte aandacht voor ieder kind"
 - **Waarom klanten voor dit bedrijf kiezen (USP's, laat ze op de homepage zien):**
   - Oprechte aandacht voor ieder kind
@@ -106,7 +106,7 @@ Verzin nooit feiten: geen niet-bestaande prijzen, jaartallen, certificaten, klan
 ## Sitemap en inhoud
 
 Pagina's: Home, over ons, diensten, prijzen, team, veelgestelde vragen en contact.
-Navigatie in de header met alle pagina's en de hoofdknop "Kom langs". Footer met contactgegevens, openingstijden, social media, KvK-nummer en links naar privacy en voorwaarden.
+Navigatie in de header met alle pagina's en de hoofdknop "Aanmelden". Footer met contactgegevens, openingstijden, social media, KvK-nummer en links naar privacy en voorwaarden.
 
 ### Home (`index`)
 
@@ -247,7 +247,7 @@ Overige wensen van de klant:
 ## Checklist
 
 - [ ] Alle pagina's uit de sitemap bestaan en staan in de navigatie
-- [ ] De hoofdknop "Kom langs" staat in de header en op elke pagina
+- [ ] De hoofdknop "Aanmelden" staat in de header en op elke pagina
 - [ ] Kleuren, letters, vormen en ruimte komen uit `design/tokens.css`
 - [ ] Het ontwerp klopt met de keuzes in de tabel onder "Ontwerp"
 - [ ] Teksten volgen de gekozen aanspreekvorm en toon

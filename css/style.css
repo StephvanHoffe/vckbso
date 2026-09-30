@@ -469,33 +469,6 @@ a:hover {
   order: 2;
 }
 
-/* Aanmeldknop: in de header op brede schermen, in het menu op kleinere schermen */
-.site-header__signup {
-  display: none;
-  order: 2;
-}
-
-.site-nav__signup {
-  margin-top: var(--space-s);
-}
-
-@media (min-width: 80em) {
-  .site-header__signup {
-    display: inline-flex;
-  }
-
-  .site-nav__signup {
-    display: none;
-  }
-}
-
-/* Inloggen voor ouders (Mijn BSO): in het mobiele menu en op brede schermen. Tussen 1280 en 1440px is er te weinig ruimte; dan staat de link alleen in de footer. */
-@media (min-width: 80em) and (max-width: 89.99em) {
-  .site-nav__login {
-    display: none;
-  }
-}
-
 @media (max-width: 23.99em) {
   .site-header__inner {
     gap: var(--space-xs) var(--space-2xs);
