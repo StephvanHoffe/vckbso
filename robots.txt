@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /beheer/
 
 Sitemap: https://bsovck.nl/sitemap.xml

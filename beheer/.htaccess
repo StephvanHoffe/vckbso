@@ -1,0 +1,21 @@
+# Beheeromgeving BSO VCK (Apache). Zie docs/beheeromgeving.md voor nginx.
+DirectoryIndex index.php
+Options -Indexes
+
+# Alleen de pagina's zelf zijn bereikbaar; config, code en data niet
+<FilesMatch "^(config|config\.voorbeeld)\.php$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "same-origin"
+  Header always set X-Frame-Options "DENY"
+</IfModule>
+
+# Uploads van foto's (telefoonfoto's zijn vaak groot)
+<IfModule mod_php.c>
+  php_value upload_max_filesize 16M
+  php_value post_max_size 64M
+  php_value max_file_uploads 30
+</IfModule>

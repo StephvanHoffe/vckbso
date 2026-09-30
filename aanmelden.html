@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Aanmelden · BSO VCK in Amsterdam</title>
-<meta name="description" content="Meld je kind aan bij BSO VCK, de gezellige en sportieve buitenschoolse opvang in Amsterdam. Vul het formulier in, dan nemen we contact met je op.">
+<meta name="description" content="Meld je kind aan bij BSO VCK, de gezellige en sportieve buitenschoolse opvang in Amsterdam. Maak je account aan en meld je kind direct online aan.">
 <!-- TODO: het domein bsovck.nl is nog niet geregistreerd; pas de URL's aan als het domein anders wordt -->
 <link rel="canonical" href="https://bsovck.nl/aanmelden.html">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="nl_NL">
 <meta property="og:site_name" content="BSO VCK">
 <meta property="og:title" content="Aanmelden · BSO VCK in Amsterdam">
-<meta property="og:description" content="Meld je kind aan bij BSO VCK, de gezellige en sportieve buitenschoolse opvang in Amsterdam. Vul het formulier in, dan nemen we contact met je op.">
+<meta property="og:description" content="Meld je kind aan bij BSO VCK, de gezellige en sportieve buitenschoolse opvang in Amsterdam. Maak je account aan en meld je kind direct online aan.">
 <meta property="og:url" content="https://bsovck.nl/aanmelden.html">
 <meta property="og:image" content="https://bsovck.nl/assets/img/og-image.jpg">
 <meta property="og:image:width" content="1200">
@@ -44,6 +44,7 @@
         <li><a href="team.html">Team</a></li>
         <li><a href="veelgestelde-vragen.html">Veelgestelde vragen</a></li>
         <li><a href="contact.html">Contact</a></li>
+        <li class="site-nav__login"><a href="beheer/inloggen.php">Inloggen</a></li>
       </ul>
       <ul class="lang" aria-label="Kies je taal">
         <li><a href="index.html" lang="nl" hreflang="nl" aria-current="true"><span aria-hidden="true">NL</span><span class="visually-hidden">Nederlands</span></a></li>
@@ -68,8 +69,8 @@
       </nav>
       <p class="eyebrow">Aanmelden</p>
       <h1>Meld je kind aan bij BSO VCK</h1>
-      <p class="lead">Wat leuk dat je voor ons kiest! Vul het formulier in, dan nemen we contact met je op. Samen maken we de inschrijving en een startdatum rond.</p>
-      <div class="btn-group"><a class="btn" href="#aanmeldformulier"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-userplus"></use></svg>Naar het formulier</a>
+      <p class="lead">Wat leuk dat je voor ons kiest! Maak je account aan en meld je kind aan. Daarna nemen we contact met je op voor een kennismaking.</p>
+      <div class="btn-group"><a class="btn" href="beheer/aanmelden.php"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-userplus"></use></svg>Account aanmaken</a>
         <a class="btn btn--secondary" href="contact.html#kom-langs"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg>Eerst kennismaken</a></div>
     </div>
     <div class="page-hero__media">
@@ -87,137 +88,32 @@
   <span class="deco deco--ring parallax" style="--size: 9rem; --deco-color: var(--color-sun); bottom: 10%; right: -3rem;" aria-hidden="true"></span>
 </section>
 
-<section class="section" aria-labelledby="formulier-titel">
+<section class="section" aria-labelledby="account-titel">
   <div class="container contact-layout">
     <div class="reveal">
-      <p class="eyebrow">Aanmeldformulier</p>
-      <h2 id="formulier-titel">Vertel ons over je kind</h2>
-      <p class="muted">Velden met een * zijn verplicht. Het invullen duurt een paar minuten.</p>
-      <!-- TODO: formulierendienst instellen (bijv. Formspree of Basin) en de endpoint-URL hieronder invullen. Aanmeldingen gaan naar info@vckbso.nl. Zolang de URL 'TODO' bevat, opent het formulier het e-mailprogramma van de bezoeker (mailto).
-           Later: aanmelden koppelen aan de beheeromgeving, zodat ouder en kinderen direct als klant in het systeem komen (zie docs/beheeromgeving.md). -->
-      <form class="form form--sections" id="aanmeldformulier" action="https://formspree.io/f/TODO-aanmeldformulier-id" method="post" data-form data-mailto="info@vckbso.nl" data-subject="Aanmelding via de website" data-success="Joepie, je aanmelding is binnen! We nemen zo snel mogelijk contact met je op." data-mailto-success="Je e-mailprogramma wordt geopend met je aanmelding erin. Verstuur de e-mail, dan komt je aanmelding bij ons binnen!">
-        <input type="hidden" name="_subject" value="Nieuwe aanmelding via de website van BSO VCK">
-
-        <fieldset>
-          <legend class="legend-title">Jouw gegevens</legend>
-          <div class="form__row">
-            <div class="field">
-            <label for="ouder-naam">Je naam *</label>
-            <input id="ouder-naam" name="ouder_naam" type="text" required aria-describedby="ouder-naam-fout" autocomplete="name" data-msg-required="Vul je naam in.">
-            <p class="field__error" id="ouder-naam-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
-          </div>
-            <div class="field">
-            <label for="ouder-email">E-mailadres *</label>
-            <input id="ouder-email" name="ouder_email" type="email" required aria-describedby="ouder-email-fout" autocomplete="email" inputmode="email" data-msg-required="Vul je e-mailadres in." data-msg-type="Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.">
-            <p class="field__error" id="ouder-email-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
-          </div>
-          </div>
-          <div class="form__row">
-            <div class="field">
-            <label for="ouder-telefoon">Telefoonnummer *</label>
-            <input id="ouder-telefoon" name="ouder_telefoon" type="tel" required aria-describedby="ouder-telefoon-fout" autocomplete="tel" inputmode="tel" pattern="[0-9 +\(\)\-]{10,20}" data-msg-required="Vul je telefoonnummer in, dan kunnen we je even bellen." data-msg-pattern="Vul een geldig telefoonnummer in, bijvoorbeeld 06&nbsp;12&nbsp;34&nbsp;56&nbsp;78.">
-            <p class="field__error" id="ouder-telefoon-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
-          </div>
-            <div class="field">
-              <label for="contactvoorkeur">Hoe bereiken we je het liefst?</label>
-              <select id="contactvoorkeur" name="contactvoorkeur">
-                <option>Bellen</option>
-                <option>Mailen</option>
-                <option>Maakt niet uit</option>
-              </select>
-            </div>
-          </div>
-        </fieldset>
-
-        <fieldset data-repeat data-repeat-max="4">
-          <legend class="legend-title">Je kind of kinderen</legend>
-          <div class="repeat-list" data-repeat-list>
-            <div class="repeat-item" data-repeat-item>
-              <fieldset>
-                <legend class="legend-label">Kind <span data-repeat-number>1</span></legend>
-                <div class="form__row">
-                  <div class="field">
-            <label for="kind1-voornaam">Voornaam *</label>
-            <input id="kind1-voornaam" name="kind1_voornaam" type="text" required aria-describedby="kind1-voornaam-fout" autocomplete="off" data-msg-required="Vul de voornaam van je kind in.">
-            <p class="field__error" id="kind1-voornaam-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
-          </div>
-                  <div class="field">
-            <label for="kind1-geboortedatum">Geboortedatum *</label>
-            <input id="kind1-geboortedatum" name="kind1_geboortedatum" type="date" required aria-describedby="kind1-geboortedatum-fout" data-max-today data-msg-required="Vul de geboortedatum van je kind in." data-msg-type="Vul een geldige datum in." data-msg-range="Deze datum ligt in de toekomst. Controleer de geboortedatum even.">
-            <p class="field__error" id="kind1-geboortedatum-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
-          </div>
-                </div>
-                <div class="field">
-            <label for="kind1-school">Basisschool <span class="field__hint">(optioneel)</span></label>
-            <input id="kind1-school" name="kind1_school" type="text" autocomplete="off">
-            
-          </div>
-                <button class="link-button" type="button" data-repeat-remove hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg>Verwijder dit kind</button>
-              </fieldset>
-            </div>
-          </div>
-          <button class="btn btn--secondary btn--small" type="button" data-repeat-add><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>Nog een kind aanmelden</button>
-          <p class="muted" data-repeat-note hidden>Wil je meer dan vier kinderen aanmelden? Zet ze dan bij de opmerkingen hieronder.</p>
-        </fieldset>
-
-        <fieldset>
-          <legend class="legend-title">Opvang</legend>
-          <fieldset data-choice-group>
-            <legend class="legend-label">Op welke dagen wil je opvang? <span class="field__hint">(optioneel)</span></legend>
-            <div class="choices">
-              <label class="choice"><input id="dag-maandag" type="checkbox" name="dagen" value="maandag">Maandag</label>
-              <label class="choice"><input id="dag-dinsdag" type="checkbox" name="dagen" value="dinsdag">Dinsdag</label>
-              <label class="choice"><input id="dag-woensdag" type="checkbox" name="dagen" value="woensdag">Woensdag</label>
-              <label class="choice"><input id="dag-donderdag" type="checkbox" name="dagen" value="donderdag">Donderdag</label>
-              <label class="choice"><input id="dag-vrijdag" type="checkbox" name="dagen" value="vrijdag">Vrijdag</label>
-            </div>
-            <p class="muted" style="margin: 0;">Weet je het nog niet precies? Geen probleem, dat bespreken we samen.</p>
-          </fieldset>
-          <div class="form__row">
-            <div class="field">
-            <label for="startdatum">Gewenste startdatum <span class="field__hint">(optioneel)</span></label>
-            <input id="startdatum" name="startdatum" type="date" >
-            
-          </div>
-          </div>
-          <div class="field">
-            <label for="opmerkingen">Opmerkingen <span class="field__hint">(optioneel)</span></label>
-            <textarea id="opmerkingen" name="opmerkingen" rows="4" aria-describedby="opmerkingen-hint"></textarea>
-            <p class="field__hint" id="opmerkingen-hint" style="margin: 0.45rem 0 0;">Is er iets wat we moeten weten over je kind? Of heb je een vraag? Zet het hier.</p>
-          </div>
-        </fieldset>
-
-        <div class="hp" aria-hidden="true">
-          <label for="website">Laat dit veld leeg</label>
-          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
-        </div>
-
-        <div class="field">
-          <div class="consent">
-            <input id="akkoord" name="akkoord" type="checkbox" required aria-describedby="akkoord-fout" data-msg-required="Vink dit aan om je aanmelding te kunnen versturen." data-summary-label="Akkoord met de privacyverklaring">
-            <label for="akkoord">Ik heb de <a href="privacy.html">privacyverklaring</a> gelezen en vind het goed dat BSO VCK mijn gegevens en die van mijn kind gebruikt om mijn aanmelding af te handelen. *</label>
-          </div>
-          <p class="field__error" id="akkoord-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
-        </div>
-
-        <!-- TODO: contract en automatische incasso (SEPA-machtiging) bij de aanmelding regelen via de beheeromgeving, zie docs/beheeromgeving.md -->
-        <p class="form__privacy">Een aanmelding is nog geen inschrijving. We nemen eerst contact met je op; het contract en de betaling regelen we samen bij de definitieve inschrijving.</p>
-
-        <div class="btn-group">
-          <button class="btn" type="submit">Aanmelding versturen<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg></button>
-          <p class="muted" style="margin: 0;">Lukt het niet? Mail naar <a href="mailto:info@vckbso.nl">info@vckbso.nl</a>.</p>
-        </div>
-        <div class="form-status" data-form-status role="status" aria-live="polite"></div>
-      </form>
+      <p class="eyebrow">Zo meld je je kind aan</p>
+      <h2 id="account-titel">Maak je account aan</h2>
+      <p>Aanmelden doe je in een paar minuten via je eigen account in <strong>Mijn BSO</strong>. Je vult je eigen gegevens en die van je kind of kinderen in, en je kiest een wachtwoord. Daarna geef je een machtiging voor automatische incasso, zodat het betalen vanzelf gaat.</p>
+      <ul class="checklist">
+        <li>Na de kennismaking kies je zelf de dagen in de agenda, en meld je je kind net zo makkelijk weer af</li>
+        <li>Stuur ons een berichtje of meld je kind ziek, gewoon vanuit je account</li>
+        <li>Bekijk de foto's die de begeleiders van jouw kind delen</li>
+        <li>Al je facturen op één plek, automatisch betaald</li>
+      </ul>
+      <div class="btn-group">
+        <a class="btn" href="beheer/aanmelden.php"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-userplus"></use></svg>Account aanmaken en aanmelden</a>
+        <a class="btn btn--secondary" href="beheer/inloggen.php">Ik heb al een account</a>
+      </div>
+      <p class="muted" style="margin-top: var(--space-m);">Lukt het niet? Mail naar <a href="mailto:info@vckbso.nl">info@vckbso.nl</a> of bel <a href="tel:+31612345678">06&nbsp;12&nbsp;34&nbsp;56&nbsp;78</a>, dan helpen we je graag.</p>
     </div>
     <aside class="reveal" style="--delay: 150ms;" aria-label="Zo gaat het verder">
       <div class="side-card">
         <h2>Zo gaat het verder</h2>
         <ol class="mini-steps">
-          <li>Je vult het aanmeldformulier in.</li>
-          <li>We nemen contact met je op, op de manier die jij kiest.</li>
-          <li>We maken kennis en spreken samen de dagen en een startdatum af.</li>
-          <li>Je kind komt voor het eerst en krijgt een warm welkom.</li>
+          <li>Je maakt een account aan en meldt je kind aan.</li>
+          <li>Je geeft een machtiging voor automatische incasso via je eigen bank.</li>
+          <li>We maken kennis en zetten je kind in een groep.</li>
+          <li>Je kiest zelf de dagen in de agenda. Je kind krijgt een warm welkom!</li>
         </ol>
       </div>
       <div class="side-card" style="background: var(--color-sun-soft);">
@@ -267,6 +163,7 @@
         <li><a href="veelgestelde-vragen.html">Veelgestelde vragen</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li><a href="aanmelden.html">Aanmelden</a></li>
+        <li><a href="beheer/inloggen.php">Inloggen (Mijn BSO)</a></li>
       </ul>
     </div>
   </div>

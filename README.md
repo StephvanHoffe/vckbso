@@ -3,6 +3,7 @@
 Statische website voor **BSO VCK**, buitenschoolse opvang in Amsterdam (statutaire naam: Je Dag in Beeld). Gebouwd volgens de bouwinstructies in [`CLAUDE.md`](CLAUDE.md).
 
 - Gewone HTML, CSS en een klein beetje JavaScript. Geen framework en geen build-stap.
+- Met een beheeromgeving en ouderportaal in `beheer/` (PHP + SQLite): aanmelden als klant met kinderen, automatische incasso via Mollie, facturen online, groepsagenda met maximale groepsgrootte die twee kanten op werkt, kindvolgsysteem, foto's en berichten. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
 - Mobile-first en getest op 360, 768 en 1280 px breed, zonder horizontaal scrollen.
 - Lighthouse (mobiel) op home, diensten en contact: prestaties 99, toegankelijkheid 100, best practices 100, SEO 100.
 - Automatische toegankelijkheidstest (axe, WCAG 2.1 AA): geen overtredingen op alle pagina's.
@@ -16,22 +17,32 @@ Open `index.html` in je browser, of start een lokale server:
 npx serve .
 ```
 
+De beheeromgeving (`/beheer/`) heeft PHP nodig:
+
+```sh
+cp beheer/config.voorbeeld.php beheer/config.php   # vul een installatiecode in
+php -S localhost:8000
+php tools/beheer-demodata.php                      # optioneel: demogegevens om uit te proberen
+```
+
 ## Structuur
 
 | Pad | Inhoud |
 |---|---|
 | `index.html`, `over-ons.html`, `diensten.html`, `prijzen.html`, `team.html`, `veelgestelde-vragen.html`, `contact.html` | De pagina's uit de sitemap |
-| `aanmelden.html` | Aanmeldformulier voor ouders (een of meer kinderen, gewenste dagen, startdatum). Bereikbaar via de knop "Aanmelden" in de header. |
+| `aanmelden.html` | Uitleg over aanmelden, met de knop naar het aanmeldproces in Mijn BSO (`beheer/aanmelden.php`). Bereikbaar via de knop "Aanmelden" in de header. |
+| `beheer/` | Beheeromgeving voor het team en Mijn BSO voor ouders (PHP 8.1+, SQLite). Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md). |
 | `privacy.html`, `voorwaarden.html`, `404.html` | Privacyverklaring, algemene voorwaarden en foutpagina |
 | `en/index.html` | Eerste opzet van de Engelse versie (taalkeuze NL/EN in de header) |
 | `design/tokens.css` | Design tokens: kleuren, letters, ruimte, vormen en beweging. Ook de `@font-face`-regels. |
 | `css/style.css` | Alle opmaak, mobile-first |
-| `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole (contact en aanmelden), kinderen toevoegen in het aanmeldformulier |
+| `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole van het contactformulier |
 | `assets/fonts/` | Manrope (variabel, lokaal gehost, OFL-licentie) |
 | `assets/fotos/` | Foto's in AVIF en WebP (nu nog stockfoto's van Pexels), met de bronbestanden in `bron/`. Fotografen, licentie en de fotolijst staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
 | `assets/img/` | Favicon, app-iconen en de deelafbeelding (`og-image.jpg`) |
 | `tools/fotos.mjs` | Hulpscript om beelden om te zetten (`npm run fotos`). Niet nodig om de site te draaien. |
-| `docs/beheeromgeving.md` | Voorstel voor de gewenste beheeromgeving met kindvolgsysteem |
+| `tools/beheer-demodata.php` | Vult een lege test-omgeving van de beheeromgeving met verzonnen demogegevens |
+| `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, rollen, installatie, Mollie, beveiliging en TODO's |
 
 Header, footer en de iconenset staan in elke pagina. Pas je iets aan in de navigatie of footer, doe dat dan op alle pagina's (zoek en vervang).
 
@@ -61,14 +72,14 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Teamportretten (Team) en de teamfoto (Over ons). Hier staan bewust geen stockfoto's: die zouden lijken op echte teamleden.
 
 **Techniek**
-- [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL's in `contact.html` en `aanmelden.html` invullen. Berichten en aanmeldingen moeten naar info@vckbso.nl gaan. Tot die tijd openen de formulieren het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
-- [ ] Privacyverklaring laten controleren: bewaartermijn, naam van de formulierendienst en een verwerkersovereenkomst. Het aanmeldformulier vraagt ook gegevens van kinderen (voornaam, geboortedatum, school).
+- [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@vckbso.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
+- [ ] Privacyverklaring laten controleren: bewaartermijnen, verwerkers (formulierendienst, hosting, Mollie) en de verwerking van gegevens van kinderen in Mijn BSO.
 - [ ] Domein `bsovck.nl` registreren. Wordt het een ander domein, pas dan de URL's aan in de `<head>` van elke pagina, in `sitemap.xml` en in `robots.txt`.
 - [ ] Engelse teksten na akkoord van de klant op de Nederlandse teksten. Nu staat er alleen een Engelse startpagina.
-- [ ] Beheeromgeving met kindvolgsysteem, aanmelding, incasso, foto's, berichten en groepsagenda. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
+- [ ] Beheeromgeving live zetten: hosting met PHP en https, `beheer/config.php`, Mollie koppelen, uurtarief en groepen instellen. De volledige lijst staat in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#nog-te-doen-todo).
 
 ## Live zetten
 
-De site werkt op elke statische host (bijvoorbeeld Netlify, Cloudflare Pages, GitHub Pages of gewone webhosting). Upload de map zonder `node_modules/`, `tools/`, `assets/fotos/bron/` en `package*.json`. Stel `404.html` in als foutpagina.
+De website zelf werkt op elke statische host, maar voor de beheeromgeving (`beheer/`) is hosting met **PHP 8.1 of hoger** en https nodig. Gewone Nederlandse webhosting met PHP is genoeg. Upload de map zonder `node_modules/`, `tools/`, `assets/fotos/bron/` en `package*.json`. Stel `404.html` in als foutpagina. Volg daarna de stappen in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#live-zetten).
 
 **Let op bij het koppelen van het domein:** er is al e-mail in gebruik (info@vckbso.nl). Het gewenste websitedomein is bsovck.nl, terwijl de e-mail op vckbso.nl draait. Controleer dit met de klant. Zet je de website op een domein waar al e-mail op draait, wijzig dan alleen de DNS-records voor de website (A/AAAA of CNAME). Laat de MX-, SPF-, DKIM- en DMARC-records ongemoeid, anders stopt de e-mail.

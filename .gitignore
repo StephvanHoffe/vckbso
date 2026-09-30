@@ -1,2 +1,6 @@
 node_modules/
 .DS_Store
+beheer/config.php
+beheer/data/*
+!beheer/data/.htaccess
+!beheer/data/index.html
