@@ -1477,6 +1477,228 @@ a:hover {
   margin-bottom: 0;
 }
 
+/* Rekentool kinderopvangtoeslag */
+.rekentool {
+  display: grid;
+  gap: var(--space-l);
+  align-items: start;
+}
+
+.rekentool [hidden] {
+  display: none !important;
+}
+
+@media (min-width: 64em) {
+  .rekentool {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: var(--space-xl);
+  }
+}
+
+.rekentool__zonder-js {
+  max-width: var(--measure);
+}
+
+.rekentool__form {
+  padding: clamp(var(--space-m), 4vw, var(--space-xl));
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-alt);
+}
+
+.rekentool__form .repeat-item {
+  background: var(--color-surface);
+}
+
+.rekentool__hint {
+  display: block;
+  margin: 0.4rem 0 0;
+  font-size: var(--step--1);
+}
+
+.field > .rekentool__hint:not(:last-child) {
+  margin: 0 0 0.6rem;
+}
+
+.rekentool__melding {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6em;
+  margin: 0;
+  padding: var(--space-s) var(--space-m);
+  border-radius: var(--radius-m);
+  background: var(--color-sun-soft);
+  font-weight: var(--font-weight-strong);
+}
+
+.rekentool__melding .icon {
+  flex-shrink: 0;
+  margin-top: 0.2em;
+}
+
+.rekentool__euro {
+  position: relative;
+}
+
+.rekentool__euro > span {
+  position: absolute;
+  top: 50%;
+  left: 1.1rem;
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-strong);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.field .rekentool__euro input {
+  padding-left: 2.4rem;
+}
+
+.choice__extra {
+  color: var(--color-text-muted);
+  font-weight: var(--font-weight-body);
+}
+
+.rekentool__breed {
+  grid-column: 1 / -1;
+}
+
+.rekentool__uren {
+  margin: 0;
+  font-weight: var(--font-weight-strong);
+}
+
+.rekentool__uren:empty,
+.rekentool__status:empty,
+.rekentool__per-kind:empty {
+  display: none;
+}
+
+.rekentool__toevoegen {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2xs);
+}
+
+.rekentool__uitkomst {
+  display: grid;
+  gap: var(--space-s);
+  padding: clamp(var(--space-m), 4vw, var(--space-xl));
+  border-radius: var(--radius-xl);
+  background: var(--color-sun-soft);
+  box-shadow: var(--shadow-m);
+}
+
+@media (min-width: 64em) {
+  .rekentool__uitkomst {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-m));
+  }
+}
+
+.rekentool__titel {
+  margin: 0;
+  font-size: var(--step-1);
+}
+
+.rekentool__bedrag {
+  margin: 0;
+  color: var(--color-primary-deep);
+  font-family: var(--font-heading);
+  font-size: var(--step-5);
+  font-weight: var(--font-weight-heading);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.rekentool__per {
+  margin: 0;
+}
+
+.rekentool__som {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding-top: var(--space-s);
+  border-top: var(--border-width) dashed var(--color-accent);
+}
+
+.rekentool__som > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-s);
+}
+
+.rekentool__som dd {
+  margin: 0;
+  font-weight: var(--font-weight-strong);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.rekentool__som--klein {
+  padding-top: 0;
+  border-top: 0;
+  font-size: var(--step--1);
+}
+
+.rekentool__status {
+  margin: 0;
+  font-weight: var(--font-weight-strong);
+}
+
+.rekentool__per-kind {
+  display: grid;
+  gap: var(--space-s);
+}
+
+.rekentool__kind-uitkomst {
+  padding: var(--space-s) var(--space-m);
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+}
+
+.rekentool__kind-kop {
+  margin: 0 0 0.35rem;
+}
+
+.rekentool__uitleg {
+  padding-top: var(--space-2xs);
+  border-top: var(--border-width) dashed var(--color-accent);
+}
+
+.rekentool__uitleg summary {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  color: var(--color-link);
+  font-weight: var(--font-weight-button);
+  cursor: pointer;
+}
+
+.rekentool__uitleg p,
+.rekentool__stap ol {
+  font-size: var(--step--1);
+}
+
+.rekentool__stap h4 {
+  margin: var(--space-s) 0 0.3rem;
+  font-size: var(--step-0);
+}
+
+.rekentool__stap ol {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding-left: 1.3rem;
+}
+
+.rekentool__klein {
+  margin: 0;
+  font-size: var(--step--1);
+}
+
 /* ---------- 13. Team ---------- */
 
 .team-card {

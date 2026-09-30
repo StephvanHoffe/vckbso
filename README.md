@@ -38,6 +38,8 @@ php tools/beheer-demodata.php                      # optioneel: demogegevens om 
 | `design/tokens.css` | Design tokens: kleuren, letters, ruimte, vormen en beweging. Ook de `@font-face`-regels. |
 | `css/style.css` | Alle opmaak, mobile-first |
 | `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole van het contactformulier |
+| `js/rekentool/` | Rekentool kinderopvangtoeslag op de prijzenpagina: officiële bedragen per jaar (`toeslag-2026.js`), de tarieven van BSO VCK (`instellingen.js`), de berekening (`berekening.js`) en het formulier (`rekentool.js`). Zie [Rekentool](#rekentool-kinderopvangtoeslag). |
+| `tests/` | Automatische tests van de rekentool (`npm test`), met de tabel uit de brochure van Dienst Toeslagen als tweede bron |
 | `assets/fonts/` | Manrope (variabel, lokaal gehost, OFL-licentie) |
 | `assets/fotos/` | Foto's in AVIF en WebP (nu nog stockfoto's van Pexels), met de bronbestanden in `bron/`. Fotografen, licentie en de fotolijst staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
 | `assets/img/` | Favicon, app-iconen en de deelafbeelding (`og-image.jpg`) |
@@ -46,6 +48,16 @@ php tools/beheer-demodata.php                      # optioneel: demogegevens om 
 | `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, de verplichte eisen (toegang, beveiliging, logboek, ouderrechten, bewaarbeleid), installatie, back-ups, Mollie en TODO's |
 
 Header, footer en de iconenset staan in elke pagina. Pas je iets aan in de navigatie of footer, doe dat dan op alle pagina's (zoek en vervang).
+
+## Rekentool kinderopvangtoeslag
+
+Op de prijzenpagina (`prijzen.html#rekentool`) rekenen ouders uit wat ze per maand betalen na aftrek van de kinderopvangtoeslag. De berekening gebeurt in de browser; er wordt niets verstuurd of opgeslagen.
+
+- **Hoe er gerekend wordt:** precies volgens de 7 stappen uit de brochure [Berekening kinderopvangtoeslag 2026](https://download.belastingdienst.nl/toeslagen/docs/berekening_kinderopvangtoeslag_tg0801z61fd.pdf) van Dienst Toeslagen: maximale uurprijs, maximaal 230 uur per kind per maand, het 1e kind is het kind met de meeste uren (bij gelijke uren de hoogste kosten), percentage uit de tabel bij het gezamenlijke toetsingsinkomen. Bedragen worden per stap op centen afgerond, zoals in de rekenvoorbeelden van de brochure. Er wordt alleen met hele getallen gerekend (centen), dus zonder afrondingsfouten.
+- **Gecontroleerd met `npm test`:** de tabel is vergeleken met twee officiële bronnen (rijksoverheid.nl en de brochure), de 4 officiële rekenvoorbeelden komen tot op de cent uit, elke grens van alle 69 inkomensschijven is getest, en 20.000 willekeurige situaties geven dezelfde uitkomst als een tweede, apart geschreven berekening.
+- **Wat de rekentool niet weet:** de uitkomst is een schatting. De Belastingdienst stelt de toeslag vast, en die hangt ook af van het aantal maanden dat jij en je partner werken. Dat staat ook bij de rekentool.
+- **Tarieven van BSO VCK invullen:** in `js/rekentool/instellingen.js` (uurtarief, schoolweken, vakantieweken, uren per dag). Draai daarna `npm test`: de test meldt ontbrekende of ongeldige gegevens. Zolang er geen tarieven zijn, vult de bezoeker zelf een uurprijs en het aantal uren in.
+- **Elk jaar in januari bijwerken:** maak `js/rekentool/toeslag-<jaar>.js` met de nieuwe tabel en maximale uurprijzen (bron: rijksoverheid.nl, "Bedragen kinderopvangtoeslag"), zet de nieuwe brochuretabel in `tests/bronnen/`, pas `jaar` aan in `instellingen.js`, zet het nieuwe bestand in `prijzen.html` en draai `npm test`. Het kabinet wil de toeslag vanaf 2029 vervangen door een nieuw stelsel; dan moet de rekentool opnieuw worden bekeken.
 
 ## Nog te doen (TODO)
 
@@ -58,6 +70,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Links naar social media (footer).
 - [ ] Openingstijden controleren: zijn 09:00–17:00 de opvangtijden of de kantoortijden? Een BSO is meestal na schooltijd tot 18:00 of 18:30 uur open.
 - [ ] Uurtarief, wat er precies bij de prijs zit en eventuele extra kosten (Prijzen).
+- [ ] Rekentool: opvangvormen (40 of 52 weken, vakantieopvang), uurtarief per opvangvorm en uren opvang per dag invullen in `js/rekentool/instellingen.js`. Bevestigen hoe de uren per maand in het contract worden berekend (nu: uren per week × weken ÷ 12, op twee decimalen).
 - [ ] Opzegtermijn, minimale afname en betaalwijze (Prijzen, Voorwaarden).
 - [ ] LRK-nummer, en bevestigen dat ouders kinderopvangtoeslag kunnen aanvragen (Prijzen, Veelgestelde vragen).
 - [ ] Exacte leeftijdsgrenzen (Diensten, Veelgestelde vragen).
@@ -81,6 +94,6 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 ## Live zetten
 
-De website zelf werkt op elke statische host, maar voor de beheeromgeving (`beheer/`) is hosting met **PHP 8.2 of hoger** en https nodig. Gewone Nederlandse webhosting met PHP is genoeg. Upload de map zonder `node_modules/`, `tools/`, `assets/fotos/bron/` en `package*.json`. Stel `404.html` in als foutpagina. Volg daarna de stappen in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#live-zetten).
+De website zelf werkt op elke statische host, maar voor de beheeromgeving (`beheer/`) is hosting met **PHP 8.2 of hoger** en https nodig. Gewone Nederlandse webhosting met PHP is genoeg. Upload de map zonder `node_modules/`, `tools/`, `tests/`, `assets/fotos/bron/` en `package*.json`. Stel `404.html` in als foutpagina. Volg daarna de stappen in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#live-zetten).
 
 **Let op bij het koppelen van het domein:** er is al e-mail in gebruik (info@vckbso.nl). Het gewenste websitedomein is bsovck.nl, terwijl de e-mail op vckbso.nl draait. Controleer dit met de klant. Zet je de website op een domein waar al e-mail op draait, wijzig dan alleen de DNS-records voor de website (A/AAAA of CNAME). Laat de MX-, SPF-, DKIM- en DMARC-records ongemoeid, anders stopt de e-mail.

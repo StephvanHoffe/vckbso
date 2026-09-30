@@ -28,6 +28,10 @@
 <link rel="stylesheet" href="css/style.css">
 <script>document.documentElement.classList.add("js","reveal-on");setTimeout(function(){if(!window.vckReady)document.documentElement.classList.remove("reveal-on")},3000);</script>
 <script src="js/main.js" defer></script>
+<script src="js/rekentool/toeslag-2026.js" defer></script>
+<script src="js/rekentool/instellingen.js" defer></script>
+<script src="js/rekentool/berekening.js" defer></script>
+<script src="js/rekentool/rekentool.js" defer></script>
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" hidden><symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3.5h3.2l1.6 4-2 1.3a11 11 0 0 0 5.4 5.4l1.3-2 4 1.6V17a3 3 0 0 1-3 3A15.5 15.5 0 0 1 2 6.5a3 3 0 0 1 3-3z"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.1A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20z"/></symbol><symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7.8 3.6 2.6-1.4 4.2H9.8l-1.4-4.2z"/><path d="M12 3v4.8M15.6 10.4l4.7-1.5M14.2 14.6l2.8 3.9M9.8 14.6 7 18.5M8.4 10.4 3.7 8.9"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.8M21.5 20a6.5 6.5 0 0 0-4-6"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol><symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.4 3 7.8 7 9.5 4-1.7 7-5.1 7-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.5"/><path d="m8.5 13.5-1.5 7.5 5-2.5 5 2.5-1.5-7.5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M8 9h8M8 12.5h5"/></symbol><symbol id="i-balloon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 1 6 6c0 4-3.5 7-6 7s-6-3-6-7a6 6 0 0 1 6-6z"/><path d="M12 16v1.5c0 1.5-2 2-2 3.5"/></symbol><symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 10c0-3.3 2.5-5 6-5 0 3.3-2.5 5-6 5z"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></symbol><symbol id="i-euro" viewBox="0 0 24 24"><path d="M17.5 6.5a7 7 0 1 0 0 11"/><path d="M4 10h9M4 14h9"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="m4 12 16-8-5 17-3-7z"/><path d="m12 14 8-10"/></symbol><symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id="i-userplus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M19 8v6M16 11h6"/></symbol></svg>
@@ -95,6 +99,7 @@
       <p>Wat je precies betaalt, hangt af van het aantal dagen en uren dat je kind komt. We rekenen het graag samen met je uit, zodat je precies weet waar je aan toe bent.</p>
       <div class="btn-group">
         <a class="btn" href="aanmelden.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-userplus"></use></svg>Aanmelden</a>
+        <a class="link-arrow" href="#rekentool">Reken het zelf uit<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
         <a class="link-arrow" href="contact.html#formulier">Vraag een prijsopgave aan<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
       </div>
     </div>
@@ -112,6 +117,88 @@
   </div>
 </section>
 
+<section class="section section--flush-top" id="rekentool" aria-labelledby="rekentool-titel">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Rekentool</p>
+      <h2 id="rekentool-titel">Wat betaal jij per maand?</h2>
+      <p>Reken in een paar tellen uit hoeveel kinderopvangtoeslag je ongeveer krijgt en wat je zelf betaalt. We rekenen met de officiële tabel <span data-rt-jaar>2026</span> van Dienst Toeslagen. Wat je invult, blijft in je eigen browser: we slaan niets op.</p>
+    </div>
+    <!-- De berekening staat in js/rekentool/berekening.js, de tarieven van BSO VCK in js/rekentool/instellingen.js (TODO). Tests: npm test -->
+    <div class="rekentool" data-rekentool>
+      <p class="rekentool__zonder-js" data-rt-zonder-js>De rekentool werkt met JavaScript. Staat dat uit in je browser? Maak dan een <a href="https://www.belastingdienst.nl/wps/wcm/connect/nl/toeslagen/content/hulpmiddel-proefberekening-toeslagen" rel="noopener">proefberekening bij Dienst Toeslagen</a>.</p>
+      <form class="form rekentool__form" data-rt-form hidden novalidate aria-label="Rekentool kinderopvangtoeslag">
+        <p class="rekentool__melding" data-rt-geen-tarief hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><span>De tarieven van BSO VCK volgen binnenkort. Tot die tijd vul je zelf de uurprijs en het aantal uren van je opvang in.</span></p>
+        <fieldset>
+          <legend class="legend-label">Werk jij? En je toeslagpartner, als je die hebt?</legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="rt-werkt" value="ja" checked>Ja</label>
+            <label class="choice"><input type="radio" name="rt-werkt" value="nee">Nee</label>
+          </div>
+          <p class="field__hint rekentool__hint">Studeer je, volg je een traject via de gemeente of het UWV, of een inburgeringscursus? Ook dan kun je recht hebben op toeslag. Kies dan ja.</p>
+        </fieldset>
+        <div class="field">
+          <label for="rt-inkomen">Jullie inkomen per jaar, samen</label>
+          <p class="field__hint rekentool__hint" id="rt-inkomen-uitleg">Het toetsingsinkomen: jouw bruto jaarinkomen plus dat van je toeslagpartner. Je vindt het op je belastingaangifte of in Mijn toeslagen.</p>
+          <div class="rekentool__euro"><span aria-hidden="true">€</span><input id="rt-inkomen" type="text" inputmode="decimal" autocomplete="off" placeholder="bijvoorbeeld 55.000" aria-describedby="rt-inkomen-uitleg rt-inkomen-fout"></div>
+          <p class="field__error" id="rt-inkomen-fout" hidden></p>
+        </div>
+        <div class="repeat-list" data-rt-kinderen></div>
+        <div class="rekentool__toevoegen">
+          <button type="button" class="btn btn--secondary btn--small" data-rt-toevoegen><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>Nog een kind</button>
+          <p class="field__hint rekentool__hint">Heb je ook een kind op een andere opvang, zoals een kinderdagverblijf? Voeg het toe: dat kan bepalen welk kind het 1e kind is, en dus hoeveel toeslag je krijgt.</p>
+        </div>
+      </form>
+      <template id="rt-kind-sjabloon">
+        <fieldset class="repeat-item rekentool__kind" data-rt-kind>
+          <legend class="legend-label" data-rt-kind-titel>Kind 1</legend>
+          <div class="field">
+            <label for="rt-KIND-opvang">Soort opvang</label>
+            <select id="rt-KIND-opvang" data-rt-opvang></select>
+          </div>
+          <fieldset data-rt-dagen-blok hidden>
+            <legend class="legend-label">Welke dagen?</legend>
+            <div class="choices" data-rt-dagen></div>
+            <p class="field__hint rekentool__hint" data-rt-dagen-uitleg></p>
+          </fieldset>
+          <div class="form__row" data-rt-eigen-blok>
+            <div class="field">
+              <label for="rt-KIND-uurprijs">Uurprijs</label>
+              <div class="rekentool__euro"><span aria-hidden="true">€</span><input id="rt-KIND-uurprijs" type="text" data-rt-uurprijs inputmode="decimal" autocomplete="off" aria-describedby="rt-KIND-uurprijs-fout"></div>
+              <p class="field__error" id="rt-KIND-uurprijs-fout" data-rt-uurprijs-fout hidden></p>
+            </div>
+            <div class="field">
+              <label for="rt-KIND-uren">Uren per maand</label>
+              <input id="rt-KIND-uren" type="text" data-rt-uren inputmode="decimal" autocomplete="off" aria-describedby="rt-KIND-uren-uitleg rt-KIND-uren-fout">
+              <p class="field__error" id="rt-KIND-uren-fout" data-rt-uren-fout hidden></p>
+            </div>
+            <p class="field__hint rekentool__hint rekentool__breed" id="rt-KIND-uren-uitleg">De uurprijs en de uren per maand staan in je contract. Weet je alleen de uren per week? Reken dan: uren per week × weken per jaar ÷ 12.</p>
+          </div>
+          <p class="rekentool__uren" data-rt-uren-uitkomst></p>
+          <button type="button" class="link-button" data-rt-verwijder hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg><span>Verwijder <span data-rt-verwijder-wie>kind 2</span></span></button>
+        </fieldset>
+      </template>
+      <aside class="rekentool__uitkomst" data-rt-uitkomst hidden aria-labelledby="rt-uitkomst-titel">
+        <h3 class="rekentool__titel" id="rt-uitkomst-titel">Jouw schatting</h3>
+        <p class="rekentool__bedrag" data-rt-netto>€ –</p>
+        <p class="rekentool__per">per maand, na aftrek van de kinderopvangtoeslag</p>
+        <dl class="rekentool__som">
+          <div><dt>Kosten opvang</dt><dd data-rt-kosten>–</dd></div>
+          <div><dt>Kinderopvangtoeslag</dt><dd data-rt-toeslag>–</dd></div>
+        </dl>
+        <p class="rekentool__status" data-rt-status></p>
+        <p class="visually-hidden" role="status" data-rt-voorlezen></p>
+        <div class="rekentool__per-kind" data-rt-perkind></div>
+        <details class="rekentool__uitleg" data-rt-uitleg hidden>
+          <summary>Zo rekenen we</summary>
+          <div data-rt-stappen></div>
+        </details>
+        <p class="rekentool__klein">Dit is een schatting met de officiële tabel <span data-rt-jaar>2026</span> van Dienst Toeslagen. De Belastingdienst stelt je toeslag vast. Je krijgt toeslag over de maanden waarin jij en je toeslagpartner werken, en alleen bij een opvang die in het Landelijk Register Kinderopvang staat. Wil je het zeker weten? Maak een <a data-rt-proef href="https://www.belastingdienst.nl/wps/wcm/connect/nl/toeslagen/content/hulpmiddel-proefberekening-toeslagen" rel="noopener">proefberekening bij Dienst Toeslagen</a>.</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
 <section class="section section--alt scallop-top" aria-labelledby="voorwaarden-titel">
   <div class="container">
     <div class="section-head reveal">
@@ -124,7 +211,7 @@
         <h3>Kinderopvangtoeslag</h3>
         <!-- TODO: LRK-nummer van BSO VCK vermelden en bevestigen dat ouders kinderopvangtoeslag kunnen aanvragen -->
         <p>Werk je, of volg je een opleiding? Dan kun je misschien kinderopvangtoeslag krijgen van de Belastingdienst. Hoeveel, hangt onder andere af van je inkomen en het aantal uren opvang. Toeslag is alleen mogelijk bij een kinderopvang die in het Landelijk Register Kinderopvang staat.</p>
-        <p><a href="https://www.belastingdienst.nl/" rel="noopener">Meer over toeslagen op belastingdienst.nl</a></p>
+        <p><a href="#rekentool">Reken het uit met onze rekentool</a> of lees <a href="https://www.belastingdienst.nl/" rel="noopener">meer over toeslagen op belastingdienst.nl</a>.</p>
       </article>
       <article class="card reveal" style="--badge-bg: var(--color-sun); --delay: 120ms;">
         <div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-calendar"></use></svg></div>
