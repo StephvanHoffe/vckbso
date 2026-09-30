@@ -126,7 +126,7 @@ function vul_plek_vanuit_wachtlijst(int $groepId, string $datum): void
             return;
         }
         q("UPDATE inschrijvingen SET status = 'bevestigd', gewijzigd_op = ? WHERE id = ?", [nu(), $volgende['id']]);
-        systeembericht((int) $volgende['ouder_id'], 'Goed nieuws! Er is een plekje vrijgekomen: ' . $volgende['voornaam'] . ' kan op ' . datum_nl($datum, 'EEEE d MMMM') . ' komen. Kan het toch niet? Meld je kind dan af in de agenda.', (int) $volgende['kind_id']);
+        bericht_aan_verzorgers((int) $volgende['kind_id'], 'agenda', 'Goed nieuws! Er is een plekje vrijgekomen: ' . $volgende['voornaam'] . ' kan op ' . datum_nl($datum, 'EEEE d MMMM') . ' komen. Kan het toch niet? Meld je kind dan af in de agenda.');
     }
 }
 
@@ -157,6 +157,7 @@ function dagoverzicht(array $groep, string $datum): array
          ORDER BY CASE i.status WHEN 'bevestigd' THEN 0 WHEN 'ziek' THEN 1 WHEN 'wachtlijst' THEN 2 ELSE 3 END, i.aangemaakt_op, k.voornaam",
         [$groep['id'], $datum]
     );
+    $kinderen = ontsleutel_kolommen($kinderen, ['bijzonderheden', 'ophaalpersonen']);
     return [
         'open' => groep_open_op($groep, $datum),
         'capaciteit' => capaciteit($groep, $datum),
@@ -181,23 +182,4 @@ function datums_tussen(string $van, string $tot): array
         $datums[] = date('Y-m-d', $d);
     }
     return $datums;
-}
-
-/* ---------- Berichten van het systeem (bijvoorbeeld wachtlijst of mislukte incasso) ---------- */
-
-function systeembericht(int $ouderId, string $tekst, ?int $kindId = null): void
-{
-    q("INSERT INTO berichten (ouder_id, afzender_id, kind_id, soort, tekst, gelezen_ouder, gelezen_team, aangemaakt_op) VALUES (?, NULL, ?, 'systeem', ?, 0, 1, ?)", [
-        $ouderId, $kindId, $tekst, nu(),
-    ]);
-}
-
-function ongelezen_voor_team(): int
-{
-    return (int) waarde('SELECT COUNT(*) FROM berichten WHERE gelezen_team = 0');
-}
-
-function ongelezen_voor_ouder(int $ouderId): int
-{
-    return (int) waarde('SELECT COUNT(*) FROM berichten WHERE ouder_id = ? AND gelezen_ouder = 0', [$ouderId]);
 }

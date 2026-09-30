@@ -16,7 +16,7 @@ $waarden = [
     'naam' => '', 'email' => '', 'telefoon' => '', 'straat' => '', 'postcode' => '', 'plaats' => 'Amsterdam',
     'contactvoorkeur' => 'Maakt niet uit', 'startdatum' => '', 'opmerkingen' => '', 'dagen' => [],
 ];
-$kinderen = [['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => '']];
+$kinderen = [['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => '', 'relatie' => 'ouder', 'gezag' => '1']];
 $fouten = [];
 
 if (is_post()) {
@@ -36,10 +36,12 @@ if (is_post()) {
             $kind[$veld] = trim((string) ($invoerKind[$veld] ?? ''));
         }
         $kind['foto_toestemming'] = !empty($invoerKind['foto_toestemming']) ? '1' : '';
+        $kind['relatie'] = array_key_exists((string) ($invoerKind['relatie'] ?? ''), RELATIES) ? (string) $invoerKind['relatie'] : 'ouder';
+        $kind['gezag'] = !empty($invoerKind['gezag']) ? '1' : '';
         $kinderen[] = $kind;
     }
     if (!$kinderen) {
-        $kinderen = [['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => '']];
+        $kinderen = [['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => '', 'relatie' => 'ouder', 'gezag' => '1']];
     }
 
     // Spam: dit verborgen veld vullen alleen robots in; en niet te veel aanmeldingen vanaf één adres
@@ -106,12 +108,14 @@ if (is_post()) {
             $ouderId = laatste_id();
             foreach ($kinderen as $kind) {
                 q('INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, school, bijzonderheden, foto_toestemming, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
-                    $ouderId, $kind['voornaam'], $kind['achternaam'], $kind['geboortedatum'], $kind['school'], $kind['bijzonderheden'], $kind['foto_toestemming'] ? 1 : 0, nu(),
+                    $ouderId, $kind['voornaam'], $kind['achternaam'], $kind['geboortedatum'], $kind['school'], versleutel($kind['bijzonderheden']), $kind['foto_toestemming'] ? 1 : 0, nu(),
                 ]);
+                // Opgegeven gezag; het team controleert dit bij de kennismaking
+                koppel_verzorger(laatste_id(), $ouderId, $kind['relatie'], (bool) $kind['gezag']);
             }
             return $ouderId;
         });
-        log_actie('Aangemeld via de website', count($kinderen) . ' kind(eren)', $ouderId);
+        log_actie('Aangemeld via de website', count($kinderen) . ' kind(eren)', $ouderId, 'wijziging', 'gebruiker:' . $ouderId);
         mail_team('Nieuwe aanmelding via de website', "Er is een nieuwe aanmelding binnen van {$waarden['naam']} met " . count($kinderen) . " kind(eren).\n\nBekijk de aanmelding in de beheeromgeving:\n" . app_url('ouder.php?id=' . $ouderId));
         stuur_mail($waarden['email'], 'Je aanmelding bij BSO VCK', "Hoi {$waarden['naam']},\n\nWat leuk dat je je kind hebt aangemeld bij BSO VCK! We hebben je aanmelding goed ontvangen en nemen snel contact met je op voor een kennismaking.\n\nJe kunt inloggen op " . app_url('') . " met je e-mailadres en het wachtwoord dat je hebt gekozen.\n\nTot snel!");
         log_in_als($ouderId);
@@ -150,6 +154,22 @@ function kind_velden(int|string $i, array $kind, array $fouten): string
                   <div class="field">
                     <label for="<?= $id ?>-school">Basisschool <span class="field__hint">(optioneel)</span></label>
                     <input id="<?= $id ?>-school" name="kinderen[<?= $i ?>][school]" autocomplete="off" value="<?= e($kind['school']) ?>">
+                  </div>
+                </div>
+                <div class="form__row">
+                  <div class="field">
+                    <label for="<?= $id ?>-relatie">Jij bent</label>
+                    <select id="<?= $id ?>-relatie" name="kinderen[<?= $i ?>][relatie]">
+<?php foreach (RELATIES as $sleutel => $label): ?>
+                      <option value="<?= e($sleutel) ?>"<?= ($kind['relatie'] ?? 'ouder') === $sleutel ? ' selected' : '' ?>><?= e($label) ?></option>
+<?php endforeach; ?>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <div class="consent" style="margin-top: 2.1rem">
+                      <input id="<?= $id ?>-gezag" name="kinderen[<?= $i ?>][gezag]" type="checkbox" value="1"<?= !empty($kind['gezag']) ? ' checked' : '' ?>>
+                      <label for="<?= $id ?>-gezag">Ik heb het (ouderlijk) gezag over dit kind</label>
+                    </div>
                   </div>
                 </div>
                 <div class="field">
@@ -235,7 +255,7 @@ pagina_begin('Kind aanmelden', '', ['publiek' => true]);
 <?= kind_velden($i, $kind, $fouten) ?>
 <?php endforeach; ?>
         </div>
-        <template><?= kind_velden('__INDEX__', ['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => ''], []) ?></template>
+        <template><?= kind_velden('__INDEX__', ['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => '', 'relatie' => 'ouder', 'gezag' => '1'], []) ?></template>
         <button class="btn btn--secondary btn--small" type="button" data-kind-toevoegen hidden><?= icoon('plus') ?>Nog een kind aanmelden</button>
       </fieldset>
 

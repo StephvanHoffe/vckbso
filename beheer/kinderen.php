@@ -7,13 +7,15 @@ $gebruiker = vereis_login();
 /* ---------- Ouder ---------- */
 if (is_ouder($gebruiker)) {
     $fouten = [];
-    $nieuw = ['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => ''];
+    $nieuw = ['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => '', 'relatie' => 'ouder', 'gezag' => '1'];
     if (is_post()) {
         csrf_controleer();
         foreach (['voornaam', 'achternaam', 'geboortedatum', 'school', 'bijzonderheden'] as $veld) {
             $nieuw[$veld] = invoer($veld);
         }
         $nieuw['foto_toestemming'] = invoer('foto_toestemming') === '1' ? '1' : '';
+        $nieuw['relatie'] = array_key_exists(invoer('relatie'), RELATIES) ? invoer('relatie') : 'ouder';
+        $nieuw['gezag'] = invoer('gezag') === '1' ? '1' : '';
         if ($nieuw['voornaam'] === '') {
             $fouten['voornaam'] = 'Vul de voornaam in.';
         }
@@ -25,18 +27,17 @@ if (is_ouder($gebruiker)) {
         }
         if (!$fouten) {
             q('INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, school, bijzonderheden, foto_toestemming, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
-                $gebruiker['id'], $nieuw['voornaam'], $nieuw['achternaam'], $nieuw['geboortedatum'], $nieuw['school'], $nieuw['bijzonderheden'], $nieuw['foto_toestemming'] ? 1 : 0, nu(),
+                $gebruiker['id'], $nieuw['voornaam'], $nieuw['achternaam'], $nieuw['geboortedatum'], $nieuw['school'], versleutel($nieuw['bijzonderheden']), $nieuw['foto_toestemming'] ? 1 : 0, nu(),
             ]);
             $kindId = laatste_id();
-            q("INSERT INTO berichten (ouder_id, afzender_id, kind_id, soort, tekst, gelezen_ouder, gelezen_team, aangemaakt_op) VALUES (?, ?, ?, 'systeem', ?, 1, 0, ?)", [
-                $gebruiker['id'], $gebruiker['id'], $kindId, 'Nieuw kind toegevoegd: ' . $nieuw['voornaam'] . ' ' . $nieuw['achternaam'] . '. Graag indelen in een groep.', nu(),
-            ]);
-            log_actie('Kind toegevoegd door ouder', $nieuw['voornaam']);
+            koppel_verzorger($kindId, (int) $gebruiker['id'], $nieuw['relatie'], (bool) $nieuw['gezag']);
+            melding_voor_team((int) $gebruiker['id'], 'Nieuw kind toegevoegd: ' . $nieuw['voornaam'] . ' ' . $nieuw['achternaam'] . '. Graag gezag controleren en indelen in een groep.', $kindId);
+            log_actie('Kind toegevoegd door ouder', '', null, 'wijziging', 'kind:' . $kindId);
             flash('succes', $nieuw['voornaam'] . ' is toegevoegd. We zetten ' . $nieuw['voornaam'] . ' zo snel mogelijk in een groep; daarna kun je dagen kiezen.');
             redirect('kinderen.php');
         }
     }
-    $kinderen = rijen('SELECT k.*, g.naam AS groepnaam FROM kinderen k LEFT JOIN groepen g ON g.id = k.groep_id WHERE k.ouder_id = ? ORDER BY k.actief DESC, k.voornaam', [$gebruiker['id']]);
+    $kinderen = kinderen_van_verzorger((int) $gebruiker['id'], null, false);
 
     pagina_begin('Mijn kinderen', 'kinderen.php');
     pagina_kop('Mijn kinderen', 'Bekijk en wijzig de gegevens van je kinderen, zoals allergieën en wie ze mag ophalen.');
@@ -51,14 +52,16 @@ if (is_ouder($gebruiker)) {
 <?php foreach ($kinderen as $kind): ?>
       <li class="kindrij">
         <div>
-          <div class="kindrij__naam"><a href="kind.php?id=<?= (int) $kind['id'] ?>"><?= e(kindnaam($kind)) ?></a><?= $kind['actief'] ? '' : ' ' . status_badge('gestopt') ?></div>
+          <div class="kindrij__naam"><?= (int) $kind['v_recht_dossier'] === 1 ? '<a href="kind.php?id=' . (int) $kind['id'] . '">' . e(kindnaam($kind)) . '</a>' : e(kindnaam($kind)) ?><?= $kind['actief'] ? '' : ' ' . status_badge('gestopt') ?></div>
           <div class="kindrij__info">
             <span><?= leeftijd($kind['geboortedatum']) ?> jaar</span>
             <span><?= $kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam']) : 'Nog geen groep' ?></span>
-            <span><?= $kind['foto_toestemming'] ? "Mag op groepsfoto's" : "Niet op groepsfoto's" ?></span>
+            <span><?= e(RELATIES[$kind['v_relatie']] ?? '') ?><?= (int) $kind['v_gezag'] === 1 ? (empty($kind['v_gezag_gecontroleerd_op']) ? ', gezag nog niet gecontroleerd' : ', gezag gecontroleerd') : ', zonder gezag' ?></span>
           </div>
         </div>
+<?php if ((int) $kind['v_recht_dossier'] === 1): ?>
         <a class="btn btn--secondary btn--mini" href="kind.php?id=<?= (int) $kind['id'] ?>">Gegevens<span class="visually-hidden"> van <?= e($kind['voornaam']) ?></span></a>
+<?php endif; ?>
       </li>
 <?php endforeach; ?>
     </ul>
@@ -75,6 +78,8 @@ if (is_ouder($gebruiker)) {
       <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" max="<?= vandaag() ?>" required value="<?= e($nieuw['geboortedatum']) ?>"<?= aria_fout($fouten, 'geboortedatum') ?>><?= veldfout($fouten, 'geboortedatum') ?></div>
       <div class="field"><label for="school">Basisschool <span class="field__hint">(optioneel)</span></label><input id="school" name="school" value="<?= e($nieuw['school']) ?>"></div>
       <div class="field"><label for="bijzonderheden">Allergieën, medicijnen of bijzonderheden <span class="field__hint">(optioneel)</span></label><textarea id="bijzonderheden" name="bijzonderheden" rows="3"><?= e($nieuw['bijzonderheden']) ?></textarea></div>
+      <div class="field"><label for="relatie">Jij bent</label><select id="relatie" name="relatie"><?php foreach (RELATIES as $sleutel => $label): ?><option value="<?= e($sleutel) ?>"<?= $nieuw['relatie'] === $sleutel ? ' selected' : '' ?>><?= e($label) ?></option><?php endforeach; ?></select></div>
+      <div class="field"><div class="consent"><input id="gezag" name="gezag" type="checkbox" value="1"<?= $nieuw['gezag'] ? ' checked' : '' ?>><label for="gezag">Ik heb het (ouderlijk) gezag over dit kind <span class="field__hint">(we controleren dit bij het volgende bezoek)</span></label></div></div>
       <div class="field"><div class="consent"><input id="foto_toestemming" name="foto_toestemming" type="checkbox" value="1"<?= $nieuw['foto_toestemming'] ? ' checked' : '' ?>><label for="foto_toestemming">Mag op groepsfoto's die ook naar andere ouders gaan</label></div></div>
       <div class="form__acties"><button class="btn" type="submit"><?= icoon('plus') ?>Toevoegen</button></div>
     </form>
@@ -89,7 +94,9 @@ if (is_ouder($gebruiker)) {
 
 if (is_post()) {
     csrf_controleer();
-    $kind = rij('SELECT * FROM kinderen WHERE id = ?', [(int) invoer('kind')]);
+    // Kinderen indelen in een groep doet de beheerder (die ziet alle kinderen)
+    vereis_beheerder();
+    $kind = rij('SELECT * FROM kinderen WHERE id = ? AND geanonimiseerd_op IS NULL', [(int) invoer('kind')]);
     if (!$kind) {
         niet_gevonden();
     }
@@ -98,7 +105,7 @@ if (is_post()) {
         niet_gevonden();
     }
     q('UPDATE kinderen SET groep_id = ? WHERE id = ?', [$groepId, $kind['id']]);
-    log_actie('Kind ingedeeld', $kind['voornaam'] . ' → ' . ($groepId ? groep($groepId)['naam'] : 'geen groep'));
+    log_actie('Kind ingedeeld', $groepId ? groep($groepId)['naam'] : 'geen groep', null, 'wijziging', 'kind:' . $kind['id']);
     flash('succes', $kind['voornaam'] . ($groepId ? ' zit nu in groep ' . groep($groepId)['naam'] . '.' : ' zit nu in geen groep.'));
     redirect(veilig_terug(invoer('terug', 'kinderen.php')));
 }
@@ -106,9 +113,9 @@ if (is_post()) {
 $filterGroep = get_str('groep');
 $zoek = get_str('zoek');
 $metGestopt = get_str('alle') === '1';
-$waar = ['1 = 1'];
+$waar = ['k.geanonimiseerd_op IS NULL', groep_voorwaarde('k.groep_id')];
 $params = [];
-if ($filterGroep === 'geen') {
+if ($filterGroep === 'geen' && is_beheerder($gebruiker)) {
     $waar[] = 'k.groep_id IS NULL';
 } elseif (ctype_digit($filterGroep)) {
     $waar[] = 'k.groep_id = ?';
@@ -128,6 +135,7 @@ $kinderen = rijen(
      WHERE ' . implode(' AND ', $waar) . ' ORDER BY k.voornaam, k.achternaam',
     $params
 );
+$kinderen = ontsleutel_kolommen($kinderen, ['bijzonderheden']);
 $terug = 'kinderen.php' . (($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $_SERVER['QUERY_STRING'] : '');
 
 pagina_begin('Kinderen', 'kinderen.php');
@@ -144,8 +152,10 @@ pagina_kop('Kinderen', 'Alle kinderen met hun groep. Klik op een naam voor het d
       <label for="groep">Groep</label>
       <select id="groep" name="groep">
         <option value="">Alle groepen</option>
+<?php if (is_beheerder($gebruiker)): ?>
         <option value="geen"<?= $filterGroep === 'geen' ? ' selected' : '' ?>>Nog geen groep</option>
-<?php foreach (rijen('SELECT * FROM groepen ORDER BY naam') as $groep): ?>
+<?php endif; ?>
+<?php foreach (rijen('SELECT * FROM groepen WHERE ' . groep_voorwaarde('id') . ' ORDER BY naam') as $groep): ?>
         <option value="<?= (int) $groep['id'] ?>"<?= $filterGroep === (string) $groep['id'] ? ' selected' : '' ?>><?= e($groep['naam']) ?></option>
 <?php endforeach; ?>
       </select>
@@ -167,6 +177,9 @@ pagina_kop('Kinderen', 'Alle kinderen met hun groep. Klik op een naam voor het d
           <td><?= leeftijd($kind['geboortedatum']) ?? '' ?></td>
           <td><a href="ouder.php?id=<?= (int) $kind['ouder_id'] ?>"><?= e($kind['oudernaam']) ?></a><?= $kind['ouderstatus'] === 'nieuw' ? ' ' . status_badge('nieuw') : '' ?></td>
           <td>
+<?php if (!is_beheerder($gebruiker)): ?>
+            <?= e($kind['groepnaam'] ?? '-') ?>
+<?php else: ?>
             <form class="inline-form groepkeuze" method="post">
               <?= csrf_veld() ?>
               <input type="hidden" name="kind" value="<?= (int) $kind['id'] ?>">
@@ -175,6 +188,7 @@ pagina_kop('Kinderen', 'Alle kinderen met hun groep. Klik op een naam voor het d
               <select id="groep-<?= (int) $kind['id'] ?>" name="groep"><?= groep_opties($kind['groep_id'] !== null ? (int) $kind['groep_id'] : null) ?></select>
               <button class="btn btn--secondary btn--mini" type="submit">Opslaan<span class="visually-hidden"> groep van <?= e($kind['voornaam']) ?></span></button>
             </form>
+<?php endif; ?>
           </td>
           <td><?= $kind['bijzonderheden'] !== '' ? '<span class="let-op">' . icoon('alert') . '<span>' . e(mb_strimwidth($kind['bijzonderheden'], 0, 60, '…')) . '</span></span>' : '' ?><?= $kind['foto_toestemming'] ? '' : '<br><small class="muted">Niet op groepsfoto\'s</small>' ?></td>
         </tr>

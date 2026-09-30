@@ -297,16 +297,122 @@ function migreer(PDO $pdo): void
                 ('betaaltermijn_dagen', '14'),
                 ('volgend_factuurnummer', '1');
             SQL,
+
+        // Toegang per groep en per kind, tweestapsverificatie, AVG-verzoeken, beveiligd logboek, bewaarbeleid
+        2 => <<<'SQL'
+            ALTER TABLE gebruikers ADD COLUMN mfa_geheim TEXT;
+            ALTER TABLE gebruikers ADD COLUMN mfa_actief INTEGER NOT NULL DEFAULT 0;
+            ALTER TABLE gebruikers ADD COLUMN mfa_laatste_stap INTEGER NOT NULL DEFAULT 0;
+            ALTER TABLE gebruikers ADD COLUMN gestopt_op TEXT;
+            ALTER TABLE gebruikers ADD COLUMN gewist_op TEXT;
+            ALTER TABLE kinderen ADD COLUMN gestopt_op TEXT;
+            ALTER TABLE kinderen ADD COLUMN geanonimiseerd_op TEXT;
+            UPDATE gebruikers SET gestopt_op = datetime('now', 'localtime') WHERE status = 'gestopt';
+            UPDATE kinderen SET gestopt_op = datetime('now', 'localtime') WHERE actief = 0;
+
+            CREATE TABLE mfa_herstelcodes (
+                id INTEGER PRIMARY KEY,
+                gebruiker_id INTEGER NOT NULL REFERENCES gebruikers(id) ON DELETE CASCADE,
+                code_hash TEXT NOT NULL,
+                gebruikt_op TEXT
+            );
+
+            -- Medewerkers zien alleen kinderen in hun eigen groepen (eventueel tijdelijk, voor invallers)
+            CREATE TABLE medewerker_groepen (
+                gebruiker_id INTEGER NOT NULL REFERENCES gebruikers(id) ON DELETE CASCADE,
+                groep_id INTEGER NOT NULL REFERENCES groepen(id) ON DELETE CASCADE,
+                tot TEXT,
+                PRIMARY KEY (gebruiker_id, groep_id)
+            );
+
+            -- Wie mag wat namens een kind? Ouder zijn alleen is niet genoeg: gezag wordt door het team gecontroleerd
+            CREATE TABLE kind_verzorgers (
+                kind_id INTEGER NOT NULL REFERENCES kinderen(id) ON DELETE CASCADE,
+                gebruiker_id INTEGER NOT NULL REFERENCES gebruikers(id) ON DELETE CASCADE,
+                relatie TEXT NOT NULL DEFAULT 'ouder',
+                gezag INTEGER NOT NULL DEFAULT 0,
+                gezag_gecontroleerd_op TEXT,
+                gezag_gecontroleerd_door INTEGER REFERENCES gebruikers(id) ON DELETE SET NULL,
+                gezag_bron TEXT NOT NULL DEFAULT '',
+                recht_agenda INTEGER NOT NULL DEFAULT 1,
+                recht_dossier INTEGER NOT NULL DEFAULT 1,
+                recht_fotos INTEGER NOT NULL DEFAULT 1,
+                recht_berichten INTEGER NOT NULL DEFAULT 1,
+                aangemaakt_op TEXT NOT NULL,
+                PRIMARY KEY (kind_id, gebruiker_id)
+            );
+            CREATE INDEX kind_verzorgers_gebruiker ON kind_verzorgers(gebruiker_id);
+            INSERT INTO kind_verzorgers (kind_id, gebruiker_id, relatie, gezag, aangemaakt_op)
+                SELECT id, ouder_id, 'ouder', 1, aangemaakt_op FROM kinderen;
+
+            ALTER TABLE logboek ADD COLUMN soort TEXT NOT NULL DEFAULT 'wijziging';
+            ALTER TABLE logboek ADD COLUMN onderwerp TEXT NOT NULL DEFAULT '';
+            ALTER TABLE logboek ADD COLUMN vorige TEXT NOT NULL DEFAULT '';
+            ALTER TABLE logboek ADD COLUMN hash TEXT NOT NULL DEFAULT '';
+            CREATE INDEX logboek_onderwerp ON logboek(onderwerp);
+            CREATE INDEX logboek_tijd ON logboek(aangemaakt_op);
+
+            CREATE TABLE avg_verzoeken (
+                id INTEGER PRIMARY KEY,
+                gebruiker_id INTEGER REFERENCES gebruikers(id) ON DELETE SET NULL,
+                kind_id INTEGER REFERENCES kinderen(id) ON DELETE SET NULL,
+                over_naam TEXT NOT NULL DEFAULT '',
+                soort TEXT NOT NULL CHECK (soort IN ('inzage', 'correctie', 'verwijdering', 'beperking', 'bezwaar', 'overdracht')),
+                toelichting TEXT NOT NULL DEFAULT '',
+                status TEXT NOT NULL DEFAULT 'ontvangen' CHECK (status IN ('ontvangen', 'in_behandeling', 'afgerond', 'afgewezen')),
+                deadline TEXT NOT NULL,
+                reactie TEXT NOT NULL DEFAULT '',
+                afgehandeld_door INTEGER REFERENCES gebruikers(id) ON DELETE SET NULL,
+                afgehandeld_op TEXT,
+                export_bestand TEXT,
+                export_verloopt_op TEXT,
+                aangemaakt_op TEXT NOT NULL
+            );
+
+            INSERT INTO instellingen (sleutel, waarde) VALUES
+                ('mfa_ouders', 'optioneel'),
+                ('bewaar_ontwikkeling_maanden', '3'),
+                ('bewaar_kinddossier_maanden', '3'),
+                ('bewaar_fotos_maanden', '12'),
+                ('bewaar_berichten_maanden', '24'),
+                ('bewaar_aanmeldingen_maanden', '6'),
+                ('bewaar_account_maanden', '3'),
+                ('bewaar_financieel_jaren', '7'),
+                ('bewaar_logboek_maanden', '24'),
+                ('bewaarbeleid_laatst', ''),
+                ('backup_laatst', '');
+            SQL,
+
+        // Bestaande gevoelige gegevens alsnog versleutelen
+        3 => function (PDO $pdo): void {
+            foreach ([['kinderen', 'bijzonderheden'], ['kinderen', 'ophaalpersonen'], ['observaties', 'tekst'], ['berichten', 'tekst']] as [$tabel, $kolom]) {
+                $stmt = $pdo->query("SELECT id, {$kolom} AS waarde FROM {$tabel} WHERE {$kolom} != '' AND {$kolom} NOT LIKE 'enc:v1:%'");
+                $update = $pdo->prepare("UPDATE {$tabel} SET {$kolom} = ? WHERE id = ?");
+                foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $rij) {
+                    $update->execute([versleutel($rij['waarde']), $rij['id']]);
+                }
+            }
+            foreach (glob(data_dir() . '/fotos/*/*/*.jpg') ?: [] as $pad) {
+                $inhoud = (string) file_get_contents($pad);
+                if (!str_starts_with($inhoud, BESTAND_MAGIC)) {
+                    versleutel_bestand($pad, $inhoud);
+                }
+            }
+        },
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();
-    foreach ($migraties as $nummer => $sql) {
+    foreach ($migraties as $nummer => $stap) {
         if ($nummer <= $versie) {
             continue;
         }
-        $pdo->exec('BEGIN');
+        $pdo->exec('BEGIN IMMEDIATE');
         try {
-            $pdo->exec($sql);
+            if (is_callable($stap)) {
+                $stap($pdo);
+            } else {
+                $pdo->exec($stap);
+            }
             $pdo->exec('PRAGMA user_version = ' . (int) $nummer);
             $pdo->exec('COMMIT');
         } catch (Throwable $fout) {

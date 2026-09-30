@@ -11,10 +11,10 @@ if ($gebruiker && is_post()) {
     if ($fout === null) {
         q('UPDATE gebruikers SET wachtwoord_hash = ? WHERE id = ?', [password_hash((string) $_POST['wachtwoord'], PASSWORD_DEFAULT), $gebruiker['id']]);
         q('UPDATE tokens SET gebruikt = 1 WHERE id = ?', [$gebruiker['token_id']]);
-        log_actie('Wachtwoord ingesteld', '', (int) $gebruiker['id']);
-        log_in_als((int) $gebruiker['id']);
+        log_actie('Wachtwoord ingesteld', '', (int) $gebruiker['id'], 'beveiliging', 'gebruiker:' . $gebruiker['id']);
+        na_wachtwoord((int) $gebruiker['id']);
         flash('succes', 'Je wachtwoord is ingesteld. Welkom!');
-        redirect('index.php');
+        redirect(mfa_wacht() ? 'inloggen-code.php' : 'index.php');
     }
 }
 

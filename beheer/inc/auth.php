@@ -15,7 +15,16 @@ function start_sessie(): void
     }
     ini_set('session.use_strict_mode', '1');
     ini_set('session.use_only_cookies', '1');
-    session_name('vck_beheer');
+    // Eigen sessiecookie en eigen sessiemap per organisatie (in de eigen datamap)
+    session_name('vck_' . preg_replace('/[^a-z0-9]/', '', strtolower((string) cfg('organisatie', 'standaard'))));
+    $sessiemap = data_dir() . '/sessies';
+    if (!is_dir($sessiemap)) {
+        mkdir($sessiemap, 0700, true);
+    }
+    session_save_path($sessiemap);
+    ini_set('session.gc_maxlifetime', (string) SESSIE_MAX_INACTIEF);
+    ini_set('session.gc_probability', '1');
+    ini_set('session.gc_divisor', '100');
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => basis_pad(),
@@ -25,6 +34,11 @@ function start_sessie(): void
     ]);
     session_start();
 
+    // Een sessie hoort bij één organisatie; anders opnieuw beginnen
+    if (isset($_SESSION['organisatie']) && $_SESSION['organisatie'] !== cfg('organisatie')) {
+        $_SESSION = [];
+        session_regenerate_id(true);
+    }
     $laatst = $_SESSION['laatst_actief'] ?? 0;
     if (!empty($_SESSION['gebruiker_id']) && time() - $laatst > SESSIE_MAX_INACTIEF) {
         $_SESSION = [];
@@ -77,6 +91,11 @@ function vereis_login(array $rollen = []): array
         $terug = basename($_SERVER['SCRIPT_NAME'] ?? 'index.php') . (empty($_SERVER['QUERY_STRING']) ? '' : '?' . $_SERVER['QUERY_STRING']);
         redirect('inloggen.php?terug=' . rawurlencode($terug));
     }
+    // Tweestapsverificatie verplicht (team, en ouders als de beheerder dat instelt)? Eerst instellen.
+    $pagina = basename($_SERVER['SCRIPT_NAME'] ?? '');
+    if (!$gebruiker['mfa_actief'] && mfa_verplicht($gebruiker) && !in_array($pagina, ['tweestaps.php', 'uitloggen.php'], true)) {
+        redirect('tweestaps.php');
+    }
     if ($rollen && !in_array($gebruiker['rol'], $rollen, true)) {
         geen_toegang();
     }
@@ -120,6 +139,17 @@ function te_veel_verzoeken(string $sleutel, int $max): bool
     return $aantal >= $max;
 }
 
+/** Aantal geregistreerde pogingen met deze sleutel in het afgelopen kwartier. */
+function recente_pogingen(string $sleutel): int
+{
+    return (int) waarde('SELECT COUNT(*) FROM inlogpogingen WHERE sleutel = ? AND tijd >= ?', [$sleutel, date('Y-m-d H:i:s', time() - INLOG_BLOKKADE_MINUTEN * 60)]);
+}
+
+function registreer_poging(string $sleutel): void
+{
+    q('INSERT INTO inlogpogingen (sleutel, tijd) VALUES (?, ?)', [$sleutel, nu()]);
+}
+
 function registreer_mislukte_poging(string $email): void
 {
     q('INSERT INTO inlogpogingen (sleutel, tijd) VALUES (?, ?), (?, ?)', [
@@ -128,7 +158,11 @@ function registreer_mislukte_poging(string $email): void
     ]);
 }
 
-/** Probeert in te loggen. Geeft een foutmelding terug, of null als het gelukt is. */
+/**
+ * Probeert in te loggen. Geeft een foutmelding terug, of null als het wachtwoord klopt.
+ * Heeft de gebruiker tweestapsverificatie, dan is hij daarna nog niet ingelogd:
+ * de code volgt op inloggen-code.php (zie mfa_wacht()).
+ */
 function probeer_in_te_loggen(string $email, string $wachtwoord): ?string
 {
     if (inlog_geblokkeerd($email)) {
@@ -140,6 +174,9 @@ function probeer_in_te_loggen(string $email, string $wachtwoord): ?string
     $klopt = password_verify($wachtwoord, $hash);
     if (!$gebruiker || !$klopt || !$gebruiker['wachtwoord_hash']) {
         registreer_mislukte_poging($email);
+        if ($gebruiker) {
+            log_actie('Inloggen mislukt', 'verkeerd wachtwoord', (int) $gebruiker['id'], 'beveiliging', 'gebruiker:' . $gebruiker['id']);
+        }
         return 'Dit e-mailadres en wachtwoord horen niet bij elkaar. Controleer ze en probeer het opnieuw.';
     }
     if ($gebruiker['status'] === 'gestopt') {
@@ -148,18 +185,42 @@ function probeer_in_te_loggen(string $email, string $wachtwoord): ?string
     if (password_needs_rehash($gebruiker['wachtwoord_hash'], PASSWORD_DEFAULT)) {
         q('UPDATE gebruikers SET wachtwoord_hash = ? WHERE id = ?', [password_hash($wachtwoord, PASSWORD_DEFAULT), $gebruiker['id']]);
     }
-    log_in_als((int) $gebruiker['id']);
+    na_wachtwoord((int) $gebruiker['id']);
     return null;
 }
 
-function log_in_als(int $gebruikerId): void
+/** Wachtwoord (of wachtwoordlink) is goed: inloggen, of eerst nog de code vragen. */
+function na_wachtwoord(int $gebruikerId): void
+{
+    $gebruiker = rij('SELECT * FROM gebruikers WHERE id = ?', [$gebruikerId]);
+    if ($gebruiker && $gebruiker['mfa_actief']) {
+        session_regenerate_id(true);
+        $_SESSION['mfa_wacht'] = ['id' => $gebruikerId, 'sinds' => time()];
+        return;
+    }
+    log_in_als($gebruikerId);
+}
+
+/** Id van de gebruiker die zijn wachtwoord goed heeft en nog de code moet invullen (maximaal 5 minuten). */
+function mfa_wacht(): ?int
+{
+    $wacht = $_SESSION['mfa_wacht'] ?? null;
+    if (!$wacht || time() - (int) $wacht['sinds'] > 300) {
+        unset($_SESSION['mfa_wacht']);
+        return null;
+    }
+    return (int) $wacht['id'];
+}
+
+function log_in_als(int $gebruikerId, string $methode = 'wachtwoord'): void
 {
     session_regenerate_id(true);
+    unset($_SESSION['mfa_wacht'], $_SESSION['csrf']);
     $_SESSION['gebruiker_id'] = $gebruikerId;
+    $_SESSION['organisatie'] = cfg('organisatie');
     $_SESSION['laatst_actief'] = time();
-    unset($_SESSION['csrf']);
     q('UPDATE gebruikers SET laatst_ingelogd = ? WHERE id = ?', [nu(), $gebruikerId]);
-    log_actie('Ingelogd', '', $gebruikerId);
+    log_actie('Ingelogd', $methode, $gebruikerId, 'inloggen', 'gebruiker:' . $gebruikerId);
 }
 
 function log_uit(): void
@@ -207,20 +268,4 @@ function zoek_wachtwoordtoken(string $token): ?array
          WHERE t.token_hash = ? AND t.soort = 'wachtwoord' AND t.gebruikt = 0 AND t.verloopt_op > ? AND g.status != 'gestopt'",
         [hash('sha256', $token), nu()]
     );
-}
-
-/* ---------- Toegang tot gegevens van kinderen ---------- */
-
-/** Het kind, als de ingelogde gebruiker het mag zien (team: alle kinderen, ouder: eigen kinderen). */
-function kind_met_toegang(int $kindId): array
-{
-    $gebruiker = vereis_login();
-    $kind = rij('SELECT k.*, g.naam AS groepnaam FROM kinderen k LEFT JOIN groepen g ON g.id = k.groep_id WHERE k.id = ?', [$kindId]);
-    if (!$kind) {
-        niet_gevonden();
-    }
-    if (!is_team($gebruiker) && (int) $kind['ouder_id'] !== (int) $gebruiker['id']) {
-        niet_gevonden();
-    }
-    return $kind;
 }

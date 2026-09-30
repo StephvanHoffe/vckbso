@@ -13,7 +13,7 @@ $actie = invoer('actie');
 
 if (in_array($actie, ['aanwezig', 'opgehaald', 'ziek', 'afmelden', 'bevestigen', 'beter', 'herstel'], true)) {
     $inschrijving = rij('SELECT i.*, k.voornaam, k.achternaam, k.ouder_id, k.groep_id AS kind_groep, k.actief FROM inschrijvingen i JOIN kinderen k ON k.id = i.kind_id WHERE i.id = ?', [(int) invoer('inschrijving')]);
-    if (!$inschrijving) {
+    if (!$inschrijving || !team_mag_groep((int) $inschrijving['groep_id'])) {
         niet_gevonden();
     }
     $naam = $inschrijving['voornaam'];
@@ -30,17 +30,17 @@ if (in_array($actie, ['aanwezig', 'opgehaald', 'ziek', 'afmelden', 'bevestigen',
             break;
         case 'ziek':
             meld_af($inschrijving, 'ziek');
-            systeembericht((int) $inschrijving['ouder_id'], "{$naam} staat voor {$dag} ziek gemeld. Beterschap!", (int) $inschrijving['kind_id']);
+            bericht_aan_verzorgers((int) $inschrijving['kind_id'], 'agenda', "{$naam} staat voor {$dag} ziek gemeld. Beterschap!");
             flash('succes', "{$naam} is ziek gemeld.");
             break;
         case 'afmelden':
             meld_af($inschrijving);
-            systeembericht((int) $inschrijving['ouder_id'], "{$naam} is door ons afgemeld voor {$dag}. Vragen? Stuur ons gerust een berichtje.", (int) $inschrijving['kind_id']);
+            bericht_aan_verzorgers((int) $inschrijving['kind_id'], 'agenda', "{$naam} is door ons afgemeld voor {$dag}. Vragen? Stuur ons gerust een berichtje.");
             flash('succes', "{$naam} is afgemeld voor {$dag}.");
             break;
         case 'bevestigen':
             q("UPDATE inschrijvingen SET status = 'bevestigd', gewijzigd_op = ? WHERE id = ? AND status = 'wachtlijst'", [nu(), $inschrijving['id']]);
-            systeembericht((int) $inschrijving['ouder_id'], "Goed nieuws: {$naam} kan op {$dag} komen!", (int) $inschrijving['kind_id']);
+            bericht_aan_verzorgers((int) $inschrijving['kind_id'], 'agenda', "Goed nieuws: {$naam} kan op {$dag} komen!");
             flash('succes', "{$naam} is geplaatst.");
             break;
         case 'beter':
@@ -53,23 +53,23 @@ if (in_array($actie, ['aanwezig', 'opgehaald', 'ziek', 'afmelden', 'bevestigen',
             flash($status ? 'succes' : 'fout', $status ? "{$naam}: " . mb_strtolower(status_label($status)) . '.' : 'Dat lukte niet: de groep is dicht of het kind heeft geen groep.');
             break;
     }
-    log_actie('Agenda: ' . $actie, "{$naam} {$inschrijving['datum']}");
+    log_actie('Agenda: ' . $actie, $inschrijving['datum'], null, 'wijziging', 'kind:' . $inschrijving['kind_id']);
     redirect($terug);
 }
 
 if ($actie === 'toevoegen') {
-    $kind = rij('SELECT * FROM kinderen WHERE id = ?', [(int) invoer('kind')]);
+    $kind = rij('SELECT * FROM kinderen WHERE id = ? AND geanonimiseerd_op IS NULL', [(int) invoer('kind')]);
     $datum = invoer('datum');
-    if (!$kind || !geldige_datum($datum)) {
+    if (!$kind || !geldige_datum($datum) || !team_mag_kind($kind)) {
         niet_gevonden();
     }
     $status = schrijf_in($kind, $datum, (int) $gebruiker['id'], invoer('boven_max') === '1');
     if ($status === null) {
         flash('fout', 'Dat lukte niet: de groep is op deze dag dicht of het kind heeft geen groep.');
     } else {
-        systeembericht((int) $kind['ouder_id'], $kind['voornaam'] . ' staat ingeschreven voor ' . datum_nl($datum, 'EEEE d MMMM') . ($status === 'wachtlijst' ? ' (op de wachtlijst).' : '.'), (int) $kind['id']);
+        bericht_aan_verzorgers((int) $kind['id'], 'agenda', $kind['voornaam'] . ' staat ingeschreven voor ' . datum_nl($datum, 'EEEE d MMMM') . ($status === 'wachtlijst' ? ' (op de wachtlijst).' : '.'));
         flash('succes', $kind['voornaam'] . ': ' . mb_strtolower(status_label($status)) . '.');
-        log_actie('Agenda: toegevoegd', $kind['voornaam'] . ' ' . $datum . ' ' . $status);
+        log_actie('Agenda: toegevoegd', $datum . ' ' . $status, null, 'wijziging', 'kind:' . $kind['id']);
     }
     redirect($terug);
 }
@@ -77,7 +77,7 @@ if ($actie === 'toevoegen') {
 if ($actie === 'uitzondering') {
     $groep = groep((int) invoer('groep'));
     $datum = invoer('datum');
-    if (!$groep || !geldige_datum($datum)) {
+    if (!$groep || !geldige_datum($datum) || !team_mag_groep((int) $groep['id'])) {
         niet_gevonden();
     }
     if (invoer('verwijderen') === '1') {
@@ -98,7 +98,7 @@ if ($actie === 'uitzondering') {
         $getroffen = rijen("SELECT i.*, k.voornaam, k.ouder_id FROM inschrijvingen i JOIN kinderen k ON k.id = i.kind_id WHERE i.groep_id = ? AND i.datum = ? AND i.status IN ('bevestigd', 'wachtlijst')", [$groep['id'], $datum]);
         foreach ($getroffen as $inschrijving) {
             q("UPDATE inschrijvingen SET status = 'afgemeld', gewijzigd_op = ? WHERE id = ?", [nu(), $inschrijving['id']]);
-            systeembericht((int) $inschrijving['ouder_id'], 'Let op: ' . $groep['naam'] . ' is op ' . datum_nl($datum, 'EEEE d MMMM') . ' gesloten' . ($notitie !== '' ? " ({$notitie})" : '') . '. ' . $inschrijving['voornaam'] . ' is daarom afgemeld voor die dag.', (int) $inschrijving['kind_id']);
+            bericht_aan_verzorgers((int) $inschrijving['kind_id'], 'agenda', 'Let op: ' . $groep['naam'] . ' is op ' . datum_nl($datum, 'EEEE d MMMM') . ' gesloten' . ($notitie !== '' ? " ({$notitie})" : '') . '. ' . $inschrijving['voornaam'] . ' is daarom afgemeld voor die dag.');
         }
         flash('succes', 'De groep is gesloten op ' . datum_nl($datum) . '.' . ($getroffen ? ' ' . count($getroffen) . ' kind(eren) afgemeld; hun ouders hebben een bericht gekregen.' : ''));
     } else {

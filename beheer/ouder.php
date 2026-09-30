@@ -4,28 +4,49 @@ require __DIR__ . '/inc/bootstrap.php';
 
 $gebruiker = vereis_team();
 $ouder = rij("SELECT * FROM gebruikers WHERE id = ? AND rol = 'ouder'", [get_int('id')]);
-if (!$ouder) {
+if (!$ouder || !team_mag_ouder((int) $ouder['id'])) {
     niet_gevonden();
 }
+$beheerder = is_beheerder($gebruiker);
 $terug = 'ouder.php?id=' . (int) $ouder['id'];
+$onderwerp = 'gebruiker:' . (int) $ouder['id'];
 $fouten = [];
+
+// Kinderen waar deze ouder contracthouder of verzorger van is (medewerker: alleen binnen de eigen groepen)
+$kinderen = rijen(
+    'SELECT k.*, g.naam AS groepnaam, v.relatie AS v_relatie, v.gezag AS v_gezag, v.gezag_gecontroleerd_op AS v_gezag_gecontroleerd_op
+     FROM kinderen k LEFT JOIN groepen g ON g.id = k.groep_id LEFT JOIN kind_verzorgers v ON v.kind_id = k.id AND v.gebruiker_id = ?
+     WHERE (k.ouder_id = ? OR v.gebruiker_id IS NOT NULL) AND k.geanonimiseerd_op IS NULL AND ' . groep_voorwaarde('k.groep_id') . '
+     ORDER BY k.actief DESC, k.voornaam',
+    [$ouder['id'], $ouder['id']]
+);
+$kinderen = ontsleutel_kolommen($kinderen, ['bijzonderheden']);
+// Activeren kan pas als bij elk kind (waarvan deze ouder contracthouder is) iemand met gecontroleerd gezag staat
+$zonderGezag = array_filter($kinderen, fn ($k) => (int) $k['ouder_id'] === (int) $ouder['id'] && $k['actief']
+    && !waarde('SELECT 1 FROM kind_verzorgers WHERE kind_id = ? AND gezag = 1 AND gezag_gecontroleerd_op IS NOT NULL', [$k['id']]));
 
 if (is_post()) {
     csrf_controleer();
+    // Klantbeheer (activeren, stoppen, gegevens, groepen, wissen) is voor de beheerder
+    vereis_beheerder();
     $actie = invoer('actie');
 
-    if ($actie === 'activeren' && $ouder['status'] !== 'actief') {
-        q("UPDATE gebruikers SET status = 'actief' WHERE id = ?", [$ouder['id']]);
+    if ($actie === 'activeren' && $ouder['status'] !== 'actief' && $zonderGezag) {
+        flash('fout', 'Controleer eerst het gezag bij ' . implode(' en ', array_map(fn ($k) => $k['voornaam'], $zonderGezag)) . ' (in het dossier van het kind, onder Verzorgers en gezag).');
+    } elseif ($actie === 'activeren' && $ouder['status'] !== 'actief') {
+        q("UPDATE gebruikers SET status = 'actief', gestopt_op = NULL WHERE id = ?", [$ouder['id']]);
         systeembericht((int) $ouder['id'], 'Welkom bij BSO VCK! Je account is actief. Zodra je kind in een groep zit, kies je in de agenda zelf de dagen. Heb je vragen? Stuur ons hier gerust een berichtje.');
         stuur_mail($ouder['email'], 'Welkom bij BSO VCK', "Hoi {$ouder['naam']},\n\nWelkom bij BSO VCK! Je account is actief. Log in om de dagen voor je kind te kiezen:\n" . app_url('agenda.php') . "\n\nTot snel!");
-        log_actie('Ouder geactiveerd', $ouder['naam']);
+        log_actie('Ouder geactiveerd', '', null, 'wijziging', $onderwerp);
         flash('succes', $ouder['naam'] . ' is actief. Zet de kinderen nu in een groep, als dat nog niet is gebeurd.');
     } elseif ($actie === 'stoppen' && $ouder['status'] !== 'gestopt') {
-        q("UPDATE gebruikers SET status = 'gestopt' WHERE id = ?", [$ouder['id']]);
+        q("UPDATE gebruikers SET status = 'gestopt', gestopt_op = ? WHERE id = ?", [nu(), $ouder['id']]);
         foreach (rijen("SELECT i.* FROM inschrijvingen i JOIN kinderen k ON k.id = i.kind_id WHERE k.ouder_id = ? AND i.datum > ? AND i.status IN ('bevestigd', 'wachtlijst')", [$ouder['id'], vandaag()]) as $inschrijving) {
             meld_af($inschrijving);
         }
-        log_actie('Ouder gestopt', $ouder['naam']);
+        // Kinderen van deze contracthouder stoppen ook; vanaf nu lopen de bewaartermijnen
+        q('UPDATE kinderen SET actief = 0, gestopt_op = COALESCE(gestopt_op, ?) WHERE ouder_id = ? AND actief = 1', [nu(), $ouder['id']]);
+        log_actie('Ouder gestopt', '', null, 'wijziging', $onderwerp);
         flash('succes', $ouder['naam'] . ' is gestopt. Toekomstige dagen zijn afgemeld en de ouder kan niet meer inloggen.');
     } elseif ($actie === 'gegevens') {
         $velden = [
@@ -46,7 +67,7 @@ if (is_post()) {
         if (!$fouten) {
             $velden['postcode'] = $velden['postcode'] !== '' ? normaliseer_postcode($velden['postcode']) : '';
             q('UPDATE gebruikers SET naam = ?, email = ?, telefoon = ?, straat = ?, postcode = ?, plaats = ? WHERE id = ?', [...array_values($velden), $ouder['id']]);
-            log_actie('Oudergegevens gewijzigd', $velden['naam']);
+            log_actie('Oudergegevens gewijzigd', '', null, 'wijziging', $onderwerp);
             flash('succes', 'De gegevens zijn opgeslagen.');
         }
     } elseif ($actie === 'groep') {
@@ -54,15 +75,15 @@ if (is_post()) {
         $groepId = invoer('groep') === '' ? null : (int) invoer('groep');
         if ($kind && ($groepId === null || groep($groepId))) {
             q('UPDATE kinderen SET groep_id = ? WHERE id = ?', [$groepId, $kind['id']]);
-            log_actie('Kind ingedeeld', $kind['voornaam']);
+            log_actie('Kind ingedeeld', $groepId ? groep($groepId)['naam'] : 'geen groep', null, 'wijziging', 'kind:' . $kind['id']);
             flash('succes', $kind['voornaam'] . ' is ingedeeld.');
         }
-    } elseif ($actie === 'wissen' && is_beheerder($gebruiker) && $ouder['status'] === 'gestopt') {
-        wis_oudergegevens($ouder);
+    } elseif ($actie === 'wissen' && $ouder['status'] === 'gestopt') {
+        wis_oudergegevens($ouder, 'handmatig door beheerder');
         flash('succes', 'De gegevens van ' . $ouder['naam'] . ' en de kinderen zijn gewist. Naam, adres en facturen blijven bewaard vanwege de fiscale bewaarplicht.');
-    } elseif ($actie === 'mandaat_intrekken' && is_beheerder($gebruiker)) {
+    } elseif ($actie === 'mandaat_intrekken') {
         q("UPDATE gebruikers SET mandaat_status = 'ingetrokken' WHERE id = ?", [$ouder['id']]);
-        log_actie('Machtiging ingetrokken', $ouder['naam']);
+        log_actie('Machtiging ingetrokken', '', null, 'wijziging', $onderwerp);
         flash('succes', 'De machtiging staat op ingetrokken. Er worden geen incasso\'s meer gestart voor deze ouder. Trek hem ook in bij Mollie als dat nodig is.');
     }
     if (!$fouten) {
@@ -70,7 +91,7 @@ if (is_post()) {
     }
 }
 
-$kinderen = rijen('SELECT k.*, g.naam AS groepnaam FROM kinderen k LEFT JOIN groepen g ON g.id = k.groep_id WHERE k.ouder_id = ? ORDER BY k.actief DESC, k.voornaam', [$ouder['id']]);
+log_inzage('Oudergegevens bekeken', $onderwerp);
 $facturen = is_beheerder($gebruiker) ? rijen('SELECT * FROM facturen WHERE ouder_id = ? ORDER BY datum DESC LIMIT 12', [$ouder['id']]) : [];
 $gewensteDagen = array_map(fn ($d) => WEEKDAGEN[(int) $d] ?? '', array_filter(explode(',', $ouder['gewenste_dagen'])));
 
@@ -90,8 +111,13 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
     <dt>Gewenste start</dt><dd><?= e($ouder['gewenste_startdatum'] ? datum_nl($ouder['gewenste_startdatum']) : '-') ?></dd>
     <dt>Opmerkingen</dt><dd><?= e($ouder['opmerkingen'] ?: '-') ?></dd>
   </dl>
-  <p>Na de kennismaking: zet de kinderen hieronder in een groep en activeer het account. Daarna kan de ouder zelf dagen kiezen.</p>
-  <form method="post" action="<?= e($terug) ?>"><?= csrf_veld() ?><input type="hidden" name="actie" value="activeren"><button class="btn" type="submit"><?= icoon('check') ?>Account activeren</button></form>
+  <p>Na de kennismaking: controleer bij elk kind het gezag (in het dossier van het kind, onder Verzorgers en gezag), zet de kinderen in een groep en activeer het account. Daarna kan de ouder zelf dagen kiezen.</p>
+<?php if ($zonderGezag): ?>
+  <p class="let-op"><?= icoon('alert') ?><span>Gezag nog niet gecontroleerd bij: <?= e(implode(', ', array_map(fn ($k) => $k['voornaam'], $zonderGezag))) ?>.</span></p>
+<?php endif; ?>
+<?php if ($beheerder): ?>
+  <form method="post" action="<?= e($terug) ?>"><?= csrf_veld() ?><input type="hidden" name="actie" value="activeren"><button class="btn" type="submit"<?= $zonderGezag ? ' disabled' : '' ?>><?= icoon('check') ?>Account activeren</button></form>
+<?php endif; ?>
 </section>
 <?php endif; ?>
 <div class="kolommen">
@@ -103,15 +129,20 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
         <li class="kindrij">
           <div>
             <div class="kindrij__naam"><a href="kind.php?id=<?= (int) $kind['id'] ?>"><?= e(kindnaam($kind)) ?></a><?= $kind['actief'] ? '' : ' ' . status_badge('gestopt') ?></div>
-            <div class="kindrij__info"><span><?= leeftijd($kind['geboortedatum']) ?> jaar</span><span><?= e($kind['school'] ?: 'School onbekend') ?></span></div>
+            <div class="kindrij__info"><span><?= leeftijd($kind['geboortedatum']) ?> jaar</span><span><?= e($kind['school'] ?: 'School onbekend') ?></span>
+              <span><?= (int) $kind['ouder_id'] === (int) $ouder['id'] ? 'Contracthouder' : 'Verzorger' ?><?= $kind['v_relatie'] ? ' (' . e(mb_strtolower(RELATIES[$kind['v_relatie']] ?? '')) . ')' : '' ?>, <?= (int) $kind['v_gezag'] ? ($kind['v_gezag_gecontroleerd_op'] ? 'gezag gecontroleerd' : 'gezag nog controleren') : 'geen gezag' ?></span></div>
 <?php if ($kind['bijzonderheden'] !== ''): ?><p class="let-op"><?= icoon('alert') ?><span><?= e($kind['bijzonderheden']) ?></span></p><?php endif; ?>
           </div>
+<?php if ($beheerder && (int) $kind['ouder_id'] === (int) $ouder['id']): ?>
           <form class="inline-form groepkeuze" method="post" action="<?= e($terug) ?>">
             <?= csrf_veld() ?><input type="hidden" name="actie" value="groep"><input type="hidden" name="kind" value="<?= (int) $kind['id'] ?>">
             <label class="visually-hidden" for="groep-<?= (int) $kind['id'] ?>">Groep van <?= e($kind['voornaam']) ?></label>
             <select id="groep-<?= (int) $kind['id'] ?>" name="groep"><?= groep_opties($kind['groep_id'] !== null ? (int) $kind['groep_id'] : null) ?></select>
             <button class="btn btn--secondary btn--mini" type="submit">Opslaan<span class="visually-hidden"> groep van <?= e($kind['voornaam']) ?></span></button>
           </form>
+<?php else: ?>
+          <span class="muted"><?= e($kind['groepnaam'] ?? 'Nog geen groep') ?></span>
+<?php endif; ?>
         </li>
 <?php endforeach; ?>
       </ul>
@@ -144,6 +175,7 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
         <dt>Incasso</dt><dd><?= status_badge($ouder['mandaat_status']) ?><?= $ouder['mandaat_rekening'] ? '<br>' . e($ouder['mandaat_rekening']) . ' (' . e($ouder['mandaat_naam']) . ')' : '' ?></dd>
         <dt>Laatst ingelogd</dt><dd><?= e($ouder['laatst_ingelogd'] ? moment_nl($ouder['laatst_ingelogd']) : 'Nog nooit') ?></dd>
       </dl>
+<?php if ($beheerder): ?>
       <details class="uitklap"<?= $fouten ? ' open' : '' ?>>
         <summary><?= icoon('gear') ?>Gegevens wijzigen</summary>
         <form class="form" method="post" action="<?= e($terug) ?>">
@@ -159,7 +191,9 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
           <div class="form__acties"><button class="btn" type="submit">Opslaan</button></div>
         </form>
       </details>
+<?php endif; ?>
     </section>
+<?php if ($beheerder): ?>
     <section class="panel" aria-labelledby="account-titel">
       <h2 id="account-titel">Account</h2>
       <div class="btn-group">
@@ -168,14 +202,16 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
 <?php else: ?>
         <form method="post" action="<?= e($terug) ?>" data-bevestig="Weet je zeker dat <?= e($ouder['naam']) ?> stopt? Alle toekomstige dagen worden afgemeld en de ouder kan niet meer inloggen."><?= csrf_veld() ?><input type="hidden" name="actie" value="stoppen"><button class="btn btn--gevaar btn--small" type="submit">Klant is gestopt</button></form>
 <?php endif; ?>
-<?php if (is_beheerder($gebruiker) && $ouder['status'] === 'gestopt' && $ouder['email'] !== 'gewist-' . $ouder['id'] . '@bsovck.invalid'): ?>
+<?php if ($ouder['status'] === 'gestopt' && !$ouder['gewist_op']): ?>
         <form method="post" action="<?= e($terug) ?>" data-bevestig="Alle gegevens van <?= e($ouder['naam']) ?> en de kinderen wissen (dossiers, observaties, foto's, berichten en aanwezigheid)? Dit kan niet ongedaan worden gemaakt. Naam, adres en facturen blijven bewaard."><?= csrf_veld() ?><input type="hidden" name="actie" value="wissen"><button class="btn btn--gevaar btn--small" type="submit"><?= icoon('trash') ?>Gegevens wissen (AVG)</button></form>
 <?php endif; ?>
-<?php if (is_beheerder($gebruiker) && in_array($ouder['mandaat_status'], ['geldig', 'demo'], true)): ?>
+<?php if (in_array($ouder['mandaat_status'], ['geldig', 'demo'], true)): ?>
         <form method="post" action="<?= e($terug) ?>" data-bevestig="Machtiging intrekken? Er worden dan geen incasso's meer gestart."><?= csrf_veld() ?><input type="hidden" name="actie" value="mandaat_intrekken"><button class="btn btn--gevaar btn--small" type="submit">Machtiging intrekken</button></form>
 <?php endif; ?>
       </div>
+      <p class="muted" style="margin-top: var(--space-s)"><a href="logboek.php?onderwerp=<?= e(rawurlencode($onderwerp)) ?>">Logboek van deze ouder</a></p>
     </section>
+<?php endif; ?>
   </div>
 </div>
 <?php

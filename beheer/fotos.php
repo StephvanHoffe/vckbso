@@ -9,7 +9,8 @@ $gebruiker = vereis_login();
 
 /* ---------- Ouder ---------- */
 if (is_ouder($gebruiker)) {
-    $kinderen = rijen('SELECT * FROM kinderen WHERE ouder_id = ? ORDER BY voornaam', [$gebruiker['id']]);
+    // Alleen kinderen waarvoor deze verzorger foto's mag ontvangen
+    $kinderen = kinderen_van_verzorger((int) $gebruiker['id'], 'fotos', false);
     $filter = get_int('kind');
     $ids = array_map(fn ($k) => (int) $k['id'], $kinderen);
     if ($filter && in_array($filter, $ids, true)) {
@@ -56,19 +57,24 @@ if (is_post()) {
     csrf_controleer();
 
     if (invoer('actie') === 'verwijderen') {
-        $foto = rij('SELECT * FROM fotos WHERE id = ?', [(int) invoer('foto')]);
-        if ($foto) {
-            verwijder_fotobestanden($foto['bestand']);
-            q('DELETE FROM fotos WHERE id = ?', [$foto['id']]);
-            log_actie('Foto verwijderd', (string) $foto['id']);
+        $foto = foto_met_toegang((int) invoer('foto'));
+        if (is_beheerder($gebruiker) || (int) $foto['geupload_door'] === (int) $gebruiker['id']) {
+            foreach (rijen('SELECT kind_id FROM foto_kinderen WHERE foto_id = ?', [$foto['id']]) as $rij) {
+                log_actie('Foto verwijderd', 'foto ' . $foto['id'], null, 'wijziging', 'kind:' . $rij['kind_id']);
+            }
+            verwijder_foto($foto);
+            registreer_verwijdering('foto', (int) $foto['id'], 'verwijderd door team');
             flash('succes', 'De foto is verwijderd.');
+        } else {
+            flash('fout', 'Alleen wie de foto heeft geplaatst of de beheerder kan hem verwijderen.');
         }
         redirect(veilig_terug(invoer('terug', 'fotos.php')));
     }
 
     $bijschrift = mb_substr(invoer('bijschrift'), 0, 300);
     $gekozen = array_values(array_unique(array_map('intval', (array) ($_POST['kinderen'] ?? []))));
-    $kinderen = $gekozen ? rijen('SELECT * FROM kinderen WHERE actief = 1 AND id IN (' . implode(',', $gekozen) . ')') : [];
+    // Alleen kinderen uit de eigen groepen
+    $kinderen = $gekozen ? rijen('SELECT * FROM kinderen WHERE actief = 1 AND geanonimiseerd_op IS NULL AND id IN (' . implode(',', $gekozen) . ') AND ' . groep_voorwaarde('groep_id')) : [];
 
     // Bestanden uit $_FILES['fotos'] omzetten naar een lijst per bestand
     $uploads = [];
@@ -117,15 +123,17 @@ if (is_post()) {
             }
         }
         if ($gelukt) {
-            // Eén berichtje per gezin, niet per foto
-            $perOuder = [];
+            // Eén berichtje per verzorger (met recht op foto's), niet per foto
+            $perVerzorger = [];
             foreach ($kinderen as $kind) {
-                $perOuder[$kind['ouder_id']][] = $kind['voornaam'];
+                foreach (verzorgers_met_recht((int) $kind['id'], 'fotos') as $verzorgerId) {
+                    $perVerzorger[$verzorgerId][] = $kind['voornaam'];
+                }
+                log_actie("Foto's gedeeld", "{$gelukt} foto('s)", null, 'wijziging', 'kind:' . $kind['id']);
             }
-            foreach ($perOuder as $ouderId => $namen) {
-                systeembericht((int) $ouderId, ($gelukt === 1 ? 'Er staat een nieuwe foto' : "Er staan {$gelukt} nieuwe foto's") . ' van ' . implode(' en ', $namen) . " voor je klaar bij Foto's.");
+            foreach ($perVerzorger as $verzorgerId => $namen) {
+                systeembericht((int) $verzorgerId, ($gelukt === 1 ? 'Er staat een nieuwe foto' : "Er staan {$gelukt} nieuwe foto's") . ' van ' . implode(' en ', $namen) . " voor je klaar bij Foto's.");
             }
-            log_actie("Foto's gedeeld", "{$gelukt} foto('s) met " . count($perOuder) . ' gezin(nen)');
             flash('succes', ($gelukt === 1 ? '1 foto is' : "{$gelukt} foto's zijn") . ' gedeeld met de ouders van ' . implode(', ', array_map(fn ($k) => $k['voornaam'], $kinderen)) . '.');
         }
         if ($mislukt) {
@@ -135,14 +143,15 @@ if (is_post()) {
     }
 }
 
-$groepen = rijen('SELECT * FROM groepen WHERE actief = 1 ORDER BY naam');
+$groepen = zichtbare_groepen();
 $perGroep = [];
-foreach (rijen("SELECT k.* FROM kinderen k JOIN gebruikers g ON g.id = k.ouder_id WHERE k.actief = 1 AND g.status != 'gestopt' ORDER BY k.voornaam") as $kind) {
+foreach (rijen("SELECT k.* FROM kinderen k JOIN gebruikers g ON g.id = k.ouder_id WHERE k.actief = 1 AND k.geanonimiseerd_op IS NULL AND g.status != 'gestopt' AND " . groep_voorwaarde('k.groep_id') . ' ORDER BY k.voornaam') as $kind) {
     $perGroep[$kind['groep_id'] ?? 0][] = $kind;
 }
 $recent = rijen(
-    "SELECT f.*, (SELECT GROUP_CONCAT(k.voornaam, ', ') FROM foto_kinderen fk JOIN kinderen k ON k.id = fk.kind_id WHERE fk.foto_id = f.id) AS kinderen
-     FROM fotos f ORDER BY f.aangemaakt_op DESC, f.id DESC LIMIT 24"
+    "SELECT f.*, (SELECT GROUP_CONCAT(k.voornaam, ', ') FROM foto_kinderen fk JOIN kinderen k ON k.id = fk.kind_id WHERE fk.foto_id = f.id AND " . groep_voorwaarde('k.groep_id') . ") AS kinderen
+     FROM fotos f WHERE EXISTS (SELECT 1 FROM foto_kinderen fk JOIN kinderen k ON k.id = fk.kind_id WHERE fk.foto_id = f.id AND " . groep_voorwaarde('k.groep_id') . ")
+     ORDER BY f.aangemaakt_op DESC, f.id DESC LIMIT 24"
 );
 
 pagina_begin("Foto's", 'fotos.php');

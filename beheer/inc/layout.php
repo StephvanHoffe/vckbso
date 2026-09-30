@@ -19,6 +19,7 @@ function menu_items(array $gebruiker): array
             ['fotos.php', "Foto's", 'camera'],
             ['kinderen.php', 'Mijn kinderen', 'smile'],
             ['facturen.php', 'Facturen', 'euro'],
+            ['privacy.php', 'Privacy', 'shield'],
         ];
     }
     $items = [
@@ -32,7 +33,8 @@ function menu_items(array $gebruiker): array
     if ($gebruiker['rol'] === 'beheerder') {
         $items[] = ['groepen.php', 'Groepen', 'grid'];
         $items[] = ['facturen.php', 'Facturen', 'euro'];
-        $items[] = ['medewerkers.php', 'Team', 'shield'];
+        $items[] = ['medewerkers.php', 'Team', 'users'];
+        $items[] = ['verzoeken.php', 'Privacyverzoeken', 'shield'];
         $items[] = ['instellingen.php', 'Instellingen', 'gear'];
     }
     return $items;
@@ -65,6 +67,9 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 <link rel="stylesheet" href="../design/tokens.css">
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="assets/beheer.css">
+<?php foreach ($opties['scripts'] ?? [] as $script): ?>
+<script src="<?= e($script) ?>" defer></script>
+<?php endforeach; ?>
 <script src="assets/beheer.js" defer></script>
 </head>
 <body class="beheer<?= $gebruiker ? '' : ' beheer--publiek' ?>">
@@ -75,14 +80,14 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
     <a class="logo" href="<?= $gebruiker ? 'index.php' : '../index.html' ?>" aria-label="BSO VCK, <?= $gebruiker ? 'naar het overzicht' : 'naar de website' ?>"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">BSO <span class="logo__accent">VCK</span></span><span class="app-header__omgeving"><?= e($omgeving) ?></span></a>
 <?php if ($gebruiker): ?>
     <ul class="app-account">
-      <li><a href="profiel.php"<?= $actief === 'profiel.php' ? ' aria-current="page"' : '' ?>><?= icoon('user') ?><span><?= e(explode(' ', $gebruiker['naam'])[0]) ?><span class="visually-hidden">, mijn gegevens</span></span></a></li>
-      <li><form method="post" action="uitloggen.php"><?= csrf_veld() ?><button type="submit" class="link-button"><?= icoon('logout') ?>Uitloggen</button></form></li>
+      <li><a href="profiel.php"<?= $actief === 'profiel.php' ? ' aria-current="page"' : '' ?>><?= icoon('user') ?><span class="app-account__label"><?= e(explode(' ', $gebruiker['naam'])[0]) ?><span class="visually-hidden">, mijn gegevens</span></span></a></li>
+      <li><form method="post" action="uitloggen.php"><?= csrf_veld() ?><button type="submit" class="link-button"><?= icoon('logout') ?><span class="app-account__label">Uitloggen</span></button></form></li>
     </ul>
   </div>
   <nav class="app-nav" aria-label="Menu">
     <ul>
 <?php foreach (menu_items($gebruiker) as [$bestand, $label, $ico]): ?>
-      <li><a href="<?= e($bestand) ?>"<?= $actief === $bestand ? ' aria-current="page"' : '' ?>><?= icoon($ico) ?><?= e($label) ?><?php if ($bestand === 'berichten.php' && $ongelezen > 0): ?> <span class="teller"><?= $ongelezen ?><span class="visually-hidden"> ongelezen</span></span><?php endif; ?></a></li>
+      <li><a href="<?= e($bestand) ?>"<?= $actief === $bestand ? ' aria-current="page"' : '' ?>><?= icoon($ico) ?><?= e($label) ?><?php if ($bestand === 'berichten.php' && $ongelezen > 0): ?> <span class="teller"><?= $ongelezen ?><span class="visually-hidden"> ongelezen</span></span><?php endif; ?><?php if ($bestand === 'verzoeken.php' && ($open = open_verzoeken()) > 0): ?> <span class="teller"><?= $open ?><span class="visually-hidden"> open</span></span><?php endif; ?></a></li>
 <?php endforeach; ?>
     </ul>
   </nav>
@@ -111,6 +116,11 @@ function pagina_einde(): void
 </body>
 </html>
 <?php
+}
+
+function open_verzoeken(): int
+{
+    return (int) waarde("SELECT COUNT(*) FROM avg_verzoeken WHERE status IN ('ontvangen', 'in_behandeling')");
 }
 
 /** Kop van een pagina met titel en eventueel knoppen rechts. */

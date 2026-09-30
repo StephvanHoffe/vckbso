@@ -114,6 +114,28 @@ body.beheer {
   margin: 0;
 }
 
+/* Smalle schermen: alleen de iconen, de tekst blijft voor schermlezers */
+@media (max-width: 27.99em) {
+  .app-account {
+    gap: var(--space-3xs);
+  }
+
+  .app-account a,
+  .app-account .link-button {
+    justify-content: center;
+    min-width: 2.75rem;
+  }
+
+  .app-account__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
+
 .app-nav {
   border-top: 1px solid var(--color-border);
 }
@@ -123,6 +145,7 @@ body.beheer {
   gap: var(--space-3xs);
   margin-block: 0;
   padding: var(--space-2xs) 0;
+  position: relative;
   overflow-x: auto;
   list-style: none;
   scrollbar-width: thin;
@@ -194,6 +217,7 @@ body.beheer {
 
 .pagina-kop h1 {
   margin-bottom: var(--space-2xs);
+  overflow-wrap: break-word;
 }
 
 .pagina-kop .lead {
@@ -252,6 +276,7 @@ body.beheer {
 
 .kolommen {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-l);
   align-items: start;
 }
@@ -416,6 +441,7 @@ a.tegel:hover {
 /* ---------- Tabellen ---------- */
 
 .tabel {
+  position: relative; /* houdt visueel verborgen labels binnen de scrollbare tabel */
   overflow-x: auto;
   margin: 0 calc(var(--space-m) * -1);
   padding: 0 var(--space-m);
@@ -997,6 +1023,18 @@ a.bezetting:hover {
 .gegevens dd {
   margin: 0;
   white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 29.99em) {
+  .gegevens {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0;
+  }
+
+  .gegevens dd {
+    margin-bottom: var(--space-xs);
+  }
 }
 
 .tijdlijn {
@@ -1200,4 +1238,42 @@ code {
 /* Grijze metatekst haalt op het koraalvlak geen 4,5:1; daar de gewone tekstkleur */
 .bericht--ziekmelding .bericht__meta {
   color: var(--color-text);
+}
+
+/* Tweestapsverificatie */
+.qr {
+  width: min(100%, 15rem);
+  margin: 0 0 var(--space-m);
+  padding: var(--space-s);
+  border-radius: var(--radius-m);
+  background: #fff;
+  box-shadow: var(--shadow-s);
+}
+
+.qr svg {
+  width: 100%;
+  height: auto;
+}
+
+.sleutel {
+  font-size: var(--step-0);
+  letter-spacing: 0.05em;
+  word-break: break-all;
+}
+
+.herstelcodes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: var(--space-2xs);
+  margin: 0 0 var(--space-m);
+  padding: 0;
+  list-style: none;
+}
+
+.herstelcodes code {
+  display: block;
+  padding: var(--space-2xs) var(--space-s);
+  background: #fff;
+  font-size: var(--step-0);
+  text-align: center;
 }

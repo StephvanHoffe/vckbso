@@ -241,15 +241,82 @@ function instelling_zet(string $sleutel, string $waarde): void
 
 /* ---------- Logboek ---------- */
 
-function log_actie(string $actie, string $details = '', ?int $gebruikerId = null): void
+const LOG_SOORTEN = [
+    'inzage' => 'Inzage',
+    'wijziging' => 'Wijziging',
+    'export' => 'Export',
+    'inloggen' => 'Inloggen',
+    'beveiliging' => 'Beveiliging',
+    'avg' => 'AVG-verzoek',
+    'bewaarbeleid' => 'Bewaarbeleid',
+];
+
+/**
+ * Registreert een actie. $soort: inzage, wijziging, export, inloggen, beveiliging,
+ * avg of bewaarbeleid. $onderwerp: over wie het gaat, bijvoorbeeld "kind:12".
+ * Elke regel bevat de hash van de vorige regel (hashketen): een regel achteraf
+ * wijzigen of weghalen valt op bij "Controleer logboek".
+ */
+function log_actie(string $actie, string $details = '', ?int $gebruikerId = null, string $soort = 'wijziging', string $onderwerp = ''): void
 {
-    q('INSERT INTO logboek (gebruiker_id, actie, details, ip, aangemaakt_op) VALUES (?, ?, ?, ?, ?)', [
-        $gebruikerId ?? (huidige_gebruiker()['id'] ?? null),
-        $actie,
-        mb_substr($details, 0, 500),
-        ip_adres(),
-        nu(),
-    ]);
+    $gebruikerId ??= huidige_gebruiker()['id'] ?? null;
+    $rij = [
+        'gebruiker_id' => $gebruikerId,
+        'actie' => $actie,
+        'details' => mb_substr($details, 0, 500),
+        'ip' => ip_adres(),
+        'aangemaakt_op' => nu(),
+        'soort' => array_key_exists($soort, LOG_SOORTEN) ? $soort : 'wijziging',
+        'onderwerp' => $onderwerp,
+    ];
+    transactie(function () use ($rij) {
+        $vorige = (string) (waarde('SELECT hash FROM logboek ORDER BY id DESC LIMIT 1') ?? '');
+        $rij['vorige'] = $vorige;
+        $rij['hash'] = log_hash($vorige, $rij);
+        q('INSERT INTO logboek (gebruiker_id, actie, details, ip, aangemaakt_op, soort, onderwerp, vorige, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            $rij['gebruiker_id'], $rij['actie'], $rij['details'], $rij['ip'], $rij['aangemaakt_op'], $rij['soort'], $rij['onderwerp'], $rij['vorige'], $rij['hash'],
+        ]);
+    });
+}
+
+function log_hash(string $vorige, array $rij): string
+{
+    return hash('sha256', $vorige . "\x1f" . implode("\x1f", [
+        (string) $rij['gebruiker_id'], $rij['actie'], $rij['details'], $rij['ip'], $rij['aangemaakt_op'], $rij['soort'], $rij['onderwerp'],
+    ]));
+}
+
+/**
+ * Controleert de hashketen van het logboek. Regels die volgens de bewaartermijn
+ * zijn verwijderd, zijn geen probleem: de controle begint bij de oudste regel die er nog is.
+ */
+function controleer_logboek(): array
+{
+    $vorigeHash = null;
+    $aantal = 0;
+    $stmt = q('SELECT * FROM logboek ORDER BY id');
+    while ($rij = $stmt->fetch()) {
+        $aantal++;
+        if ($vorigeHash !== null && $rij['vorige'] !== $vorigeHash) {
+            return ['ok' => false, 'aantal' => $aantal, 'fout_id' => (int) $rij['id']];
+        }
+        if (!hash_equals($rij['hash'], log_hash($rij['vorige'], $rij))) {
+            return ['ok' => false, 'aantal' => $aantal, 'fout_id' => (int) $rij['id']];
+        }
+        $vorigeHash = $rij['hash'];
+    }
+    return ['ok' => true, 'aantal' => $aantal, 'fout_id' => null];
+}
+
+/** Iemand van het team bekijkt gegevens van een kind of ouder. */
+function log_inzage(string $wat, string $onderwerp): void
+{
+    log_actie($wat, '', null, 'inzage', $onderwerp);
+}
+
+function log_export(string $wat, string $onderwerp, string $details = ''): void
+{
+    log_actie($wat, $details, null, 'export', $onderwerp);
 }
 
 function ip_adres(): string

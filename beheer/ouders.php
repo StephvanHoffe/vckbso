@@ -2,11 +2,12 @@
 /* Ouders (klanten): lijst met status en machtiging (team). */
 require __DIR__ . '/inc/bootstrap.php';
 
-vereis_team();
+$gebruiker = vereis_team();
 
 $status = get_str('status', 'actief');
 $zoek = get_str('zoek');
-$waar = ["g.rol = 'ouder'"];
+// Medewerkers zien alleen ouders van kinderen in hun eigen groepen
+$waar = ["g.rol = 'ouder'", 'g.gewist_op IS NULL', ouder_voorwaarde('g.id')];
 $params = [];
 if (in_array($status, ['nieuw', 'actief', 'gestopt'], true)) {
     $waar[] = 'g.status = ?';
@@ -17,12 +18,12 @@ if ($zoek !== '') {
     array_push($params, "%{$zoek}%", "%{$zoek}%", "%{$zoek}%");
 }
 $ouders = rijen(
-    "SELECT g.*, (SELECT GROUP_CONCAT(k.voornaam, ', ') FROM kinderen k WHERE k.ouder_id = g.id AND k.actief = 1) AS kinderen
+    "SELECT g.*, (SELECT GROUP_CONCAT(k.voornaam, ', ') FROM kinderen k WHERE (k.ouder_id = g.id OR EXISTS (SELECT 1 FROM kind_verzorgers v WHERE v.kind_id = k.id AND v.gebruiker_id = g.id)) AND k.actief = 1 AND " . groep_voorwaarde('k.groep_id') . ") AS kinderen
      FROM gebruikers g WHERE " . implode(' AND ', $waar) . ' ORDER BY g.status = \'nieuw\' DESC, g.naam',
     $params
 );
 $aantallen = [];
-foreach (rijen("SELECT status, COUNT(*) AS n FROM gebruikers WHERE rol = 'ouder' GROUP BY status") as $rij) {
+foreach (rijen("SELECT status, COUNT(*) AS n FROM gebruikers g WHERE rol = 'ouder' AND gewist_op IS NULL AND " . ouder_voorwaarde('g.id') . ' GROUP BY status') as $rij) {
     $aantallen[$rij['status']] = (int) $rij['n'];
 }
 
@@ -32,7 +33,7 @@ pagina_kop('Ouders', 'Alle klanten met hun kinderen, status en machtiging. Nieuw
 <section class="panel" aria-labelledby="lijst-titel">
   <h2 id="lijst-titel" class="visually-hidden">Lijst met ouders</h2>
   <ul class="kind-tabs" aria-label="Filter op status">
-<?php foreach (['nieuw' => 'Nieuwe aanmeldingen', 'actief' => 'Actief', 'gestopt' => 'Gestopt', 'alle' => 'Alle'] as $sleutel => $label): ?>
+<?php foreach ((is_beheerder($gebruiker) ? ['nieuw' => 'Nieuwe aanmeldingen'] : []) + ['actief' => 'Actief', 'gestopt' => 'Gestopt', 'alle' => 'Alle'] as $sleutel => $label): ?>
     <li><a href="ouders.php?status=<?= $sleutel ?>"<?= $status === $sleutel ? ' aria-current="true"' : '' ?>><?= e($label) ?><?= $sleutel !== 'alle' ? ' (' . ($aantallen[$sleutel] ?? 0) . ')' : '' ?></a></li>
 <?php endforeach; ?>
   </ul>

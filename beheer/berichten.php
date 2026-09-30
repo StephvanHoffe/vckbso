@@ -10,8 +10,8 @@ $team = is_team($gebruiker);
 
 if ($team) {
     $ouderId = get_int('ouder') ?: (int) invoer('ouder');
-    $ouder = $ouderId ? rij("SELECT * FROM gebruikers WHERE id = ? AND rol = 'ouder'", [$ouderId]) : null;
-    if ($ouderId && !$ouder) {
+    $ouder = $ouderId ? rij("SELECT * FROM gebruikers WHERE id = ? AND rol = 'ouder' AND gewist_op IS NULL", [$ouderId]) : null;
+    if ($ouderId && (!$ouder || !team_mag_ouder((int) $ouder['id']))) {
         niet_gevonden();
     }
 } else {
@@ -30,12 +30,13 @@ if (is_post() && $ouder) {
             redirect($terug);
         }
         $kindId = (int) invoer('kind') ?: null;
-        if ($kindId && !waarde('SELECT id FROM kinderen WHERE id = ? AND ouder_id = ?', [$kindId, $ouder['id']])) {
+        if ($kindId && !heeft_recht($kindId, (int) $ouder['id'], 'berichten')) {
             $kindId = null;
         }
-        q("INSERT INTO berichten (ouder_id, afzender_id, kind_id, soort, tekst, gelezen_ouder, gelezen_team, aangemaakt_op) VALUES (?, ?, ?, 'bericht', ?, ?, ?, ?)", [
-            $ouder['id'], $gebruiker['id'], $kindId, $tekst, $team ? 0 : 1, $team ? 1 : 0, nu(),
-        ]);
+        nieuw_bericht((int) $ouder['id'], (int) $gebruiker['id'], $kindId, 'bericht', $tekst, !$team, $team);
+        if ($team) {
+            log_actie('Bericht gestuurd', '', null, 'wijziging', 'gebruiker:' . $ouder['id']);
+        }
         if ($team) {
             stuur_mail($ouder['email'], 'Nieuw bericht van BSO VCK', "Hoi {$ouder['naam']},\n\nJe hebt een nieuw bericht van BSO VCK. Lees het hier:\n" . app_url('berichten.php'));
         } else {
@@ -46,7 +47,7 @@ if (is_post() && $ouder) {
     }
 
     if ($actie === 'ziek' && !$team) {
-        $kind = rij('SELECT * FROM kinderen WHERE id = ? AND ouder_id = ?', [(int) invoer('kind'), $ouder['id']]);
+        $kind = heeft_recht((int) invoer('kind'), (int) $ouder['id'], 'agenda') ? rij('SELECT * FROM kinderen WHERE id = ?', [(int) invoer('kind')]) : null;
         $van = invoer('van');
         $tot = invoer('tot') ?: $van;
         if (!$kind || !geldige_datum($van) || !geldige_datum($tot) || $van < vandaag() || $tot < $van || $tot > date('Y-m-d', strtotime('+30 days'))) {
@@ -61,11 +62,9 @@ if (is_post() && $ouder) {
         }
         $periode = $van === $tot ? datum_nl($van, 'EEEE d MMMM') : datum_nl($van, 'd MMMM') . ' t/m ' . datum_nl($tot, 'd MMMM');
         $toelichting = mb_substr(invoer('toelichting'), 0, 1000);
-        q("INSERT INTO berichten (ouder_id, afzender_id, kind_id, soort, tekst, gelezen_ouder, gelezen_team, aangemaakt_op) VALUES (?, ?, ?, 'ziekmelding', ?, 1, 0, ?)", [
-            $ouder['id'], $gebruiker['id'], $kind['id'], $kind['voornaam'] . ' is ziek (' . $periode . ').' . ($toelichting !== '' ? "\n" . $toelichting : ''), nu(),
-        ]);
+        nieuw_bericht((int) $ouder['id'], (int) $gebruiker['id'], (int) $kind['id'], 'ziekmelding', $kind['voornaam'] . ' is ziek (' . $periode . ').' . ($toelichting !== '' ? "\n" . $toelichting : ''), true, false);
         mail_team('Ziekmelding: ' . $kind['voornaam'], $ouder['naam'] . ' heeft ' . $kind['voornaam'] . ' ziek gemeld (' . $periode . ').' . "\n" . app_url('berichten.php?ouder=' . $ouder['id']));
-        log_actie('Ziekmelding', $kind['voornaam'] . ' ' . $van . ' t/m ' . $tot);
+        log_actie('Ziekmelding', $van . ' t/m ' . $tot, null, 'wijziging', 'kind:' . $kind['id']);
         flash('succes', $kind['voornaam'] . ' is ziek gemeld' . ($aantal ? ' en afgemeld voor ' . $aantal . ' ' . ($aantal === 1 ? 'dag' : 'dagen') : '') . '. Beterschap!');
         redirect('berichten.php#gesprek');
     }
@@ -78,9 +77,11 @@ if ($team && !$ouder) {
         "SELECT g.id, g.naam, MAX(b.aangemaakt_op) AS laatste, SUM(b.gelezen_team = 0) AS ongelezen,
                 (SELECT tekst FROM berichten b2 WHERE b2.ouder_id = g.id ORDER BY b2.aangemaakt_op DESC, b2.id DESC LIMIT 1) AS voorbeeld
          FROM berichten b JOIN gebruikers g ON g.id = b.ouder_id
+         WHERE " . ouder_voorwaarde('g.id') . "
          GROUP BY g.id ORDER BY ongelezen > 0 DESC, laatste DESC LIMIT 200"
     );
-    $ouders = rijen("SELECT id, naam FROM gebruikers WHERE rol = 'ouder' AND status != 'gestopt' ORDER BY naam");
+    $gesprekken = ontsleutel_kolommen($gesprekken, ['voorbeeld']);
+    $ouders = rijen("SELECT g.id, g.naam FROM gebruikers g WHERE g.rol = 'ouder' AND g.status != 'gestopt' AND " . ouder_voorwaarde('g.id') . ' ORDER BY g.naam');
 
     pagina_begin('Berichten', 'berichten.php');
     pagina_kop('Berichten', 'Alle gesprekken met ouders. Ongelezen gesprekken staan bovenaan.');
@@ -115,7 +116,10 @@ if ($team && !$ouder) {
     exit;
 }
 
-// Gesprek openen = gelezen
+// Gesprek openen = gelezen; inzage door het team wordt vastgelegd
+if ($team) {
+    log_inzage('Berichten bekeken', 'gebruiker:' . $ouder['id']);
+}
 q($team ? 'UPDATE berichten SET gelezen_team = 1 WHERE ouder_id = ? AND gelezen_team = 0' : 'UPDATE berichten SET gelezen_ouder = 1 WHERE ouder_id = ? AND gelezen_ouder = 0', [$ouder['id']]);
 
 $berichten = rijen(
@@ -124,7 +128,9 @@ $berichten = rijen(
      WHERE b.ouder_id = ? ORDER BY b.aangemaakt_op, b.id',
     [$ouder['id']]
 );
-$kinderen = rijen('SELECT * FROM kinderen WHERE ouder_id = ? AND actief = 1 ORDER BY voornaam', [$ouder['id']]);
+$berichten = ontsleutel_kolommen($berichten, ['tekst']);
+$kinderen = kinderen_van_verzorger((int) $ouder['id'], 'berichten');
+$ziekKinderen = kinderen_van_verzorger((int) $ouder['id'], 'agenda');
 
 pagina_begin('Berichten', 'berichten.php');
 if ($team) {
@@ -173,15 +179,15 @@ if ($team) {
 <?php if (!$team): ?>
   <section class="panel" id="ziekmelden" aria-labelledby="ziek-titel">
     <h2 id="ziek-titel">Ziek melden</h2>
-<?php if (!$kinderen): ?>
-    <p class="leeg">Er staan nog geen kinderen in je account.</p>
+<?php if (!$ziekKinderen): ?>
+    <p class="leeg">Er zijn geen kinderen die jij ziek kunt melden.</p>
 <?php else: ?>
     <p>Je kind wordt afgemeld voor de gekozen dagen en wij krijgen direct een seintje.</p>
     <form class="form" method="post" action="berichten.php">
       <?= csrf_veld() ?>
       <input type="hidden" name="actie" value="ziek">
       <div class="field"><label for="ziek-kind">Wie is er ziek?</label><select id="ziek-kind" name="kind">
-<?php foreach ($kinderen as $k): ?>
+<?php foreach ($ziekKinderen as $k): ?>
         <option value="<?= (int) $k['id'] ?>"><?= e($k['voornaam']) ?></option>
 <?php endforeach; ?>
       </select></div>

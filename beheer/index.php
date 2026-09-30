@@ -9,11 +9,12 @@ $gebruiker = vereis_login();
 $voornaam = explode(' ', $gebruiker['naam'])[0];
 
 if (is_ouder($gebruiker)) {
-    $kinderen = rijen('SELECT k.*, g.naam AS groepnaam FROM kinderen k LEFT JOIN groepen g ON g.id = k.groep_id WHERE k.ouder_id = ? AND k.actief = 1 ORDER BY k.voornaam', [$gebruiker['id']]);
-    $kindIds = array_map(fn ($k) => (int) $k['id'], $kinderen);
+    $kinderen = kinderen_van_verzorger((int) $gebruiker['id']);
+    $fotoKinderen = array_map(fn ($k) => (int) $k['id'], kinderen_van_verzorger((int) $gebruiker['id'], 'fotos'));
+    $zonderGecontroleerdGezag = array_filter($kinderen, fn ($k) => (int) $k['v_gezag'] === 1 && empty($k['v_gezag_gecontroleerd_op']));
     $ongelezen = ongelezen_voor_ouder((int) $gebruiker['id']);
     $openFacturen = rijen("SELECT * FROM facturen WHERE ouder_id = ? AND status IN ('open', 'mislukt') ORDER BY datum DESC", [$gebruiker['id']]);
-    $fotos = fotos_van($kindIds, 4);
+    $fotos = fotos_van($fotoKinderen, 4);
     $machtigingOk = in_array($gebruiker['mandaat_status'], ['geldig', 'demo'], true);
 
     pagina_begin('Overzicht', 'index.php');
@@ -27,7 +28,7 @@ if (is_ouder($gebruiker)) {
   <ol class="mini-steps">
     <li><span><strong>Aanmelding ontvangen</strong> <?= status_badge('bevestigd') ?><br><span class="muted">Je account is aangemaakt.</span></span></li>
     <li><span><strong>Automatische incasso</strong> <?= status_badge($gebruiker['mandaat_status']) ?><br><?= $machtigingOk ? '<span class="muted">Geregeld, je hoeft er niets meer voor te doen.</span>' : '<a href="machtiging.php">Geef nu je machtiging af</a>' ?></span></li>
-    <li><span><strong>Kennismaken</strong><?= $gebruiker['status'] === 'actief' ? ' ' . status_badge('bevestigd') : '' ?><br><span class="muted"><?= $gebruiker['status'] === 'actief' ? 'Gedaan, welkom bij BSO VCK!' : 'We nemen snel contact met je op voor een kennismaking.' ?></span></span></li>
+    <li><span><strong>Kennismaken</strong><?= $gebruiker['status'] === 'actief' ? ' ' . status_badge('bevestigd') : '' ?><br><span class="muted"><?= $gebruiker['status'] === 'actief' ? 'Gedaan, welkom bij BSO VCK!' : 'We nemen snel contact met je op voor een kennismaking. Neem dan een bewijs van gezag mee, bijvoorbeeld een uittreksel uit het gezagsregister.' ?></span></span></li>
     <li><span><strong>Dagen kiezen</strong><br><span class="muted">Daarna kies je in de <a href="agenda.php">agenda</a> zelf de dagen.</span></span></li>
   </ol>
 </section>
@@ -37,8 +38,11 @@ if (is_ouder($gebruiker)) {
 <ul class="tegels">
   <li><a class="tegel" href="berichten.php" style="--tegel-bg: var(--color-sun-soft)"><span class="tegel__getal"><?= $ongelezen ?></span><span class="tegel__label"><?= $ongelezen === 1 ? 'nieuw bericht' : 'nieuwe berichten' ?></span></a></li>
   <li><a class="tegel" href="facturen.php" style="--tegel-bg: var(--color-mint-soft)"><span class="tegel__getal"><?= count($openFacturen) ?></span><span class="tegel__label">open <?= count($openFacturen) === 1 ? 'factuur' : 'facturen' ?></span></a></li>
-  <li><a class="tegel" href="fotos.php" style="--tegel-bg: var(--color-coral-soft)"><span class="tegel__getal"><?= (int) (count($kindIds) ? waarde('SELECT COUNT(DISTINCT foto_id) FROM foto_kinderen WHERE kind_id IN (' . implode(',', $kindIds) . ')') : 0) ?></span><span class="tegel__label">foto's</span></a></li>
+  <li><a class="tegel" href="fotos.php" style="--tegel-bg: var(--color-coral-soft)"><span class="tegel__getal"><?= (int) ($fotoKinderen ? waarde('SELECT COUNT(DISTINCT foto_id) FROM foto_kinderen WHERE kind_id IN (' . implode(',', $fotoKinderen) . ')') : 0) ?></span><span class="tegel__label">foto's</span></a></li>
 </ul>
+<?php if ($zonderGecontroleerdGezag && $gebruiker['status'] === 'actief'): ?>
+<p class="melding"><?= icoon('info') ?><span>Voor <?= e(implode(' en ', array_map(fn ($k) => $k['voornaam'], $zonderGecontroleerdGezag))) ?> hebben we je gezag nog niet gecontroleerd. Tot die tijd kun je de gegevens en toestemmingen niet zelf wijzigen. Neem bij je volgende bezoek een uittreksel uit het gezagsregister mee.</span></p>
+<?php endif; ?>
 <div class="kolommen">
   <section class="panel" aria-labelledby="kinderen-titel">
     <div class="panel__kop"><h2 id="kinderen-titel">Je kinderen</h2><a href="kinderen.php">Alle gegevens</a></div>
@@ -80,7 +84,7 @@ if (is_ouder($gebruiker)) {
 /* ---------- Team ---------- */
 
 $datum = vandaag();
-$groepen = actieve_groepen();
+$groepen = zichtbare_groepen();
 $totaal = $ziek = $wacht = 0;
 foreach ($groepen as $groep) {
     if (groep_open_op($groep, $datum)) {
@@ -89,9 +93,10 @@ foreach ($groepen as $groep) {
         $wacht += aantal_wachtlijst((int) $groep['id'], $datum);
     }
 }
-$nieuw = rijen("SELECT g.*, (SELECT COUNT(*) FROM kinderen k WHERE k.ouder_id = g.id) AS aantal_kinderen FROM gebruikers g WHERE g.rol = 'ouder' AND g.status = 'nieuw' ORDER BY g.aangemaakt_op");
+// Nieuwe aanmeldingen en kinderen zonder groep: alleen de beheerder (intake)
+$nieuw = is_beheerder($gebruiker) ? rijen("SELECT g.*, (SELECT COUNT(*) FROM kinderen k WHERE k.ouder_id = g.id) AS aantal_kinderen FROM gebruikers g WHERE g.rol = 'ouder' AND g.status = 'nieuw' ORDER BY g.aangemaakt_op") : [];
 $ongelezen = ongelezen_voor_team();
-$zonderGroep = (int) waarde("SELECT COUNT(*) FROM kinderen k JOIN gebruikers g ON g.id = k.ouder_id WHERE k.groep_id IS NULL AND k.actief = 1 AND g.status = 'actief'");
+$zonderGroep = is_beheerder($gebruiker) ? (int) waarde("SELECT COUNT(*) FROM kinderen k JOIN gebruikers g ON g.id = k.ouder_id WHERE k.groep_id IS NULL AND k.actief = 1 AND g.status = 'actief'") : 0;
 
 pagina_begin('Vandaag', 'index.php');
 pagina_kop("Hoi {$voornaam}!", 'Vandaag is het ' . e(datum_nl($datum, 'EEEE d MMMM')) . '.',
@@ -102,7 +107,9 @@ pagina_kop("Hoi {$voornaam}!", 'Vandaag is het ' . e(datum_nl($datum, 'EEEE d MM
   <li><span class="tegel" style="--tegel-bg: var(--color-coral-soft)"><span class="tegel__getal"><?= $ziek ?></span><span class="tegel__label">ziek gemeld</span></span></li>
   <li><span class="tegel" style="--tegel-bg: var(--color-sun-soft)"><span class="tegel__getal"><?= $wacht ?></span><span class="tegel__label">op de wachtlijst</span></span></li>
   <li><a class="tegel" href="berichten.php"><span class="tegel__getal"><?= $ongelezen ?></span><span class="tegel__label">ongelezen <?= $ongelezen === 1 ? 'bericht' : 'berichten' ?></span></a></li>
+<?php if (is_beheerder($gebruiker)): ?>
   <li><a class="tegel" href="ouders.php?status=nieuw"><span class="tegel__getal"><?= count($nieuw) ?></span><span class="tegel__label">nieuwe <?= count($nieuw) === 1 ? 'aanmelding' : 'aanmeldingen' ?></span></a></li>
+<?php endif; ?>
 </ul>
 <?php if ($nieuw): ?>
 <section class="panel" aria-labelledby="nieuw-titel">
@@ -125,7 +132,9 @@ pagina_kop("Hoi {$voornaam}!", 'Vandaag is het ' . e(datum_nl($datum, 'EEEE d MM
 <?php endif; ?>
 <h2 class="visually-hidden">Groepen vandaag</h2>
 <?php
-if (!in_array(weekdag($datum), [1, 2, 3, 4, 5], true)) {
+if (!$groepen && !is_beheerder($gebruiker)) {
+    echo '<div class="panel"><p class="leeg">Je bent nog niet aan een groep gekoppeld, dus je ziet nog geen kinderen. Vraag de beheerder om je aan je groep(en) te koppelen.</p></div>';
+} elseif (!in_array(weekdag($datum), [1, 2, 3, 4, 5], true)) {
     echo '<div class="panel"><p class="leeg">Het is weekend, de BSO is dicht. <a href="agenda.php">Bekijk de agenda van volgende week</a>.</p></div>';
 } else {
     toon_dagoverzicht($datum, $groepen, 'index.php');

@@ -52,6 +52,8 @@ if (!actieve_groepen()) {
     q("INSERT INTO groepen (naam, omschrijving, max_kinderen, dagen, begintijd, eindtijd, kleur) VALUES ('De Bengels', 'Onderbouw', 8, '1,2,3,4,5', '14:00', '17:00', 'sun'), ('De Kanjers', 'Bovenbouw', 10, '1,2,4', '14:00', '17:00', 'mint')");
 }
 $groepen = actieve_groepen();
+// De begeleider werkt in de eerste groep
+q('INSERT OR IGNORE INTO medewerker_groepen (gebruiker_id, groep_id) VALUES (?, ?)', [$begeleider, $groepen[0]['id']]);
 
 // Gezinnen met kinderen (verzonnen namen)
 $gezinnen = [
@@ -68,14 +70,19 @@ foreach ($gezinnen as $i => [$ouderNaam, $kids]) {
     foreach ($kids as [$voornaam, $achternaam, $leeftijd, $toestemming]) {
         $groep = $groepen[strtotime($leeftijd) < strtotime('-8 years') ? min(1, count($groepen) - 1) : 0];
         q('INSERT INTO kinderen (ouder_id, groep_id, voornaam, achternaam, geboortedatum, foto_toestemming, bijzonderheden, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
-            $ouderId, $groep['id'], $voornaam, $achternaam, date('Y-m-d', strtotime($leeftijd . ' -40 days')), $toestemming, $voornaam === 'Elif' ? 'Allergisch voor noten' : '', nu(),
+            $ouderId, $groep['id'], $voornaam, $achternaam, date('Y-m-d', strtotime($leeftijd . ' -40 days')), $toestemming, versleutel($voornaam === 'Elif' ? 'Allergisch voor noten' : ''), nu(),
         ]);
-        $kinderen[] = rij('SELECT * FROM kinderen WHERE id = ?', [laatste_id()]);
+        $kindId = laatste_id();
+        // Ouder met gezag, gecontroleerd door de beheerder
+        koppel_verzorger($kindId, $ouderId, 'ouder', true);
+        q("UPDATE kind_verzorgers SET gezag_gecontroleerd_op = ?, gezag_gecontroleerd_door = ?, gezag_bron = 'gezagsregister' WHERE kind_id = ? AND gebruiker_id = ?", [nu(), $beheerder, $kindId, $ouderId]);
+        $kinderen[] = rij('SELECT * FROM kinderen WHERE id = ?', [$kindId]);
     }
 }
 // Eén nieuwe aanmelding die nog goedgekeurd moet worden
 $nieuw = demo_gebruiker('ouder', 'Lisa Bos', 'lisa.bos@demo.bsovck.nl', $hash, ['status' => 'nieuw', 'mandaat' => 'demo']);
 q("INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, foto_toestemming, aangemaakt_op) VALUES (?, 'Mees', 'Bos', ?, 1, ?)", [$nieuw, date('Y-m-d', strtotime('-6 years')), nu()]);
+koppel_verzorger(laatste_id(), $nieuw, 'ouder', true); // gezag opgegeven, nog te controleren
 
 // Inschrijvingen: vorige maand (voor facturen) tot drie weken vooruit
 $van = date('Y-m-01', strtotime('first day of last month'));
@@ -90,11 +97,12 @@ foreach ($kinderen as $n => $kind) {
 
 // Berichten en observaties
 $ouderNoor = (int) $kinderen[0]['ouder_id'];
-q("INSERT INTO berichten (ouder_id, afzender_id, soort, tekst, gelezen_ouder, gelezen_team, aangemaakt_op) VALUES (?, ?, 'bericht', ?, 1, 0, ?)", [$ouderNoor, $ouderNoor, 'Hoi! Noor wordt vandaag om 16:30 opgehaald door oma.', nu()]);
-q("INSERT INTO observaties (kind_id, auteur_id, datum, gebied, tekst, gedeeld, aangemaakt_op) VALUES (?, ?, ?, 'motoriek', ?, 1, ?)", [$kinderen[0]['id'], $begeleider, vandaag(), 'Oefende vandaag fanatiek met touwtjespringen en kan nu tien keer achter elkaar!', nu()]);
+nieuw_bericht($ouderNoor, $ouderNoor, null, 'bericht', 'Hoi! Noor wordt vandaag om 16:30 opgehaald door oma.', true, false);
+q("INSERT INTO observaties (kind_id, auteur_id, datum, gebied, tekst, gedeeld, aangemaakt_op) VALUES (?, ?, ?, 'motoriek', ?, 1, ?)", [$kinderen[0]['id'], $begeleider, vandaag(), versleutel('Oefende vandaag fanatiek met touwtjespringen en kan nu tien keer achter elkaar!'), nu()]);
 
 echo "Demogegevens aangemaakt.\n";
 echo "Inloggen met wachtwoord \"" . DEMO_WACHTWOORD . "\":\n";
 echo "  beheerder@demo.bsovck.nl   (beheerder)\n";
 echo "  begeleider@demo.bsovck.nl  (medewerker)\n";
 echo "  sam.de.jong@demo.bsovck.nl (ouder)\n";
+echo "Het team stelt bij de eerste keer inloggen tweestapsverificatie in (verplicht).\n";

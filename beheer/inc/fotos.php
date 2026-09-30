@@ -76,9 +76,16 @@ function bewaar_foto(array $upload): array
     if (!is_dir($map)) {
         mkdir($map, 0770, true);
     }
-    imagejpeg($groot, foto_map() . '/' . $relatief . '.jpg', 82);
-    imagejpeg($klein, foto_map() . '/' . $relatief . '_klein.jpg', 78);
+    versleutel_bestand(foto_map() . '/' . $relatief . '.jpg', jpeg_inhoud($groot, 82));
+    versleutel_bestand(foto_map() . '/' . $relatief . '_klein.jpg', jpeg_inhoud($klein, 78));
     return [$relatief, imagesx($groot), imagesy($groot)];
+}
+
+function jpeg_inhoud(GdImage $beeld, int $kwaliteit): string
+{
+    ob_start();
+    imagejpeg($beeld, null, $kwaliteit);
+    return (string) ob_get_clean();
 }
 
 /** Verkleint tot maximaal $max pixels (langste zijde, of alleen de breedte). */
@@ -114,7 +121,7 @@ function verwijder_fotobestanden(string $relatief): void
     }
 }
 
-/** Mag de ingelogde gebruiker deze foto zien? Team: ja. Ouder: als er een eigen kind op staat. */
+/** Mag de ingelogde gebruiker deze foto zien? Team: als er een kind uit de eigen groepen op staat. Verzorger: met recht op foto's van een kind op de foto. */
 function foto_met_toegang(int $fotoId): array
 {
     $gebruiker = vereis_login();
@@ -122,38 +129,15 @@ function foto_met_toegang(int $fotoId): array
     if (!$foto) {
         niet_gevonden();
     }
-    if (!is_team($gebruiker)) {
-        $magZien = waarde('SELECT 1 FROM foto_kinderen fk JOIN kinderen k ON k.id = fk.kind_id WHERE fk.foto_id = ? AND k.ouder_id = ?', [$fotoId, $gebruiker['id']]);
-        if (!$magZien) {
-            niet_gevonden();
-        }
+    if (is_team($gebruiker)) {
+        $magZien = waarde('SELECT 1 FROM foto_kinderen fk JOIN kinderen k ON k.id = fk.kind_id WHERE fk.foto_id = ? AND ' . groep_voorwaarde('k.groep_id'), [$fotoId])
+            || (is_beheerder($gebruiker));
+    } else {
+        $magZien = waarde('SELECT 1 FROM foto_kinderen fk JOIN kind_verzorgers v ON v.kind_id = fk.kind_id WHERE fk.foto_id = ? AND v.gebruiker_id = ? AND v.recht_fotos = 1', [$fotoId, $gebruiker['id']]);
+    }
+    if (!$magZien) {
+        niet_gevonden();
     }
     return $foto;
 }
 
-/**
- * Wist de gegevens van een gestopte ouder en de kinderen (recht op vergetelheid).
- * Naam, adres en facturen blijven bewaard vanwege de fiscale bewaarplicht (7 jaar).
- */
-function wis_oudergegevens(array $ouder): void
-{
-    transactie(function () use ($ouder) {
-        $kindIds = array_map('intval', array_column(rijen('SELECT id FROM kinderen WHERE ouder_id = ?', [$ouder['id']]), 'id'));
-        if ($kindIds) {
-            $lijst = implode(',', $kindIds);
-            // Foto's waar na het wissen geen enkel ander kind meer aan gekoppeld is
-            $wezen = rijen("SELECT f.* FROM fotos f WHERE EXISTS (SELECT 1 FROM foto_kinderen fk WHERE fk.foto_id = f.id AND fk.kind_id IN ($lijst))
-                            AND NOT EXISTS (SELECT 1 FROM foto_kinderen fk WHERE fk.foto_id = f.id AND fk.kind_id NOT IN ($lijst))");
-            foreach ($wezen as $foto) {
-                verwijder_fotobestanden($foto['bestand']);
-                q('DELETE FROM fotos WHERE id = ?', [$foto['id']]);
-            }
-            q("DELETE FROM kinderen WHERE id IN ($lijst)"); // inschrijvingen, observaties en fotokoppelingen gaan mee
-        }
-        q('DELETE FROM berichten WHERE ouder_id = ?', [$ouder['id']]);
-        q('DELETE FROM tokens WHERE gebruiker_id = ?', [$ouder['id']]);
-        q("UPDATE gebruikers SET email = ?, telefoon = '', wachtwoord_hash = NULL, contactvoorkeur = '', gewenste_dagen = '', gewenste_startdatum = NULL,
-           opmerkingen = '', mandaat_naam = '', mandaat_rekening = '' WHERE id = ?", ['gewist-' . $ouder['id'] . '@bsovck.invalid', $ouder['id']]);
-    });
-    log_actie('Gegevens gewist (AVG)', 'ouder #' . $ouder['id']);
-}

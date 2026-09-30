@@ -30,7 +30,7 @@ if (is_post()) {
             }
             $sets = implode(', ', array_map(fn ($v) => "$v = ?", array_keys($velden)));
             q("UPDATE gebruikers SET $sets WHERE id = ?", [...array_values($velden), $gebruiker['id']]);
-            log_actie('Eigen gegevens gewijzigd');
+            log_actie('Eigen gegevens gewijzigd', implode(', ', array_keys($velden)), null, 'wijziging', 'gebruiker:' . $gebruiker['id']);
             flash('succes', 'Je gegevens zijn opgeslagen.');
             redirect('profiel.php');
         }
@@ -46,16 +46,14 @@ if (is_post()) {
             q('UPDATE gebruikers SET wachtwoord_hash = ? WHERE id = ?', [password_hash((string) $_POST['wachtwoord'], PASSWORD_DEFAULT), $gebruiker['id']]);
             q("UPDATE tokens SET gebruikt = 1 WHERE gebruiker_id = ?", [$gebruiker['id']]);
             session_regenerate_id(true);
-            log_actie('Wachtwoord gewijzigd');
+            log_actie('Wachtwoord gewijzigd', '', null, 'beveiliging', 'gebruiker:' . $gebruiker['id']);
             flash('succes', 'Je wachtwoord is gewijzigd.');
             redirect('profiel.php');
         }
     }
 
     if ($actie === 'opzeggen' && $ouder) {
-        q("INSERT INTO berichten (ouder_id, afzender_id, soort, tekst, gelezen_ouder, gelezen_team, aangemaakt_op) VALUES (?, ?, 'bericht', ?, 1, 0, ?)", [
-            $gebruiker['id'], $gebruiker['id'], 'Ik wil de opvang opzeggen. Willen jullie contact met me opnemen om de einddatum en de laatste factuur af te spreken?' . (invoer('toelichting') !== '' ? "\n\n" . mb_substr(invoer('toelichting'), 0, 1000) : ''), nu(),
-        ]);
+        nieuw_bericht((int) $gebruiker['id'], (int) $gebruiker['id'], null, 'bericht', 'Ik wil de opvang opzeggen. Willen jullie contact met me opnemen om de einddatum en de laatste factuur af te spreken?' . (invoer('toelichting') !== '' ? "\n\n" . mb_substr(invoer('toelichting'), 0, 1000) : ''), true, false);
         mail_team('Opzegging van ' . $gebruiker['naam'], $gebruiker['naam'] . ' wil de opvang opzeggen. Zie de berichten:' . "\n" . app_url('berichten.php?ouder=' . $gebruiker['id']));
         flash('succes', 'We hebben je opzegging ontvangen en nemen contact met je op om alles af te ronden.');
         redirect('berichten.php');
@@ -100,6 +98,11 @@ pagina_kop('Mijn gegevens');
         <div class="field"><label for="wachtwoord2">Nieuw wachtwoord nog een keer</label><input id="wachtwoord2" name="wachtwoord2" type="password" required autocomplete="new-password"></div>
         <div class="form__acties"><button class="btn btn--secondary" type="submit">Wachtwoord wijzigen</button></div>
       </form>
+    </section>
+    <section class="panel" aria-labelledby="mfa-titel">
+      <h2 id="mfa-titel">Tweestapsverificatie</h2>
+      <p><?= $gebruiker['mfa_actief'] ? '<span class="badge badge--geldig">Aan</span>' : '<span class="badge badge--geen">Uit</span>' ?></p>
+      <a class="btn btn--secondary btn--small" href="tweestaps.php"><?= icoon('shield') ?><?= $gebruiker['mfa_actief'] ? 'Beheren' : 'Aanzetten (aanbevolen)' ?></a>
     </section>
 <?php if ($ouder): ?>
     <section class="panel" aria-labelledby="incasso-titel">

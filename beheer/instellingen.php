@@ -17,7 +17,7 @@ $velden = [
 ];
 $fouten = [];
 $waarden = [];
-foreach (array_merge(array_keys($velden), ['uurtarief', 'uren_per_middag', 'afmelden_tot', 'betaaltermijn_dagen']) as $sleutel) {
+foreach (array_merge(array_keys($velden), ['uurtarief', 'uren_per_middag', 'afmelden_tot', 'betaaltermijn_dagen', 'mfa_ouders'], array_keys(BEWAARTERMIJNEN)) as $sleutel) {
     $waarden[$sleutel] = $sleutel === 'uurtarief'
         ? (instelling('uurtarief_cent') !== '' ? cent_naar_euro((int) instelling('uurtarief_cent')) : '')
         : instelling($sleutel);
@@ -45,6 +45,16 @@ if (is_post()) {
     if ($waarden['email'] !== '' && !geldig_email($waarden['email'])) {
         $fouten['email'] = 'Vul een geldig e-mailadres in.';
     }
+    foreach (BEWAARTERMIJNEN as $sleutel => [$omschrijving, $eenheid]) {
+        if (!ctype_digit($waarden[$sleutel]) || (int) $waarden[$sleutel] > 240) {
+            $fouten[$sleutel] = 'Vul een geheel aantal ' . $eenheid . ' in.';
+        }
+    }
+    // Minimaal de fiscale bewaarplicht voor de financiële administratie
+    if (ctype_digit($waarden['bewaar_financieel_jaren']) && (int) $waarden['bewaar_financieel_jaren'] < 7) {
+        $fouten['bewaar_financieel_jaren'] = 'De fiscale bewaarplicht is 7 jaar; korter mag niet.';
+    }
+    $waarden['mfa_ouders'] = $waarden['mfa_ouders'] === 'verplicht' ? 'verplicht' : 'optioneel';
     if (!$fouten) {
         foreach (array_keys($velden) as $sleutel) {
             instelling_zet($sleutel, $waarden[$sleutel]);
@@ -53,14 +63,18 @@ if (is_post()) {
         instelling_zet('uren_per_middag', $waarden['uren_per_middag'] === '' ? '' : str_replace('.', ',', $uren));
         instelling_zet('afmelden_tot', $waarden['afmelden_tot']);
         instelling_zet('betaaltermijn_dagen', $waarden['betaaltermijn_dagen']);
-        log_actie('Instellingen gewijzigd');
+        instelling_zet('mfa_ouders', $waarden['mfa_ouders']);
+        foreach (array_keys(BEWAARTERMIJNEN) as $sleutel) {
+            instelling_zet($sleutel, (string) (int) $waarden[$sleutel]);
+        }
+        log_actie('Instellingen gewijzigd', '', null, 'beveiliging');
         flash('succes', 'De instellingen zijn opgeslagen.');
         redirect('instellingen.php');
     }
 }
 
 pagina_begin('Instellingen', 'instellingen.php');
-pagina_kop('Instellingen', 'Gegevens voor de facturen, het tarief en tot hoe laat ouders zelf kunnen afmelden.', '<a class="btn btn--secondary btn--small" href="logboek.php">' . icoon('book') . 'Logboek</a>');
+pagina_kop('Instellingen', 'Gegevens voor de facturen, het tarief, afmelden, beveiliging en bewaartermijnen.', '<a class="btn btn--secondary btn--small" href="beveiliging.php">' . icoon('shield') . 'Beveiligingsstatus</a><a class="btn btn--secondary btn--small" href="logboek.php">' . icoon('book') . 'Logboek</a>');
 ?>
 <?= foutensamenvatting($fouten) ?>
 <form class="form" method="post">
@@ -105,6 +119,30 @@ pagina_kop('Instellingen', 'Gegevens voor de facturen, het tarief en tot hoe laa
       </div>
       <h3 style="margin-top: var(--space-l)">Betalen via Mollie</h3>
       <p><?= mollie_actief() ? status_badge('geldig') . ' Gekoppeld' . (mollie_testmodus() ? ' (testmodus: er wordt nog niets echt afgeschreven)' : '') . '.' : status_badge('demo') . ' Nog niet gekoppeld. Zet de API-sleutel van Mollie in <code>beheer/config.php</code>.' ?></p>
+    </section>
+  </div>
+  <div class="kolommen kolommen--gelijk">
+    <section class="panel" aria-labelledby="bewaar-titel">
+      <h2 id="bewaar-titel">Bewaartermijnen</h2>
+      <p class="muted">Na deze termijnen worden gegevens automatisch verwijderd (dagelijks). Ze verdwijnen ook uit de back-ups, uiterlijk <?= (int) cfg('backup.bewaardagen', 30) ?> dagen later. <!-- TODO: termijnen laten bevestigen door de klant en een privacyjurist --></p>
+      <div class="form">
+<?php foreach (BEWAARTERMIJNEN as $sleutel => [$omschrijving, $eenheid, $uitleg]): ?>
+        <div class="field">
+          <label for="<?= e($sleutel) ?>"><?= e($omschrijving) ?> <span class="field__hint">(<?= e($eenheid) ?><?= $uitleg ? ', ' . e($uitleg) : '' ?>)</span></label>
+          <input id="<?= e($sleutel) ?>" name="<?= e($sleutel) ?>" type="number" min="0" max="240" style="max-width: 8rem" value="<?= e($waarden[$sleutel]) ?>"<?= aria_fout($fouten, $sleutel) ?>>
+          <?= veldfout($fouten, $sleutel) ?>
+        </div>
+<?php endforeach; ?>
+      </div>
+      <p class="muted">Laatst uitgevoerd: <?= instelling('bewaarbeleid_laatst') ? e(moment_nl(instelling('bewaarbeleid_laatst'))) : 'nog niet' ?>.</p>
+    </section>
+    <section class="panel" aria-labelledby="mfa-titel">
+      <h2 id="mfa-titel">Tweestapsverificatie</h2>
+      <p>Voor het team is tweestapsverificatie altijd verplicht. Voor ouders kies je zelf:</p>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="mfa_ouders" value="optioneel"<?= $waarden['mfa_ouders'] !== 'verplicht' ? ' checked' : '' ?>>Aanbevolen, maar niet verplicht</label>
+        <label class="choice"><input type="radio" name="mfa_ouders" value="verplicht"<?= $waarden['mfa_ouders'] === 'verplicht' ? ' checked' : '' ?>>Verplicht voor ouders</label>
+      </div>
     </section>
   </div>
   <div class="form__acties" style="margin-top: var(--space-l)"><button class="btn" type="submit">Instellingen opslaan</button></div>

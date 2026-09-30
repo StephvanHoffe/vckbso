@@ -17,7 +17,7 @@ if (is_post()) {
     $email = invoer('email');
     $fout = probeer_in_te_loggen($email, (string) ($_POST['wachtwoord'] ?? ''));
     if ($fout === null) {
-        redirect($terug);
+        redirect(mfa_wacht() ? 'inloggen-code.php?terug=' . rawurlencode($terug) : $terug);
     }
 }
 

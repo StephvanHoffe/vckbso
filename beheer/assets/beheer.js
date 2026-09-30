@@ -68,6 +68,15 @@
     });
   });
 
+  /* QR-code voor de authenticator-app (tweestapsverificatie) */
+  document.querySelectorAll("[data-qr]").forEach(function (plek) {
+    if (typeof window.qrcode !== "function") return;
+    var qr = window.qrcode(0, "M");
+    qr.addData(plek.getAttribute("data-qr"));
+    qr.make();
+    plek.innerHTML = qr.createSvgTag({ cellSize: 5, margin: 3, scalable: true });
+  });
+
   /* Factuur printen of als pdf opslaan */
   document.querySelectorAll("[data-print]").forEach(function (knop) {
     knop.hidden = false;

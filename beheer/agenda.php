@@ -17,7 +17,8 @@ if (is_ouder($gebruiker)) {
 
 function agenda_ouder(array $ouder): void
 {
-    $kinderen = rijen('SELECT k.*, g.naam AS groepnaam, g.dagen AS groepdagen FROM kinderen k LEFT JOIN groepen g ON g.id = k.groep_id WHERE k.ouder_id = ? AND k.actief = 1 ORDER BY k.voornaam', [$ouder['id']]);
+    // Alleen kinderen waarvoor deze verzorger dagen mag kiezen en afmelden
+    $kinderen = kinderen_van_verzorger((int) $ouder['id'], 'agenda');
     $kindId = get_int('kind') ?: (int) (invoer('kind') ?: 0);
     $kind = $kinderen[0] ?? null;
     foreach ($kinderen as $k) {
@@ -59,9 +60,7 @@ function agenda_ouder(array $ouder): void
             }
             if ($actie === 'ziek' && $inschrijving['datum'] === vandaag() && $inschrijving['status'] === 'bevestigd') {
                 meld_af($inschrijving, 'ziek');
-                q("INSERT INTO berichten (ouder_id, afzender_id, kind_id, soort, tekst, gelezen_ouder, gelezen_team, aangemaakt_op) VALUES (?, ?, ?, 'ziekmelding', ?, 1, 0, ?)", [
-                    $ouder['id'], $ouder['id'], $kind['id'], $kind['voornaam'] . ' is vandaag ziek.', nu(),
-                ]);
+                nieuw_bericht((int) $ouder['id'], (int) $ouder['id'], (int) $kind['id'], 'ziekmelding', $kind['voornaam'] . ' is vandaag ziek.', true, false);
                 flash('succes', $kind['voornaam'] . ' is ziek gemeld voor vandaag. Beterschap!');
             } elseif ($actie === 'afmelden' && ouder_mag_wijzigen($inschrijving['datum']) && in_array($inschrijving['status'], ['bevestigd', 'wachtlijst'], true)) {
                 meld_af($inschrijving);
@@ -94,7 +93,7 @@ function agenda_ouder(array $ouder): void
                     $tekst .= ', ' . $telling['dicht'] . ' overgeslagen omdat de groep dan dicht is';
                 }
                 flash('succes', $tekst . '.');
-                log_actie('Vaste dagen gekozen', $kind['voornaam'] . " {$van} t/m {$tot}");
+                log_actie('Vaste dagen gekozen', "{$van} t/m {$tot}", null, 'wijziging', 'kind:' . $kind['id']);
             }
         }
         redirect($terug);
@@ -104,7 +103,7 @@ function agenda_ouder(array $ouder): void
     pagina_kop('Agenda', 'Kies de dagen waarop je kind komt, of meld je kind af. Afmelden kan tot ' . e(instelling('afmelden_tot', '12:00')) . ' uur op de dag zelf.');
 
     if (!$kinderen) {
-        echo '<div class="panel"><p class="leeg">Er staan nog geen kinderen in je account. <a href="kinderen.php">Voeg een kind toe</a>.</p></div>';
+        echo '<div class="panel"><p class="leeg">Er zijn (nog) geen kinderen waarvoor jij dagen kunt kiezen. Is dit niet goed? Stuur ons een <a href="berichten.php">bericht</a>.</p></div>';
         pagina_einde();
         return;
     }
@@ -274,7 +273,7 @@ function agenda_team(): void
     $week = get_str('week');
     $maandag = maandag_van(geldige_datum($week) ? $week : vandaag());
     $dagen = datums_tussen($maandag, date('Y-m-d', strtotime($maandag . ' +4 days')));
-    $groepen = actieve_groepen();
+    $groepen = zichtbare_groepen();
 
     pagina_begin('Agenda', 'agenda.php');
     pagina_kop('Agenda', 'Per groep en per dag: hoeveel kinderen er komen en hoeveel plek er nog is. Klik op een dag voor de namen.',
@@ -287,7 +286,7 @@ function agenda_team(): void
     <a class="btn btn--secondary btn--mini" href="agenda.php?week=<?= e(date('Y-m-d', strtotime($maandag . ' +7 days'))) ?>"><?= icoon('arrow') ?><span class="visually-hidden">Volgende week</span></a>
   </div>
 <?php if (!$groepen): ?>
-  <p class="leeg">Er zijn nog geen groepen. <?= is_beheerder() ? '<a href="groepen.php">Maak eerst een groep aan.</a>' : '' ?></p>
+  <p class="leeg"><?= is_beheerder() ? 'Er zijn nog geen groepen. <a href="groepen.php">Maak eerst een groep aan.</a>' : 'Je bent nog niet aan een groep gekoppeld. Vraag de beheerder om je te koppelen.' ?></p>
 <?php else: ?>
   <div class="tabel week">
     <table>
@@ -340,6 +339,6 @@ function agenda_team_dag(string $datum): void
         '<a class="btn btn--secondary btn--mini" href="agenda.php?datum=' . e($vorige) . '">' . icoon('back') . '<span class="visually-hidden">Vorige dag</span></a>'
         . '<form class="inline-form" method="get" action="agenda.php"><label class="visually-hidden" for="naar-datum">Ga naar datum</label><input class="datumkiezer" id="naar-datum" type="date" name="datum" value="' . e($datum) . '"><button class="btn btn--secondary btn--mini" type="submit">Ga</button></form>'
         . '<a class="btn btn--secondary btn--mini" href="agenda.php?datum=' . e($volgende) . '">' . icoon('arrow') . '<span class="visually-hidden">Volgende dag</span></a>');
-    toon_dagoverzicht($datum, actieve_groepen(), 'agenda.php?datum=' . $datum);
+    toon_dagoverzicht($datum, zichtbare_groepen(), 'agenda.php?datum=' . $datum);
     pagina_einde();
 }
