@@ -469,6 +469,26 @@ a:hover {
   order: 2;
 }
 
+/* Aanmeldknop: in de header op brede schermen, in het menu op kleinere schermen */
+.site-header__signup {
+  display: none;
+  order: 2;
+}
+
+.site-nav__signup {
+  margin-top: var(--space-s);
+}
+
+@media (min-width: 80em) {
+  .site-header__signup {
+    display: inline-flex;
+  }
+
+  .site-nav__signup {
+    display: none;
+  }
+}
+
 @media (max-width: 23.99em) {
   .site-header__inner {
     gap: var(--space-xs) var(--space-2xs);
@@ -617,8 +637,9 @@ a:hover {
 .js .site-nav {
   position: absolute;
   top: 100%;
-  left: calc(var(--gutter) * -1);
-  right: calc(var(--gutter) * -1);
+  left: 0;
+  right: 0;
+  width: auto;
   padding: var(--space-s) var(--gutter) var(--space-l);
   border-radius: 0 0 var(--radius-l) var(--radius-l);
   background: var(--color-surface);
@@ -646,7 +667,7 @@ a:hover {
   padding-inline: var(--space-s);
 }
 
-@media (min-width: 75em) {
+@media (min-width: 80em) {
   .site-header__inner {
     flex-wrap: nowrap;
   }
@@ -1837,6 +1858,172 @@ a:hover {
   font-size: var(--step--1);
 }
 
+/* Formulier in secties (aanmelden) */
+.form--sections {
+  gap: var(--space-xl);
+}
+
+.form fieldset {
+  display: grid;
+  gap: var(--space-m);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend-title {
+  margin-bottom: var(--space-m);
+  padding: 0;
+  font-family: var(--font-heading);
+  font-size: var(--step-2);
+  font-weight: var(--font-weight-heading);
+  letter-spacing: -0.02em;
+  line-height: var(--line-height-heading);
+}
+
+.legend-label {
+  margin-bottom: 0.4rem;
+  padding: 0;
+  font-weight: var(--font-weight-button);
+}
+
+.repeat-list {
+  display: grid;
+  gap: var(--space-m);
+}
+
+.repeat-item {
+  padding: var(--space-m);
+  border-radius: var(--radius-l);
+  background: var(--color-surface-alt);
+}
+
+.repeat-item .legend-label {
+  font-family: var(--font-heading);
+  font-size: var(--step-1);
+  font-weight: var(--font-weight-heading);
+}
+
+[data-repeat-add] {
+  display: none;
+  justify-self: start;
+}
+
+.js [data-repeat-add] {
+  display: inline-flex;
+}
+
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  justify-self: start;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-link);
+  font: inherit;
+  font-weight: var(--font-weight-strong);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: var(--color-primary-deep);
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+}
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  min-height: 2.75rem;
+  padding: 0.45em 1.1em 0.45em 0.85em;
+  border: var(--border-width) solid var(--color-text-muted);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-weight: var(--font-weight-strong);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+
+.choice:hover {
+  border-color: var(--color-text);
+}
+
+.choice:has(input:checked) {
+  border-color: var(--color-primary-strong);
+  background: var(--color-sun-soft);
+}
+
+.field input[type="checkbox"],
+.choice input {
+  flex-shrink: 0;
+  width: 1.3rem;
+  height: 1.3rem;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  accent-color: var(--color-primary-strong);
+}
+
+.consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75em;
+}
+
+.consent input[type="checkbox"] {
+  margin-top: 0.2em;
+}
+
+.field .consent label {
+  display: inline;
+  margin: 0;
+  font-weight: var(--font-weight-body);
+}
+
+/* Genummerde stappen in een zijkaart */
+.mini-steps {
+  display: grid;
+  gap: var(--space-s);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: stap;
+}
+
+.mini-steps li {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  gap: var(--space-s);
+  align-items: start;
+  counter-increment: stap;
+}
+
+.mini-steps li::before {
+  content: counter(stap);
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-sun);
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-heading);
+}
+
 /* ---------- 17. Kaart (laadt pas na een klik) ---------- */
 
 .map {
@@ -1923,6 +2110,11 @@ a:hover {
 
 .cta a:not(.btn) {
   color: var(--color-on-secondary);
+}
+
+.cta__extra {
+  margin: var(--space-m) 0 0;
+  font-weight: var(--font-weight-strong);
 }
 
 .cta .btn--secondary {

@@ -52,5 +52,6 @@ Een eigen applicatie op `/beheer/` (of op een subdomein, bijvoorbeeld `mijn.bsov
 
 ## Wat al klaarstaat op de website
 
-- Het contactformulier heeft het onderwerp "Ik wil mijn kind inschrijven". Aanmeldingen komen zo al binnen, ook zonder beheeromgeving.
+- Een aanmeldpagina (`aanmelden.html`), bereikbaar via de knop "Aanmelden" in de header. Ouders vullen hun eigen gegevens in, een of meer kinderen (voornaam, geboortedatum, school), gewenste dagen, startdatum en opmerkingen. De aanmelding komt nu per e-mail binnen via een formulierendienst. Zodra de beheeromgeving er is, kan dezelfde knop naar het aanmeldproces daar wijzen, inclusief de machtiging voor automatische incasso.
+- Het contactformulier heeft het onderwerp "Ik wil mijn kind inschrijven".
 - De stappen "Zo werkt het" op de pagina Diensten beschrijven de inschrijving op een manier die later met online aanmelden kan worden uitgebreid.

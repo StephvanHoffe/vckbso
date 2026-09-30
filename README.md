@@ -21,11 +21,12 @@ npx serve .
 | Pad | Inhoud |
 |---|---|
 | `index.html`, `over-ons.html`, `diensten.html`, `prijzen.html`, `team.html`, `veelgestelde-vragen.html`, `contact.html` | De pagina's uit de sitemap |
+| `aanmelden.html` | Aanmeldformulier voor ouders (een of meer kinderen, gewenste dagen, startdatum). Bereikbaar via de knop "Aanmelden" in de header. |
 | `privacy.html`, `voorwaarden.html`, `404.html` | Privacyverklaring, algemene voorwaarden en foutpagina |
 | `en/index.html` | Eerste opzet van de Engelse versie (taalkeuze NL/EN in de header) |
 | `design/tokens.css` | Design tokens: kleuren, letters, ruimte, vormen en beweging. Ook de `@font-face`-regels. |
 | `css/style.css` | Alle opmaak, mobile-first |
-| `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole |
+| `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole (contact en aanmelden), kinderen toevoegen in het aanmeldformulier |
 | `assets/fonts/` | Manrope (variabel, lokaal gehost, OFL-licentie) |
 | `assets/fotos/` | Beelden in AVIF en WebP. Bronnen en de fotolijst staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
 | `assets/img/` | Favicon, app-iconen en de deelafbeelding (`og-image.png`) |
@@ -59,8 +60,8 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Placeholder-illustraties vervangen door eigen foto's en de alt-teksten aanpassen. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
 
 **Techniek**
-- [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@vckbso.nl gaan. Tot die tijd opent het formulier het e-mailprogramma van de bezoeker.
-- [ ] Privacyverklaring laten controleren: bewaartermijn, naam van de formulierendienst en een verwerkersovereenkomst.
+- [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL's in `contact.html` en `aanmelden.html` invullen. Berichten en aanmeldingen moeten naar info@vckbso.nl gaan. Tot die tijd openen de formulieren het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
+- [ ] Privacyverklaring laten controleren: bewaartermijn, naam van de formulierendienst en een verwerkersovereenkomst. Het aanmeldformulier vraagt ook gegevens van kinderen (voornaam, geboortedatum, school).
 - [ ] Domein `bsovck.nl` registreren. Wordt het een ander domein, pas dan de URL's aan in de `<head>` van elke pagina, in `sitemap.xml` en in `robots.txt`.
 - [ ] Engelse teksten na akkoord van de klant op de Nederlandse teksten. Nu staat er alleen een Engelse startpagina.
 - [ ] Beheeromgeving met kindvolgsysteem, aanmelding, incasso, foto's, berichten en groepsagenda. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
