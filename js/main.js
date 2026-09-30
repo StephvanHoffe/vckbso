@@ -1,4 +1,4 @@
-/* BSO VCK · kleine verbeteringen bovenop de HTML. De site werkt ook zonder JavaScript. */
+/* Sporty · kleine verbeteringen bovenop de HTML. De site werkt ook zonder JavaScript. */
 (function () {
   "use strict";
 

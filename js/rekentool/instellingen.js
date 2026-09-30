@@ -1,7 +1,7 @@
 /*
- * Instellingen van de rekentool op de prijzenpagina (BSO VCK).
+ * Instellingen van de rekentool op de prijzenpagina (Sporty).
  *
- * TODO (BSO VCK): vul hieronder de opvangvormen in. Per opvangvorm:
+ * TODO (Sporty): vul hieronder de opvangvormen in. Per opvangvorm:
  *   - naam:            zoals ouders hem kennen, bijvoorbeeld "BSO 40 weken (alleen schoolweken)"
  *   - soort:           "bso" (buitenschoolse opvang); voor de maximale uurprijs van de toeslag
  *   - uurtarief:       het uurtarief in euro, met een punt: 10.25 is € 10,25
@@ -12,7 +12,7 @@
  *
  * De rekentool rekent de uren per maand uit zoals in een contract:
  * (schoolweken x uren per schooldag + vakantieweken x uren per vakantiedag) / 12, per gekozen dag,
- * afgerond op twee decimalen. Rekent BSO VCK de uren per maand anders uit (bijvoorbeeld afgerond
+ * afgerond op twee decimalen. Rekent Sporty de uren per maand anders uit (bijvoorbeeld afgerond
  * op hele uren)? Pas dat dan aan in berekening.js (functie urenPerMaand) en in de tests.
  *
  * Zolang de lijst leeg is, vult de bezoeker zelf een uurprijs en het aantal uren per maand in.

@@ -26,7 +26,7 @@ pagina_begin('Inloggen', '', ['publiek' => true]);
 <div class="auth">
   <div class="panel">
     <h1>Inloggen</h1>
-    <p>Voor ouders en voor het team van BSO VCK.</p>
+    <p>Voor ouders en voor het team van Sporty.</p>
 <?php if ($fout): ?>
     <div class="melding melding--fout" role="alert" tabindex="-1" data-focus><?= icoon('alert') ?><p><?= e($fout) ?></p></div>
 <?php endif; ?>

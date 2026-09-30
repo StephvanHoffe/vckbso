@@ -41,7 +41,7 @@ if (is_post() && $ouder) {
             log_actie('Bericht gestuurd', '', null, 'wijziging', 'gebruiker:' . $ouder['id']);
         }
         if ($team) {
-            stuur_mail($ouder['email'], 'Nieuw bericht van BSO VCK', "Hoi {$ouder['naam']},\n\nJe hebt een nieuw bericht van BSO VCK. Lees het hier:\n" . app_url('berichten.php'));
+            stuur_mail($ouder['email'], 'Nieuw bericht van Sporty', "Hoi {$ouder['naam']},\n\nJe hebt een nieuw bericht van Sporty. Lees het hier:\n" . app_url('berichten.php'));
         } else {
             mail_team('Nieuw bericht van ' . $ouder['naam'], 'Er is een nieuw bericht van ' . $ouder['naam'] . ":\n" . app_url('berichten.php?ouder=' . $ouder['id']));
         }
@@ -153,7 +153,7 @@ if ($team) {
 <?php foreach ($berichten as $b):
     $eigen = (int) $b['afzender_id'] === (int) $gebruiker['id'] || ($team && $b['afzender_rol'] && $b['afzender_rol'] !== 'ouder' && $b['soort'] !== 'systeem');
     $klasse = 'bericht' . ($b['soort'] === 'systeem' ? ' bericht--systeem' : ($eigen ? ' bericht--eigen' : '')) . ($b['soort'] === 'ziekmelding' ? ' bericht--ziekmelding' : '');
-    $wie = $b['soort'] === 'systeem' && $b['afzender_rol'] !== 'ouder' ? 'BSO VCK' : ($b['afzender_rol'] === 'ouder' ? ($team ? $b['afzender'] : 'Jij') : ($b['afzender'] ? explode(' ', $b['afzender'])[0] . ' van BSO VCK' : 'BSO VCK'));
+    $wie = $b['soort'] === 'systeem' && $b['afzender_rol'] !== 'ouder' ? 'Sporty' : ($b['afzender_rol'] === 'ouder' ? ($team ? $b['afzender'] : 'Jij') : ($b['afzender'] ? explode(' ', $b['afzender'])[0] . ' van Sporty' : 'Sporty'));
     ?>
       <li class="<?= $klasse ?>">
         <span class="bericht__meta"><?= e($wie) ?> · <?= e(moment_nl($b['aangemaakt_op'])) ?><?= $b['soort'] === 'ziekmelding' ? ' · Ziekmelding' : '' ?><?= $b['kind'] && $b['soort'] === 'bericht' ? ' · over ' . e($b['kind']) : '' ?></span>

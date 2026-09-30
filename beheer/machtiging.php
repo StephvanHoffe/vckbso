@@ -72,7 +72,7 @@ pagina_kop('Automatische incasso', 'Zo hoef jij nergens meer aan te denken: je f
     <p><?= status_badge('in_behandeling') ?> We wachten nog op de bevestiging van je bank. Dat duurt meestal maar even. Ging er iets mis? Probeer het dan hieronder opnieuw.</p>
 <?php endif; ?>
 <?php if (mollie_actief()): ?>
-    <p>Je betaalt eenmalig <strong>€ 0,01</strong> via je eigen bank (iDEAL). Daarmee bevestig je je rekeningnummer en geef je <?= e(instelling('statutaire_naam', 'Je Dag in Beeld')) ?> (BSO VCK) toestemming om de facturen voor de opvang automatisch af te schrijven.</p>
+    <p>Je betaalt eenmalig <strong>€ 0,01</strong> via je eigen bank (iDEAL). Daarmee bevestig je je rekeningnummer en geef je <?= e(instelling('statutaire_naam', 'Je Dag in Beeld')) ?> (Sporty) toestemming om de facturen voor de opvang automatisch af te schrijven.</p>
     <form method="post">
       <?= csrf_veld() ?>
       <button class="btn" type="submit"><?= icoon('bank') ?>Machtiging afgeven via mijn bank</button>

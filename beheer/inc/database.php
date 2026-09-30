@@ -432,6 +432,9 @@ function migreer(PDO $pdo): void
                 }
             }
         },
+
+        // Nieuwe naam: BSO VCK heet voortaan Sporty (alleen als de naam nog niet zelf was aangepast)
+        5 => "UPDATE instellingen SET waarde = 'Sporty' WHERE sleutel = 'bedrijfsnaam' AND waarde = 'BSO VCK';",
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

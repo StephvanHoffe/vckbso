@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- TODO: domein bsovck.nl nog registreren; pas de URL's aan als het domein anders wordt -->
+<!-- TODO: domein kiezen bij de nieuwe naam Sporty (nu nog bsovck.nl) en de URL's aanpassen; zie docs/seo.md -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://bsovck.nl/</loc>
     <xhtml:link rel="alternate" hreflang="nl" href="https://bsovck.nl/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://bsovck.nl/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsovck.nl/"/>
     <lastmod>2026-09-30</lastmod>
     <priority>1.0</priority>
   </url>
@@ -57,6 +58,7 @@
     <loc>https://bsovck.nl/en/</loc>
     <xhtml:link rel="alternate" hreflang="nl" href="https://bsovck.nl/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://bsovck.nl/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsovck.nl/"/>
     <lastmod>2026-09-30</lastmod>
     <priority>0.5</priority>
   </url>

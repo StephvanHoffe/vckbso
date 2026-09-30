@@ -42,7 +42,7 @@ function export_kind(int $kindId, bool $volledig, ?int $aanvragerId = null): arr
     $berichten = $aanvragerId ? ontsleutel_kolommen(rijen('SELECT aangemaakt_op, soort, tekst FROM berichten WHERE kind_id = ? AND ouder_id = ? ORDER BY aangemaakt_op', [$kindId, $aanvragerId]), ['tekst']) : [];
 
     return [
-        'toelichting' => 'Alle gegevens die ' . instelling('bedrijfsnaam', 'BSO VCK') . ' over dit kind bewaart, gemaakt op ' . datum_nl(nu(), "d MMMM y 'om' HH:mm") . '.',
+        'toelichting' => 'Alle gegevens die ' . instelling('bedrijfsnaam', 'Sporty') . ' over dit kind bewaart, gemaakt op ' . datum_nl(nu(), "d MMMM y 'om' HH:mm") . '.',
         'kind' => [
             'voornaam' => $kind['voornaam'],
             'achternaam' => $kind['achternaam'],
@@ -68,7 +68,7 @@ function export_kind(int $kindId, bool $volledig, ?int $aanvragerId = null): arr
             'ontwikkelgebied' => ONTWIKKELGEBIEDEN[$o['gebied']] ?? $o['gebied'],
             'observatie' => $o['tekst'],
             'gedeeld_met_ouders' => (bool) $o['gedeeld'],
-            'door' => 'Team ' . instelling('bedrijfsnaam', 'BSO VCK'),
+            'door' => 'Team ' . instelling('bedrijfsnaam', 'Sporty'),
         ], $observaties),
         'fotos' => array_map(fn ($f) => ['geplaatst_op' => $f['aangemaakt_op'], 'bijschrift' => $f['bijschrift']], rijen('SELECT f.aangemaakt_op, f.bijschrift FROM fotos f JOIN foto_kinderen fk ON fk.foto_id = f.id WHERE fk.kind_id = ? ORDER BY f.aangemaakt_op', [$kindId])),
         'fotos_toelichting' => "De foto's zelf kun je bekijken en downloaden bij Foto's in Mijn BSO.",
@@ -85,7 +85,7 @@ function export_gebruiker(int $gebruikerId): array
         return [];
     }
     return [
-        'toelichting' => 'Alle gegevens die ' . instelling('bedrijfsnaam', 'BSO VCK') . ' over jou bewaart, gemaakt op ' . datum_nl(nu(), "d MMMM y 'om' HH:mm") . '.',
+        'toelichting' => 'Alle gegevens die ' . instelling('bedrijfsnaam', 'Sporty') . ' over jou bewaart, gemaakt op ' . datum_nl(nu(), "d MMMM y 'om' HH:mm") . '.',
         'account' => [
             'naam' => $g['naam'], 'email' => $g['email'], 'telefoon' => $g['telefoon'],
             'adres' => trim($g['straat'] . ', ' . $g['postcode'] . ' ' . $g['plaats'], ', '),

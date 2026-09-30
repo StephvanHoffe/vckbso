@@ -46,6 +46,6 @@ if (get_str('download') === '1') {
             log_export('Foto gedownload', 'kind:' . $rij['kind_id'], 'foto ' . $foto['id']);
         }
     }
-    header('Content-Disposition: attachment; filename="bso-vck-' . date('Y-m-d', strtotime($foto['aangemaakt_op'])) . '-' . (int) $foto['id'] . '.jpg"');
+    header('Content-Disposition: attachment; filename="sporty-' . date('Y-m-d', strtotime($foto['aangemaakt_op'])) . '-' . (int) $foto['id'] . '.jpg"');
 }
 echo $inhoud;

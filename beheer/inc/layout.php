@@ -44,7 +44,7 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= e($titel) ?> · <?= e($omgeving) ?> · BSO VCK</title>
+<title><?= e($titel) ?> · <?= e($omgeving) ?> · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#c8553d">
 <link rel="icon" href="../favicon.ico" sizes="32x32">
@@ -63,7 +63,7 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 <a class="skip-link" href="#inhoud">Naar de inhoud</a>
 <header class="app-header">
   <div class="app-header__inner">
-    <a class="logo" href="<?= $gebruiker ? 'index.php' : '../index.html' ?>" aria-label="BSO VCK, <?= $gebruiker ? 'naar het overzicht' : 'naar de website' ?>"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">BSO <span class="logo__accent">VCK</span></span><span class="app-header__omgeving"><?= e($omgeving) ?></span></a>
+    <a class="logo" href="<?= $gebruiker ? 'index.php' : '../index.html' ?>" aria-label="Sporty, <?= $gebruiker ? 'naar het overzicht' : 'naar de website' ?>"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">Sport<span class="logo__accent">y</span></span><span class="app-header__omgeving"><?= e($omgeving) ?></span></a>
 <?php if ($gebruiker): ?>
     <ul class="app-account">
       <li><a href="profiel.php"<?= $actief === 'profiel.php' ? ' aria-current="page"' : '' ?>><?= icoon('user') ?><span class="app-account__label"><?= e(explode(' ', $gebruiker['naam'])[0]) ?><span class="visually-hidden">, mijn gegevens</span></span></a></li>
@@ -97,7 +97,7 @@ function pagina_einde(): void
     ?>
 </main>
 <footer class="app-footer">
-  <p>BSO VCK · <?= e(instelling('telefoon', '06 12 34 56 78')) ?> · <a href="mailto:<?= e(instelling('email', 'info@vckbso.nl')) ?>"><?= e(instelling('email', 'info@vckbso.nl')) ?></a> · <a href="../privacy.html">Privacyverklaring</a></p>
+  <p>Sporty · <?= e(instelling('telefoon', '06 12 34 56 78')) ?> · <a href="mailto:<?= e(instelling('email', 'info@vckbso.nl')) ?>"><?= e(instelling('email', 'info@vckbso.nl')) ?></a> · <a href="../privacy.html">Privacyverklaring</a></p>
 </footer>
 </body>
 </html>

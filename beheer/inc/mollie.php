@@ -102,7 +102,7 @@ function start_machtiging(array $ouder): string
         'amount' => mollie_bedrag(1),
         'customerId' => mollie_klant($ouder),
         'sequenceType' => 'first',
-        'description' => 'Machtiging automatische incasso ' . instelling('bedrijfsnaam', 'BSO VCK'),
+        'description' => 'Machtiging automatische incasso ' . instelling('bedrijfsnaam', 'Sporty'),
         'redirectUrl' => app_url('machtiging.php?terug=1'),
         'locale' => 'nl_NL',
         'metadata' => ['soort' => 'machtiging', 'gebruiker_id' => (int) $ouder['id']],
@@ -138,7 +138,7 @@ function start_incasso(array $factuur): void
         'customerId' => $ouder['mollie_klant_id'],
         'mandateId' => $ouder['mandaat_id'],
         'sequenceType' => 'recurring',
-        'description' => 'Factuur ' . $factuur['nummer'] . ' ' . instelling('bedrijfsnaam', 'BSO VCK'),
+        'description' => 'Factuur ' . $factuur['nummer'] . ' ' . instelling('bedrijfsnaam', 'Sporty'),
         'metadata' => ['soort' => 'incasso', 'factuur_id' => (int) $factuur['id']],
     ];
     if ($webhook = mollie_webhook_url()) {
@@ -155,7 +155,7 @@ function start_eenmalige_betaling(array $factuur): string
 {
     $data = [
         'amount' => mollie_bedrag((int) $factuur['bedrag_cent']),
-        'description' => 'Factuur ' . $factuur['nummer'] . ' ' . instelling('bedrijfsnaam', 'BSO VCK'),
+        'description' => 'Factuur ' . $factuur['nummer'] . ' ' . instelling('bedrijfsnaam', 'Sporty'),
         'redirectUrl' => app_url('factuur.php?id=' . (int) $factuur['id'] . '&betaald=1'),
         'locale' => 'nl_NL',
         'metadata' => ['soort' => 'eenmalig', 'factuur_id' => (int) $factuur['id']],

@@ -49,7 +49,7 @@ if (is_post()) {
                 q('INSERT OR IGNORE INTO medewerker_groepen (gebruiker_id, groep_id) VALUES (?, ?)', [$id, $groepId]);
             }
             $uitnodigingslink = maak_wachtwoordlink($id, 72);
-            stuur_mail($email, 'Je account voor de beheeromgeving van BSO VCK', "Hoi {$naam},\n\nJe bent uitgenodigd voor de beheeromgeving van BSO VCK. Via deze link kies je je wachtwoord (de link werkt 3 dagen):\n\n{$uitnodigingslink}\n\nTot snel!");
+            stuur_mail($email, 'Je account voor de beheeromgeving van Sporty', "Hoi {$naam},\n\nJe bent uitgenodigd voor de beheeromgeving van Sporty. Via deze link kies je je wachtwoord (de link werkt 3 dagen):\n\n{$uitnodigingslink}\n\nTot snel!");
             log_actie('Collega uitgenodigd', rechten_label($nieuweRechten), null, 'beveiliging', 'gebruiker:' . $id);
             flash('succes', "{$naam} is uitgenodigd en krijgt een e-mail met een link om een wachtwoord te kiezen.");
             $_SESSION['laatste_uitnodiging'] = $uitnodigingslink;
@@ -109,7 +109,7 @@ if (is_post()) {
             flash('succes', $persoon['naam'] . ' kan weer inloggen.');
         } elseif ($actie === 'link') {
             $_SESSION['laatste_uitnodiging'] = maak_wachtwoordlink((int) $persoon['id'], 72);
-            stuur_mail($persoon['email'], 'Nieuwe link voor de beheeromgeving van BSO VCK', "Hoi {$persoon['naam']},\n\nVia deze link kies je (opnieuw) je wachtwoord. De link werkt 3 dagen:\n\n{$_SESSION['laatste_uitnodiging']}");
+            stuur_mail($persoon['email'], 'Nieuwe link voor de beheeromgeving van Sporty', "Hoi {$persoon['naam']},\n\nVia deze link kies je (opnieuw) je wachtwoord. De link werkt 3 dagen:\n\n{$_SESSION['laatste_uitnodiging']}");
             log_actie('Nieuwe wachtwoordlink', '', null, 'beveiliging', $wie);
             flash('succes', 'Er is een nieuwe link gemaakt en gemaild naar ' . $persoon['naam'] . '.');
         }

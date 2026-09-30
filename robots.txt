@@ -1,5 +1,8 @@
+# TODO: domein kiezen bij de nieuwe naam Sporty (nu nog bsovck.nl) en de URL hieronder aanpassen; zie docs/seo.md
 User-agent: *
 Allow: /
-Disallow: /beheer/
+
+# De beheeromgeving (Mijn BSO) is niet geblokkeerd, maar stuurt zelf "noindex" mee.
+# Zo zien zoekmachines dat deze pagina's niet in de zoekresultaten horen.
 
 Sitemap: https://bsovck.nl/sitemap.xml

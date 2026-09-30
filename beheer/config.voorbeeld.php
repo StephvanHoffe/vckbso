@@ -43,7 +43,7 @@ return [
     'mail' => [
         'methode' => 'log',
         'van' => 'info@vckbso.nl',
-        'van_naam' => 'BSO VCK',
+        'van_naam' => 'Sporty',
     ],
 
     // Hier komen meldingen binnen van nieuwe aanmeldingen, berichten en privacyverzoeken.

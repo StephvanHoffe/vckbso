@@ -50,7 +50,7 @@ pagina_begin('Code invullen', '', ['publiek' => true]);
         <a href="inloggen.php">Annuleren</a>
       </div>
     </form>
-    <p class="muted" style="margin-top: var(--space-l)">Geen toegang meer tot je app én geen herstelcodes? Neem contact op met de beheerder van BSO VCK.</p>
+    <p class="muted" style="margin-top: var(--space-l)">Geen toegang meer tot je app én geen herstelcodes? Neem contact op met de beheerder van Sporty.</p>
   </div>
 </div>
 <?php

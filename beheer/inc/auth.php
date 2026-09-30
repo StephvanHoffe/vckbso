@@ -169,7 +169,7 @@ function probeer_in_te_loggen(string $email, string $wachtwoord): ?string
         return 'Dit e-mailadres en wachtwoord horen niet bij elkaar. Controleer ze en probeer het opnieuw.';
     }
     if ($gebruiker['status'] === 'gestopt') {
-        return 'Dit account is niet meer actief. Neem contact op met BSO VCK als je denkt dat dit niet klopt.';
+        return 'Dit account is niet meer actief. Neem contact op met Sporty als je denkt dat dit niet klopt.';
     }
     if (password_needs_rehash($gebruiker['wachtwoord_hash'], PASSWORD_DEFAULT)) {
         q('UPDATE gebruikers SET wachtwoord_hash = ? WHERE id = ?', [password_hash($wachtwoord, PASSWORD_DEFAULT), $gebruiker['id']]);

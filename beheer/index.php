@@ -28,7 +28,7 @@ if (is_ouder($gebruiker)) {
   <ol class="mini-steps">
     <li><span><strong>Aanmelding ontvangen</strong> <?= status_badge('bevestigd') ?><br><span class="muted">Je account is aangemaakt.</span></span></li>
     <li><span><strong>Automatische incasso</strong> <?= status_badge($gebruiker['mandaat_status']) ?><br><?= $machtigingOk ? '<span class="muted">Geregeld, je hoeft er niets meer voor te doen.</span>' : '<a href="machtiging.php">Geef nu je machtiging af</a>' ?></span></li>
-    <li><span><strong>Kennismaken</strong><?= $gebruiker['status'] === 'actief' ? ' ' . status_badge('bevestigd') : '' ?><br><span class="muted"><?= $gebruiker['status'] === 'actief' ? 'Gedaan, welkom bij BSO VCK!' : 'We nemen snel contact met je op voor een kennismaking. Neem dan een bewijs van gezag mee, bijvoorbeeld een uittreksel uit het gezagsregister.' ?></span></span></li>
+    <li><span><strong>Kennismaken</strong><?= $gebruiker['status'] === 'actief' ? ' ' . status_badge('bevestigd') : '' ?><br><span class="muted"><?= $gebruiker['status'] === 'actief' ? 'Gedaan, welkom bij Sporty!' : 'We nemen snel contact met je op voor een kennismaking. Neem dan een bewijs van gezag mee, bijvoorbeeld een uittreksel uit het gezagsregister.' ?></span></span></li>
     <li><span><strong>Dagen kiezen</strong><br><span class="muted">Daarna kies je in de <a href="agenda.php">agenda</a> zelf de dagen.</span></span></li>
   </ol>
 </section>

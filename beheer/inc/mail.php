@@ -9,7 +9,7 @@ declare(strict_types=1);
 function stuur_mail(string $aan, string $onderwerp, string $tekst): bool
 {
     $onderwerp = trim((string) preg_replace('/[\r\n\t]+/', ' ', $onderwerp));
-    $tekst .= "\n\n--\n" . instelling('bedrijfsnaam', 'BSO VCK') . "\n" . basis_url() . "/\n";
+    $tekst .= "\n\n--\n" . instelling('bedrijfsnaam', 'Sporty') . "\n" . basis_url() . "/\n";
 
     if (cfg('mail.methode') !== 'mail') {
         $regel = '[' . nu() . "] Aan: {$aan}\nOnderwerp: {$onderwerp}\n\n{$tekst}\n" . str_repeat('-', 60) . "\n";

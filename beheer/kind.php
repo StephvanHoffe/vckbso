@@ -173,7 +173,7 @@ if (is_post()) {
             q("INSERT INTO gebruikers (rol, status, naam, email, aangemaakt_op) VALUES ('ouder', 'actief', ?, ?, ?)", [$naam, $email, nu()]);
             $id = laatste_id();
             $link = maak_wachtwoordlink($id, 72);
-            stuur_mail($email, 'Je account bij BSO VCK', "Hoi {$naam},\n\nJe bent bij BSO VCK gekoppeld als verzorger van {$kind['voornaam']}. Via deze link kies je een wachtwoord voor Mijn BSO (de link werkt 3 dagen):\n\n{$link}\n\nTot snel!");
+            stuur_mail($email, 'Je account bij Sporty', "Hoi {$naam},\n\nJe bent bij Sporty gekoppeld als verzorger van {$kind['voornaam']}. Via deze link kies je een wachtwoord voor Mijn BSO (de link werkt 3 dagen):\n\n{$link}\n\nTot snel!");
             $_SESSION['laatste_uitnodiging'] = $link;
         }
         $gezag = invoer('v_gezag') === '1';

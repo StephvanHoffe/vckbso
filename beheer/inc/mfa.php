@@ -73,7 +73,7 @@ function totp_controleer(string $geheimBase32, string $code, int $nietVoor = 0):
 
 function mfa_uri(string $geheimBase32, string $email): string
 {
-    $uitgever = instelling('bedrijfsnaam', 'BSO VCK');
+    $uitgever = instelling('bedrijfsnaam', 'Sporty');
     return 'otpauth://totp/' . rawurlencode($uitgever . ':' . $email) . '?secret=' . $geheimBase32 . '&issuer=' . rawurlencode($uitgever) . '&digits=6&period=' . MFA_PERIODE;
 }
 

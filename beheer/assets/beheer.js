@@ -1,4 +1,4 @@
-/* Beheeromgeving BSO VCK: kleine verbeteringen. Alles werkt ook zonder JavaScript. */
+/* Beheeromgeving Sporty: kleine verbeteringen. Alles werkt ook zonder JavaScript. */
 (function () {
   "use strict";
 

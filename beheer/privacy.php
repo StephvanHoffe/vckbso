@@ -25,7 +25,7 @@ if (is_post()) {
         foreach ($namensKinderen as $kind) {
             log_export('Gegevens gedownload door verzorger', 'kind:' . $kind['id']);
         }
-        stuur_download(export_json($data), 'mijn-gegevens-bso-vck-' . date('Y-m-d') . '.json');
+        stuur_download(export_json($data), 'mijn-gegevens-sporty-' . date('Y-m-d') . '.json');
     }
 
     if ($actie === 'verzoek') {

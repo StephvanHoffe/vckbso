@@ -22,7 +22,7 @@
   const jaar = jaren[instellingen.jaar] || jaren[beschikbaar[0]];
   if (!jaar) return;
 
-  // Alleen volledig ingevulde opvangvormen van BSO VCK tonen
+  // Alleen volledig ingevulde opvangvormen van Sporty tonen
   const vormen = (instellingen.opvangvormen || []).filter((vorm) => {
     const fouten = R.controleerOpvangvorm(vorm);
     if (fouten.length && window.console) console.warn("Rekentool: opvangvorm overgeslagen (" + (vorm && vorm.naam) + "): " + fouten.join(", "));
@@ -63,7 +63,7 @@
     };
     if (vormen.length) {
       const vck = document.createElement("optgroup");
-      vck.label = "BSO VCK";
+      vck.label = "Sporty";
       vormen.forEach((vorm, i) => vck.append(optie("vck:" + i, vorm.naam)));
       const elders = document.createElement("optgroup");
       elders.label = "Andere opvang (bijvoorbeeld voor een broertje of zusje)";

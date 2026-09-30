@@ -2,7 +2,7 @@
 
 ## Huidige stand
 
-Alle foto's op de site zijn **tijdelijke stockfoto's van [Pexels](https://www.pexels.com/)**. Ze laten de sfeer zien die past bij BSO VCK: buiten sporten en spelen, aandacht voor ieder kind en samen gezellig. Het zijn geen foto's van BSO VCK zelf.
+Alle foto's op de site zijn **tijdelijke stockfoto's van [Pexels](https://www.pexels.com/)**. Ze laten de sfeer zien die past bij Sporty: buiten sporten en spelen, aandacht voor ieder kind en samen gezellig. Het zijn geen foto's van Sporty zelf.
 
 De klant wil uiteindelijk eigen beeld laten zien: "mezelf en mijn team, klanten in actie, sfeer en omgeving". Vervang de stockfoto's daarom stap voor stap door eigen foto's (zie onderaan).
 
@@ -10,7 +10,7 @@ De klant wil uiteindelijk eigen beeld laten zien: "mezelf en mijn team, klanten 
 
 Alle foto's vallen onder de [Pexels-licentie](https://www.pexels.com/license/): gratis te gebruiken, ook commercieel, en naamsvermelding is niet verplicht. Let op de voorwaarden:
 
-- Wek niet de indruk dat de mensen op de foto's BSO VCK aanbevelen, of dat het de kinderen of medewerkers van BSO VCK zijn. Gebruik stockfoto's daarom **niet** als foto van een teamlid, de eigenaar of een review.
+- Wek niet de indruk dat de mensen op de foto's Sporty aanbevelen, of dat het de kinderen of medewerkers van Sporty zijn. Gebruik stockfoto's daarom **niet** als foto van een teamlid, de eigenaar of een review.
 - Verkoop de foto's niet los en zet ze niet ongewijzigd op een andere fotosite.
 
 ### Gebruikte foto's
@@ -22,7 +22,7 @@ Alle foto's vallen onder de [Pexels-licentie](https://www.pexels.com/license/): 
 | `aandacht.jpg` | [Kids Playing with Teacher in the Classroom](https://www.pexels.com/photo/kids-playing-with-teacher-in-the-classroom-8363102/) | RDNE Stock project | Home ("Over ons") |
 | `samen.jpg` | [Group of Children Running in Garden](https://www.pexels.com/photo/group-of-children-running-in-garden-16724787/) | Yakup Polat | Afsluitend blok (rond beeld) op Home, Over ons, Diensten, Prijzen, Team en Veelgestelde vragen |
 | `binnen.jpg` | [Women Kneeling on the Floor with Children in a Room](https://www.pexels.com/photo/women-kneeling-on-the-floor-with-children-in-a-room-8441839/) | Pavel Danilyuk | Over ons (bovenaan) |
-| `luisteren.jpg` | [A Woman Talking to her Child at a Park](https://www.pexels.com/photo/a-woman-talking-to-her-child-at-a-park-7880785/) (liggend uitgesneden) | Barbara Olsen | Over ons ("Waarom BSO VCK?") |
+| `luisteren.jpg` | [A Woman Talking to her Child at a Park](https://www.pexels.com/photo/a-woman-talking-to-her-child-at-a-park-7880785/) (liggend uitgesneden) | Barbara Olsen | Over ons ("Waarom Sporty?") |
 | `basketbal.jpg` | [Kids Playing Basketball with Their Coach](https://www.pexels.com/photo/kids-playing-basketball-with-their-coach-8336951/) | RDNE Stock project | Over ons ("Wat ons anders maakt") |
 | `plezier.jpg` | [Kids Having Fun at the Park](https://www.pexels.com/photo/kids-having-fun-at-the-park-8033873/) | RDNE Stock project | Diensten (bovenaan) |
 | `voetbal.jpg` | [Young Soccer Player Kicking Ball on Green Field](https://www.pexels.com/photo/person-field-playing-school-972513/) | Markus Spiske | Diensten ("Sporten en bewegen") |

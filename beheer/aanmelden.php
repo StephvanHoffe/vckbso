@@ -117,7 +117,7 @@ if (is_post()) {
         });
         log_actie('Aangemeld via de website', count($kinderen) . ' kind(eren)', $ouderId, 'wijziging', 'gebruiker:' . $ouderId);
         mail_team('Nieuwe aanmelding via de website', "Er is een nieuwe aanmelding binnen van {$waarden['naam']} met " . count($kinderen) . " kind(eren).\n\nBekijk de aanmelding in de beheeromgeving:\n" . app_url('ouder.php?id=' . $ouderId));
-        stuur_mail($waarden['email'], 'Je aanmelding bij BSO VCK', "Hoi {$waarden['naam']},\n\nWat leuk dat je je kind hebt aangemeld bij BSO VCK! We hebben je aanmelding goed ontvangen en nemen snel contact met je op voor een kennismaking.\n\nJe kunt inloggen op " . app_url('') . " met je e-mailadres en het wachtwoord dat je hebt gekozen.\n\nTot snel!");
+        stuur_mail($waarden['email'], 'Je aanmelding bij Sporty', "Hoi {$waarden['naam']},\n\nWat leuk dat je je kind hebt aangemeld bij Sporty! We hebben je aanmelding goed ontvangen en nemen snel contact met je op voor een kennismaking.\n\nJe kunt inloggen op " . app_url('') . " met je e-mailadres en het wachtwoord dat je hebt gekozen.\n\nTot snel!");
         log_in_als($ouderId);
         flash('succes', 'Joepie, je account is aangemaakt! Nog één stap: de machtiging voor automatische incasso.');
         redirect('machtiging.php');
@@ -194,7 +194,7 @@ pagina_begin('Kind aanmelden', '', ['publiek' => true]);
 <div class="auth auth--breed">
   <div class="panel">
     <p class="eyebrow">Aanmelden</p>
-    <h1>Meld je kind aan bij BSO VCK</h1>
+    <h1>Meld je kind aan bij Sporty</h1>
     <p>Wat leuk dat je voor ons kiest! Je maakt meteen een account aan. Daarmee kies je straks zelf de dagen in de agenda, stuur je ons berichtjes en vind je je facturen terug.</p>
     <p class="muted">Velden met een * zijn verplicht. Heb je al een account? <a href="inloggen.php">Log dan in</a>.</p>
     <?= foutensamenvatting($fouten) ?>
@@ -308,7 +308,7 @@ pagina_begin('Kind aanmelden', '', ['publiek' => true]);
         <div class="field">
           <div class="consent">
             <input id="incasso" name="incasso" type="checkbox" value="1" required<?= !empty($_POST['incasso']) ? ' checked' : '' ?><?= aria_fout($fouten, 'incasso') ?>>
-            <label for="incasso">Ik geef na het aanmelden een machtiging aan <?= e(instelling('statutaire_naam', 'Je Dag in Beeld')) ?> (BSO VCK) om de facturen voor de opvang automatisch af te schrijven. *</label>
+            <label for="incasso">Ik geef na het aanmelden een machtiging aan <?= e(instelling('statutaire_naam', 'Je Dag in Beeld')) ?> (Sporty) om de facturen voor de opvang automatisch af te schrijven. *</label>
           </div>
           <?= veldfout($fouten, 'incasso') ?>
         </div>

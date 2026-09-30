@@ -35,8 +35,8 @@ if (is_post()) {
         flash('fout', 'Controleer eerst het gezag bij ' . implode(' en ', array_map(fn ($k) => $k['voornaam'], $zonderGezag)) . ' (in het dossier van het kind, onder Verzorgers en gezag).');
     } elseif ($actie === 'activeren' && $ouder['status'] !== 'actief') {
         q("UPDATE gebruikers SET status = 'actief', gestopt_op = NULL WHERE id = ?", [$ouder['id']]);
-        systeembericht((int) $ouder['id'], 'Welkom bij BSO VCK! Je account is actief. Zodra je kind in een groep zit, kies je in de agenda zelf de dagen. Heb je vragen? Stuur ons hier gerust een berichtje.');
-        stuur_mail($ouder['email'], 'Welkom bij BSO VCK', "Hoi {$ouder['naam']},\n\nWelkom bij BSO VCK! Je account is actief. Log in om de dagen voor je kind te kiezen:\n" . app_url('agenda.php') . "\n\nTot snel!");
+        systeembericht((int) $ouder['id'], 'Welkom bij Sporty! Je account is actief. Zodra je kind in een groep zit, kies je in de agenda zelf de dagen. Heb je vragen? Stuur ons hier gerust een berichtje.');
+        stuur_mail($ouder['email'], 'Welkom bij Sporty', "Hoi {$ouder['naam']},\n\nWelkom bij Sporty! Je account is actief. Log in om de dagen voor je kind te kiezen:\n" . app_url('agenda.php') . "\n\nTot snel!");
         log_actie('Ouder geactiveerd', '', null, 'wijziging', $onderwerp);
         flash('succes', $ouder['naam'] . ' is actief. Zet de kinderen nu in een groep, als dat nog niet is gebeurd.');
     } elseif ($actie === 'stoppen' && $ouder['status'] !== 'gestopt') {

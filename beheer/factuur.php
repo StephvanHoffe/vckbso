@@ -53,7 +53,7 @@ echo '<a class="terug-link niet-printen" href="facturen.php' . (is_team($gebruik
       </address>
     </div>
     <address>
-      <strong><?= e(instelling('bedrijfsnaam', 'BSO VCK')) ?></strong><br>
+      <strong><?= e(instelling('bedrijfsnaam', 'Sporty')) ?></strong><br>
       <?= e(instelling('statutaire_naam')) ?><br>
 <?php if (instelling('adres') !== ''): ?><?= e(instelling('adres')) ?><br><?php endif; ?>
       <?= e(instelling('postcode_plaats')) ?><br>

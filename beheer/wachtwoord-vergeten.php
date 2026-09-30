@@ -16,7 +16,7 @@ if (is_post()) {
         $gebruiker = rij("SELECT * FROM gebruikers WHERE email = ? AND status != 'gestopt'", [$email]);
         if ($gebruiker) {
             $link = maak_wachtwoordlink((int) $gebruiker['id'], 2);
-            stuur_mail($gebruiker['email'], 'Nieuw wachtwoord instellen', "Hoi {$gebruiker['naam']},\n\nJe hebt gevraagd om een nieuw wachtwoord voor BSO VCK. Via deze link stel je het in (de link werkt 2 uur):\n\n{$link}\n\nHeb je dit niet zelf gevraagd? Dan kun je deze e-mail negeren.");
+            stuur_mail($gebruiker['email'], 'Nieuw wachtwoord instellen', "Hoi {$gebruiker['naam']},\n\nJe hebt gevraagd om een nieuw wachtwoord voor Sporty. Via deze link stel je het in (de link werkt 2 uur):\n\n{$link}\n\nHeb je dit niet zelf gevraagd? Dan kun je deze e-mail negeren.");
             log_actie('Wachtwoordlink aangevraagd', '', (int) $gebruiker['id']);
         }
         $verstuurd = true; // altijd dezelfde melding, zodat niemand kan zien welke adressen bestaan

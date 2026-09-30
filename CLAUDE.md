@@ -1,4 +1,4 @@
-# Website voor BSO VCK: bouwinstructies
+# Website voor Sporty: bouwinstructies
 
 > Gemaakt door Aries Media op 30 september 2026 op basis van de ontwerpbriefing van 30 september 2026.
 > Bouw de website precies volgens dit document. Alle keuzes hieronder komen van de klant zelf; waar "de ontwerper kiest" staat, maak jij een passende keuze die aansluit bij de rest.
@@ -7,7 +7,7 @@
 
 ## Opdracht
 
-Bouw een complete, responsive website voor **BSO VCK** (bso) in Amsterdam.
+Bouw een complete, responsive website voor **Sporty** (bso) in Amsterdam. (Naam gewijzigd op 30 september 2026; eerder heette de BSO "BSO VCK".)
 
 - **Wat het bedrijf doet:** Wij zijn een buitenschoolse opvang voor
 - **Diensten of producten:** Buitenschoolse opvang
@@ -205,7 +205,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 
 ## Gegevens op de website
 
-- Bedrijfsnaam: BSO VCK (statutair: Je Dag in Beeld)
+- Bedrijfsnaam: Sporty (statutair: Je Dag in Beeld; tot 30 september 2026: BSO VCK)
 - E-mail: info@vckbso.nl (als `mailto:`-link)
 - Telefoon: 0612345678 (als `tel:`-link)
 

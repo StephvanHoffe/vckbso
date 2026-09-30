@@ -30,7 +30,7 @@ $standaardConfig = [
     'ontwikkelmodus' => false,
     'installatiecode' => '',
     'mollie' => ['api_key' => '', 'methode_machtiging' => 'ideal'],
-    'mail' => ['methode' => 'log', 'van' => 'info@vckbso.nl', 'van_naam' => 'BSO VCK'],
+    'mail' => ['methode' => 'log', 'van' => 'info@vckbso.nl', 'van_naam' => 'Sporty'],
     'team_email' => 'info@vckbso.nl',
     'backup' => ['map' => '', 'sleutel' => '', 'bewaardagen' => 30],
     'organisaties' => [],
@@ -78,6 +78,7 @@ if (PHP_SAPI !== 'cli') {
     header('X-Frame-Options: DENY');
     header('Referrer-Policy: same-origin');
     header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
+    header('X-Robots-Tag: noindex, nofollow');
     header('Cache-Control: no-store, private');
 
     if (!defined('GEEN_SESSIE')) {
