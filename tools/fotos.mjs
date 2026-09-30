@@ -2,9 +2,9 @@
 //
 // Gebruik:  npm install  &&  npm run fotos
 //
-// Vervang een placeholder-illustratie door een echte foto door een .jpg of .png
-// met dezelfde naam in assets/fotos/bron/ te zetten (bijv. hero.jpg) en de .svg
-// te verwijderen. Lever foto's bij voorkeur minimaal 1600px breed aan.
+// Vervang een stockfoto door een eigen foto door een .jpg of .png met dezelfde
+// naam in assets/fotos/bron/ te zetten (bijv. hero.jpg). Lever foto's bij
+// voorkeur minimaal 1600px breed aan.
 // De website zelf heeft geen build-stap nodig: de uitvoer wordt meegecommit.
 
 import { readdir, mkdir } from "node:fs/promises";

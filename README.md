@@ -28,8 +28,8 @@ npx serve .
 | `css/style.css` | Alle opmaak, mobile-first |
 | `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole (contact en aanmelden), kinderen toevoegen in het aanmeldformulier |
 | `assets/fonts/` | Manrope (variabel, lokaal gehost, OFL-licentie) |
-| `assets/fotos/` | Beelden in AVIF en WebP. Bronnen en de fotolijst staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
-| `assets/img/` | Favicon, app-iconen en de deelafbeelding (`og-image.png`) |
+| `assets/fotos/` | Foto's in AVIF en WebP (nu nog stockfoto's van Pexels), met de bronbestanden in `bron/`. Fotografen, licentie en de fotolijst staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
+| `assets/img/` | Favicon, app-iconen en de deelafbeelding (`og-image.jpg`) |
 | `tools/fotos.mjs` | Hulpscript om beelden om te zetten (`npm run fotos`). Niet nodig om de site te draaien. |
 | `docs/beheeromgeving.md` | Voorstel voor de gewenste beheeromgeving met kindvolgsysteem |
 
@@ -57,7 +57,8 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Algemene voorwaarden (Voorwaarden).
 
 **Beeld**
-- [ ] Placeholder-illustraties vervangen door eigen foto's en de alt-teksten aanpassen. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
+- [ ] De tijdelijke stockfoto's (Pexels) stap voor stap vervangen door eigen foto's van het team, de kinderen (met toestemming van de ouders) en de locatie, en de alt-teksten aanpassen. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
+- [ ] Teamportretten (Team) en de teamfoto (Over ons). Hier staan bewust geen stockfoto's: die zouden lijken op echte teamleden.
 
 **Techniek**
 - [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL's in `contact.html` en `aanmelden.html` invullen. Berichten en aanmeldingen moeten naar info@vckbso.nl gaan. Tot die tijd openen de formulieren het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
@@ -68,6 +69,6 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 ## Live zetten
 
-De site werkt op elke statische host (bijvoorbeeld Netlify, Cloudflare Pages, GitHub Pages of gewone webhosting). Upload de map zonder `node_modules/`, `tools/` en `package*.json`. Stel `404.html` in als foutpagina.
+De site werkt op elke statische host (bijvoorbeeld Netlify, Cloudflare Pages, GitHub Pages of gewone webhosting). Upload de map zonder `node_modules/`, `tools/`, `assets/fotos/bron/` en `package*.json`. Stel `404.html` in als foutpagina.
 
 **Let op bij het koppelen van het domein:** er is al e-mail in gebruik (info@vckbso.nl). Het gewenste websitedomein is bsovck.nl, terwijl de e-mail op vckbso.nl draait. Controleer dit met de klant. Zet je de website op een domein waar al e-mail op draait, wijzig dan alleen de DNS-records voor de website (A/AAAA of CNAME). Laat de MX-, SPF-, DKIM- en DMARC-records ongemoeid, anders stopt de e-mail.
