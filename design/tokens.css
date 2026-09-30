@@ -1,0 +1,124 @@
+/*
+ * Design tokens BSO VCK
+ * Stijlprofiel: zacht, luchtig & beeldend. Thema: licht.
+ * Gebruik overal deze variabelen in plaats van losse kleurcodes of maten.
+ */
+
+/* Manrope (variabel, 200–800), lokaal gehost. Licentie: assets/fonts/OFL.txt */
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("../assets/fonts/manrope-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("../assets/fonts/manrope-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  /* ---------- Kleuren (rollen uit de briefing) ---------- */
+  --color-primary: #c8553d;          /* hoofdkleur: accenten, grote vlakken, grote tekst */
+  --color-on-primary: #ffffff;
+  --color-secondary: #ff6b6b;        /* tweede kleur */
+  --color-on-secondary: #111111;
+  --color-accent: #e8a33d;           /* details en highlights */
+  --color-on-accent: #111111;
+  --color-surface: #ffffff;
+  --color-surface-alt: #fcf5f3;
+  --color-text: #1b1d23;
+  --color-text-muted: #6b6c70;
+  --color-link: #b44d37;
+  --color-border: #dfdfe0;
+
+  /*
+   * Afgeleid van de hoofdkleur. Witte tekst op #c8553d haalt 4,35:1 en is
+   * daarmee alleen geschikt voor grote tekst. Voor knoppen en vlakken met
+   * gewone tekst gebruiken we dezelfde tint iets donkerder (5,2:1).
+   */
+  --color-primary-strong: #b44d37;
+  --color-primary-deep: #93392a;     /* hover en actieve toestand (7,3:1) */
+  --color-primary-soft: #f7dcd4;     /* zachte tint; tekst erop in --color-text of --color-primary-deep */
+
+  /* Overige kleuren van de klant, voor vlakken, stickers en illustraties */
+  --color-sand: #f2d6a2;
+  --color-sun: #ffd166;
+  --color-mint: #06d6a0;
+  --color-coral-soft: #ffe1dc;
+  --color-sun-soft: #fff1cc;
+  --color-mint-soft: #d4f7ec;
+
+  --color-focus: #1b1d23;
+  --color-error: #a8321f;            /* 6,7:1 op wit */
+  --color-success: #0d6e52;          /* 6,2:1 op wit */
+
+  /* ---------- Letters ---------- */
+  --font-heading: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-body: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-weight-body: 400;
+  --font-weight-strong: 600;
+  --font-weight-button: 700;
+  --font-weight-heading: 800;
+
+  /* Basisgrootte 17px op mobiel, 18px vanaf tablet */
+  --font-size-base: clamp(1.0625rem, 1.02rem + 0.2vw, 1.125rem);
+  --line-height-body: 1.65;
+  --line-height-heading: 1.12;
+  --letter-spacing-heading: -0.025em;
+  --measure: 65ch;
+
+  /* Typografische schaal (vloeiend tussen 360 en 1280px) */
+  --step--1: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+  --step-0: var(--font-size-base);
+  --step-1: clamp(1.25rem, 1.15rem + 0.45vw, 1.5rem);
+  --step-2: clamp(1.5rem, 1.3rem + 0.9vw, 2rem);
+  --step-3: clamp(1.875rem, 1.5rem + 1.7vw, 2.875rem);
+  --step-4: clamp(2.25rem, 1.65rem + 2.7vw, 3.875rem);
+  --step-5: clamp(2.5rem, 1.7rem + 3.6vw, 4.75rem);
+
+  /* ---------- Ruimte ---------- */
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 6rem;
+  --section-space: clamp(4.5rem, 2.9rem + 7vw, 8.5rem); /* 72–136px */
+  --gutter: clamp(1rem, 0.6rem + 1.8vw, 2rem);
+  --container: 75rem;       /* 1200px */
+  --container-narrow: 48rem;
+
+  /* ---------- Vormen ---------- */
+  --radius-s: 12px;
+  --radius-m: 18px;
+  --radius-l: 28px;
+  --radius-xl: 40px;
+  --radius-pill: 999px;
+  --radius-blob: 58% 42% 55% 45% / 45% 55% 45% 55%;
+
+  --border-width: 2px;
+
+  /* Zachte, warme schaduwen in plaats van harde lijnen */
+  --shadow-s: 0 2px 6px -2px rgb(147 57 42 / 0.12), 0 6px 16px -8px rgb(147 57 42 / 0.14);
+  --shadow-m: 0 4px 12px -4px rgb(147 57 42 / 0.12), 0 18px 40px -18px rgb(147 57 42 / 0.28);
+  --shadow-l: 0 8px 20px -8px rgb(147 57 42 / 0.14), 0 32px 64px -28px rgb(147 57 42 / 0.36);
+
+  /* ---------- Beweging (300–600ms) ---------- */
+  --duration-fast: 300ms;
+  --duration: 450ms;
+  --duration-slow: 600ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --header-height: 4.5rem;
+}

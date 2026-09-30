@@ -1,0 +1,14 @@
+{
+  "name": "bso-vck-website",
+  "private": true,
+  "description": "Statische website van BSO VCK. Geen build-stap nodig; de scripts hieronder zijn hulpmiddelen voor beeld.",
+  "type": "module",
+  "scripts": {
+    "fotos": "node tools/fotos.mjs",
+    "serve": "npx --yes serve . -l 8080"
+  },
+  "devDependencies": {
+    "@fontsource-variable/manrope": "^5.2.5",
+    "sharp": "^0.34.0"
+  }
+}
