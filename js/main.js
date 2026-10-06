@@ -119,7 +119,7 @@
     var status = form.querySelector("[data-form-status]");
     var submit = form.querySelector('[type="submit"]');
     var submitText = submit ? submit.innerHTML : "";
-    var mailto = form.getAttribute("data-mailto") || "info@vckbso.nl";
+    var mailto = form.getAttribute("data-mailto") || "info@sporty.nl";
 
     // Een geboortedatum kan niet in de toekomst liggen
     form.querySelectorAll("[data-max-today]").forEach(function (el) { el.max = todayIso; });

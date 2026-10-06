@@ -198,7 +198,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 
 ## Functies
 
-- **Contactformulier:** Contactformulier met naam, e-mail, telefoon (optioneel) en bericht, met duidelijke foutmeldingen en een bevestiging na versturen. Berichten gaan naar info@vckbso.nl. Bij een statische site: gebruik een formulierendienst en zet de endpoint-URL als TODO in de code, met een `mailto:`-link als terugvaloptie.
+- **Contactformulier:** Contactformulier met naam, e-mail, telefoon (optioneel) en bericht, met duidelijke foutmeldingen en een bevestiging na versturen. Berichten gaan naar info@sporty.nl. Bij een statische site: gebruik een formulierendienst en zet de endpoint-URL als TODO in de code, met een `mailto:`-link als terugvaloptie.
 - **Google Maps-kaart:** Kaart met de locatie. Laad Google Maps pas na een klik (privacy en cookies); toon daarvoor een afbeelding of een link "Route plannen".
 - **Meertalig (bv. NL/EN):** Meertalig (Nederlands en Engels): taalkeuze in de header, teksten per taal gescheiden. De Engelse teksten volgen of worden vertaald na akkoord van de klant.
 - **Overige wensen:** In de backend van de website wil ik een compleet kindvolgsysteem om zo alle kinderen individueel bij te kunnen houden en eventueel hun ontwikkeling te monitoren.
@@ -206,7 +206,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 ## Gegevens op de website
 
 - Bedrijfsnaam: Sporty (statutair: Je Dag in Beeld; tot 30 september 2026: BSO VCK)
-- E-mail: info@vckbso.nl (als `mailto:`-link)
+- E-mail: info@sporty.nl (als `mailto:`-link; gewijzigd op 6 oktober 2026, eerder info@vckbso.nl)
 - Telefoon: 0612345678 (als `tel:`-link)
 
 Openingstijden:

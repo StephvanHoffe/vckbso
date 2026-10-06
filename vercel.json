@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/beheer/inloggen.php", "destination": "/voorbeeld/beheer/inloggen.html", "permanent": false },
+    { "source": "/beheer/aanmelden.php", "destination": "/voorbeeld/beheer/aanmelden.html", "permanent": false },
+    { "source": "/beheer/wachtwoord-vergeten.php", "destination": "/voorbeeld/beheer/wachtwoord-vergeten.html", "permanent": false },
+    { "source": "/beheer/privacy.php", "destination": "/voorbeeld/beheer/ouder-privacy.html", "permanent": false },
+    { "source": "/beheer/:pad*", "destination": "/voorbeeld/", "permanent": false }
+  ],
+  "headers": [
+    { "source": "/voorbeeld/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] }
+  ]
+}

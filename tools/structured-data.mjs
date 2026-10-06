@@ -33,7 +33,7 @@ export const BSO = {
   image: `${SITE}/assets/img/og-image.jpg`,
   logo: `${SITE}/assets/img/icon-512.png`,
   telephone: "+31612345678",
-  email: "info@vckbso.nl",
+  email: "info@sporty.nl",
   address: { "@type": "PostalAddress", addressLocality: "Amsterdam", addressCountry: "NL" },
   areaServed: { "@type": "City", name: "Amsterdam" },
   openingHoursSpecification: [

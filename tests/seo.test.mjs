@@ -93,8 +93,8 @@ test("schema.org-gegevens zijn geldig en komen overeen met de zichtbare pagina (
   assert.ok(html["index.html"].includes(`href="mailto:${bso.email}"`), "e-mailadres in schema.org wijkt af van de website");
 });
 
-test("de oude naam BSO VCK komt nergens meer voor op de website", () => {
+test("de oude naam BSO VCK en het oude e-mailadres komen nergens meer voor op de website", () => {
   for (const p of [...PAGINAS, "404.html", "site.webmanifest", "js/rekentool/rekentool.js", "js/rekentool/instellingen.js"]) {
-    assert.doesNotMatch(lees(p), /BSO VCK|BSO\+VCK/, `${p} noemt nog BSO VCK`);
+    assert.doesNotMatch(lees(p), /BSO VCK|BSO\+VCK|vckbso/, `${p} noemt nog de oude naam of het oude e-mailadres`);
   }
 });

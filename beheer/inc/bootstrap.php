@@ -30,8 +30,8 @@ $standaardConfig = [
     'ontwikkelmodus' => false,
     'installatiecode' => '',
     'mollie' => ['api_key' => '', 'methode_machtiging' => 'ideal'],
-    'mail' => ['methode' => 'log', 'van' => 'info@vckbso.nl', 'van_naam' => 'Sporty'],
-    'team_email' => 'info@vckbso.nl',
+    'mail' => ['methode' => 'log', 'van' => 'info@sporty.nl', 'van_naam' => 'Sporty'],
+    'team_email' => 'info@sporty.nl',
     'backup' => ['map' => '', 'sleutel' => '', 'bewaardagen' => 30],
     'organisaties' => [],
 ];

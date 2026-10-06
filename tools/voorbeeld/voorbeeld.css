@@ -1,0 +1,109 @@
+/* Voorbeeldbalk bovenaan elke pagina van de voorbeeldweergave */
+.vb-balk {
+  position: relative;
+  z-index: 50;
+  background: var(--color-text, #1b1d23);
+  color: #ffffff;
+  font-family: var(--font-body, "Manrope", system-ui, sans-serif);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.vb-balk__binnen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.25rem;
+  width: min(100% - 2rem, 80rem);
+  margin-inline: auto;
+  padding-block: 0.55rem;
+}
+
+.vb-balk__tekst {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.6rem;
+  margin: 0;
+  max-width: none;
+  color: #ffffff;
+}
+
+.vb-balk__tekst strong {
+  padding: 0.1em 0.7em;
+  border-radius: 999px;
+  background: var(--color-sun, #ffd166);
+  color: #111111;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.vb-balk__rollen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.vb-balk__rollen span {
+  margin-right: 0.2rem;
+  color: #d5d6d9;
+}
+
+.vb-balk a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0.15rem 0.8rem;
+  border: 1px solid #5d6068;
+  border-radius: 999px;
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.vb-balk a:hover {
+  border-color: #ffffff;
+  color: #ffffff;
+}
+
+.vb-balk a[aria-current="page"] {
+  border-color: var(--color-sun, #ffd166);
+  background: var(--color-sun, #ffd166);
+  color: #111111;
+}
+
+.vb-balk a:focus-visible {
+  outline: 3px solid var(--color-sun, #ffd166);
+  outline-offset: 2px;
+}
+
+.vb-melding {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  padding: 0.75rem 1.1rem;
+  border-radius: 1rem;
+  background: var(--color-text, #1b1d23);
+  box-shadow: 0 10px 30px rgb(27 29 35 / 0.25);
+  color: #ffffff;
+  font-family: var(--font-body, "Manrope", system-ui, sans-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  transform: translateX(-50%);
+}
+
+.vb-melding[hidden] {
+  display: none;
+}
+
+@media (max-width: 40em) {
+  .vb-balk__tekst span {
+    display: none;
+  }
+}

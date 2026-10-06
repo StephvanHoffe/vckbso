@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mees Bos · Beheer · Sporty</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#c8553d">
+<link rel="icon" href="../../favicon.ico" sizes="32x32">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../design/tokens.css">
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="assets/beheer.css">
+<script src="assets/beheer.js" defer></script>
+<link rel="stylesheet" href="../beheer/voorbeeld.css">
+<script src="../beheer/voorbeeld.js" defer></script>
+<meta name="robots" content="noindex">
+</head>
+<body class="beheer">
+<svg xmlns="http://www.w3.org/2000/svg" hidden><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M8 9h8M8 12.5h5"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></symbol><symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></symbol><symbol id="i-euro" viewBox="0 0 24 24"><path d="M17.5 6.5a7 7 0 1 0 0 11"/><path d="M4 10h9M4 14h9"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.8M21.5 20a6.5 6.5 0 0 0-4-6"/></symbol><symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.4 3 7.8 7 9.5 4-1.7 7-5.1 7-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></symbol><symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol><symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H4"/></symbol><symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol><symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="m4 12 16-8-5 17-3-7z"/><path d="m12 14 8-10"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.1A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20z"/></symbol><symbol id="i-thermo" viewBox="0 0 24 24"><path d="M10 13.5V5a2 2 0 0 1 4 0v8.5a4 4 0 1 1-4 0z"/><path d="M12 9v6"/></symbol><symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M8 7h7"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3.5h3.2l1.6 4-2 1.3a11 11 0 0 0 5.4 5.4l1.3-2 4 1.6V17a3 3 0 0 1-3 3A15.5 15.5 0 0 1 2 6.5a3 3 0 0 1 3-3z"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol><symbol id="i-print" viewBox="0 0 24 24"><path d="M7 9V4h10v5M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><rect x="7" y="14" width="10" height="7" rx="1"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol><symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16"/><rect x="5.5" y="11" width="3.5" height="6.5" rx="1"/><rect x="10.25" y="5.5" width="3.5" height="12" rx="1"/><rect x="15" y="13.5" width="3.5" height="4" rx="1"/></symbol><symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><path d="m11.2 11.8 8.3-8.3M16.5 6.5l3 3M14 9l2 2"/></symbol><symbol id="i-clip" viewBox="0 0 24 24"><path d="m20 11.5-8.2 8.2a5 5 0 0 1-7-7L13.2 4.3a3.4 3.4 0 0 1 4.8 4.8l-8.4 8.4a1.8 1.8 0 0 1-2.5-2.5l7.7-7.7"/></symbol><symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></symbol></svg><a class="skip-link" href="#inhoud">Naar de inhoud</a>
+<div class="vb-balk" data-rol="beheerder" role="region" aria-label="Voorbeeldweergave">
+  <div class="vb-balk__binnen">
+    <p class="vb-balk__tekst"><strong>Voorbeeld</strong> <span>Verzonnen gegevens. Formulieren en knoppen slaan niets op.</span></p>
+    <nav class="vb-balk__rollen" aria-label="Bekijk als"><span>Bekijk als:</span><a href="../beheer/beheerder-index.html" aria-current="page">Beheerder</a><a href="../beheer/begeleider-index.html">Begeleider</a><a href="../beheer/ouder-index.html">Ouder</a><a href="../../index.html">Website</a><a href="../index.html">Overzicht</a></nav>
+  </div>
+</div>
+<div class="vb-melding" role="status" aria-live="polite" hidden></div>
+<header class="app-header">
+  <div class="app-header__inner">
+    <a class="logo" href="beheerder-index.html" aria-label="Sporty, naar het overzicht"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">Sport<span class="logo__accent">y</span></span><span class="app-header__omgeving">Beheer</span></a>
+    <ul class="app-account">
+      <li><a href="beheerder-profiel.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg><span class="app-account__label">Demo<span class="visually-hidden">, mijn gegevens</span></span></a></li>
+      <li><form method="post" action="inloggen.html" data-vb-uitloggen><input type="hidden" name="csrf" value="voorbeeld"><button type="submit" class="link-button"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-logout"></use></svg><span class="app-account__label">Uitloggen</span></button></form></li>
+    </ul>
+  </div>
+  <nav class="app-nav" aria-label="Menu">
+    <ul>
+      <li><a href="beheerder-index.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg>Vandaag</a></li>
+      <li><a href="beheerder-agenda.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-calendar"></use></svg>Agenda</a></li>
+      <li><a href="beheerder-kinderen.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-smile"></use></svg>Kinderen</a></li>
+      <li><a href="beheerder-ouders.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-users"></use></svg>Ouders</a></li>
+      <li><a href="beheerder-berichten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chat"></use></svg>Berichten <span class="teller">2<span class="visually-hidden"> ongelezen</span></span></a></li>
+      <li><a href="beheerder-fotos.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-camera"></use></svg>Foto&#039;s</a></li>
+      <li><a href="beheerder-groepen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-grid"></use></svg>Groepen</a></li>
+      <li><a href="beheerder-facturen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-euro"></use></svg>Facturen</a></li>
+      <li><a href="beheerder-financien.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chart"></use></svg>Financiën</a></li>
+      <li><a href="beheerder-medewerkers.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-key"></use></svg>Team</a></li>
+      <li><a href="beheerder-verzoeken.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken <span class="teller">1<span class="visually-hidden"> open</span></span></a></li>
+      <li><a href="beheerder-instellingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
+    </ul>
+  </nav>
+</header>
+<main id="inhoud" class="app-main">
+  <p class="demo-balk"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>Demo-modus: Mollie is nog niet gekoppeld, er wordt niets echt afgeschreven.</p>
+<a class="terug-link" href="beheerder-kinderen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>Alle kinderen</a><div class="pagina-kop"><div><h1>Mees Bos</h1><p class="lead">Nog geen groep · 6 jaar</p></div><div class="btn-group"><a class="btn btn--secondary btn--small" href="beheerder-berichten-ouder-8.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chat"></use></svg>Bericht aan ouder</a></div></div><div class="kolommen">
+  <div class="stapel">
+    <section class="panel" aria-labelledby="gegevens-titel">
+      <h2 id="gegevens-titel">Gegevens</h2>
+      <dl class="gegevens">
+        <dt>Geboortedatum</dt><dd>6 oktober 2020</dd>
+        <dt>School</dt><dd>-</dd>
+        <dt>Bijzonderheden</dt><dd>Geen</dd>
+        <dt>Mag opgehaald worden door</dt><dd>Alleen de ouders</dd>
+        <dt>Groepsfoto's</dt><dd>Mag op groepsfoto's</dd>
+        <dt>Ouder</dt><dd><a href="beheerder-ouder-id-8.html">Lisa Bos</a><br><a href="tel:0600000000">06 00 00 00 00</a> · <a href="mailto:lisa.bos@demo.bsovck.nl">lisa.bos@demo.bsovck.nl</a></dd>
+      </dl>
+      <details class="uitklap">
+        <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Gegevens wijzigen</summary>
+        <form class="form" method="post" action="#">
+          <input type="hidden" name="csrf" value="voorbeeld">          <input type="hidden" name="actie" value="gegevens">
+          <div class="form__row">
+            <div class="field"><label for="voornaam">Voornaam</label><input id="voornaam" name="voornaam" required value="Mees"></div>
+            <div class="field"><label for="achternaam">Achternaam</label><input id="achternaam" name="achternaam" value="Bos"></div>
+          </div>
+          <div class="form__row">
+            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2020-10-06"></div>
+            <div class="field"><label for="groep">Groep</label><select id="groep" name="groep"><option value="">Nog geen groep</option><option value="1">De Bengels</option><option value="2">De Kanjers</option></select></div>
+          </div>
+          <div class="field"><label for="school">Basisschool</label><input id="school" name="school" value=""></div>
+          <div class="field"><label for="bijzonderheden">Allergieën, medicijnen of bijzonderheden</label><textarea id="bijzonderheden" name="bijzonderheden" rows="3"></textarea></div>
+          <div class="field"><label for="ophaalpersonen">Wie mag Mees ophalen, behalve de ouders?</label><input id="ophaalpersonen" name="ophaalpersonen" value="" placeholder="Bijvoorbeeld: oma Els, buurvrouw Fatima"></div>
+          <div class="field"><div class="consent"><input id="foto_toestemming" name="foto_toestemming" type="checkbox" value="1" checked><label for="foto_toestemming">Mag op groepsfoto's die ook naar andere ouders gaan <span class="field__hint">(alleen aanpassen op verzoek van wie gezag heeft)</span></label></div></div>
+          <div class="field"><div class="consent"><input id="actief" name="actief" type="checkbox" value="1" checked><label for="actief">Komt naar de BSO (uitvinken als het kind stopt; toekomstige dagen worden dan afgemeld)</label></div></div>
+          <div class="form__acties"><button class="btn" type="submit">Opslaan</button></div>
+        </form>
+      </details>
+    </section>
+    <section class="panel" id="verzorgers" aria-labelledby="verzorgers-titel">
+      <h2 id="verzorgers-titel">Verzorgers en gezag</h2>
+      <p class="muted">Wie namens Mees mag beslissen (toestemming, gegevens, privacyverzoeken): alleen verzorgers met gezag dat door ons is gecontroleerd.</p>
+      <ul class="kindlijst">
+        <li class="kindrij" style="grid-template-columns: 1fr">
+          <div>
+            <div class="kindrij__naam">Lisa Bos <span class="badge">Ouder</span> <span class="badge">Contracthouder</span>              <span class="badge badge--wachtlijst">Gezag nog controleren</span></div>
+            <div class="kindrij__info">
+              <span>Rechten: dagen kiezen en afmelden, gegevens en gedeelde observaties inzien, foto&#039;s ontvangen, berichten over het kind</span>
+            </div>
+          </div>
+          <details class="uitklap">
+            <summary>Gezag en rechten van Lisa Bos</summary>
+            <form class="form" method="post" action="#">
+              <input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="gezag"><input type="hidden" name="verzorger" value="8">
+              <fieldset><legend class="legend-label">Gezag controleren</legend>
+                <div class="choices">
+                  <label class="choice"><input type="radio" name="gezag" value="1" checked>Heeft gezag</label>
+                  <label class="choice"><input type="radio" name="gezag" value="0">Geen gezag</label>
+                </div>
+              </fieldset>
+              <div class="field"><label for="bron-8">Gecontroleerd met</label><select id="bron-8" name="bron"><option value="">Kies…</option><option value="gezagsregister">Uittreksel gezagsregister</option><option value="geboorteakte">Geboorteakte (gehuwd of geregistreerd partner bij geboorte)</option><option value="beschikking">Rechterlijke beschikking</option><option value="instelling">Verklaring voogdij-instelling</option><option value="anders">Anders (zie logboek)</option></select></div>
+              <div class="form__acties"><button class="btn btn--small" type="submit">Gezag vastleggen</button></div>
+            </form>
+            <form class="form" method="post" action="#">
+              <input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="rechten"><input type="hidden" name="verzorger" value="8">
+              <div class="field field--klein"><label for="relatie-8">Relatie</label><select id="relatie-8" name="relatie"><option value="ouder" selected>Ouder</option><option value="voogd">Voogd</option><option value="pleegouder">Pleegouder</option><option value="stiefouder">Partner van een ouder</option><option value="grootouder">Grootouder</option><option value="anders">Anders</option></select></div>
+              <fieldset><legend class="legend-label">Rechten</legend><div class="choices">
+                <label class="choice"><input type="checkbox" name="rechten[]" value="agenda" checked>Dagen kiezen en afmelden</label>
+                <label class="choice"><input type="checkbox" name="rechten[]" value="dossier" checked>Gegevens en gedeelde observaties inzien</label>
+                <label class="choice"><input type="checkbox" name="rechten[]" value="fotos" checked>Foto&#039;s ontvangen</label>
+                <label class="choice"><input type="checkbox" name="rechten[]" value="berichten" checked>Berichten over het kind</label>
+              </div></fieldset>
+              <div class="form__acties">
+                <button class="btn btn--secondary btn--small" type="submit">Rechten opslaan</button>
+              </div>
+            </form>
+          </details>
+        </li>
+      </ul>
+      <details class="uitklap">
+        <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>Verzorger toevoegen (bijvoorbeeld de andere ouder)</summary>
+        <form class="form" method="post" action="#">
+          <input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="verzorger_toevoegen">
+          <div class="form__row">
+            <div class="field"><label for="v_naam">Naam</label><input id="v_naam" name="v_naam" required></div>
+            <div class="field"><label for="v_email">E-mailadres</label><input id="v_email" name="v_email" type="email" required></div>
+          </div>
+          <div class="form__row">
+            <div class="field"><label for="v_relatie">Relatie</label><select id="v_relatie" name="v_relatie"><option value="ouder">Ouder</option><option value="voogd">Voogd</option><option value="pleegouder">Pleegouder</option><option value="stiefouder">Partner van een ouder</option><option value="grootouder">Grootouder</option><option value="anders">Anders</option></select></div>
+            <div class="field"><label for="v_bron">Gezag gecontroleerd met <span class="field__hint">(als van toepassing)</span></label><select id="v_bron" name="v_bron"><option value="">Nog niet gecontroleerd</option><option value="gezagsregister">Uittreksel gezagsregister</option><option value="geboorteakte">Geboorteakte (gehuwd of geregistreerd partner bij geboorte)</option><option value="beschikking">Rechterlijke beschikking</option><option value="instelling">Verklaring voogdij-instelling</option><option value="anders">Anders (zie logboek)</option></select></div>
+          </div>
+          <div class="field"><div class="consent"><input id="v_gezag" name="v_gezag" type="checkbox" value="1"><label for="v_gezag">Heeft het gezag over Mees</label></div></div>
+          <fieldset><legend class="legend-label">Rechten</legend><div class="choices">
+            <label class="choice"><input type="checkbox" name="rechten[]" value="agenda">Dagen kiezen en afmelden</label>
+            <label class="choice"><input type="checkbox" name="rechten[]" value="dossier" checked>Gegevens en gedeelde observaties inzien</label>
+            <label class="choice"><input type="checkbox" name="rechten[]" value="fotos" checked>Foto&#039;s ontvangen</label>
+            <label class="choice"><input type="checkbox" name="rechten[]" value="berichten" checked>Berichten over het kind</label>
+          </div></fieldset>
+          <div class="form__acties"><button class="btn btn--small" type="submit">Koppelen</button></div>
+        </form>
+      </details>
+      <p class="muted" style="margin-top: var(--space-s)"><a href="beheerder-logboek-onderwerp-kind-3a8.html">Logboek van Mees: wie heeft het dossier bekeken of gewijzigd?</a></p>
+    </section>
+
+    <section class="panel" id="kindvolg" aria-labelledby="kindvolg-titel">
+      <div class="panel__kop"><h2 id="kindvolg-titel">Kindvolgsysteem</h2></div>
+      <ul class="legenda" aria-label="Aantal observaties per ontwikkelgebied">
+        <li class="badge gebied-sociaal" style="border-left: 4px solid var(--gebied-kleur)">Sociaal-emotioneel: 0</li>
+        <li class="badge gebied-motoriek" style="border-left: 4px solid var(--gebied-kleur)">Sport en bewegen: 0</li>
+        <li class="badge gebied-taal" style="border-left: 4px solid var(--gebied-kleur)">Taal en communicatie: 0</li>
+        <li class="badge gebied-zelfstandigheid" style="border-left: 4px solid var(--gebied-kleur)">Zelfstandigheid: 0</li>
+        <li class="badge gebied-creativiteit" style="border-left: 4px solid var(--gebied-kleur)">Spel en creativiteit: 0</li>
+        <li class="badge gebied-overig" style="border-left: 4px solid var(--gebied-kleur)">Overig: 0</li>
+      </ul>
+      <details class="uitklap">
+        <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>Observatie toevoegen</summary>
+        <form class="form" method="post" action="#">
+          <input type="hidden" name="csrf" value="voorbeeld">          <input type="hidden" name="actie" value="observatie">
+          <div class="form__row">
+            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-10-06" required value="2026-10-06"></div>
+            <div class="field"><label for="obs_gebied">Ontwikkelgebied</label><select id="obs_gebied" name="gebied">
+              <option value="sociaal">Sociaal-emotioneel</option>
+              <option value="motoriek">Sport en bewegen</option>
+              <option value="taal">Taal en communicatie</option>
+              <option value="zelfstandigheid">Zelfstandigheid</option>
+              <option value="creativiteit">Spel en creativiteit</option>
+              <option value="overig">Overig</option>
+            </select></div>
+          </div>
+          <div class="field"><label for="obs_tekst">Wat zag je?</label><textarea id="obs_tekst" name="tekst" rows="4" required placeholder="Beschrijf wat je zag, zo feitelijk mogelijk. Bijvoorbeeld: Durfde vandaag voor het eerst mee te doen met trefbal en moedigde anderen aan."></textarea></div>
+          <div class="field"><div class="consent"><input id="obs_gedeeld" name="gedeeld" type="checkbox" value="1"><label for="obs_gedeeld">Delen met de ouders (ze krijgen een berichtje)</label></div></div>
+          <div class="form__acties"><button class="btn" type="submit">Opslaan</button></div>
+        </form>
+      </details>
+      <p class="leeg">Nog geen observaties. Leg hierboven vast wat je ziet: zo volg je de ontwikkeling van Mees.</p>
+    </section>
+  </div>
+
+  <div class="stapel">
+    <section class="panel" aria-labelledby="komend-titel">
+      <h2 id="komend-titel">Binnenkort</h2>
+      <p class="leeg">Geen dagen ingeschreven.</p>
+    </section>
+    <section class="panel" aria-labelledby="geweest-titel">
+      <h2 id="geweest-titel">Aanwezigheid</h2>
+      <p class="leeg">Nog geen eerdere dagen.</p>
+    </section>
+    <section class="panel" aria-labelledby="fotos-titel">
+      <div class="panel__kop"><h2 id="fotos-titel">Foto's</h2><a href="beheerder-fotos.html">Foto's delen</a></div>
+      <p class="leeg">Nog geen foto's.</p>
+    </section>
+  </div>
+</div>
+</main>
+<footer class="app-footer">
+  <p>Sporty · 06 12 34 56 78 · <a href="mailto:info@sporty.nl">info@sporty.nl</a> · <a href="../../privacy.html">Privacyverklaring</a></p>
+</footer>
+</body>
+</html>

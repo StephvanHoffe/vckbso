@@ -25,6 +25,16 @@ php -S localhost:8000
 php tools/beheer-demodata.php                      # optioneel: demogegevens om uit te proberen
 ```
 
+## Voorbeeld op Vercel
+
+De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Vercel draait alleen statische bestanden, geen PHP. Daarom staat er een doorklikbare momentopname van Mijn BSO in `voorbeeld/`, met verzonnen gegevens:
+
+- **Overzichtspagina:** https://sporty-sigma.vercel.app/voorbeeld/ ("De website en Mijn BSO om door te klikken"), met de website en de beheeromgeving als beheerder, begeleider en ouder.
+- **Links naar Mijn BSO** (Inloggen, Aanmelden) gaan op Vercel naar dezelfde pagina's in het voorbeeld. Dat regelt `vercel.json`; op gewone PHP-hosting doet dat bestand niets.
+- **Niet in Google:** het voorbeeld heeft `noindex`.
+- **Opnieuw maken** na wijzigingen in de website of de beheeromgeving: `npm run voorbeeld` (PHP 8.2+ nodig). Het script maakt een tijdelijke demo-omgeving, legt alle schermen vast en ruimt daarna alles op. `npm test` meldt het als het voorbeeld verouderd is of als een link niet klopt.
+- **Welke versie Vercel toont:** Vercel publiceert de productiebranch van deze repository (in Vercel: Settings → Git → Production Branch). Wijzigingen staan pas op sporty-sigma.vercel.app als ze in die branch staan.
+
 ## Structuur
 
 | Pad | Inhoud |
@@ -47,6 +57,9 @@ php tools/beheer-demodata.php                      # optioneel: demogegevens om 
 | `tools/structured-data.mjs` | Zet de schema.org-gegevens (JSON-LD) in de pagina's, met kruimelpad en veelgestelde vragen uit de zichtbare HTML (`npm run seo`) |
 | `tools/og-image.mjs` | Maakt de deelafbeelding `assets/img/og-image.jpg` opnieuw (`npm run og-image`, vereist Playwright) |
 | `tools/beheer-demodata.php` | Vult een lege test-omgeving van de beheeromgeving met verzonnen demogegevens |
+| `voorbeeld/` | Doorklikbare momentopname van Mijn BSO met verzonnen gegevens, voor Vercel. Gemaakt door `npm run voorbeeld`, niet met de hand aanpassen. Zie [Voorbeeld op Vercel](#voorbeeld-op-vercel). |
+| `tools/voorbeeld/` | Bouwscript (`bouw.mjs`), extra demogegevens, de overzichtspagina en de voorbeeldbalk |
+| `vercel.json` | Alleen voor Vercel: stuurt `/beheer/` door naar het voorbeeld en zet `noindex` op het voorbeeld |
 | `docs/seo.md` | Wat er voor de vindbaarheid is gedaan, wat Sporty nog zelf moet regelen (domein, adres, Google Bedrijfsprofiel) en onderhoud |
 | `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, de verplichte eisen (toegang, beveiliging, logboek, ouderrechten, bewaarbeleid), installatie, back-ups, Mollie en TODO's |
 
@@ -69,6 +82,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 **Gegevens van de klant**
 - [ ] Adres (straat, huisnummer, postcode). Dit moet op de contactpagina, in de footer, bij de routelink, in de kaart-URL en in de schema.org-gegevens.
 - [ ] Informatie over parkeren, fietsenstalling en openbaar vervoer (contactpagina).
+- [ ] Bevestigen dat het domein sporty.nl van Sporty is en dat info@sporty.nl werkt (nu staat er een andere website op sporty.nl). Zie [Live zetten](#live-zetten).
 - [ ] KvK-nummer (footer).
 - [ ] Links naar social media (footer).
 - [ ] Openingstijden controleren: zijn 09:00–17:00 de opvangtijden of de kantoortijden? Een BSO is meestal na schooltijd tot 18:00 of 18:30 uur open.
@@ -89,7 +103,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Teamportretten (Team) en de teamfoto (Over ons). Hier staan bewust geen stockfoto's: die zouden lijken op echte teamleden.
 
 **Techniek**
-- [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@vckbso.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
+- [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@sporty.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
 - [ ] Privacyverklaring laten controleren: bewaartermijnen, verwerkers (formulierendienst, hosting, Mollie) en de verwerking van gegevens van kinderen in Mijn BSO.
 - [ ] Domein kiezen bij de nieuwe naam Sporty (nu staat overal nog het eerder gewenste `bsovck.nl`). Vervang daarna `https://bsovck.nl` in de `<head>` van elke pagina, in `sitemap.xml`, `robots.txt` en `tools/structured-data.mjs`, en draai `npm run seo` en `npm test`.
 - [ ] SEO-stappen die alleen Sporty zelf kan zetten: Google Bedrijfsprofiel, Search Console, LRK-nummer, vermeldingen bij scholen en verenigingen. Zie [`docs/seo.md`](docs/seo.md#nog-te-doen-door-sporty).
@@ -98,6 +112,8 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 ## Live zetten
 
-De website zelf werkt op elke statische host, maar voor de beheeromgeving (`beheer/`) is hosting met **PHP 8.2 of hoger** en https nodig. Gewone Nederlandse webhosting met PHP is genoeg. Upload de map zonder `node_modules/`, `tools/`, `tests/`, `assets/fotos/bron/` en `package*.json`. Stel `404.html` in als foutpagina. Volg daarna de stappen in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#live-zetten).
+De website zelf werkt op elke statische host, maar voor de beheeromgeving (`beheer/`) is hosting met **PHP 8.2 of hoger** en https nodig. Gewone Nederlandse webhosting met PHP is genoeg. Upload de map zonder `node_modules/`, `tools/`, `tests/`, `voorbeeld/`, `assets/fotos/bron/`, `package*.json` en `vercel.json`. Stel `404.html` in als foutpagina. Volg daarna de stappen in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#live-zetten).
 
-**Let op bij het koppelen van het domein:** er is al e-mail in gebruik (info@vckbso.nl). Het gewenste websitedomein is bsovck.nl, terwijl de e-mail op vckbso.nl draait. Controleer dit met de klant. Zet je de website op een domein waar al e-mail op draait, wijzig dan alleen de DNS-records voor de website (A/AAAA of CNAME). Laat de MX-, SPF-, DKIM- en DMARC-records ongemoeid, anders stopt de e-mail.
+**Let op met het e-mailadres:** op de website staat info@sporty.nl. Het domein sporty.nl was op 6 oktober 2026 in gebruik voor een andere website (Sporty.nl, over sport en fitness), met e-mail bij TransIP. Controleer vóór het live zetten dat sporty.nl echt van Sporty is en dat de mailbox info@sporty.nl bestaat. Anders komen berichten van ouders bij een ander terecht, of komen ze nergens aan. Het vorige adres info@vckbso.nl werkte ook niet: het domein vckbso.nl bestond niet. Het gewenste websitedomein is nog steeds bsovck.nl (zie `docs/seo.md`).
+
+**Let op bij het koppelen van het domein:** zet je de website op een domein waar al e-mail op draait, wijzig dan alleen de DNS-records voor de website (A/AAAA of CNAME). Laat de MX-, SPF-, DKIM- en DMARC-records ongemoeid, anders stopt de e-mail.

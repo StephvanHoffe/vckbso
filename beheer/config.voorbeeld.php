@@ -42,12 +42,12 @@ return [
     // 'mail' verstuurt ze met de mailfunctie van de server.
     'mail' => [
         'methode' => 'log',
-        'van' => 'info@vckbso.nl',
+        'van' => 'info@sporty.nl',
         'van_naam' => 'Sporty',
     ],
 
     // Hier komen meldingen binnen van nieuwe aanmeldingen, berichten en privacyverzoeken.
-    'team_email' => 'info@vckbso.nl',
+    'team_email' => 'info@sporty.nl',
 
     // Back-ups (php beheer/cli/backup.php, dagelijks via cron).
     'backup' => [

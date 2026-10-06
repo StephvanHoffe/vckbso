@@ -435,6 +435,9 @@ function migreer(PDO $pdo): void
 
         // Nieuwe naam: BSO VCK heet voortaan Sporty (alleen als de naam nog niet zelf was aangepast)
         5 => "UPDATE instellingen SET waarde = 'Sporty' WHERE sleutel = 'bedrijfsnaam' AND waarde = 'BSO VCK';",
+
+        // Nieuw e-mailadres: info@vckbso.nl wordt info@sporty.nl (alleen als het adres nog niet zelf was aangepast)
+        6 => "UPDATE instellingen SET waarde = 'info@sporty.nl' WHERE sleutel = 'email' AND waarde = 'info@vckbso.nl';",
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();
