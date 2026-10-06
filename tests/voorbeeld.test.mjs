@@ -50,6 +50,8 @@ test("vercel.json stuurt de beheeromgeving door naar bestaande pagina's van het 
     assert.ok(existsSync(naarBestand(destination)), `${source} → ${destination}: bestemming bestaat niet`);
   }
   assert.equal(vercel.redirects.at(-1).source, "/beheer/:pad*", "de laatste redirect moet alle overige beheerpagina's opvangen");
+  // Vercel matcht strikt: /beheer/:pad* vangt /beheer/ (met slash) niet op, anders toont Vercel de PHP-code van beheer/index.php
+  assert.ok(vercel.redirects.some((r) => r.source === "/beheer/"), "/beheer/ (met slash aan het eind) heeft een eigen redirect nodig");
   const kop = vercel.headers.find((h) => h.source === "/voorbeeld/(.*)");
   assert.ok(kop?.headers.some((h) => h.key === "X-Robots-Tag" && h.value.includes("noindex")), "X-Robots-Tag noindex voor /voorbeeld/ ontbreekt");
 });
