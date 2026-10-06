@@ -7,6 +7,7 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | Wens van de klant | Waar | Hoe het werkt |
 |---|---|---|
 | Aanmelden op de website en als klant in het systeem komen, met de kinderen eronder | `aanmelden.php` (knop op `aanmelden.html`) | Ouder maakt een account aan met eigen gegevens, een of meer kinderen, gewenste dagen en een wachtwoord. Het team krijgt een e-mail en ziet de aanmelding op het dashboard. |
+| Dagen die vol zitten, niet aan te vinken bij het aanmelden | `groepen.php` (blok "Dagen die vol zitten"), `aanmelden.php` | Het team vinkt bij Groepen aan welke weekdagen vol zitten. In het aanmeldformulier staan die dagen dan grijs met "(vol)" en zijn ze niet aan te vinken; ouders lezen dat ze in de opmerkingen om de wachtlijst kunnen vragen. Raakt een dag vol terwijl een ouder het formulier invult, dan weigert de server die dag met een duidelijke melding. Bestaande klanten merken er niets van: in de agenda geldt gewoon de maximale groepsgrootte. Elke wijziging staat in het logboek. |
 | Automatische incasso bij de aanmelding | `machtiging.php` | Direct na het aanmelden geeft de ouder een SEPA-machtiging via Mollie: een eerste betaling van € 0,01 via de eigen bank. Daarna kan elke factuur automatisch worden afgeschreven. |
 | Facturen online terugvinden | `facturen.php`, `factuur.php` | Beheerder maakt per maand de facturen (op basis van de ingeschreven dagen) en start de incasso. Ouders zien, printen en (bij een mislukte incasso) betalen hun facturen online. |
 | Kindvolgsysteem | `kind.php` | Per kind een dossier: gegevens, allergieën, ophaalpersonen, aanwezigheid (binnen en opgehaald), foto's en observaties per ontwikkelgebied. Een observatie kan alleen voor het team zijn, of gedeeld worden met de ouders. |
@@ -46,7 +47,7 @@ Onder **Team** zet je per collega elk menuonderdeel aan of uit. Een onderdeel da
 | Ouders | Contactgegevens van ouders en verzorgers |
 | Berichten | Berichten en ziekmeldingen van ouders |
 | Foto's | Foto's delen met ouders |
-| Groepen | Groepen en maximale groepsgrootte |
+| Groepen | Groepen, maximale groepsgrootte en dagen die vol zitten voor nieuwe aanmeldingen |
 | Facturen | Facturen maken en incasso starten |
 | Financiën | Inkomsten, uitgaven en bonnetjes |
 | Team | Collega's uitnodigen en rechten geven |

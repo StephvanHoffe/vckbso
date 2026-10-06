@@ -53,7 +53,7 @@
 </header>
 <main id="inhoud" class="app-main">
   <p class="demo-balk"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>Demo-modus: Mollie is nog niet gekoppeld, er wordt niets echt afgeschreven.</p>
-<div class="pagina-kop"><div><h1>Groepen</h1><p class="lead">Stel per groep de maximale groepsgrootte, de dagen en de tijden in. Een dag sluiten of tijdelijk meer of minder plekken? Dat doe je in de agenda bij die dag.</p></div></div><div class="kolommen">
+<div class="pagina-kop"><div><h1>Groepen</h1><p class="lead">Stel per groep de maximale groepsgrootte, de dagen en de tijden in. Een dag sluiten of tijdelijk meer of minder plekken? Dat doe je in de agenda bij die dag. Zit een weekdag vol voor nieuwe ouders? Zet dat bij Dagen die vol zitten.</p></div></div><div class="kolommen">
   <section class="panel" aria-labelledby="lijst-titel">
     <h2 id="lijst-titel">Alle groepen</h2>
     <div class="tabel">
@@ -135,6 +135,28 @@
     </form>
   </section>
 </div>
+
+<section class="panel" id="vol" aria-labelledby="vol-titel">
+  <h2 id="vol-titel">Dagen die vol zitten</h2>
+  <p>Zit een dag vol? Vink hem hier aan. Nieuwe ouders kunnen die dag dan niet aanvinken in het aanmeldformulier. Ze zien dat de dag vol zit en kunnen in hun opmerkingen vragen om de wachtlijst.</p>
+  <p class="muted">Kinderen die al bij ons zijn, merken hier niets van: hun ouders kiezen de dagen gewoon in de agenda, tot de maximale groepsgrootte.</p>
+  <form class="form" method="post" action="#">
+    <input type="hidden" name="csrf" value="voorbeeld">    <input type="hidden" name="actie" value="volle_dagen">
+    <fieldset>
+      <legend class="legend-label">Vol voor nieuwe aanmeldingen</legend>
+      <div class="choices">
+        <label class="choice"><input type="checkbox" name="vol[]" value="1">Maandag</label>
+        <label class="choice"><input type="checkbox" name="vol[]" value="2" checked>Dinsdag</label>
+        <label class="choice"><input type="checkbox" name="vol[]" value="3">Woensdag</label>
+        <label class="choice"><input type="checkbox" name="vol[]" value="4">Donderdag</label>
+        <label class="choice"><input type="checkbox" name="vol[]" value="5">Vrijdag</label>
+      </div>
+    </fieldset>
+    <div class="form__acties">
+      <button class="btn" type="submit">Opslaan</button>
+    </div>
+  </form>
+</section>
 </main>
 <footer class="app-footer">
   <p>Sporty · 06 12 34 56 78 · <a href="mailto:info@sporty.nl">info@sporty.nl</a> · <a href="../../privacy.html">Privacyverklaring</a></p>

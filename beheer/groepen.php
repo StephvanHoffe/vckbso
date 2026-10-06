@@ -1,5 +1,5 @@
 <?php
-/* Groepen beheren: naam, maximale groepsgrootte, dagen en tijden (beheerder). */
+/* Groepen beheren: naam, maximale groepsgrootte, dagen en tijden, en welke dagen vol zitten voor nieuwe aanmeldingen. */
 require __DIR__ . '/inc/bootstrap.php';
 
 vereis_recht('groepen');
@@ -12,6 +12,18 @@ if (get_int('id') && !$bewerk) {
 }
 $waarden = $bewerk ?? ['naam' => '', 'omschrijving' => '', 'max_kinderen' => '', 'dagen' => '1,2,3,4,5', 'begintijd' => '14:00', 'eindtijd' => '17:00', 'kleur' => 'sun', 'actief' => 1];
 $fouten = [];
+
+// Dagen die vol zitten: nieuwe ouders kunnen ze niet aanvinken in het aanmeldformulier
+if (is_post() && invoer('actie') === 'volle_dagen') {
+    csrf_controleer();
+    $vol = array_values(array_intersect([1, 2, 3, 4, 5], array_map('intval', (array) ($_POST['vol'] ?? []))));
+    instelling_zet('volle_dagen', implode(',', $vol));
+    log_actie('Volle dagen gewijzigd', $vol ? dagen_opsomming($vol) : 'geen');
+    flash('succes', $vol
+        ? 'Opgeslagen. Nieuwe ouders kunnen ' . dagen_opsomming($vol) . ' niet meer aanvinken bij het aanmelden.'
+        : 'Opgeslagen. Er zitten geen dagen vol: nieuwe ouders kunnen weer alle dagen aanvinken.');
+    redirect('groepen.php#vol');
+}
 
 if (is_post()) {
     csrf_controleer();
@@ -60,9 +72,10 @@ if (is_post()) {
 
 $groepen = rijen("SELECT g.*, (SELECT COUNT(*) FROM kinderen k WHERE k.groep_id = g.id AND k.actief = 1) AS aantal FROM groepen g ORDER BY g.actief DESC, g.naam");
 $gekozenDagen = array_map('intval', array_filter(explode(',', (string) $waarden['dagen'])));
+$volleDagen = volle_dagen();
 
 pagina_begin('Groepen', 'groepen.php');
-pagina_kop('Groepen', 'Stel per groep de maximale groepsgrootte, de dagen en de tijden in. Een dag sluiten of tijdelijk meer of minder plekken? Dat doe je in de agenda bij die dag.');
+pagina_kop('Groepen', 'Stel per groep de maximale groepsgrootte, de dagen en de tijden in. Een dag sluiten of tijdelijk meer of minder plekken? Dat doe je in de agenda bij die dag. Zit een weekdag vol voor nieuwe ouders? Zet dat bij Dagen die vol zitten.');
 ?>
 <div class="kolommen">
   <section class="panel" aria-labelledby="lijst-titel">
@@ -147,5 +160,26 @@ pagina_kop('Groepen', 'Stel per groep de maximale groepsgrootte, de dagen en de 
     </form>
   </section>
 </div>
+
+<section class="panel" id="vol" aria-labelledby="vol-titel">
+  <h2 id="vol-titel">Dagen die vol zitten</h2>
+  <p>Zit een dag vol? Vink hem hier aan. Nieuwe ouders kunnen die dag dan niet aanvinken in het aanmeldformulier. Ze zien dat de dag vol zit en kunnen in hun opmerkingen vragen om de wachtlijst.</p>
+  <p class="muted">Kinderen die al bij ons zijn, merken hier niets van: hun ouders kiezen de dagen gewoon in de agenda, tot de maximale groepsgrootte.</p>
+  <form class="form" method="post" action="groepen.php">
+    <?= csrf_veld() ?>
+    <input type="hidden" name="actie" value="volle_dagen">
+    <fieldset>
+      <legend class="legend-label">Vol voor nieuwe aanmeldingen</legend>
+      <div class="choices">
+<?php foreach ([1, 2, 3, 4, 5] as $dag): ?>
+        <label class="choice"><input type="checkbox" name="vol[]" value="<?= $dag ?>"<?= in_array($dag, $volleDagen, true) ? ' checked' : '' ?>><?= e(ucfirst(WEEKDAGEN[$dag])) ?></label>
+<?php endforeach; ?>
+      </div>
+    </fieldset>
+    <div class="form__acties">
+      <button class="btn" type="submit">Opslaan</button>
+    </div>
+  </form>
+</section>
 <?php
 pagina_einde();

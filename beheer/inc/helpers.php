@@ -159,6 +159,23 @@ function weekdag(string $iso): int
     return (int) date('N', strtotime($iso));
 }
 
+/**
+ * Weekdagen (1 = maandag) die vol zitten voor nieuwe aanmeldingen. Het team stelt ze in bij Groepen;
+ * in het aanmeldformulier zijn ze dan niet aan te vinken. Op de agenda van bestaande klanten heeft dit geen invloed.
+ */
+function volle_dagen(): array
+{
+    return array_values(array_intersect([1, 2, 3, 4, 5], array_map('intval', explode(',', instelling('volle_dagen')))));
+}
+
+/** Weekdagen als leesbare opsomming, bijvoorbeeld "dinsdag en donderdag". */
+function dagen_opsomming(array $dagen): string
+{
+    $namen = array_map(fn (int $d) => WEEKDAGEN[$d], $dagen);
+    $laatste = array_pop($namen);
+    return $namen ? implode(', ', $namen) . ' en ' . $laatste : (string) $laatste;
+}
+
 /** € 1.234,56 */
 function geld(int $cent): string
 {

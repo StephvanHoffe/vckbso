@@ -49,6 +49,9 @@ nieuw_bericht($aylin, $begeleider, (int) $kinderen[2]['id'], 'bericht', 'Betersc
 q("INSERT INTO gebruikers (rol, status, naam, email, telefoon, wachtwoord_hash, aangemaakt_op) VALUES ('ouder', 'actief', 'Oma Joke', 'oma.joke@demo.bsovck.nl', '', ?, ?)", [password_hash('demo-wachtwoord', PASSWORD_DEFAULT), nu()]);
 koppel_verzorger((int) $noor['id'], laatste_id(), 'grootouder', false, ['fotos', 'berichten']);
 
+// Dinsdag zit vol voor nieuwe aanmeldingen (te zien in het aanmeldformulier en bij Groepen)
+instelling_zet('volle_dagen', '2');
+
 // Privacyverzoek van een ouder
 q('INSERT INTO avg_verzoeken (gebruiker_id, kind_id, over_naam, soort, toelichting, deadline, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?)', [$sam, $noor['id'], kindnaam($noor), 'inzage', versleutel('Ik wil graag weten welke gegevens jullie over Noor bewaren.'), date('Y-m-d', strtotime('+1 month')), nu()]);
 

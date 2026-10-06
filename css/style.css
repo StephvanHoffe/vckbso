@@ -2166,6 +2166,16 @@ a:hover {
   background: var(--color-sun-soft);
 }
 
+/* Een keuze die niet beschikbaar is, zoals een dag die vol zit */
+.choice--vol,
+.choice--vol:hover {
+  border-style: dashed;
+  border-color: var(--color-text-muted);
+  background: var(--color-surface-alt);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
 .field input[type="checkbox"],
 .choice input {
   flex-shrink: 0;

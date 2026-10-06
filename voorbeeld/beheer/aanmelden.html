@@ -207,11 +207,12 @@
           <legend class="legend-label">Op welke dagen denk je opvang nodig te hebben? <span class="field__hint">(optioneel)</span></legend>
           <div class="choices">
             <label class="choice"><input type="checkbox" name="dagen[]" value="1">Maandag</label>
-            <label class="choice"><input type="checkbox" name="dagen[]" value="2">Dinsdag</label>
+            <label class="choice choice--vol"><input type="checkbox" name="dagen[]" value="2" disabled aria-describedby="dagen-vol">Dinsdag <span class="choice__extra">(vol)</span></label>
             <label class="choice"><input type="checkbox" name="dagen[]" value="3">Woensdag</label>
             <label class="choice"><input type="checkbox" name="dagen[]" value="4">Donderdag</label>
             <label class="choice"><input type="checkbox" name="dagen[]" value="5">Vrijdag</label>
           </div>
+                    <p class="muted" id="dagen-vol" style="margin: 0;">Op dinsdag zitten we op dit moment vol. Wil je toch graag die dag? Zet het bij de opmerkingen, dan zetten we je kind op de wachtlijst.</p>
           <p class="muted" style="margin: 0;">Na de kennismaking kies je de dagen zelf in de agenda.</p>
         </fieldset>
         <div class="form__row">

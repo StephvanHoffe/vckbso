@@ -18,6 +18,7 @@ $waarden = [
 ];
 $kinderen = [['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => '', 'relatie' => 'ouder', 'gezag' => '1']];
 $fouten = [];
+$volleDagen = volle_dagen();
 
 if (is_post()) {
     csrf_controleer();
@@ -71,6 +72,11 @@ if (is_post()) {
     }
     if ($waarden['plaats'] === '') {
         $fouten['plaats'] = 'Vul je woonplaats in.';
+    }
+    // Een dag kan vol zijn geraakt terwijl het formulier openstond
+    if ($gekozenVol = array_values(array_intersect($waarden['dagen'], $volleDagen))) {
+        $fouten['dagen'] = 'Op ' . dagen_opsomming($gekozenVol) . ' zitten we op dit moment vol. Kies een andere dag, of vraag in de opmerkingen om de wachtlijst.';
+        $waarden['dagen'] = array_values(array_diff($waarden['dagen'], $volleDagen));
     }
     if ($waarden['startdatum'] !== '' && (!geldige_datum($waarden['startdatum']) || $waarden['startdatum'] < vandaag())) {
         $fouten['startdatum'] = 'Kies een startdatum vanaf vandaag.';
@@ -265,9 +271,17 @@ pagina_begin('Kind aanmelden', '', ['publiek' => true]);
           <legend class="legend-label">Op welke dagen denk je opvang nodig te hebben? <span class="field__hint">(optioneel)</span></legend>
           <div class="choices">
 <?php foreach ([1, 2, 3, 4, 5] as $dag): ?>
-            <label class="choice"><input type="checkbox" name="dagen[]" value="<?= $dag ?>"<?= in_array($dag, $waarden['dagen'], true) ? ' checked' : '' ?>><?= e(ucfirst(WEEKDAGEN[$dag])) ?></label>
+<?php if (in_array($dag, $volleDagen, true)): ?>
+            <label class="choice choice--vol"><input type="checkbox" name="dagen[]" value="<?= $dag ?>" disabled aria-describedby="dagen-vol"><?= e(ucfirst(WEEKDAGEN[$dag])) ?> <span class="choice__extra">(vol)</span></label>
+<?php else: ?>
+            <label class="choice"><input type="checkbox" name="dagen[]" value="<?= $dag ?>"<?= in_array($dag, $waarden['dagen'], true) ? ' checked' : '' ?><?= aria_fout($fouten, 'dagen') ?>><?= e(ucfirst(WEEKDAGEN[$dag])) ?></label>
+<?php endif; ?>
 <?php endforeach; ?>
           </div>
+          <?= veldfout($fouten, 'dagen') ?>
+<?php if ($volleDagen): ?>
+          <p class="muted" id="dagen-vol" style="margin: 0;">Op <?= e(dagen_opsomming($volleDagen)) ?> zitten we op dit moment vol. Wil je toch graag die dag? Zet het bij de opmerkingen, dan zetten we je kind op de wachtlijst.</p>
+<?php endif; ?>
           <p class="muted" style="margin: 0;">Na de kennismaking kies je de dagen zelf in de agenda.</p>
         </fieldset>
         <div class="form__row">
