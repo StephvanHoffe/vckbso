@@ -89,7 +89,7 @@
       var label = document.createElement("span");
       label.className = "today-label";
       label.textContent = row.closest("[lang='en']") ? "today" : "vandaag";
-      cell.appendChild(label);
+      cell.append(" ", label); // spatie: op smalle schermen mag het label onder de dagnaam vallen
     }
   });
 

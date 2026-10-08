@@ -55,35 +55,43 @@ Stijlschuiven (0 = helemaal links, 100 = helemaal rechts):
 - Ingetogen ↔ Uitgesproken: **28** (vrij ingetogen)
 - Toegankelijk ↔ Exclusief: **7** (heel toegankelijk)
 
+### Huisstijl: het moodboard (8 oktober 2026)
+
+De klant heeft een moodboard aangeleverd: `design/moodboard-sporty.jpg`. Dat is de huisstijl van de website. De kleuren, letters en het logo hieronder zijn daarop aangepast (gewijzigd op 8 oktober 2026; eerder: terracotta, koraal en Manrope met een eenvoudig woordmerk).
+
+Kenmerken van het moodboard: Sporty-oranje met wit en crème, grote zonnige foto's van spelende kinderen, een website met een beeldvullende foto in de hero met een donkere overloop en witte tekst (de laatste regel oranje), het motto "Sport · Plezier · Ontwikkeling" met iconen in witte rondjes, de slogan "Samen sporten, samen groeien" in handgeschreven hoofdletters en een lachje onder het woordmerk.
+
 ### Kleuren
 
-Kleurstemming "Warm & uitnodigend" (terracotta, oker, zand) + "Speels & kleurrijk" (fel, vrolijk, veel kleur): een richting, geen vaste huisstijl. Thema: **licht** (lichte achtergrond, donkere tekst).
+Thema: **licht** (lichte achtergrond, donkere tekst), met oranje vlakken en een donkere hero en footer.
 
 | Rol (CSS-variabele) | Kleur | Tekstkleur erop |
 |---|---|---|
-| `--color-primary` — Hoofdkleur: knoppen en accenten | `#c8553d` | `#ffffff` |
-| `--color-secondary` — Tweede kleur | `#ff6b6b` | `#111111` |
-| `--color-accent` — Accent: details en highlights | `#e8a33d` | `#111111` |
+| `--color-primary` — Sporty-oranje: logo, vlakken, iconen, grote tekst | `#f05a1a` | `#ffffff` (alleen grote tekst, 3,4:1) |
+| `--color-primary-strong` — Knoppen en kleine oranje tekst | `#c9450d` | `#ffffff` (4,8:1) |
+| `--color-secondary` — Crème (canvas tas, kaart) | `#f6ead8` | `#221a15` |
+| `--color-accent` — Licht oranje, alleen details zonder tekst | `#ff9a57` | `#221a15` |
 | `--color-surface` — Achtergrond | `#ffffff` |  |
-| `--color-surface-alt` — Achtergrond van afwisselende secties | `#fcf5f3` |  |
-| `--color-text` — Tekst | `#1b1d23` |  |
-| `--color-text-muted` — Tekst, minder nadruk | `#6b6c70` |  |
-| `--color-link` — Tekstlinks (goed leesbaar op de achtergrond) | `#b44d37` |  |
-| `--color-border` — Lijnen en randen | `#dfdfe0` |  |
+| `--color-surface-alt` — Achtergrond van afwisselende secties (licht crème) | `#fbf4ea` |  |
+| `--color-text` — Tekst (warm donkerbruin) | `#221a15` |  |
+| `--color-text-muted` — Tekst, minder nadruk | `#6b625a` |  |
+| `--color-link` — Tekstlinks | `#b63f0c` |  |
+| `--color-border` — Lijnen en randen | `#e8ddd0` |  |
+| `--color-dark` — Hero-overloop en footer | `#221a15` | `#f6ead8` |
 
-Alle kleuren van de klant: `#C8553D`, `#E8A33D`, `#F2D6A2`, `#FF6B6B`, `#FFD166`, `#06D6A0`.
-Controleer het contrast van tekst op elke achtergrond (minimaal 4,5:1).
+Controleer het contrast van tekst op elke achtergrond (minimaal 4,5:1; voor tekst vanaf 24px, of 18,66px vet, minimaal 3:1).
 
 ### Letters
 
-De klant liet de letterkeuze vrij; dit is een voorstel dat past bij de andere keuzes. Gebruik:
-- Koppen: **Manrope** (800)
-- Lopende tekst: **Manrope** (400, en 600 voor nadruk), basisgrootte 17–18px
-Alle letters zijn gratis (Google Fonts). Host ze lokaal met `font-display: swap`.
+Gekozen op basis van het moodboard. Alle letters zijn gratis (Google Fonts), lokaal gehost met `font-display: swap`:
+- Koppen: **Poppins** (700)
+- Lopende tekst: **Poppins** (400, en 600 voor nadruk), basisgrootte 17–18px
+- Slogans en labels boven koppen: **Caveat Brush**, in hoofdletters, minimaal 24px
+- Woordmerk: **Pacifico**, alleen als vorm in het logo (geen lettertypebestand op de site)
 
 ### Logo en huisstijl
 
-De klant heeft nog geen logo. Maak een eenvoudig woordmerk: de bedrijfsnaam in de koptekstletter, eventueel met een klein symbool in de hoofdkleur.
+Het logo uit het moodboard: een rond embleem met drie kinderen van achteren (krullen, paardenstaart, pet) die de armen om elkaar slaan, "BSO" op het middelste shirt, het woordmerk "Sporty" in script en een lachje eronder. In de header staat alleen het woordmerk. De logobestanden staan in `assets/img/` en worden gemaakt met `npm run logo` (`tools/logo/maak-logo.mjs`). Het is een nagetekende versie; vervang die door de originele logobestanden zodra de klant die aanlevert (TODO).
 
 ### Voorbeeldsites die de klant mooi vindt
 

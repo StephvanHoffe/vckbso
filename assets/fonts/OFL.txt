@@ -1,4 +1,11 @@
-Copyright 2019 The Manrope Project Authors (https://github.com/sharanda/manrope)
+Lettertypes van deze website. Alle drie gelicenseerd onder de SIL Open Font License 1.1 (tekst hieronder).
+
+- Poppins (koppen en tekst): poppins-*.woff2
+  Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins)
+- Caveat Brush (slogans, alleen hoofdletters): caveat-brush-hoofdletters.woff2
+  Copyright 2015 Google Inc. All Rights Reserved.
+- Pacifico (alleen als vorm in het woordmerk in assets/img/, niet als lettertypebestand)
+  Copyright 2018 The Pacifico Project Authors (https://github.com/googlefonts/Pacifico)
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

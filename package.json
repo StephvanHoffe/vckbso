@@ -8,11 +8,12 @@
     "seo": "node tools/structured-data.mjs",
     "fotos": "node tools/fotos.mjs",
     "og-image": "node tools/og-image.mjs",
+    "logo": "node tools/logo/maak-logo.mjs",
     "voorbeeld": "node tools/voorbeeld/bouw.mjs",
     "serve": "npx --yes serve . -l 8080"
   },
   "devDependencies": {
-    "@fontsource-variable/manrope": "^5.2.5",
+    "opentype.js": "^2.0.0",
     "sharp": "^0.34.0"
   }
 }

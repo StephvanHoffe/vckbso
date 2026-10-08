@@ -22,12 +22,13 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Sporty: after-school care in Amsterdam">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#c8553d">
+<meta name="theme-color" content="#f05a1a">
 <link rel="icon" href="../favicon.ico" sizes="32x32">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
 <link rel="manifest" href="../site.webmanifest">
-<link rel="preload" href="../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/poppins-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/poppins-latin-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../design/tokens.css">
 <link rel="stylesheet" href="../css/style.css">
 <script>document.documentElement.classList.add("js","reveal-on");setTimeout(function(){if(!window.vckReady)document.documentElement.classList.remove("reveal-on")},3000);</script>
@@ -39,7 +40,7 @@
 <a class="skip-link" href="#inhoud">Skip to content</a>
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="logo" href="../en/index.html" aria-label="Sporty, go to the homepage"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">Sport<span class="logo__accent">y</span></span></a>
+    <a class="logo" href="../en/index.html" aria-label="Sporty, go to the homepage"><img class="logo__woordmerk" src="../assets/img/sporty-woordmerk.svg" alt="" width="102" height="46"></a>
     <nav class="site-nav" id="site-nav" aria-label="Main menu">
       <ul class="site-nav__list">
         <li><a href="#why">Why Sporty</a></li>
@@ -58,34 +59,38 @@
 <main id="inhoud">
 <!-- TODO: volledige Engelse teksten na akkoord van de klant op de Nederlandse teksten -->
 <section class="hero">
-  <div class="hero__grid">
+  <div class="hero__media">
+    
+    <picture>
+  <source type="image/avif" srcset="../assets/fotos/hero-480.avif 480w, ../assets/fotos/hero-800.avif 800w, ../assets/fotos/hero-1200.avif 1200w, ../assets/fotos/hero-1600.avif 1600w" sizes="100vw">
+  <img src="../assets/fotos/hero-800.webp" srcset="../assets/fotos/hero-480.webp 480w, ../assets/fotos/hero-800.webp 800w, ../assets/fotos/hero-1200.webp 1200w, ../assets/fotos/hero-1600.webp 1600w" sizes="100vw" width="1600" height="1068" alt="Children playing football together on a sunny field in the park" fetchpriority="high" decoding="async">
+</picture>
+  </div>
+  <div class="container hero__inner">
     <div class="hero__content">
       <p class="eyebrow">After-school care in Amsterdam</p>
-      <h1 class="hero__title">The most <span class="hl hl--coral">fun</span>, <span class="hl hl--sun">cosy</span> and <span class="hl hl--mint">sporty</span> BSO <span class="hero__title-sub">with genuine attention for every child</span></h1>
+      <h1 class="hero__title">The most fun, cosy and sporty BSO <span class="hero__title-sub">with genuine attention for every child</span></h1>
       <p class="lead">Hi, great to see you here! After school, children at Sporty run, play and catch up with friends. You get your hands free, we make sure your child has an afternoon full of fun.</p>
       <div class="btn-group">
         <a class="btn" href="../aanmelden.html" hreflang="nl"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-userplus"></use></svg>Sign up</a>
-        <a class="btn btn--secondary" href="../index.html" lang="nl" hreflang="nl">Nederlandse website<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+        <a class="btn btn--op-donker" href="../index.html" lang="nl" hreflang="nl">Nederlandse website<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
       </div>
       <ul class="hero__facts">
         <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>Open Monday to Friday</li>
         <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg>In Amsterdam</li>
       </ul>
     </div>
-    <div class="hero__media">
-      <div class="hero__img">
-        <picture>
-  <source type="image/avif" srcset="../assets/fotos/hero-480.avif 480w, ../assets/fotos/hero-800.avif 800w, ../assets/fotos/hero-1200.avif 1200w, ../assets/fotos/hero-1600.avif 1600w" sizes="(min-width: 64em) 55vw, 100vw">
-  <img src="../assets/fotos/hero-800.webp" srcset="../assets/fotos/hero-480.webp 480w, ../assets/fotos/hero-800.webp 800w, ../assets/fotos/hero-1200.webp 1200w, ../assets/fotos/hero-1600.webp 1600w" sizes="(min-width: 64em) 55vw, 100vw" width="1600" height="1068" alt="Children playing football together on a sunny field in the park" fetchpriority="high" decoding="async">
-</picture>
-      </div>
-      <p class="sticker sticker--1"><span class="sticker__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-ball"></use></svg></span>Lots of sports and exercise</p>
-      <p class="sticker sticker--2"><span class="sticker__icon"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg></span>Attention for every child</p>
-    </div>
   </div>
 </section>
+<section class="slogan-band" aria-label="What Sporty stands for">
+  <ul class="container slogan-band__lijst">
+    <li><span class="slogan-band__icoon" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-ball"></use></svg></span>Sport</li>
+    <li><span class="slogan-band__icoon" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-smile"></use></svg></span>Fun</li>
+    <li><span class="slogan-band__icoon" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-users"></use></svg></span>Growth</li>
+  </ul>
+</section>
 
-<section class="section section--alt scallop-top" id="why" aria-labelledby="why-title">
+<section class="section section--alt" id="why" aria-labelledby="why-title">
   <div class="container">
     <div class="section-head reveal">
       <p class="eyebrow">Why Sporty?</p>
@@ -93,9 +98,9 @@
       <p class="lead">Our full English website is on its way. Here's the short version.</p>
     </div>
     <div class="grid grid--3 grid--stagger">
-      <article class="card usp-card reveal" style="--badge-bg: var(--color-secondary);"><div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg></div><h3>Genuine attention for every child</h3><p>Every child is different, and we love that. We take the time to listen and really look at what your child needs.</p></article>
-      <article class="card usp-card reveal" style="--badge-bg: var(--color-mint); --delay: 120ms;"><div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-ball"></use></svg></div><h3>Lots of sports and exercise</h3><p>Running, jumping, ball games and playing outside. We encourage children to move, at their own level and above all with lots of fun.</p></article>
-      <article class="card usp-card reveal" style="--badge-bg: var(--color-sun); --delay: 240ms;"><div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></div><h3>Cosy, like a second home</h3><p>Familiar faces, friends and a warm atmosphere make Sporty a place your child loves to go to.</p></article>
+      <article class="card usp-card reveal"><div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg></div><h3>Genuine attention for every child</h3><p>Every child is different, and we love that. We take the time to listen and really look at what your child needs.</p></article>
+      <article class="card usp-card reveal" style="--delay: 120ms;"><div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-ball"></use></svg></div><h3>Lots of sports and exercise</h3><p>Running, jumping, ball games and playing outside. We encourage children to move, at their own level and above all with lots of fun.</p></article>
+      <article class="card usp-card reveal" style="--delay: 240ms;"><div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></div><h3>Cosy, like a second home</h3><p>Familiar faces, friends and a warm atmosphere make Sporty a place your child loves to go to.</p></article>
     </div>
   </div>
 </section>
@@ -118,7 +123,7 @@
       </div>
     </div>
     <div class="split__media">
-      <div class="frame frame--tilt reveal" style="--frame-accent: var(--color-sun);">
+      <div class="frame frame--tilt reveal">
         <div class="frame__img">
           <picture>
   <source type="image/avif" srcset="../assets/fotos/amsterdam-480.avif 480w, ../assets/fotos/amsterdam-800.avif 800w, ../assets/fotos/amsterdam-1200.avif 1200w, ../assets/fotos/amsterdam-1600.avif 1600w" sizes="(min-width: 64em) 45vw, 100vw">
@@ -130,10 +135,10 @@
   </div>
 </section>
 </main>
-<footer class="site-footer scallop-top on-dark">
+<footer class="site-footer on-dark">
   <div class="container site-footer__grid">
     <div>
-      <a class="logo" href="../en/index.html" aria-label="Sporty, go to the homepage"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">Sport<span class="logo__accent">y</span></span></a>
+      <a class="logo logo--embleem" href="../en/index.html" aria-label="Sporty, go to the homepage"><img src="../assets/img/sporty-logo.svg" alt="" width="132" height="129" loading="lazy"></a>
       <p>After-school care in Amsterdam with genuine attention for every child.</p>
     </div>
     <div>

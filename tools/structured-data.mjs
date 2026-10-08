@@ -31,7 +31,7 @@ export const BSO = {
   description: "Sportieve buitenschoolse opvang (BSO) in Amsterdam met oprechte aandacht voor ieder kind en volop sport en beweging.",
   url: `${SITE}/`,
   image: `${SITE}/assets/img/og-image.jpg`,
-  logo: `${SITE}/assets/img/icon-512.png`,
+  logo: `${SITE}/assets/img/sporty-logo-512.png`,
   telephone: "+31612345678",
   email: "info@sporty.nl",
   address: { "@type": "PostalAddress", addressLocality: "Amsterdam", addressCountry: "NL" },

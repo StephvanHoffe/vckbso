@@ -52,21 +52,13 @@ body.beheer {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  margin-right: 0;
   color: var(--color-text);
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  font-weight: var(--font-weight-heading);
-  letter-spacing: -0.02em;
   text-decoration: none;
 }
 
-.app-header .logo__mark {
-  width: 2.1rem;
-  height: 2.1rem;
-}
-
-.app-header .logo__accent {
-  color: var(--color-primary-strong);
+.app-header .logo__woordmerk {
+  height: 2.3rem;
 }
 
 .app-header__omgeving {
@@ -835,7 +827,7 @@ a.bezetting:hover {
 
 .kleur--sun { --groep-kleur: var(--color-sun); }
 .kleur--mint { --groep-kleur: var(--color-mint); }
-.kleur--coral { --groep-kleur: var(--color-secondary); }
+.kleur--coral { --groep-kleur: var(--color-coral); }
 .kleur--sand { --groep-kleur: var(--color-sand); }
 .kleur--primary { --groep-kleur: var(--color-primary); }
 
@@ -1076,7 +1068,7 @@ a.bezetting:hover {
   font-size: var(--step--1);
 }
 
-.gebied-sociaal { --gebied-kleur: var(--color-secondary); }
+.gebied-sociaal { --gebied-kleur: var(--color-coral); }
 .gebied-motoriek { --gebied-kleur: var(--color-mint); }
 .gebied-taal { --gebied-kleur: var(--color-accent); }
 .gebied-zelfstandigheid { --gebied-kleur: var(--color-primary); }
@@ -1485,7 +1477,7 @@ code {
 .grafiek,
 .legenda {
   --reeks-in: #0e8a6a;
-  --reeks-uit: #c8553d;
+  --reeks-uit: #c9450d; /* uitgaven in het donkere merkoranje; paar met groen gecontroleerd op kleurenblindheid */
 }
 
 .legenda {
@@ -1666,7 +1658,7 @@ code {
 }
 
 .verdeling__vulling--uit {
-  background: #c8553d;
+  background: #c9450d;
 }
 
 .boeking__kop {

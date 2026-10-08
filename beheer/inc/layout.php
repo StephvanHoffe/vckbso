@@ -46,10 +46,11 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($titel) ?> · <?= e($omgeving) ?> · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#c8553d">
+<meta name="theme-color" content="#f05a1a">
 <link rel="icon" href="../favicon.ico" sizes="32x32">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/poppins-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/poppins-latin-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../design/tokens.css">
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="assets/beheer.css">
@@ -63,7 +64,7 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 <a class="skip-link" href="#inhoud">Naar de inhoud</a>
 <header class="app-header">
   <div class="app-header__inner">
-    <a class="logo" href="<?= $gebruiker ? 'index.php' : '../index.html' ?>" aria-label="Sporty, <?= $gebruiker ? 'naar het overzicht' : 'naar de website' ?>"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">Sport<span class="logo__accent">y</span></span><span class="app-header__omgeving"><?= e($omgeving) ?></span></a>
+    <a class="logo" href="<?= $gebruiker ? 'index.php' : '../index.html' ?>" aria-label="Sporty, <?= $gebruiker ? 'naar het overzicht' : 'naar de website' ?>"><img class="logo__woordmerk" src="../assets/img/sporty-woordmerk.svg" alt="" width="89" height="40"><span class="app-header__omgeving"><?= e($omgeving) ?></span></a>
 <?php if ($gebruiker): ?>
     <ul class="app-account">
       <li><a href="profiel.php"<?= $actief === 'profiel.php' ? ' aria-current="page"' : '' ?>><?= icoon('user') ?><span class="app-account__label"><?= e(explode(' ', $gebruiker['naam'])[0]) ?><span class="visually-hidden">, mijn gegevens</span></span></a></li>

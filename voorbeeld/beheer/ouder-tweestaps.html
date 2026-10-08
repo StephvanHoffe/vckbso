@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tweestapsverificatie · Mijn BSO · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#c8553d">
+<meta name="theme-color" content="#f05a1a">
 <link rel="icon" href="../../favicon.ico" sizes="32x32">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/poppins-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/poppins-latin-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../../design/tokens.css">
 <link rel="stylesheet" href="../../css/style.css">
 <link rel="stylesheet" href="assets/beheer.css">
@@ -29,7 +30,7 @@
 <div class="vb-melding" role="status" aria-live="polite" hidden></div>
 <header class="app-header">
   <div class="app-header__inner">
-    <a class="logo" href="ouder-index.html" aria-label="Sporty, naar het overzicht"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">Sport<span class="logo__accent">y</span></span><span class="app-header__omgeving">Mijn BSO</span></a>
+    <a class="logo" href="ouder-index.html" aria-label="Sporty, naar het overzicht"><img class="logo__woordmerk" src="../../assets/img/sporty-woordmerk.svg" alt="" width="89" height="40"><span class="app-header__omgeving">Mijn BSO</span></a>
     <ul class="app-account">
       <li><a href="ouder-profiel.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg><span class="app-account__label">Sam<span class="visually-hidden">, mijn gegevens</span></span></a></li>
       <li><form method="post" action="inloggen.html" data-vb-uitloggen><input type="hidden" name="csrf" value="voorbeeld"><button type="submit" class="link-button"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-logout"></use></svg><span class="app-account__label">Uitloggen</span></button></form></li>
@@ -52,9 +53,9 @@
   <section class="panel" aria-labelledby="stap1-titel">
     <h2 id="stap1-titel">1. Scan de code</h2>
     <p>Installeer een authenticator-app, bijvoorbeeld Microsoft Authenticator, Google Authenticator of de wachtwoordmanager die je al gebruikt. Scan daarmee deze QR-code:</p>
-    <div class="qr" data-qr="otpauth://totp/Sporty%3Asam.de.jong%40demo.bsovck.nl?secret=MRCG63NBOMFQVUFWL6KW7BU3TID247HP&amp;issuer=Sporty&amp;digits=6&amp;period=30" role="img" aria-label="QR-code voor je authenticator-app"></div>
+    <div class="qr" data-qr="otpauth://totp/Sporty%3Asam.de.jong%40demo.bsovck.nl?secret=O6YVHZLML5GJAMW4PZOKIMKQHCTK4FQV&amp;issuer=Sporty&amp;digits=6&amp;period=30" role="img" aria-label="QR-code voor je authenticator-app"></div>
     <p>Lukt scannen niet? Vul dan deze sleutel in je app in:</p>
-    <p><code class="sleutel">MRCG 63NB OMFQ VUFW L6KW 7BU3 TID2 47HP</code></p>
+    <p><code class="sleutel">O6YV HZLM L5GJ AMW4 PZOK IMKQ HCTK 4FQV</code></p>
   </section>
   <section class="panel" aria-labelledby="stap2-titel">
     <h2 id="stap2-titel">2. Vul de code in</h2>

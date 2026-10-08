@@ -2,7 +2,7 @@
 /**
  * Maakt de deelafbeelding (assets/img/og-image.jpg, 1200×630) die WhatsApp, Facebook,
  * LinkedIn en andere apps tonen als iemand een link naar de website deelt.
- * Kleuren komen uit design/tokens.css, de letter en de foto uit assets/.
+ * Kleuren komen uit design/tokens.css, de letters, het logo en de foto uit assets/.
  *
  * Gebruik: npm run og-image   (vereist Playwright met Chromium: npx playwright install chromium)
  */
@@ -11,7 +11,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
-const FOTO = "assets/fotos/hero-1200.webp";
+const FOTO = "assets/fotos/hero-1600.webp";
 const UIT = "assets/img/og-image.jpg";
 
 async function laadPlaywright() {
@@ -33,30 +33,38 @@ async function laadPlaywright() {
 const base64 = (pad) => readFileSync(ROOT + pad).toString("base64");
 const tokens = readFileSync(ROOT + "design/tokens.css", "utf8");
 
+const svg64 = (pad) => `data:image/svg+xml;base64,${base64(pad)}`;
+const font = (pad, familie, gewicht) => `@font-face { font-family: "${familie}"; font-weight: ${gewicht}; src: url(data:font/woff2;base64,${base64(pad)}) format("woff2"); }`;
+const tokensZonderFonts = tokens.replace(/@font-face\s*{[^}]*}/g, "");
+
+// Zoals de hero op de homepage: foto met donkere overloop, wit embleem, kop met oranje regel en de oranje band
 const html = `<!doctype html>
 <html lang="nl"><head><meta charset="utf-8">
 <style>
-@font-face { font-family: "Manrope"; font-weight: 200 800; src: url(data:font/woff2;base64,${base64("assets/fonts/manrope-latin.woff2")}) format("woff2"); }
-${tokens}
+${font("assets/fonts/poppins-latin-700.woff2", "Poppins", 700)}
+${font("assets/fonts/caveat-brush-hoofdletters.woff2", "Caveat Brush", 400)}
+${tokensZonderFonts}
 * { box-sizing: border-box; margin: 0; }
 html, body { width: 1200px; height: 630px; overflow: hidden; }
-body { display: grid; grid-template-columns: 620px 1fr; background: var(--color-surface-alt); color: var(--color-text); font-family: var(--font-heading); }
-.tekst { display: flex; flex-direction: column; justify-content: center; padding: 0 40px 0 72px; }
-.logo { display: flex; align-items: center; gap: 14px; font-size: 38px; font-weight: 800; letter-spacing: -0.03em; }
-.logo svg { width: 54px; height: 54px; }
-.logo span { color: var(--color-primary-strong); }
-h1 { margin-top: 44px; font-size: 64px; line-height: 1.12; font-weight: 800; letter-spacing: -0.03em; }
-.hl { background: linear-gradient(to top, var(--hl) 0 0.3em, transparent 0.3em); padding-inline: 0.04em; }
-p { margin-top: 30px; white-space: nowrap; font-size: 27px; font-weight: 700; color: var(--color-primary-strong); }
-.foto { background: url(data:image/webp;base64,${base64(FOTO)}) center / cover; border-radius: var(--radius-l) 0 0 var(--radius-l); }
+body { position: relative; background: var(--color-dark); color: #fff; font-family: var(--font-heading); }
+.foto { position: absolute; inset: 0 0 92px; overflow: hidden; isolation: isolate; }
+.foto::before { content: ""; position: absolute; inset: 0; background: url(data:image/webp;base64,${base64(FOTO)}) 50% 40% / cover; transform: scaleX(-1); }
+.foto::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgb(34 26 21 / 0.94) 0, rgb(34 26 21 / 0.86) 46%, rgb(34 26 21 / 0) 78%); }
+.tekst { position: absolute; left: 64px; top: 48px; width: 640px; }
+.logo { width: 150px; height: auto; display: block; }
+h1 { margin-top: 26px; font-size: 52px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; }
+h1 span { display: block; margin-top: 6px; color: var(--color-primary); font-size: 40px; }
+.band { position: absolute; left: 0; right: 0; bottom: 0; height: 92px; display: flex; align-items: center; justify-content: center; gap: 64px; background: var(--color-primary); font-family: var(--font-slogan); font-size: 40px; text-transform: uppercase; letter-spacing: 0.03em; }
+.band b { font-weight: 400; display: flex; align-items: center; gap: 14px; }
+.band i { display: block; width: 14px; height: 14px; border-radius: 50%; background: #fff; }
 </style></head>
 <body>
-  <div class="tekst">
-    <div class="logo"><svg viewBox="0 0 40 40"><circle cx="18" cy="22" r="16" fill="var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" stroke="var(--color-surface)"/><circle cx="33" cy="8" r="5.5" fill="var(--color-sun)"/></svg><div>Sport<span>y</span></div></div>
-    <h1>De <span class="hl" style="--hl: var(--color-secondary)">leukste</span>,<br><span class="hl" style="--hl: var(--color-sun)">gezelligste</span> én<br><span class="hl" style="--hl: var(--color-mint)">sportiefste</span> BSO</h1>
-    <p>Buitenschoolse opvang in Amsterdam</p>
-  </div>
   <div class="foto" role="img" aria-label="Kinderen voetballen samen op een grasveld"></div>
+  <div class="tekst">
+    <img class="logo" src="${svg64("assets/img/sporty-logo-wit.svg")}" alt="Sporty">
+    <h1>De leukste, gezelligste én sportiefste BSO <span>in Amsterdam</span></h1>
+  </div>
+  <div class="band"><b><i></i>Sport</b><b><i></i>Plezier</b><b><i></i>Ontwikkeling</b></div>
 </body></html>`;
 
 const { chromium } = await laadPlaywright();

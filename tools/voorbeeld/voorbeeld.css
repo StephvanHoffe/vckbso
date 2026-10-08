@@ -4,7 +4,7 @@
   z-index: 50;
   background: var(--color-text, #1b1d23);
   color: #ffffff;
-  font-family: var(--font-body, "Manrope", system-ui, sans-serif);
+  font-family: var(--font-body, "Poppins", system-ui, sans-serif);
   font-size: 0.875rem;
   line-height: 1.4;
 }
@@ -92,7 +92,7 @@
   background: var(--color-text, #1b1d23);
   box-shadow: 0 10px 30px rgb(27 29 35 / 0.25);
   color: #ffffff;
-  font-family: var(--font-body, "Manrope", system-ui, sans-serif);
+  font-family: var(--font-body, "Poppins", system-ui, sans-serif);
   font-size: 0.95rem;
   font-weight: 600;
   transform: translateX(-50%);

@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lieke Mulder · Beheer · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#c8553d">
+<meta name="theme-color" content="#f05a1a">
 <link rel="icon" href="../../favicon.ico" sizes="32x32">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/poppins-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/poppins-latin-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../../design/tokens.css">
 <link rel="stylesheet" href="../../css/style.css">
 <link rel="stylesheet" href="assets/beheer.css">
@@ -28,7 +29,7 @@
 <div class="vb-melding" role="status" aria-live="polite" hidden></div>
 <header class="app-header">
   <div class="app-header__inner">
-    <a class="logo" href="beheerder-index.html" aria-label="Sporty, naar het overzicht"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">Sport<span class="logo__accent">y</span></span><span class="app-header__omgeving">Beheer</span></a>
+    <a class="logo" href="beheerder-index.html" aria-label="Sporty, naar het overzicht"><img class="logo__woordmerk" src="../../assets/img/sporty-woordmerk.svg" alt="" width="89" height="40"><span class="app-header__omgeving">Beheer</span></a>
     <ul class="app-account">
       <li><a href="beheerder-profiel.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg><span class="app-account__label">Demo<span class="visually-hidden">, mijn gegevens</span></span></a></li>
       <li><form method="post" action="inloggen.html" data-vb-uitloggen><input type="hidden" name="csrf" value="voorbeeld"><button type="submit" class="link-button"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-logout"></use></svg><span class="app-account__label">Uitloggen</span></button></form></li>
@@ -58,7 +59,7 @@
     <section class="panel" aria-labelledby="gegevens-titel">
       <h2 id="gegevens-titel">Gegevens</h2>
       <dl class="gegevens">
-        <dt>Geboortedatum</dt><dd>27 augustus 2018</dd>
+        <dt>Geboortedatum</dt><dd>29 augustus 2018</dd>
         <dt>School</dt><dd>-</dd>
         <dt>Bijzonderheden</dt><dd>Geen</dd>
         <dt>Mag opgehaald worden door</dt><dd>Alleen de ouders</dd>
@@ -74,7 +75,7 @@
             <div class="field"><label for="achternaam">Achternaam</label><input id="achternaam" name="achternaam" value="Mulder"></div>
           </div>
           <div class="form__row">
-            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2018-08-27"></div>
+            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2018-08-29"></div>
             <div class="field"><label for="groep">Groep</label><select id="groep" name="groep"><option value="">Nog geen groep</option><option value="1" selected>De Bengels</option><option value="2">De Kanjers</option></select></div>
           </div>
           <div class="field"><label for="school">Basisschool</label><input id="school" name="school" value=""></div>
@@ -95,7 +96,7 @@
             <div class="kindrij__naam">Kees Mulder <span class="badge">Ouder</span> <span class="badge">Contracthouder</span>              <span class="badge badge--geldig">Gezag gecontroleerd</span></div>
             <div class="kindrij__info">
               <span>Rechten: dagen kiezen en afmelden, gegevens en gedeelde observaties inzien, foto&#039;s ontvangen, berichten over het kind</span>
-<span>Vastgelegd op 6 oktober 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
+<span>Vastgelegd op 8 oktober 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
           </div>
           <details class="uitklap">
             <summary>Gezag en rechten van Kees Mulder</summary>
@@ -166,7 +167,7 @@
         <form class="form" method="post" action="#">
           <input type="hidden" name="csrf" value="voorbeeld">          <input type="hidden" name="actie" value="observatie">
           <div class="form__row">
-            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-10-06" required value="2026-10-06"></div>
+            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-10-08" required value="2026-10-08"></div>
             <div class="field"><label for="obs_gebied">Ontwikkelgebied</label><select id="obs_gebied" name="gebied">
               <option value="sociaal">Sociaal-emotioneel</option>
               <option value="motoriek">Sport en bewegen</option>
@@ -189,12 +190,12 @@
     <section class="panel" aria-labelledby="komend-titel">
       <h2 id="komend-titel">Binnenkort</h2>
       <ul class="kindlijst">
-        <li class="kindrij"><span>Woensdag 7 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Maandag 12 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Woensdag 14 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Maandag 19 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Woensdag 21 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Maandag 26 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
+        <li class="kindrij"><span>Woensdag 28 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
       </ul>
     </section>
     <section class="panel" aria-labelledby="geweest-titel">
@@ -203,6 +204,7 @@
         <table>
           <thead><tr><th scope="col">Dag</th><th scope="col">Status</th><th scope="col">Binnen</th><th scope="col">Opgehaald</th></tr></thead>
           <tbody>
+            <tr><td>wo 7 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>ma 5 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 30 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>ma 28 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
@@ -212,7 +214,6 @@
             <tr><td>ma 14 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 9 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>ma 7 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
-            <tr><td>wo 2 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
           </tbody>
         </table>
       </div>

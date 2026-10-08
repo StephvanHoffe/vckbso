@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Noor de Jong · Mijn BSO · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#c8553d">
+<meta name="theme-color" content="#f05a1a">
 <link rel="icon" href="../../favicon.ico" sizes="32x32">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="../../assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/poppins-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/poppins-latin-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../../design/tokens.css">
 <link rel="stylesheet" href="../../css/style.css">
 <link rel="stylesheet" href="assets/beheer.css">
@@ -28,7 +29,7 @@
 <div class="vb-melding" role="status" aria-live="polite" hidden></div>
 <header class="app-header">
   <div class="app-header__inner">
-    <a class="logo" href="ouder-index.html" aria-label="Sporty, naar het overzicht"><svg class="logo__mark" viewBox="0 0 40 40" aria-hidden="true" focusable="false"><circle cx="18" cy="22" r="16" style="fill: var(--color-primary)"/><path d="M10.5 23.5a7.5 7.5 0 0 0 15 0" fill="none" stroke-width="3.4" stroke-linecap="round" style="stroke: var(--color-surface)"/><circle cx="33" cy="8" r="5.5" style="fill: var(--color-sun)"/></svg><span aria-hidden="true">Sport<span class="logo__accent">y</span></span><span class="app-header__omgeving">Mijn BSO</span></a>
+    <a class="logo" href="ouder-index.html" aria-label="Sporty, naar het overzicht"><img class="logo__woordmerk" src="../../assets/img/sporty-woordmerk.svg" alt="" width="89" height="40"><span class="app-header__omgeving">Mijn BSO</span></a>
     <ul class="app-account">
       <li><a href="ouder-profiel.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-user"></use></svg><span class="app-account__label">Sam<span class="visually-hidden">, mijn gegevens</span></span></a></li>
       <li><form method="post" action="inloggen.html" data-vb-uitloggen><input type="hidden" name="csrf" value="voorbeeld"><button type="submit" class="link-button"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-logout"></use></svg><span class="app-account__label">Uitloggen</span></button></form></li>
@@ -52,7 +53,7 @@
     <section class="panel" aria-labelledby="gegevens-titel">
       <h2 id="gegevens-titel">Gegevens</h2>
       <dl class="gegevens">
-        <dt>Geboortedatum</dt><dd>27 augustus 2020</dd>
+        <dt>Geboortedatum</dt><dd>29 augustus 2020</dd>
         <dt>School</dt><dd>-</dd>
         <dt>Bijzonderheden</dt><dd>Geen</dd>
         <dt>Mag opgehaald worden door</dt><dd>Alleen de ouders</dd>
@@ -77,10 +78,18 @@
         <li class="gebied-motoriek">
           <div class="tijdlijn__meta">
             <strong>Sport en bewegen</strong>
-            <span>6 oktober 2026</span>
+            <span>8 oktober 2026</span>
             <span>Demo Begeleider</span>
           </div>
           <p>Oefende vandaag fanatiek met touwtjespringen en kan nu tien keer achter elkaar!</p>
+        </li>
+        <li class="gebied-sociaal">
+          <div class="tijdlijn__meta">
+            <strong>Sociaal-emotioneel</strong>
+            <span>5 oktober 2026</span>
+            <span>Demo Begeleider</span>
+          </div>
+          <p>Hielp vandaag uit zichzelf een nieuw kindje met de weg vinden. Heel lief om te zien!</p>
         </li>
         <li class="gebied-taal">
           <div class="tijdlijn__meta">
@@ -90,14 +99,6 @@
           </div>
           <p>Vertelde aan tafel een lang verhaal over het schoolreisje, met veel details.</p>
         </li>
-        <li class="gebied-sociaal">
-          <div class="tijdlijn__meta">
-            <strong>Sociaal-emotioneel</strong>
-            <span>17 september 2026</span>
-            <span>Demo Begeleider</span>
-          </div>
-          <p>Hielp vandaag uit zichzelf een nieuw kindje met de weg vinden. Heel lief om te zien!</p>
-        </li>
       </ol>
     </section>
   </div>
@@ -106,12 +107,12 @@
     <section class="panel" aria-labelledby="komend-titel">
       <h2 id="komend-titel">Binnenkort</h2>
       <ul class="kindlijst">
-        <li class="kindrij"><span>Woensdag 7 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Maandag 12 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Woensdag 14 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Maandag 19 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Woensdag 21 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Maandag 26 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
+        <li class="kindrij"><span>Woensdag 28 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
       </ul>
     </section>
     <section class="panel" aria-labelledby="geweest-titel">
@@ -120,6 +121,7 @@
         <table>
           <thead><tr><th scope="col">Dag</th><th scope="col">Status</th><th scope="col">Binnen</th><th scope="col">Opgehaald</th></tr></thead>
           <tbody>
+            <tr><td>wo 7 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>ma 5 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 30 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>ma 28 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
@@ -129,14 +131,13 @@
             <tr><td>ma 14 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 9 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>ma 7 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
-            <tr><td>wo 2 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
           </tbody>
         </table>
       </div>
     </section>
     <section class="panel" aria-labelledby="fotos-titel">
       <div class="panel__kop"><h2 id="fotos-titel">Foto's</h2><a href="ouder-fotos-kind-1.html">Alle foto's</a></div>
-      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=2&amp;weergave=1"><img src="fotos/foto-2-klein.jpg" alt="Knutselmiddag" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Knutselmiddag</p><p class="muted">vandaag 17:38 · Noor</p></div></li><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=1&amp;weergave=1"><img src="fotos/foto-1-klein.jpg" alt="Voetballen op het veldje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Voetballen op het veldje</p><p class="muted">vandaag 17:38 · Noor</p></div></li></ul>
+      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=2&amp;weergave=1"><img src="fotos/foto-2-klein.jpg" alt="Knutselmiddag" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Knutselmiddag</p><p class="muted">vandaag 16:31 · Noor</p></div></li><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=1&amp;weergave=1"><img src="fotos/foto-1-klein.jpg" alt="Voetballen op het veldje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Voetballen op het veldje</p><p class="muted">vandaag 16:31 · Noor</p></div></li></ul>
     </section>
   </div>
 </div>
