@@ -93,7 +93,7 @@ Gekozen op basis van het moodboard. Alle letters zijn gratis (Google Fonts), lok
 
 Het logo uit het moodboard: een rond embleem met drie kinderen van achteren (krullen, paardenstaart, pet) die de armen om elkaar slaan, "BSO" op het middelste shirt, het woordmerk "Sporty" in script en een lachje eronder. In de header staat alleen het woordmerk. De logobestanden staan in `assets/img/` en worden gemaakt met `npm run logo` (`tools/logo/maak-logo.mjs`). Het is een nagetekende versie; vervang die door de originele logobestanden zodra de klant die aanlevert (TODO).
 
-**Intro op de homepage (9 oktober 2026):** de klant wil een preloader op de homepage waarin de kinderen uit het logo komen aanrennen en samen het logo vormen. Die staat in `index.html` en `en/index.html` en wordt gemaakt met `npm run logo`; de beweging staat in `css/style.css` (sectie Intro). Alleen bij het eerste bezoek, over te slaan, en niet bij "minder beweging".
+**Intro op de homepage (9 oktober 2026):** de klant wil een preloader op de homepage waarin de kinderen uit het logo komen aanrennen en samen het logo vormen; ze rennen vanaf de rand van het scherm (9 oktober 2026: "meer van buiten het logo"). Die staat in `index.html` en `en/index.html` en wordt gemaakt met `npm run logo`; de beweging staat in `css/style.css` (sectie Intro). Alleen bij het eerste bezoek, over te slaan, en niet bij "minder beweging".
 
 ### Voorbeeldsites die de klant mooi vindt
 

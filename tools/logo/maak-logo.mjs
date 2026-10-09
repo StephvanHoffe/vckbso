@@ -117,7 +117,8 @@ function omhulling(delen) {
 
 /**
  * Het logo voor de intro op de homepage: dezelfde vormen, verdeeld over lagen die elk apart kunnen
- * bewegen (de kinderen rennen in beeld, de armen gaan om elkaar heen, daarna "BSO", het woordmerk en het lachje).
+ * bewegen. De kinderen (met benen) rennen vanaf de rand van het scherm naar het midden, slaan de armen
+ * om elkaar, de ring sluit zich om ze heen en daarna komen "BSO", het woordmerk en het lachje.
  * In plaats van maskers krijgt elke laag een "halo" in de achtergrondkleur (dezelfde witte rand als in het logo),
  * zodat de lagen ook tijdens het bewegen goed over elkaar vallen. Elke laag is een eigen HTML-element, zodat de
  * browser de beweging met de grafische kaart doet en de pagina niet trager wordt.
@@ -132,14 +133,28 @@ export function maakIntro() {
   const breed = (b) => ` stroke-width="${b}"`;
   const metKlasse = (cirkels, klasse, extra = "") => cirkels.replaceAll("<circle", `<circle class="${klasse}"${extra}`);
   const pct = (waarde, totaal) => `${+((waarde / totaal) * 100).toFixed(3)}%`;
-  const VOET = { krul: [104, 340], pet: [296, 340], meisje: [201, 340] };
+  const VOET = { krul: [104, 340], pet: [296, 340], meisje: [201, 340] }; // heup: draaipunt bij het rennen
 
-  // Van achter naar voren, net als de lagen van het logo
+  // Tijdens het rennen hebben de kinderen een broek en benen; die vallen straks buiten de ring
+  const BROEK = {
+    krul: "M46 345 L162 345 L162 364 C162 371 157 375 150 375 L58 375 C51 375 46 371 46 364 Z",
+    pet: "M240 345 L352 345 L352 364 C352 371 347 375 340 375 L252 375 C245 375 240 371 240 364 Z",
+    meisje: "M163 348 L239 348 L240 366 C240 372 236 375 230 375 L172 375 C166 375 162 372 162 366 Z",
+  };
+  const BENEN = { krul: [[78, 130], 26], pet: [[270, 322], 26], meisje: [[185, 217], 22] };
+  const broek = (wie) => pad("intro__halo", BROEK[wie], breed(GAT2)) + pad("intro__vlak", BROEK[wie]);
+  const benen = Object.entries(BENEN).flatMap(([wie, [xen, dikte]]) => xen.map((x, i) => {
+    const d = `M${x} 368 L${x} 452`;
+    return { naam: `been-${wie}-${"ab"[i]}`, kind: wie, been: "ab"[i], delen: [{ d, marge: dikte / 2 }], inhoud: pad("intro__lijn", d, breed(dikte)) };
+  }));
+
+  // Van achter naar voren, net als de lagen van het logo. De iris (crème met een rond gat) sluit zich op het
+  // eind om de kinderen heen en snijdt af wat buiten de ring valt, net als het knippad van het logo.
   const lagen = [
-    { naam: "ring", oorsprong: [200, 186], vak: { x: 31, y: 17, b: 338, h: 338 }, inhoud: pad("intro__ring", "M200 23a163 163 0 1 1 0 326a163 163 0 1 1 0-326", breed(11)), buiten: true },
-    { naam: "pet-romp", kind: "pet", delen: [{ d: V.rompR, marge: 3 }], inhoud: pad("intro__vlak", V.rompR) + pad("intro__halo-lijn", V.mouwR, breed(GAT)) },
-    { naam: "krul-romp", kind: "krul", delen: [{ d: V.rompL, marge: 3 }], inhoud: pad("intro__vlak", V.rompL) + pad("intro__halo-lijn", V.mouwL, breed(GAT)) },
-    { naam: "meisje-shirt", kind: "meisje", delen: [{ d: V.shirt, marge: GAT }], inhoud: pad("intro__halo", V.shirt, breed(GAT2)) + pad("intro__lijn", V.shirt, breed(6)) + pad("intro__lijn", V.kraag, breed(6)) },
+    ...benen,
+    { naam: "pet-romp", kind: "pet", delen: [{ d: V.rompR, marge: 3 }, { d: BROEK.pet, marge: GAT }], inhoud: pad("intro__vlak", V.rompR) + pad("intro__halo-lijn", V.mouwR, breed(GAT)) + broek("pet") },
+    { naam: "krul-romp", kind: "krul", delen: [{ d: V.rompL, marge: 3 }, { d: BROEK.krul, marge: GAT }], inhoud: pad("intro__vlak", V.rompL) + pad("intro__halo-lijn", V.mouwL, breed(GAT)) + broek("krul") },
+    { naam: "meisje-shirt", kind: "meisje", delen: [{ d: V.shirt, marge: GAT }, { d: BROEK.meisje, marge: GAT }], inhoud: pad("intro__halo", V.shirt, breed(GAT2)) + pad("intro__lijn", V.shirt, breed(6)) + pad("intro__lijn", V.kraag, breed(6)) + broek("meisje") },
     // De arm van het meisje hoort bij haar shirt: de halo laat het shirt heel
     { naam: "arm-meisje", oorsprong: [230, 180], delen: [{ d: V.armMeisje, marge: (ARM + GAT2) / 2 }], inhoud: (vak) => `<mask id="intro-shirt" maskUnits="userSpaceOnUse" x="${vak.x}" y="${vak.y}" width="${vak.b}" height="${vak.h}"><rect x="${vak.x}" y="${vak.y}" width="${vak.b}" height="${vak.h}" fill="#fff"/><path d="${V.shirt}" stroke="#000" stroke-width="6"/></mask>` + pad("intro__halo-lijn", V.armMeisje, breed(ARM + GAT2) + ' mask="url(#intro-shirt)"') + pad("intro__lijn", V.armMeisje, breed(ARM)) },
     { naam: "arm-krul", oorsprong: [144, 184], delen: [{ d: V.armKrul, marge: (ARM + GAT2) / 2 }], inhoud: pad("intro__halo-lijn", V.armKrul, breed(ARM + GAT2)) + pad("intro__lijn", V.armKrul, breed(ARM)) },
@@ -147,21 +162,21 @@ export function maakIntro() {
     { naam: "meisje-hoofd", kind: "meisje", delen: [{ cirkels: V.meisje, marge: GAT }, { d: V.staart, marge: GAT }], inhoud: metKlasse(V.meisje, "intro__halo", breed(GAT2)) + metKlasse(V.meisje, "intro__vlak") + pad("intro__halo", V.staart, breed(GAT2)) + pad("intro__vlak", V.staart) },
     { naam: "pet-hoofd", kind: "pet", delen: [{ cirkels: V.petHoofd, marge: GAT }, { d: V.pet, marge: GAT }, { d: V.klep, marge: GAT }], inhoud: metKlasse(V.petHoofd, "intro__halo", breed(GAT2)) + metKlasse(V.petHoofd, "intro__vlak") + `<g class="intro__halo"${breed(GAT2)}>${pad("", V.pet)}${pad("", V.klep)}</g>` + pad("intro__lijn", V.pet, breed(5)) + pad("intro__vlak intro__lijn", V.klep, breed(5)) + `<circle class="intro__vlak" cx="${V.knoop.cx}" cy="${V.knoop.cy}" r="${V.knoop.r}"/>` + pad("intro__lijn", V.naad, breed(3.5)) },
     { naam: "bso", oorsprong: [201, 228], delen: [{ d: bso.d, marge: 1 }], inhoud: pad("intro__vlak", bso.d) },
-    { naam: "woord", oorsprong: [200, 308], buiten: true, delen: [{ d: woord.d, marge: KO }, { d: V.glimlach, marge: (11 + 2 * KO) / 2 }], inhoud: `<defs><path id="intro-w" d="${woord.d}"/></defs><use class="intro__halo" href="#intro-w"${breed(2 * KO)}/>` + pad("intro__halo-lijn", V.glimlach, breed(11 + 2 * KO)) + `<use class="intro__vlak" href="#intro-w"/>` },
-    { naam: "lach", oorsprong: [203, 372], buiten: true, delen: [{ d: V.glimlach, marge: 5.5 }], inhoud: pad("intro__lijn", V.glimlach, breed(11)) },
+    { naam: "iris", oorsprong: [200, 186], vak: { x: -130, y: -144, b: 660, h: 660 }, inhoud: pad("intro__iris", "M-130 186a330 330 0 1 0 660 0a330 330 0 1 0-660 0ZM49 186a151 151 0 1 0 302 0a151 151 0 1 0-302 0Z", ' fill-rule="evenodd"') },
+    { naam: "ring", oorsprong: [200, 186], vak: { x: 31, y: 17, b: 338, h: 338 }, inhoud: pad("intro__ring", "M200 23a163 163 0 1 1 0 326a163 163 0 1 1 0-326", breed(11)) },
+    { naam: "woord", oorsprong: [200, 308], delen: [{ d: woord.d, marge: KO }, { d: V.glimlach, marge: (11 + 2 * KO) / 2 }], inhoud: `<defs><path id="intro-w" d="${woord.d}"/></defs><use class="intro__halo" href="#intro-w"${breed(2 * KO)}/>` + pad("intro__halo-lijn", V.glimlach, breed(11 + 2 * KO)) + `<use class="intro__vlak" href="#intro-w"/>` },
+    { naam: "lach", oorsprong: [203, 372], delen: [{ d: V.glimlach, marge: 5.5 }], inhoud: pad("intro__lijn", V.glimlach, breed(11)) },
   ];
 
   const html = (laag) => {
     const vak = laag.vak || omhulling(laag.delen);
     const [ox, oy] = laag.kind ? VOET[laag.kind] : laag.oorsprong;
-    const klassen = `intro__laag intro__laag--${laag.naam}${laag.kind ? ` intro__kind intro__kind--${laag.kind}` : ""}`;
+    const klassen = `intro__laag intro__laag--${laag.naam}${laag.kind ? ` intro__kind intro__kind--${laag.kind}` : ""}${laag.been ? ` intro__been intro__been--${laag.been}` : ""}`;
     const stijl = `left:${pct(vak.x, 400)};top:${pct(vak.y, 392)};width:${pct(vak.b, 400)};height:${pct(vak.h, 392)};--o:${pct(ox - vak.x, vak.b)} ${pct(oy - vak.y, vak.h)}`;
     const inhoud = typeof laag.inhoud === "function" ? laag.inhoud(vak) : laag.inhoud;
     return `<div class="${klassen}" style="${stijl}"><svg viewBox="${vak.x} ${vak.y} ${vak.b} ${vak.h}" focusable="false">${inhoud}</svg></div>`;
   };
-  const binnen = lagen.filter((l) => !l.buiten).map(html).join("\n");
-  const [ring, ...erna] = lagen.filter((l) => l.buiten).map(html);
-  return `<div class="intro__logo">\n${ring}\n<div class="intro__binnen">\n${binnen}\n</div>\n${erna.join("\n")}\n</div>`;
+  return `<div class="intro__logo">\n${lagen.map(html).join("\n")}\n</div>`;
 }
 
 export const INTRO_PAGINAS = ["index.html", "en/index.html"];
