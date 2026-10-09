@@ -2593,12 +2593,280 @@ a:hover {
   }
 }
 
-/* ---------- 23. Print ---------- */
+/* ---------- 23. Intro (homepage) ---------- */
+
+/*
+ * De kinderen uit het logo rennen in beeld en vormen samen het logo. De lagen komen uit
+ * tools/logo/maak-logo.mjs (npm run logo), de beweging staat hier. Alles beweegt met transform en
+ * opacity, zodat de browser het met de grafische kaart doet en de pagina er niet trager van wordt.
+ * Alleen op de homepage, één keer per bezoek en niet bij "minder beweging": het script in de <head>
+ * van index.html zet dan de klasse met-intro. Een toets, klik, tik of scroll slaat de intro over.
+ * Tijdlijn: ring 0–0,45 s · kinderen rennen 0,08–0,99 s · armen, BSO, woordmerk en lachje 0,99–1,75 s ·
+ * sprongetje 1,72 s · de intro verdwijnt 2,3–2,7 s.
+ */
+.met-intro .intro[hidden] {
+  display: grid !important;
+}
+
+.intro {
+  --intro-bg: var(--color-surface-alt);
+  --e: calc(min(66vw, 18rem) / 400); /* één eenheid van het logo (viewBox 400 × 392) */
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  place-items: center;
+  background: var(--intro-bg);
+  animation: intro-weg 400ms ease-in 2.3s both, intro-verberg 1ms linear 2.7s both;
+}
+
+.intro-overslaan .intro {
+  animation: intro-weg-snel 250ms ease-in both, intro-verberg 1ms linear 250ms both;
+}
+
+.intro__logo {
+  position: relative;
+  width: calc(400 * var(--e));
+  aspect-ratio: 400 / 392;
+  animation: intro-hoera 400ms ease-in-out 1.72s both;
+}
+
+/* Binnen de ring: de kinderen komen van buiten de cirkel in beeld */
+.intro__binnen {
+  position: absolute;
+  inset: 0;
+  clip-path: circle(38.129% at 50% 47.449%); /* straal 151 en middelpunt (200, 186) van het logo */
+}
+
+.intro__laag {
+  position: absolute;
+  transform-origin: var(--o);
+}
+
+.intro__laag > svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform-origin: var(--o);
+}
+
+/* Het logo in oranje; de halo's in de achtergrondkleur maken de witte randen tussen de delen */
+.intro__vlak {
+  fill: var(--color-primary);
+}
+
+.intro__lijn,
+.intro__ring {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.intro__vlak.intro__lijn {
+  fill: var(--color-primary);
+}
+
+.intro__halo {
+  fill: var(--intro-bg);
+  stroke: var(--intro-bg);
+  stroke-linejoin: round;
+}
+
+.intro__halo-lijn {
+  fill: none;
+  stroke: var(--intro-bg);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.intro__laag--ring {
+  animation: intro-plop 450ms var(--ease-bounce) both;
+}
+
+/* De kinderen rennen in beeld: links het krullenkind, rechts het kind met de pet, het meisje van onderen */
+.intro__kind {
+  --start: 80ms;
+  animation: intro-van-links 750ms cubic-bezier(0.3, 0.3, 0.6, 1) var(--start) both;
+}
+
+.intro__kind--pet {
+  --start: 160ms;
+  animation-name: intro-van-rechts;
+}
+
+.intro__kind--meisje {
+  --start: 240ms;
+  animation-name: intro-van-onder;
+}
+
+/* Rennen: vier sprongetjes, steeds een beetje naar links en naar rechts */
+.intro__kind > svg {
+  animation: intro-hop 375ms linear var(--start) 2 both;
+}
+
+/* Daarna slaan ze de armen om elkaar */
+.intro__laag--arm-krul {
+  animation: intro-arm 250ms cubic-bezier(0.3, 0, 0.2, 1) 990ms both;
+}
+
+.intro__laag--arm-meisje {
+  animation: intro-arm 250ms cubic-bezier(0.3, 0, 0.2, 1) 1.05s both;
+}
+
+.intro__laag--bso {
+  animation: intro-plop 340ms var(--ease-bounce) 1.12s both;
+}
+
+.intro__laag--woord {
+  animation: intro-woord 400ms var(--ease-bounce) 1.22s both;
+}
+
+.intro__laag--lach {
+  animation: intro-lach 300ms var(--ease-out) 1.45s both;
+}
+
+/* Na de intro komt de tekst in de hero in beeld */
+.met-intro .hero__content > * {
+  animation: intro-hero 700ms var(--ease-out) both;
+}
+
+.met-intro .hero__content > :nth-child(2) { animation-delay: 80ms; }
+.met-intro .hero__content > :nth-child(3) { animation-delay: 160ms; }
+.met-intro .hero__content > :nth-child(4) { animation-delay: 240ms; }
+.met-intro .hero__content > :nth-child(5) { animation-delay: 320ms; }
+
+.intro-speelt .hero__content > *,
+.intro-speelt .slogan-band__icoon {
+  animation-play-state: paused;
+}
+
+@keyframes intro-van-links {
+  0% { transform: translate(calc(-150 * var(--e)), 0) rotate(8deg) scale(1, 1); }
+  80% { transform: translate(calc(6 * var(--e)), 0) rotate(3deg) scale(1, 1); }
+  90% { transform: translate(0, 0) rotate(-1deg) scale(1.04, 0.95); }
+  100% { transform: translate(0, 0) rotate(0deg) scale(1, 1); }
+}
+
+@keyframes intro-van-rechts {
+  0% { transform: translate(calc(150 * var(--e)), 0) rotate(-8deg) scale(1, 1); }
+  80% { transform: translate(calc(-6 * var(--e)), 0) rotate(-3deg) scale(1, 1); }
+  90% { transform: translate(0, 0) rotate(1deg) scale(1.04, 0.95); }
+  100% { transform: translate(0, 0) rotate(0deg) scale(1, 1); }
+}
+
+@keyframes intro-van-onder {
+  0% { transform: translate(0, calc(330 * var(--e))) rotate(0deg) scale(1.2, 1.2); }
+  80% { transform: translate(0, calc(-6 * var(--e))) rotate(0deg) scale(1, 1); }
+  90% { transform: translate(0, 0) rotate(0deg) scale(1.04, 0.95); }
+  100% { transform: translate(0, 0) rotate(0deg) scale(1, 1); }
+}
+
+@keyframes intro-hop {
+  0%,
+  50%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.3, 0.6, 0.6, 1);
+  }
+
+  25% {
+    transform: translateY(calc(-18 * var(--e))) rotate(-3deg);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.4);
+  }
+
+  75% {
+    transform: translateY(calc(-18 * var(--e))) rotate(3deg);
+    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.4);
+  }
+}
+
+@keyframes intro-arm {
+  from {
+    opacity: 0;
+    transform: scaleX(0.2);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes intro-plop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+@keyframes intro-woord {
+  from {
+    opacity: 0;
+    transform: translateY(calc(16 * var(--e))) scale(0.6);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes intro-lach {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes intro-hoera {
+  0%,
+  100% { transform: scale(1) rotate(0deg); }
+  35% { transform: scale(1.06) rotate(-3deg); }
+  70% { transform: scale(0.99) rotate(1.5deg); }
+}
+
+@keyframes intro-weg {
+  to {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes intro-weg-snel {
+  to {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes intro-verberg {
+  to { visibility: hidden; }
+}
+
+@keyframes intro-hero {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .met-intro .intro[hidden] {
+    display: none !important;
+  }
+}
+
+/* ---------- 24. Print ---------- */
 
 @media print {
   .site-header,
   .site-footer,
   .cta-section,
+  .met-intro .intro[hidden],
   .map {
     display: none !important;
   }

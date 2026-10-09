@@ -4,9 +4,10 @@ Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutair
 
 - Gewone HTML, CSS en een klein beetje JavaScript. Geen framework en geen build-stap.
 - Huisstijl volgens het moodboard van de klant (`design/moodboard-sporty.jpg`): Sporty-oranje, wit en crème, Poppins, slogans in handgeschreven hoofdletters en het logo met drie kinderen en een lachje.
+- Intro op de homepage: de drie kinderen uit het logo rennen in beeld en vormen samen het logo. Eén keer per bezoek (en bij opnieuw laden), over te slaan met een toets, klik, tik of scroll, en niet bij de instelling "minder beweging" of zonder JavaScript.
 - Met een beheeromgeving en ouderportaal in `beheer/` (PHP + SQLite): aanmelden als klant met kinderen, automatische incasso via Mollie, facturen online, groepsagenda met maximale groepsgrootte die twee kanten op werkt, kindvolgsysteem, foto's en berichten, en een overzicht van inkomsten en uitgaven. Met rechten per collega per menuonderdeel, toegang per groep en per verzorger (gecontroleerd gezag), tweestapsverificatie, versleutelde opslag en back-ups, een controleerbaar logboek, privacyverzoeken voor ouders, bewaartermijnen per soort gegevens en strikt gescheiden organisaties. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
 - Mobile-first en getest op 360, 768 en 1280 px breed, zonder horizontaal scrollen.
-- Lighthouse (mobiel) op home, diensten en contact: prestaties 99, toegankelijkheid 100, best practices 100, SEO 100.
+- Lighthouse (mobiel): prestaties 96 op de homepage (met de intro), 98 op diensten en 97 op contact; toegankelijkheid, best practices en SEO 100.
 - Automatische toegankelijkheidstest (axe, WCAG 2.1 AA): geen overtredingen op alle pagina's.
 - Privacy: geen tracking, lettertypen lokaal, Google Maps laadt pas na een klik.
 
@@ -57,7 +58,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `assets/img/` | Favicon, app-iconen en de deelafbeelding (`og-image.jpg`) |
 | `tools/fotos.mjs` | Hulpscript om beelden om te zetten (`npm run fotos`). Niet nodig om de site te draaien. |
 | `tools/structured-data.mjs` | Zet de schema.org-gegevens (JSON-LD) in de pagina's, met kruimelpad en veelgestelde vragen uit de zichtbare HTML (`npm run seo`) |
-| `tools/logo/` | Maakt het logo (embleem en woordmerk), de favicon en de app-iconen (`npm run logo`), nagetekend naar het moodboard |
+| `tools/logo/` | Maakt het logo (embleem en woordmerk), de favicon, de app-iconen en de intro op de homepage (`npm run logo`), nagetekend naar het moodboard |
 | `tools/og-image.mjs` | Maakt de deelafbeelding `assets/img/og-image.jpg` opnieuw (`npm run og-image`, vereist Playwright) |
 | `tools/beheer-demodata.php` | Vult een lege test-omgeving van de beheeromgeving met verzonnen demogegevens |
 | `voorbeeld/` | Doorklikbare momentopname van Mijn BSO met verzonnen gegevens, voor Vercel. Gemaakt door `npm run voorbeeld`, niet met de hand aanpassen. Zie [Voorbeeld op Vercel](#voorbeeld-op-vercel). |
