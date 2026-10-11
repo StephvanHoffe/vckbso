@@ -53,7 +53,7 @@ pagina_kop('Ouders', 'Alle klanten met hun kinderen, status en machtiging. Nieuw
         <tr>
           <th scope="row"><a href="ouder.php?id=<?= (int) $ouder['id'] ?>"><?= e($ouder['naam']) ?></a></th>
           <td><?= e($ouder['kinderen'] ?? '-') ?></td>
-          <td><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $ouder['telefoon'])) ?>"><?= e($ouder['telefoon']) ?></a><br><a href="mailto:<?= e($ouder['email']) ?>"><?= e($ouder['email']) ?></a></td>
+          <td><?php if (trim((string) $ouder['telefoon']) !== ''): ?><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $ouder['telefoon'])) ?>"><?= e($ouder['telefoon']) ?></a><br><?php endif; ?><a href="mailto:<?= e($ouder['email']) ?>"><?= e($ouder['email']) ?></a></td>
           <td><?= status_badge($ouder['status']) ?><?php if ($ouder['status'] === 'nieuw'): ?><br><small class="muted"><?= e(moment_nl($ouder['aangemaakt_op'])) ?></small><?php endif; ?></td>
           <td><?= status_badge($ouder['mandaat_status']) ?></td>
         </tr>

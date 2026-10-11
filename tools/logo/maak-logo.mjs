@@ -61,7 +61,7 @@ const V = {
   glimlach: "M166 368 Q203 385 240 368",
 };
 
-export function maakLogo({ kleur = "#F05A1A", achtergrond = null, alleenWoord = false } = {}) {
+export function maakLogo({ kleur = "#F26522", achtergrond = null, alleenWoord = false } = {}) {
   const woord = tekstPad(pacifico, "Sporty", alleenWoord ? 100 : 104, 200, alleenWoord ? 100 : 330);
   if (alleenWoord) {
     // Woordmerk met lachje, voor de header
@@ -189,7 +189,7 @@ export function metIntro(html) {
 }
 
 // Favicon en app-iconen: oranje vlak met een witte script-S
-export function maakIcoon({ kleur = "#F05A1A", letter = "#ffffff", vorm = "rond", marge = 0 } = {}) {
+export function maakIcoon({ kleur = "#F26522", letter = "#ffffff", vorm = "rond", marge = 0 } = {}) {
   const grootte = 44 * (1 - marge);
   const p = pacifico.getPath("S", 0, 0, grootte); const bb = p.getBoundingBox();
   const x = 32 - (bb.x1 + bb.x2) / 2, y = 32 - (bb.y1 + bb.y2) / 2 + 1;

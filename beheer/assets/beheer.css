@@ -9,10 +9,10 @@ body.beheer {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--color-surface-alt);
+  background: var(--color-bg);
 }
 
-.beheer h1 { font-size: var(--step-4); }
+.beheer h1 { font-size: var(--step-3); }
 .beheer h2 { font-size: var(--step-2); }
 .beheer h3 { font-size: var(--step-1); }
 
@@ -23,6 +23,31 @@ body.beheer {
 }
 
 /* ---------- Kop en menu ---------- */
+
+/*
+ * Knoppen in Mijn BSO zijn compacter dan op de website (kleinere tekst). Daarom het donkerdere oranje:
+ * daarop is ook kleine witte tekst goed leesbaar (4,8:1, bij hover 6,3:1).
+ */
+.beheer .btn {
+  --btn-bg: var(--color-primary-strong);
+  --btn-bg-hover: var(--color-primary-dark);
+}
+
+.beheer .btn:not(.btn--mini) {
+  min-height: 3rem;
+  font-size: var(--step-0);
+}
+
+.beheer .btn--secondary,
+.beheer .btn--light,
+.beheer .btn--gevaar {
+  --btn-bg: var(--color-surface);
+  --btn-bg-hover: var(--color-surface);
+}
+
+.beheer .btn--secondary {
+  --btn-fg: var(--color-text);
+}
 
 .app-header {
   position: sticky;
@@ -98,7 +123,7 @@ body.beheer {
 }
 
 .app-account a[aria-current="page"] {
-  color: var(--color-primary-deep);
+  color: var(--color-link);
   text-decoration: underline;
 }
 
@@ -172,7 +197,7 @@ body.beheer {
 
 .app-nav a[aria-current="page"] {
   background: var(--color-primary-soft);
-  color: var(--color-primary-deep);
+  color: var(--color-link);
 }
 
 .teller {

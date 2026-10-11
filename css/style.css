@@ -26,7 +26,7 @@ body {
   font-weight: var(--font-weight-body);
   line-height: var(--line-height-body);
   color: var(--color-text);
-  background: var(--color-surface);
+  background: var(--color-bg);
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -73,6 +73,14 @@ h2 { font-size: var(--step-4); }
 h3 { font-size: var(--step-2); }
 h4 { font-size: var(--step-1); }
 
+/* Kleinere koppen iets minder zwaar en wat ruimer */
+h3,
+h4 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
 p,
 ul,
 ol,
@@ -97,7 +105,8 @@ a {
 }
 
 a:hover {
-  color: var(--color-primary-deep);
+  color: var(--color-text);
+  text-decoration-color: var(--color-primary);
   text-decoration-thickness: 0.14em;
 }
 
@@ -181,12 +190,16 @@ a:hover {
   background: var(--color-surface-alt);
 }
 
+.section--white {
+  background: var(--color-surface);
+}
+
 .section--sand {
   background: var(--color-sand);
 }
 
 .section--primary {
-  background: var(--color-primary-strong);
+  background: var(--color-primary);
   color: var(--color-on-primary);
 }
 
@@ -217,27 +230,67 @@ a:hover {
   color: var(--color-text-muted);
 }
 
-/* Handgeschreven hoofdletters met een lachje eronder, zoals de slogans in het moodboard */
-.eyebrow,
+/*
+ * Label boven een kop: strak, in hoofdletters, met een kort oranje streepje ervoor
+ * (sportief en rustig; het handschrift is alleen voor een enkel accent, zie .slogan)
+ */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin: 0 0 var(--space-s);
+  color: var(--eyebrow-color, var(--color-link));
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: "";
+  flex: none;
+  width: 2rem;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--eyebrow-line, var(--color-primary));
+}
+
+.section-head.center .eyebrow,
+.center > .eyebrow {
+  justify-content: center;
+}
+
+.section-head.center .eyebrow::after,
+.center > .eyebrow::after {
+  content: "";
+  flex: none;
+  width: 2rem;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--eyebrow-line, var(--color-primary));
+}
+
+/* Handgeschreven accent, zoals de slogan in het moodboard. Spaarzaam gebruiken: alleen korte statements */
 .slogan {
+  margin: 0 0 var(--space-s);
   font-family: var(--font-slogan);
+  font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
-.eyebrow {
+/* Speelse onderstreping: het lachje uit het logo */
+.slogan--glimlach {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.15em;
-  margin: 0 0 var(--space-s);
-  color: var(--eyebrow-color, var(--color-primary-strong));
-  font-size: 1.5rem; /* 24px: groot genoeg voor 3:1 contrast */
+  gap: 0.1em;
 }
 
-.eyebrow::after,
 .slogan--glimlach::after {
   content: "";
   width: 2.4em;
@@ -247,129 +300,125 @@ a:hover {
   mask: var(--glimlach) center / contain no-repeat;
 }
 
-.slogan {
-  margin: 0 0 var(--space-s);
-  font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.5rem);
-}
-
-.slogan--glimlach {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.1em;
-}
-
 .section-head {
-  max-width: 44rem;
+  max-width: 46rem;
   margin-bottom: var(--space-2xl);
-}
-
-.section-head.center .eyebrow,
-.center > .eyebrow {
-  align-items: center;
 }
 
 .section-head > p:last-child {
   margin-bottom: 0;
 }
 
-/* Oranje accent in een kop */
+/* Oranje woord in een kop (Deep Orange: ook op beige minstens 3:1, koppen zijn groot) */
 .hl {
-  color: var(--color-primary-strong);
+  color: var(--color-primary-deep);
 }
 
 /* ---------- 3. Knoppen en labels ---------- */
 
+/*
+ * Oranje, rond, met witte vette tekst. De tekst is 19px vet: zo geldt wit op Sporty-oranje als grote tekst
+ * (WCAG AA vraagt dan 3:1, het is 3,2:1). Bij hover wordt de knop donkerder en iets groter.
+ */
 .btn {
-  --btn-bg: var(--color-primary-strong);
+  --btn-bg: var(--color-primary);
   --btn-fg: var(--color-on-primary);
   --btn-bg-hover: var(--color-primary-deep);
+  --btn-border: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.55em;
-  min-height: 3.25rem;
-  padding: 0.8em 1.55em;
-  border: var(--border-width) solid transparent;
+  min-height: 3.5rem;
+  padding: 0.8em 1.6em;
+  border: var(--border-width) solid var(--btn-border);
   border-radius: var(--radius-pill);
   background: var(--btn-bg);
   color: var(--btn-fg);
-  font-family: var(--font-body);
-  font-size: var(--step-0);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-button);
   font-weight: var(--font-weight-button);
   line-height: 1.2;
+  letter-spacing: -0.005em;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
-  box-shadow: var(--shadow-s);
   transition:
-    translate var(--duration-fast) var(--ease-bounce),
-    box-shadow var(--duration-fast) var(--ease-out),
+    scale var(--duration-fast) var(--ease-out),
     background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out);
 }
 
 .btn:hover {
   background: var(--btn-bg-hover);
   color: var(--btn-fg);
-  translate: 0 -3px;
-  box-shadow: var(--shadow-m);
+  scale: 1.03;
 }
 
 .btn:active {
-  translate: 0 0;
+  scale: 0.99;
 }
 
-.btn .icon {
-  transition: rotate var(--duration-fast) var(--ease-bounce), translate var(--duration-fast) var(--ease-bounce);
+/* Kleine pijl naar rechts bij de belangrijkste knoppen */
+.btn .icon--arrow,
+.link-arrow .icon {
+  transition: translate var(--duration-fast) var(--ease-out);
 }
 
-.btn:hover .icon {
-  rotate: -10deg;
-}
-
-.btn:hover .icon--arrow {
-  rotate: 0deg;
+.btn:hover .icon--arrow,
+.link-arrow:hover .icon {
   translate: 4px 0;
 }
 
+/* Wit met een subtiele rand */
 .btn--secondary {
   --btn-bg: var(--color-surface);
-  --btn-fg: var(--color-primary-deep);
-  --btn-bg-hover: var(--color-primary-soft);
-  border-color: currentColor;
-  box-shadow: none;
+  --btn-fg: var(--color-text);
+  --btn-bg-hover: var(--color-surface);
+  --btn-border: var(--color-border);
 }
 
+.btn--secondary:hover {
+  border-color: var(--color-text);
+}
+
+/* Witte knop op een oranje vlak */
 .btn--light {
   --btn-bg: var(--color-surface);
   --btn-fg: var(--color-primary-deep);
-  --btn-bg-hover: var(--color-sun-soft);
+  --btn-bg-hover: var(--color-bg);
 }
 
-/* Omlijnde knop op een donker vlak of een foto */
-.btn--op-donker {
+/* Omlijnde knop op een donker of oranje vlak, of op een foto */
+.btn--op-donker,
+.hero .btn--secondary,
+.page-hero--foto .btn--secondary,
+.on-dark .btn--secondary {
   --btn-bg: transparent;
   --btn-fg: var(--color-on-primary);
   --btn-bg-hover: var(--color-on-primary);
-  border-color: currentColor;
-  box-shadow: none;
+  --btn-border: rgb(255 255 255 / 0.75);
 }
 
-.btn--op-donker:hover {
+.btn--op-donker:hover,
+.hero .btn--secondary:hover,
+.page-hero--foto .btn--secondary:hover,
+.on-dark .btn--secondary:hover {
+  border-color: var(--color-on-primary);
   color: var(--color-text);
 }
 
 .btn--dark {
   --btn-bg: var(--color-text);
   --btn-fg: var(--color-surface);
-  --btn-bg-hover: var(--color-primary-deep);
+  --btn-bg-hover: #000;
 }
 
+/* Compacter, maar met dezelfde tekstgrootte (wit op oranje moet groot blijven) */
 .btn--small {
-  min-height: 2.75rem;
-  padding: 0.5em 1.1em;
-  font-size: var(--step--1);
+  min-height: 2.875rem;
+  padding: 0.5em 1.2em;
 }
 
 .btn[disabled],
@@ -389,15 +438,8 @@ a:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
+  font-family: var(--font-ui);
   font-weight: var(--font-weight-button);
-}
-
-.link-arrow .icon {
-  transition: translate var(--duration-fast) var(--ease-bounce);
-}
-
-.link-arrow:hover .icon {
-  translate: 4px 0;
 }
 
 .pill {
@@ -408,18 +450,20 @@ a:hover {
   border-radius: var(--radius-pill);
   background: var(--pill-bg, var(--color-sun-soft));
   color: var(--color-text);
+  font-family: var(--font-ui);
   font-size: var(--step--1);
-  font-weight: var(--font-weight-button);
+  font-weight: var(--font-weight-ui);
   line-height: 1.35;
 }
 
 /* ---------- 4. Header en navigatie ---------- */
 
+/* Wit, rustig en sticky; bij scrollen wordt de balk iets lager */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
   -webkit-backdrop-filter: saturate(1.4) blur(14px);
   backdrop-filter: saturate(1.4) blur(14px);
   transition: box-shadow var(--duration) var(--ease-out);
@@ -437,6 +481,11 @@ a:hover {
   align-items: center;
   gap: var(--space-xs) var(--space-s);
   min-height: var(--header-height);
+  transition: min-height var(--duration) var(--ease-out);
+}
+
+.site-header.is-scrolled .site-header__inner {
+  min-height: var(--header-height-compact);
 }
 
 .logo {
@@ -450,12 +499,15 @@ a:hover {
 /* Het woordmerk uit het moodboard (assets/img/sporty-woordmerk.svg) */
 .logo__woordmerk {
   width: auto;
-  height: 2.75rem;
-  transition: rotate var(--duration) var(--ease-bounce), scale var(--duration) var(--ease-bounce);
+  height: 2.6rem;
+  transition: height var(--duration) var(--ease-out), scale var(--duration-fast) var(--ease-out);
+}
+
+.site-header.is-scrolled .logo__woordmerk {
+  height: 2.25rem;
 }
 
 .logo:hover .logo__woordmerk {
-  rotate: -3deg;
   scale: 1.04;
 }
 
@@ -463,17 +515,18 @@ a:hover {
   order: 2;
 }
 
-@media (max-width: 23.99em) {
+/* Op smalle schermen passen logo, knop en menuknop zo samen op één regel */
+@media (max-width: 29.99em) {
   .site-header__inner {
     gap: var(--space-xs) var(--space-2xs);
   }
 
   .logo__woordmerk {
-    height: 2.35rem;
+    height: 2.25rem;
   }
 
   .site-header__cta {
-    padding-inline: 0.9em;
+    padding-inline: 0.95em;
   }
 
   .site-header__cta .icon {
@@ -485,12 +538,12 @@ a:hover {
   order: 3;
   display: none;
   place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.875rem;
+  height: 2.875rem;
   padding: 0;
   border: 0;
   border-radius: 50%;
-  background: var(--color-surface-alt);
+  background: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
   transition: background-color var(--duration-fast) var(--ease-out);
@@ -545,27 +598,44 @@ a:hover {
   list-style: none;
 }
 
+/* Menu-items: rustig antraciet, met een oranje streep die bij hover en op de huidige pagina verschijnt */
 .site-nav__list a {
+  position: relative;
   display: flex;
   align-items: center;
   min-height: 2.75rem;
-  padding: 0.35em 0.8em;
-  border-radius: var(--radius-pill);
+  padding: 0.35em 0.75em;
   color: var(--color-text);
-  font-weight: var(--font-weight-strong);
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-ui);
   text-decoration: none;
-  transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+
+.site-nav__list a::after {
+  content: "";
+  position: absolute;
+  left: 0.75em;
+  right: 0.75em;
+  bottom: 0.3em;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--color-primary);
+  scale: 0 1;
+  transform-origin: left;
+  transition: scale var(--duration-fast) var(--ease-out);
 }
 
 .site-nav__list a:hover {
-  background: var(--color-primary-soft);
   color: var(--color-text);
 }
 
-.site-nav__list a[aria-current="page"] {
-  color: var(--color-primary-strong);
-  text-decoration: underline 3px var(--color-primary);
-  text-underline-offset: 0.45em;
+.site-nav__list a:hover::after,
+.site-nav__list a[aria-current="page"]::after {
+  scale: 1 1;
+}
+
+.site-nav__login a {
+  color: var(--color-text-muted);
 }
 
 .lang {
@@ -573,7 +643,8 @@ a:hover {
   padding: 3px;
   width: max-content;
   border-radius: var(--radius-pill);
-  background: var(--color-surface-alt);
+  background: var(--color-bg);
+  box-shadow: inset 0 0 0 1px var(--color-border);
 }
 
 .lang a {
@@ -584,8 +655,9 @@ a:hover {
   padding: 0 0.7em;
   border-radius: var(--radius-pill);
   color: var(--color-text);
+  font-family: var(--font-ui);
   font-size: var(--step--1);
-  font-weight: var(--font-weight-button);
+  font-weight: var(--font-weight-ui);
   text-decoration: none;
 }
 
@@ -595,8 +667,8 @@ a:hover {
 }
 
 .lang a[aria-current="true"] {
-  background: var(--color-surface);
-  box-shadow: var(--shadow-s);
+  background: var(--color-text);
+  color: var(--color-surface);
 }
 
 /* Met JavaScript: uitklapmenu op kleine schermen */
@@ -637,9 +709,16 @@ a:hover {
   padding-inline: var(--space-s);
 }
 
+.js .site-nav__list a::after {
+  left: var(--space-s);
+  right: auto;
+  width: 2rem;
+}
+
 @media (min-width: 80em) {
   .site-header__inner {
     flex-wrap: nowrap;
+    gap: var(--space-m);
   }
 
   .js .nav-toggle,
@@ -653,7 +732,7 @@ a:hover {
     position: static;
     display: flex;
     align-items: center;
-    gap: var(--space-xs);
+    gap: var(--space-s);
     width: auto;
     padding: 0;
     background: none;
@@ -672,9 +751,26 @@ a:hover {
   .site-nav__list a,
   .js .site-nav__list a {
     min-height: 2.75rem;
-    padding-inline: 0.75em;
-    font-size: var(--step--1);
+    padding-inline: 0.7em;
+    font-size: 1rem;
     white-space: nowrap;
+  }
+
+  .js .site-nav__list a::after {
+    left: 0.7em;
+    right: 0.7em;
+    width: auto;
+  }
+
+  /* Het logo brengt je al naar de homepage */
+  .site-nav__home {
+    display: none;
+  }
+
+  .site-nav__login {
+    margin-left: var(--space-2xs);
+    padding-left: var(--space-xs);
+    border-left: 1px solid var(--color-border);
   }
 
   .lang {
@@ -689,9 +785,10 @@ a:hover {
 /* ---------- 5. Hero (home) ---------- */
 
 /*
- * Zoals in het moodboard: een grote foto met een donkere overloop en witte tekst.
+ * Een grote, brede foto van kinderen die samen sporten, met een donkere overloop en witte tekst.
  * Mobiel: foto bovenaan die overloopt in een donker vlak met de tekst.
- * Vanaf 64em: foto over de hele breedte, de overloop loopt van links naar rechts.
+ * Vanaf 64em: foto over de hele breedte; de kop staat breed onderaan (de gezichten blijven vrij),
+ * met daaronder de tekst en de knoppen naast elkaar.
  */
 .hero {
   position: relative;
@@ -705,7 +802,7 @@ a:hover {
 .hero__media {
   position: relative;
   aspect-ratio: 4 / 3;
-  max-height: 58vh;
+  max-height: 60vh;
   width: 100%;
 }
 
@@ -718,7 +815,7 @@ a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 62% 40%;
+  object-position: 50% 30%;
 }
 
 /* Overloop naar het donkere vlak eronder */
@@ -726,58 +823,54 @@ a:hover {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgb(34 26 21 / 0) 45%, rgb(34 26 21 / 0.75) 82%, var(--color-dark) 100%);
+  background: linear-gradient(to bottom, rgb(34 34 34 / 0) 50%, rgb(34 34 34 / 0.7) 84%, var(--color-dark) 100%);
 }
 
 .hero__inner {
   position: relative;
   z-index: 1;
-  margin-top: -3rem;
+  margin-top: -2.5rem;
   padding-bottom: var(--space-2xl);
 }
 
-.hero__content {
-  max-width: 38rem;
-}
-
 .hero .eyebrow {
-  --eyebrow-color: var(--color-primary);
+  --eyebrow-color: var(--color-on-dark);
 }
 
 .hero__title {
   margin-bottom: var(--space-m);
   color: var(--color-on-primary);
-  font-size: clamp(2.125rem, 1.6rem + 2.3vw, 3.375rem);
-  line-height: 1.08;
+  font-size: clamp(2.5rem, 1.55rem + 3.4vw, 4.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
 }
 
-.hero__title-sub {
-  display: block;
-  margin-top: 0.2em;
+.hero .hl {
   color: var(--color-primary);
-  font-size: 0.78em; /* nog steeds groot: minimaal 26px vet */
 }
 
 .hero .lead {
+  max-width: 34rem;
   color: var(--color-on-dark);
 }
 
 .hero__facts {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2xs) var(--space-m);
+  gap: var(--space-2xs) var(--space-l);
   margin: var(--space-l) 0 0;
   padding: 0;
   list-style: none;
   color: var(--color-on-dark);
+  font-family: var(--font-ui);
   font-size: var(--step--1);
-  font-weight: var(--font-weight-strong);
+  font-weight: var(--font-weight-ui);
 }
 
 .hero__facts li {
   display: inline-flex;
   align-items: center;
-  gap: 0.45em;
+  gap: 0.5em;
 }
 
 .hero__facts .icon {
@@ -790,8 +883,8 @@ a:hover {
 
 @media (min-width: 64em) {
   .hero {
-    min-height: min(86vh, 48rem);
-    align-items: center;
+    min-height: min(calc(100svh - var(--header-height)), 54rem);
+    align-items: end;
   }
 
   .hero__media {
@@ -802,83 +895,62 @@ a:hover {
     max-height: none;
   }
 
-  /* Gespiegeld, zodat de kinderen rechts staan en de tekst links op de donkere overloop (zoals in het moodboard) */
   .hero__media img {
-    object-position: 70% 35%;
-    transform: scaleX(-1);
+    object-position: 50% 28%;
   }
 
-  /* Donkere overloop van links, zodat de tekst altijd goed leesbaar is */
+  /* Donkere overloop van onderen (en een beetje van links), zodat de witte tekst goed leesbaar is */
   .hero__media::after {
-    background: linear-gradient(90deg, rgb(34 26 21 / 0.92) 0, rgb(34 26 21 / 0.88) max(50%, 40rem), rgb(34 26 21 / 0) calc(max(50%, 40rem) + 22rem));
+    background:
+      linear-gradient(to top, rgb(34 34 34 / 0.94) 0, rgb(34 34 34 / 0.8) 32%, rgb(34 34 34 / 0) 64%),
+      linear-gradient(90deg, rgb(34 34 34 / 0.55) 0, rgb(34 34 34 / 0.2) 40%, rgb(34 34 34 / 0) 60%);
   }
 
   .hero__inner {
     margin-top: 0;
-    padding-block: var(--space-3xl);
+    padding-block: var(--space-3xl) var(--space-2xl);
+  }
+
+  .hero__title {
+    max-width: 18ch;
+  }
+
+  .hero__onder {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-xl);
+  }
+
+  .hero .lead {
+    margin-bottom: 0;
+  }
+
+  .hero__onder .btn-group {
+    flex: none;
   }
 }
 
-/* Oranje band onder de hero: Sport, Plezier, Ontwikkeling (zoals de vlag en de banner) */
-.slogan-band {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-}
+@media (min-width: 64em) and (prefers-reduced-motion: no-preference) {
+  /* De foto komt rustig tot stilstand */
+  .hero__media img {
+    animation: hero-foto 1.6s var(--ease-out) both;
+  }
 
-.slogan-band__lijst {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-s) var(--space-2xl);
-  margin: 0 auto;
-  padding-block: var(--space-m);
-  list-style: none;
-  font-family: var(--font-slogan);
-  font-size: clamp(1.5rem, 1.3rem + 1vw, 2rem); /* minimaal 24px: groot genoeg voor wit op oranje */
-  line-height: 1;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-.slogan-band__lijst li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45em;
-}
-
-.slogan-band__icoon {
-  display: grid;
-  place-items: center;
-  width: 1.6em;
-  height: 1.6em;
-  border-radius: 50%;
-  background: var(--color-on-primary);
-  color: var(--color-primary-strong);
-}
-
-.slogan-band__icoon .icon {
-  width: 62%;
-  height: 62%;
+  @keyframes hero-foto {
+    from { scale: 1.06; }
+  }
 }
 
 /* ---------- 6. Pagina-kop (subpagina's) ---------- */
 
+/* Zonder foto: rustig warm wit met de kop */
 .page-hero {
   position: relative;
-  padding-block: var(--space-xl) calc(var(--section-space) * 0.85);
-  background: var(--color-surface-alt);
+  padding-block: var(--space-xl) var(--space-2xl);
+  background: var(--color-bg);
   overflow: clip;
-}
-
-/* Oranje streep onderaan, als de rand van de banner in het moodboard */
-.page-hero::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 6px;
-  background: var(--color-primary);
+  isolation: isolate;
 }
 
 .page-hero__grid {
@@ -889,15 +961,12 @@ a:hover {
 }
 
 .page-hero h1 {
-  font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.625rem);
+  max-width: 20ch;
+  font-size: clamp(2.375rem, 1.6rem + 3vw, 4rem);
 }
 
 .page-hero .lead {
   margin-bottom: var(--space-l);
-}
-
-.page-hero__media {
-  max-width: 34rem;
 }
 
 .breadcrumb ol {
@@ -926,30 +995,113 @@ a:hover {
   font-weight: var(--font-weight-strong);
 }
 
+/*
+ * Met foto: net als de hero op de homepage een brede foto met een donkere overloop.
+ * Mobiel staat de foto bovenaan, vanaf 64em over de hele breedte met de tekst links.
+ */
+.page-hero--foto {
+  padding: 0 0 var(--space-2xl);
+  background: var(--color-dark);
+  color: var(--color-on-primary);
+}
+
+.page-hero--foto .page-hero__grid {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0;
+}
+
+.page-hero--foto .page-hero__media {
+  position: relative;
+  margin-inline: calc(var(--gutter) * -1);
+  aspect-ratio: 16 / 10;
+  max-height: 52vh;
+}
+
+.page-hero--foto .page-hero__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgb(34 34 34 / 0) 45%, rgb(34 34 34 / 0.7) 82%, var(--color-dark) 100%);
+}
+
+.page-hero--foto .frame,
+.page-hero--foto .frame__img,
+.page-hero--foto picture {
+  height: 100%;
+}
+
+.page-hero--foto .frame__img {
+  aspect-ratio: auto;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.page-hero--foto .page-hero__content {
+  position: relative;
+  z-index: 1;
+  margin-top: -2rem;
+}
+
+.page-hero--foto h1 {
+  color: var(--color-on-primary);
+}
+
+.page-hero--foto .lead {
+  color: var(--color-on-dark);
+}
+
+.page-hero--foto .eyebrow {
+  --eyebrow-color: var(--color-on-dark);
+}
+
+.page-hero--foto .breadcrumb ol,
+.page-hero--foto .breadcrumb li + li::before,
+.page-hero--foto .breadcrumb a,
+.page-hero--foto .breadcrumb [aria-current="page"] {
+  color: var(--color-on-dark);
+}
+
+.page-hero--foto :focus-visible {
+  outline-color: var(--color-on-primary);
+}
+
 @media (min-width: 64em) {
-  .page-hero__grid {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    gap: var(--space-2xl);
+  .page-hero {
+    padding-block: var(--space-2xl) var(--space-3xl);
   }
 
-  .page-hero__media {
-    justify-self: end;
-    width: 100%;
+  .page-hero--foto {
+    display: grid;
+    align-items: center;
+    min-height: min(68vh, 36rem);
+    padding-block: var(--space-3xl);
+  }
+
+  .page-hero--foto .page-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    margin: 0;
+    aspect-ratio: auto;
+    max-height: none;
+  }
+
+  .page-hero--foto .page-hero__media::after {
+    background: linear-gradient(90deg, rgb(34 34 34 / 0.9) 0, rgb(34 34 34 / 0.8) max(42%, 34rem), rgb(34 34 34 / 0.05) calc(max(42%, 34rem) + 24rem));
+  }
+
+  .page-hero--foto .page-hero__content {
+    max-width: 40rem;
+    margin-top: 0;
   }
 }
 
 /* ---------- 7. Beeldkaders ---------- */
 
 .frame {
-  --frame-offset: -0.6rem;
   position: relative;
   isolation: isolate;
-}
-
-@media (min-width: 48em) {
-  .frame {
-    --frame-offset: -1rem;
-  }
 }
 
 .frame__img {
@@ -968,96 +1120,84 @@ a:hover {
 }
 
 .frame:hover .frame__img img {
-  scale: 1.04;
+  scale: 1.03;
 }
 
-/* Gekleurd vlak dat achter de foto uitsteekt */
-.frame::before {
+/* Een subtiele "bal" die achter de foto uitsteekt: een verwijzing naar sport en beweging */
+.frame--left::before,
+.frame--tilt::before {
   content: "";
   position: absolute;
   z-index: -1;
-  right: var(--frame-offset);
-  bottom: var(--frame-offset);
-  width: 62%;
-  height: 62%;
-  border-radius: var(--radius-l);
-  background: var(--frame-accent, var(--color-primary));
-  transition: translate var(--duration) var(--ease-bounce);
-}
-
-.frame:hover::before {
-  translate: 6px 6px;
+  width: clamp(4.5rem, 20%, 8.5rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-primary);
+  transition: translate var(--duration) var(--ease-out);
 }
 
 .frame--left::before {
-  right: auto;
-  left: var(--frame-offset);
+  left: -0.75rem;
+  bottom: -0.75rem;
 }
 
-.frame--top::before {
-  top: var(--frame-offset);
-  bottom: auto;
+.frame--tilt::before {
+  right: -0.75rem;
+  top: -0.75rem;
 }
 
-.frame--blob .frame__img {
-  border-radius: var(--radius-blob);
+.frame--left:hover::before {
+  translate: -4px 4px;
 }
 
-.frame--blob::before {
-  border-radius: 50%;
+.frame--tilt:hover::before {
+  translate: 4px -4px;
 }
 
-.frame--tilt .frame__img {
-  rotate: 2deg;
-  transition: rotate var(--duration) var(--ease-bounce);
+/* Nooit verder uitsteken dan de marge van de pagina (anders kun je horizontaal scrollen) */
+@media (min-width: 48em) {
+  .frame--left::before {
+    left: -1.25rem;
+    bottom: -1.25rem;
+  }
+
+  .frame--tilt::before {
+    right: -1.25rem;
+    top: -1.25rem;
+  }
 }
 
-.frame--tilt:hover .frame__img {
-  rotate: 0deg;
-}
+@media (min-width: 64em) {
+  .frame--left::before {
+    left: -1.5rem;
+    bottom: -1.5rem;
+  }
 
-.bubble {
-  position: absolute;
-  z-index: 2;
-  top: -1.5rem;
-  left: -0.5rem;
-  padding: 0.45em 0.9em 0.5em;
-  border-radius: var(--radius-m) var(--radius-m) var(--radius-m) 4px;
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  font-family: var(--font-slogan);
-  font-size: 1.75rem; /* groot genoeg voor wit op oranje */
-  font-weight: 400;
-  line-height: 1;
-  text-transform: uppercase;
-  box-shadow: var(--shadow-m);
-  rotate: -6deg;
+  .frame--tilt::before {
+    right: -1.5rem;
+    top: -1.5rem;
+  }
 }
 
 /* ---------- 8. Kaarten ---------- */
 
+/* Witte kaart met licht afgeronde hoeken en een subtiele schaduw; bij hover komt hij iets omhoog */
 .card {
   position: relative;
   padding: var(--space-l);
-  border-radius: var(--radius-l);
+  border-radius: var(--radius-m);
   background: var(--color-surface);
-  box-shadow: var(--shadow-m);
-  transition: translate var(--duration) var(--ease-bounce), rotate var(--duration) var(--ease-bounce), box-shadow var(--duration) var(--ease-out);
+  box-shadow: var(--shadow-s);
+  transition: translate var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out);
 }
 
 .card:hover {
   translate: 0 -6px;
-  rotate: -0.6deg;
-  box-shadow: var(--shadow-l);
-}
-
-.card:nth-child(even):hover {
-  rotate: 0.6deg;
+  box-shadow: var(--shadow-m);
 }
 
 .card h3 {
   font-size: var(--step-1);
-  letter-spacing: -0.015em;
 }
 
 .card p:last-child {
@@ -1073,7 +1213,7 @@ a:hover {
   border-radius: 50%;
   background: var(--badge-bg, var(--color-primary));
   color: var(--badge-fg, var(--color-on-primary));
-  transition: rotate var(--duration) var(--ease-bounce), scale var(--duration) var(--ease-bounce);
+  transition: scale var(--duration) var(--ease-out);
 }
 
 .icon-badge .icon {
@@ -1082,7 +1222,6 @@ a:hover {
 }
 
 .card:hover .icon-badge {
-  rotate: -10deg;
   scale: 1.06;
 }
 
@@ -1100,19 +1239,6 @@ a:hover {
 @media (min-width: 64em) {
   .grid--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .grid--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-  /* Speels verspringende kaarten */
-  .grid--stagger {
-    align-items: start;
-  }
-
-  .grid--stagger > :nth-child(3n + 2) {
-    margin-top: var(--space-2xl);
-  }
-
-  .grid--stagger > :nth-child(3n + 3) {
-    margin-top: var(--space-l);
-  }
 }
 
 @media (min-width: 48em) and (max-width: 63.99em) {
@@ -1123,26 +1249,41 @@ a:hover {
   }
 }
 
-/* Kaart met gekleurde bovenkant */
-.usp-card {
-  padding-top: var(--space-xl);
+/* Kaart met een foto bovenaan (activiteiten, programma) */
+.foto-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
   overflow: hidden;
 }
 
-.usp-card::before {
-  content: "";
-  position: absolute;
-  top: -3.5rem;
-  right: -3.5rem;
-  width: 9rem;
-  height: 9rem;
-  border-radius: 50%;
-  background: var(--color-primary-soft);
+.foto-card__img {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-surface-alt);
+}
+
+.foto-card__img picture {
+  height: 100%;
+}
+
+.foto-card__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: scale var(--duration-slow) var(--ease-out);
 }
 
-.usp-card:hover::before {
-  scale: 1.25;
+.foto-card:hover .foto-card__img img {
+  scale: 1.04;
+}
+
+.foto-card__body {
+  padding: var(--space-m) var(--space-l) var(--space-l);
+}
+
+.foto-card__body p:last-child {
+  margin-bottom: 0;
 }
 
 /* ---------- 9. Uitgelichte blokken ---------- */
@@ -1158,7 +1299,7 @@ a:hover {
   margin: -3rem var(--space-xs) 0;
   padding: var(--space-xl) var(--space-m);
   border-radius: var(--radius-l);
-  background: var(--color-primary-strong);
+  background: var(--color-dark);
   color: var(--color-on-primary);
   box-shadow: var(--shadow-l);
 }
@@ -1172,7 +1313,7 @@ a:hover {
 }
 
 .feature__panel .eyebrow {
-  --eyebrow-color: var(--color-on-primary);
+  --eyebrow-color: var(--color-on-dark);
 }
 
 @media (min-width: 64em) {
@@ -1253,12 +1394,134 @@ a:hover {
   width: 1.45em;
   height: 1.45em;
   border-radius: 50%;
-  background: var(--check-bg, var(--color-primary-soft)) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b1d23' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4L18 8'/%3E%3C/svg%3E") center / 68% no-repeat;
+  background: var(--check-bg, var(--color-primary)) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4L18 8'/%3E%3C/svg%3E") center / 68% no-repeat;
 }
 
-.on-dark .checklist,
-.checklist--sun {
-  --check-bg: var(--color-sun);
+/* Kernwaarden: Sport, Plezier, Ontwikkeling. Drie iconen met korte tekst, naast elkaar vanaf 48em */
+.kernwaarden {
+  display: grid;
+  gap: var(--space-l);
+  margin: 0;
+  padding: var(--space-l);
+  border-radius: var(--radius-l);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-s);
+  list-style: none;
+}
+
+.kernwaarden li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-2xs) var(--space-m);
+  align-items: start;
+}
+
+.kernwaarden .icon-badge {
+  grid-row: span 2;
+  width: 4rem;
+  height: 4rem;
+  margin: 0;
+}
+
+.kernwaarden .icon-badge .icon {
+  width: 1.9rem;
+  height: 1.9rem;
+}
+
+.kernwaarden h3 {
+  margin: 0.35rem 0 0;
+  font-size: var(--step-1);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.kernwaarden p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 48em) {
+  .kernwaarden {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    padding: var(--space-xl) 0;
+  }
+
+  .kernwaarden li {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    padding-inline: var(--space-l);
+    text-align: center;
+  }
+
+  .kernwaarden li + li {
+    border-left: 1px solid var(--color-border);
+  }
+
+  .kernwaarden .icon-badge {
+    grid-row: auto;
+    margin-bottom: var(--space-s);
+  }
+}
+
+/* Lijst met sterke punten naast een foto (homepage: wat Sporty uniek maakt) */
+.punten {
+  display: grid;
+  gap: var(--space-m);
+  margin: var(--space-l) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.punten li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.15rem var(--space-s);
+}
+
+.punten .icon-badge {
+  grid-row: span 2;
+  width: 3rem;
+  height: 3rem;
+  margin: 0;
+}
+
+.punten .icon-badge .icon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.punten h3 {
+  margin: 0.3rem 0 0;
+  font-size: var(--step-1);
+}
+
+.punten p {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.stappen__knoppen {
+  margin-top: var(--space-xl);
+}
+
+/* Kop met een knop ernaast (programma op de homepage) */
+.section-head--met-knop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-m) var(--space-xl);
+  max-width: none;
+}
+
+.section-head--met-knop > div {
+  max-width: 46rem;
+}
+
+.section-head--met-knop > div > :last-child {
+  margin-bottom: 0;
 }
 
 /* ---------- 10. Stappen ---------- */
@@ -1298,12 +1561,32 @@ a:hover {
 
 @media (min-width: 64em) {
   .steps {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    align-items: start;
+    grid-template-columns: repeat(var(--stappen, 4), minmax(0, 1fr));
   }
 
-  .steps > li:nth-child(even) {
-    margin-top: var(--space-xl);
+  .steps--3 {
+    --stappen: 3;
+  }
+
+  /* Een dunne stippellijn verbindt de stappen */
+  .steps {
+    position: relative;
+  }
+
+  .steps::before {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: calc(var(--space-l) + 1.75rem);
+    left: calc(var(--space-l) + 3.5rem);
+    right: calc(100% / var(--stappen, 4) - var(--space-l));
+    border-top: 2px dashed var(--color-accent);
+    pointer-events: none;
+  }
+
+  .steps > li::before {
+    position: relative;
+    z-index: 2;
   }
 }
 
@@ -1368,10 +1651,10 @@ a:hover {
   display: grid;
   gap: var(--space-m);
   padding: var(--space-xl) var(--space-l);
-  border-radius: var(--radius-l);
+  border-radius: var(--radius-m);
   background: var(--color-surface);
-  box-shadow: var(--shadow-l);
-  border-top: 10px solid var(--color-accent);
+  box-shadow: var(--shadow-m);
+  border-top: 6px solid var(--color-primary);
 }
 
 .price-card > .pill {
@@ -1398,7 +1681,7 @@ a:hover {
 .price__amount {
   font-size: var(--step-4);
   letter-spacing: -0.03em;
-  color: var(--color-primary-strong);
+  color: var(--color-primary-deep);
 }
 
 .price__unit {
@@ -1657,10 +1940,11 @@ a:hover {
   width: 9.5rem;
   height: 9.5rem;
   margin: 0 auto var(--space-m);
-  border-radius: var(--radius-blob);
+  border-radius: 50%;
   overflow: hidden;
   background: var(--badge-bg, var(--color-sun));
-  transition: border-radius var(--duration-slow) var(--ease-out), rotate var(--duration) var(--ease-bounce);
+  box-shadow: 0 0 0 6px var(--color-surface), 0 0 0 8px var(--color-primary-soft);
+  transition: scale var(--duration) var(--ease-out);
 }
 
 .avatar svg {
@@ -1669,8 +1953,7 @@ a:hover {
 }
 
 .team-card:hover .avatar {
-  border-radius: 50%;
-  rotate: -4deg;
+  scale: 1.04;
 }
 
 .team-card .pill {
@@ -1689,7 +1972,7 @@ a:hover {
 .team-card__fact strong {
   display: block;
   font-size: var(--step--1);
-  color: var(--color-primary-deep);
+  color: var(--color-link);
 }
 
 /* ---------- 14. Veelgestelde vragen ---------- */
@@ -1725,8 +2008,9 @@ a:hover {
   display: block;
   padding: var(--space-m) 4.25rem var(--space-m) var(--space-m);
   border-radius: var(--radius-m);
+  font-family: var(--font-ui);
   font-size: var(--step-1);
-  font-weight: var(--font-weight-button);
+  font-weight: var(--font-weight-ui);
   line-height: 1.35;
   cursor: pointer;
   list-style: none;
@@ -1745,17 +2029,16 @@ a:hover {
   height: 2.25rem;
   margin-top: -1.125rem;
   border-radius: 50%;
-  background: var(--color-sun-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231b1d23' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M12 6v12M6 12h12'/%3E%3C/svg%3E") center / 55% no-repeat;
-  transition: rotate var(--duration) var(--ease-bounce), background-color var(--duration-fast) var(--ease-out);
+  background: var(--color-primary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M12 6v12M6 12h12'/%3E%3C/svg%3E") center / 55% no-repeat;
+  transition: rotate var(--duration) var(--ease-out), background-color var(--duration-fast) var(--ease-out);
 }
 
 .faq summary:hover::after {
-  background-color: var(--color-sun);
+  background-color: var(--color-primary-deep);
 }
 
 .faq details[open] summary::after {
   rotate: 45deg;
-  background-color: var(--color-sun);
 }
 
 .faq__answer {
@@ -1803,8 +2086,9 @@ a:hover {
 
 .contact-card__value {
   margin: 0;
+  font-family: var(--font-ui);
   font-size: var(--step-1);
-  font-weight: var(--font-weight-heading);
+  font-weight: 700;
   overflow-wrap: anywhere;
 }
 
@@ -1876,7 +2160,7 @@ a:hover {
 
 .side-card {
   padding: var(--space-l);
-  border-radius: var(--radius-l);
+  border-radius: var(--radius-m);
   background: var(--color-surface-alt);
 }
 
@@ -2084,7 +2368,7 @@ a:hover {
 }
 
 .link-button:hover {
-  color: var(--color-primary-deep);
+  color: var(--color-text);
 }
 
 .choices {
@@ -2250,25 +2534,32 @@ a:hover {
 
 /* ---------- 18. Afsluitend blok (CTA) ---------- */
 
-/* Oranje, zoals de banner aan het hek: slogan in handschrift, witte tekst. Diep oranje voor goed leesbare gewone tekst. */
+/*
+ * Krachtig Sporty-oranje met een zacht verloop, het handgeschreven accent "Samen sporten, samen groeien"
+ * en witte tekst. Wit op oranje is alleen groot genoeg vanaf 18,66px vet: alle tekst hier is daarom groot of vet.
+ * Op de achtergrond twee subtiele ronde vormen, als een bal en de middencirkel van een veld.
+ */
 .cta {
   position: relative;
   display: grid;
   gap: var(--space-xl);
   padding: var(--space-xl) var(--space-l);
   border-radius: var(--radius-l);
-  background: var(--color-primary-strong);
+  background: linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 80%, var(--color-primary-deep)) 100%);
   color: var(--color-on-primary);
   overflow: hidden;
   isolation: isolate;
 }
 
 .cta h2 {
+  max-width: 16ch;
   font-size: var(--step-4);
 }
 
 .cta p {
-  max-width: 36em;
+  max-width: 34em;
+  font-size: clamp(1.1875rem, 1.12rem + 0.3vw, 1.375rem);
+  font-weight: var(--font-weight-strong);
 }
 
 .cta a:not(.btn) {
@@ -2298,21 +2589,20 @@ a:hover {
 
 .cta__extra {
   margin: var(--space-m) 0 0;
-  font-weight: var(--font-weight-strong);
 }
 
 /* Witte knop met oranje tekst, en een omlijnde witte knop */
 .cta .btn {
   --btn-bg: var(--color-surface);
   --btn-fg: var(--color-primary-deep);
-  --btn-bg-hover: var(--color-secondary);
+  --btn-bg-hover: var(--color-bg);
 }
 
 .cta .btn--secondary {
   --btn-bg: transparent;
   --btn-fg: var(--color-on-primary);
   --btn-bg-hover: var(--color-on-primary);
-  border-color: currentColor;
+  --btn-border: rgb(255 255 255 / 0.8);
 }
 
 .cta .btn--secondary:hover {
@@ -2327,7 +2617,6 @@ a:hover {
   border-radius: 50%;
   overflow: hidden;
   box-shadow: var(--shadow-l);
-  rotate: 4deg;
 }
 
 .cta__media img {
@@ -2336,19 +2625,29 @@ a:hover {
   object-fit: cover;
 }
 
-/* Grote lach op de achtergrond, zoals onder het woordmerk */
-.cta::before {
+.cta::before,
+.cta::after {
   content: "";
   position: absolute;
   z-index: -1;
-  right: -4rem;
-  bottom: -2.5rem;
-  width: 22rem;
-  height: 8rem;
-  background: var(--color-primary);
-  -webkit-mask: var(--glimlach) center / contain no-repeat;
-  mask: var(--glimlach) center / contain no-repeat;
-  opacity: 0.6;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.cta::before {
+  top: -9rem;
+  right: -7rem;
+  width: 26rem;
+  aspect-ratio: 1;
+  border: 2px solid rgb(255 255 255 / 0.22);
+}
+
+.cta::after {
+  left: -3rem;
+  bottom: -3rem;
+  width: 9rem;
+  aspect-ratio: 1;
+  background: rgb(255 255 255 / 0.1);
 }
 
 @media (min-width: 64em) {
@@ -2419,7 +2718,42 @@ a:hover {
   margin-bottom: var(--space-s);
   color: var(--color-primary);
   font-size: var(--step-1);
+  font-weight: 700;
   letter-spacing: -0.01em;
+}
+
+/* Sport · Plezier · Ontwikkeling, met witte iconen in oranje rondjes */
+.site-footer .footer-waarden {
+  display: grid;
+  gap: var(--space-2xs);
+  margin: var(--space-m) 0 var(--space-l);
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+  font-size: var(--step--1);
+}
+
+.site-footer .footer-waarden li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0;
+}
+
+.footer-waarden span {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.footer-waarden .icon {
+  width: 1.1rem;
+  height: 1.1rem;
 }
 
 .site-footer ul {
@@ -2520,7 +2854,7 @@ a:hover {
 /* Elementen komen subtiel in beeld bij het scrollen (alleen met JavaScript) */
 .reveal-on .reveal {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(20px);
   transition: opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out);
   transition-delay: var(--delay, 0ms);
 }
@@ -2530,22 +2864,17 @@ a:hover {
   transform: none;
 }
 
-@keyframes pop-in {
-  from {
-    opacity: 0;
-    scale: 0.6;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
-  /* De iconen in de oranje band springen even in beeld */
-  .slogan-band__icoon {
-    animation: pop-in var(--duration-slow) var(--ease-bounce) both;
-    animation-delay: 300ms;
+  /* De iconen van de kernwaarden komen rustig in beeld */
+  .reveal-on .kernwaarden .reveal .icon-badge {
+    scale: 0.7;
+    transition: scale var(--duration-slow) var(--ease-out);
+    transition-delay: calc(var(--delay, 0ms) + 150ms);
   }
 
-  .slogan-band__lijst li:nth-child(2) .slogan-band__icoon { animation-delay: 450ms; }
-  .slogan-band__lijst li:nth-child(3) .slogan-band__icoon { animation-delay: 600ms; }
+  .reveal-on .kernwaarden .reveal.is-visible .icon-badge {
+    scale: 1;
+  }
 
   /* Lichte parallax, waar de browser het ondersteunt */
   @supports (animation-timeline: view()) {
@@ -2610,7 +2939,7 @@ a:hover {
 }
 
 .intro {
-  --intro-bg: var(--color-surface-alt);
+  --intro-bg: var(--color-bg);
   --e: calc(min(72vw, 50vh, 26rem) / 400); /* één eenheid van het logo (viewBox 400 × 392) */
   position: fixed;
   inset: 0;
@@ -2755,8 +3084,7 @@ a:hover {
 .met-intro .hero__content > :nth-child(4) { animation-delay: 240ms; }
 .met-intro .hero__content > :nth-child(5) { animation-delay: 320ms; }
 
-.intro-speelt .hero__content > *,
-.intro-speelt .slogan-band__icoon {
+.intro-speelt .hero__content > * {
   animation-play-state: paused;
 }
 

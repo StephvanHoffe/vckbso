@@ -170,7 +170,7 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
     <section class="panel" aria-labelledby="contact-titel">
       <h2 id="contact-titel">Contactgegevens</h2>
       <dl class="gegevens">
-        <dt>Telefoon</dt><dd><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $ouder['telefoon'])) ?>"><?= e($ouder['telefoon']) ?></a></dd>
+        <dt>Telefoon</dt><dd><?php if (trim((string) $ouder['telefoon']) !== ''): ?><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $ouder['telefoon'])) ?>"><?= e($ouder['telefoon']) ?></a><?php else: ?><span class="muted">Niet ingevuld</span><?php endif; ?></dd>
         <dt>E-mail</dt><dd><a href="mailto:<?= e($ouder['email']) ?>"><?= e($ouder['email']) ?></a></dd>
         <dt>Adres</dt><dd><?= e($ouder['straat']) ?><br><?= e(trim($ouder['postcode'] . ' ' . $ouder['plaats'])) ?></dd>
         <dt>Incasso</dt><dd><?= status_badge($ouder['mandaat_status']) ?><?= $ouder['mandaat_rekening'] ? '<br>' . e($ouder['mandaat_rekening']) . ' (' . e($ouder['mandaat_naam']) . ')' : '' ?></dd>

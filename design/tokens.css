@@ -1,29 +1,12 @@
 /*
  * Design tokens Sporty
- * Huisstijl volgens het moodboard (design/moodboard-sporty.jpg): Sporty-oranje, wit en crème,
- * het woordmerk in script, koppen in Poppins en slogans in handgeschreven hoofdletters.
+ * Huisstijl volgens het moodboard (design/moodboard-sporty.jpg) en de designprompt van 11 oktober 2026:
+ * krachtig Sporty-oranje met (warm) wit, zacht beige en antraciet; koppen in Poppins ExtraBold,
+ * lopende tekst in DM Sans en af en toe een handgeschreven accent.
  * Gebruik overal deze variabelen in plaats van losse kleurcodes of maten.
  */
 
-/* Poppins (400, 600, 700) en Caveat Brush, lokaal gehost. Licenties: assets/fonts/OFL.txt */
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../assets/fonts/poppins-latin-400.woff2") format("woff2");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../assets/fonts/poppins-latin-ext-400.woff2") format("woff2");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
+/* Poppins (600, 700, 800) voor koppen, knoppen en labels, DM Sans (400, 700) voor lopende tekst, en Caveat Brush. Lokaal gehost; licenties: assets/fonts/OFL.txt */
 @font-face {
   font-family: "Poppins";
   font-style: normal;
@@ -60,6 +43,60 @@
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("../assets/fonts/poppins-latin-800.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("../assets/fonts/poppins-latin-ext-800.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/dm-sans-latin-400.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/dm-sans-latin-ext-400.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/dm-sans-latin-700.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/dm-sans-latin-ext-700.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 /* Handgeschreven hoofdletters voor slogans, zoals op de kaart en de banner in het moodboard (alleen hoofdletters, 22 kB) */
 @font-face {
   font-family: "Caveat Brush";
@@ -71,71 +108,74 @@
 }
 
 :root {
-  /* ---------- Kleuren (moodboard) ---------- */
-  --color-primary: #f05a1a;          /* Sporty-oranje: grote vlakken, logo, iconen en grote tekst (wit erop 3,4:1, alleen groot) */
-  --color-on-primary: #ffffff;
-  --color-secondary: #f6ead8;        /* crème, zoals de canvas tas en de kaart */
-  --color-on-secondary: #221a15;
-  --color-accent: #ff9a57;           /* licht oranje, alleen voor details zonder tekst */
-  --color-on-accent: #221a15;
-  --color-surface: #ffffff;
-  --color-surface-alt: #fbf4ea;      /* licht crème voor afwisselende secties */
-  --color-text: #221a15;             /* warm donkerbruin, 17,1:1 op wit */
-  --color-text-muted: #6b625a;       /* 6,0:1 op wit, 5,5:1 op licht crème */
-  --color-link: #b63f0c;             /* 5,7:1 op wit, 5,2:1 op licht crème */
-  --color-border: #e8ddd0;
+  /* ---------- Kleuren (designprompt, 11 oktober 2026) ---------- */
+  --color-primary: #f26522;          /* Sporty Orange: knoppen, vlakken, iconen, logo en grote tekst */
+  --color-on-primary: #ffffff;       /* wit op oranje is 3,2:1: alleen voor grote of vette tekst (knoppen zijn 19px vet) */
+  --color-primary-deep: #d94e12;     /* Deep Orange: hover en oranje woorden in koppen op lichte vlakken (≥ 3,4:1) */
+  --color-primary-strong: #c9450d;   /* oranje voor kleine tekst en knoppen met kleine tekst in Mijn BSO (wit erop 4,8:1) */
+  --color-primary-dark: #a33a0b;     /* hover van die knoppen (wit erop 6,3:1) */
+  --color-primary-soft: #fde6d6;     /* zachte oranje tint; tekst erop in --color-text */
+  --color-secondary: #f3e9dc;        /* Soft Beige: afwisselende vlakken */
+  --color-on-secondary: #222222;
+  --color-accent: #ffb27a;           /* licht oranje, alleen voor details zonder tekst */
+  --color-on-accent: #222222;
+  --color-bg: #fff9f3;               /* Warm White: achtergrond van de pagina en rustige secties */
+  --color-surface: #ffffff;          /* Pure White: kaarten, header, invoervelden */
+  --color-surface-alt: #f3e9dc;      /* Soft Beige: afwisselende secties */
+  --color-text: #222222;             /* Charcoal: koppen en tekst, 15,9:1 op warm wit */
+  --color-text-muted: #5d5751;       /* 7,0:1 op wit, 5,9:1 op beige */
+  --color-link: #b63f0c;             /* kleine oranje tekst en links: 5,7:1 op wit, 4,7:1 op beige */
+  --color-border: #e9dfd2;
 
-  /*
-   * Het merkoranje is te licht voor gewone witte tekst. Knoppen en kleine oranje
-   * tekst gebruiken daarom dezelfde tint, iets donkerder (wit erop 4,8:1).
-   */
-  --color-primary-strong: #c9450d;
-  --color-primary-deep: #99350a;     /* hover en actieve toestand (wit erop 7,3:1) */
-  --color-primary-soft: #ffe7d8;     /* zachte tint; tekst erop in --color-text */
+  /* Donker vlak: de overloop over de foto in de hero en de footer */
+  --color-dark: #222222;
+  --color-on-dark: #fff9f3;
 
-  /* Donker vlak, zoals de overloop over de foto in de hero (footer) */
-  --color-dark: #221a15;
-  --color-on-dark: #f6ead8;          /* crème op donker, 14,4:1 */
-
-  /* Zachte tinten voor vlakken en labels */
-  --color-sand: #f1e1c8;
-  --color-sun: #ffb27a;
+  /* Zachte tinten voor vlakken en labels (alleen oranje en beige: geen extra kleuren) */
+  --color-sand: #eadbc6;
+  --color-sun: #ffc49c;
   --color-sun-soft: #fff1e6;
-  --color-coral-soft: #ffe1dc;
+  --color-coral-soft: #fde6d6;
 
   /* Alleen voor status en indeling in Mijn BSO (groen = gelukt, koraal en mint als groepskleuren) */
   --color-mint: #06d6a0;
   --color-mint-soft: #d4f7ec;
   --color-coral: #ff6b6b;
 
-  --color-focus: #221a15;
+  --color-focus: #222222;
   --color-error: #a8321f;            /* 6,7:1 op wit */
   --color-success: #0d6e52;          /* 6,2:1 op wit */
 
   /* ---------- Letters ---------- */
   --font-heading: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  --font-body: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-ui: var(--font-heading);    /* knoppen, menu en labels */
   --font-slogan: "Caveat Brush", "Poppins", ui-sans-serif, system-ui, sans-serif;
   --font-weight-body: 400;
-  --font-weight-strong: 600;
-  --font-weight-button: 600;
-  --font-weight-heading: 700;
+  --font-weight-strong: 700;
+  --font-weight-ui: 600;
+  --font-weight-button: 700;
+  --font-weight-heading: 800;
+
+  /* Knoppen: 19px vet, zodat wit op oranje als grote tekst geldt (WCAG: vanaf 18,66px vet 3:1) */
+  --font-size-button: 1.1875rem;
 
   /* Basisgrootte 17px op mobiel, 18px vanaf tablet */
   --font-size-base: clamp(1.0625rem, 1.02rem + 0.2vw, 1.125rem);
   --line-height-body: 1.65;
-  --line-height-heading: 1.12;
-  --letter-spacing-heading: -0.02em;
+  --line-height-heading: 1.06;       /* compacte, krachtige koppen */
+  --letter-spacing-heading: -0.025em;
+  --letter-spacing-label: 0.14em;    /* labels in hoofdletters boven koppen */
   --measure: 65ch;
 
   /* Typografische schaal (vloeiend tussen 360 en 1280px) */
-  --step--1: clamp(0.875rem, 0.85rem + 0.1vw, 0.9375rem);
+  --step--1: clamp(0.9375rem, 0.92rem + 0.1vw, 1rem); /* kleinste tekst: 15–16px */
   --step-0: var(--font-size-base);
   --step-1: clamp(1.25rem, 1.15rem + 0.45vw, 1.5rem);
   --step-2: clamp(1.5rem, 1.3rem + 0.9vw, 2rem);
-  --step-3: clamp(1.875rem, 1.5rem + 1.7vw, 2.875rem);
-  --step-4: clamp(2.25rem, 1.65rem + 2.7vw, 3.875rem);
-  --step-5: clamp(2.5rem, 1.7rem + 3.6vw, 4.75rem);
+  --step-3: clamp(2rem, 1.55rem + 2vw, 3.25rem);
+  --step-4: clamp(2.375rem, 1.7rem + 3vw, 4.25rem);
+  --step-5: clamp(2.625rem, 1.75rem + 3.9vw, 5.25rem);
 
   /* ---------- Ruimte ---------- */
   --space-3xs: 0.25rem;
@@ -154,9 +194,9 @@
 
   /* ---------- Vormen ---------- */
   --radius-s: 12px;
-  --radius-m: 18px;
-  --radius-l: 28px;
-  --radius-xl: 40px;
+  --radius-m: 20px;         /* kaarten */
+  --radius-l: 24px;         /* foto's en grote vlakken */
+  --radius-xl: 32px;
   --radius-pill: 999px;
   --radius-blob: 58% 42% 55% 45% / 45% 55% 45% 55%;
 
@@ -165,10 +205,10 @@
 
   --border-width: 2px;
 
-  /* Zachte, warme schaduwen in plaats van harde lijnen */
-  --shadow-s: 0 2px 6px -2px rgb(120 50 10 / 0.12), 0 6px 16px -8px rgb(120 50 10 / 0.14);
-  --shadow-m: 0 4px 12px -4px rgb(120 50 10 / 0.12), 0 18px 40px -18px rgb(120 50 10 / 0.26);
-  --shadow-l: 0 8px 20px -8px rgb(120 50 10 / 0.14), 0 32px 64px -28px rgb(120 50 10 / 0.34);
+  /* Subtiele schaduwen in plaats van randen */
+  --shadow-s: 0 1px 2px rgb(60 30 10 / 0.06), 0 4px 14px -6px rgb(60 30 10 / 0.10);
+  --shadow-m: 0 2px 6px -2px rgb(60 30 10 / 0.08), 0 16px 36px -18px rgb(60 30 10 / 0.22);
+  --shadow-l: 0 6px 16px -8px rgb(60 30 10 / 0.12), 0 28px 56px -28px rgb(60 30 10 / 0.30);
 
   /* ---------- Beweging (300–600ms) ---------- */
   --duration-fast: 300ms;
@@ -177,5 +217,6 @@
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --header-height: 4.5rem;
+  --header-height: 5rem;
+  --header-height-compact: 4rem;
 }

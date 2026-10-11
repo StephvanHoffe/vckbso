@@ -46,11 +46,11 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($titel) ?> · <?= e($omgeving) ?> · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#f05a1a">
+<meta name="theme-color" content="#f26522">
 <link rel="icon" href="../favicon.ico" sizes="32x32">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="../assets/fonts/poppins-latin-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../assets/fonts/poppins-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/dm-sans-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/poppins-latin-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../design/tokens.css">
 <link rel="stylesheet" href="../css/style.css">
 <link rel="stylesheet" href="assets/beheer.css">

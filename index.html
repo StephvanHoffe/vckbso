@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sporty · Sportieve buitenschoolse opvang (BSO) in Amsterdam</title>
-<meta name="description" content="Hé, welkom bij Sporty! Buitenschoolse opvang in Amsterdam waar je kind lekker sport, speelt en zich thuis voelt, met oprechte aandacht voor ieder kind.">
+<meta name="description" content="Sport, plezier en ontwikkeling na schooltijd. Sporty is een sportieve BSO in Amsterdam voor kinderen van 5 t/m 13 jaar, met oprechte aandacht voor ieder kind.">
 <!-- TODO: domein kiezen bij de nieuwe naam Sporty (nu nog bsovck.nl) en de URL's aanpassen; zie docs/seo.md -->
 <link rel="canonical" href="https://bsovck.nl/">
 <link rel="alternate" hreflang="nl" href="https://bsovck.nl/">
@@ -15,20 +15,20 @@
 <meta property="og:locale:alternate" content="en_GB">
 <meta property="og:site_name" content="Sporty">
 <meta property="og:title" content="Sporty · Sportieve buitenschoolse opvang (BSO) in Amsterdam">
-<meta property="og:description" content="Hé, welkom bij Sporty! Buitenschoolse opvang in Amsterdam waar je kind lekker sport, speelt en zich thuis voelt, met oprechte aandacht voor ieder kind.">
+<meta property="og:description" content="Sport, plezier en ontwikkeling na schooltijd. Sporty is een sportieve BSO in Amsterdam voor kinderen van 5 t/m 13 jaar, met oprechte aandacht voor ieder kind.">
 <meta property="og:url" content="https://bsovck.nl/">
 <meta property="og:image" content="https://bsovck.nl/assets/img/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Sporty: de leukste, gezelligste én sportiefste BSO in Amsterdam">
+<meta property="og:image:alt" content="Sporty: sport, plezier en ontwikkeling na schooltijd">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#f05a1a">
+<meta name="theme-color" content="#f26522">
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
-<link rel="preload" href="assets/fonts/poppins-latin-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="assets/fonts/poppins-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/dm-sans-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/poppins-latin-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="design/tokens.css">
 <link rel="stylesheet" href="css/style.css">
 <script>document.documentElement.classList.add("js","reveal-on");setTimeout(function(){if(!window.vckReady)document.documentElement.classList.remove("reveal-on")},3000);</script>
@@ -97,12 +97,12 @@
     <a class="logo" href="index.html" aria-label="Sporty, naar de homepage"><img class="logo__woordmerk" src="assets/img/sporty-woordmerk.svg" alt="" width="102" height="46"></a>
     <nav class="site-nav" id="site-nav" aria-label="Hoofdmenu">
       <ul class="site-nav__list">
-        <li><a href="index.html" aria-current="page">Home</a></li>
+        <li class="site-nav__home"><a href="index.html" aria-current="page">Home</a></li>
         <li><a href="over-ons.html">Over ons</a></li>
-        <li><a href="diensten.html">Diensten</a></li>
+        <li><a href="diensten.html">Programma</a></li>
         <li><a href="prijzen.html">Prijzen</a></li>
         <li><a href="team.html">Team</a></li>
-        <li><a href="veelgestelde-vragen.html">Veelgestelde vragen</a></li>
+        <li><a href="veelgestelde-vragen.html">Vragen</a></li>
         <li><a href="contact.html">Contact</a></li>
         <li class="site-nav__login"><a href="beheer/inloggen.php">Inloggen</a></li>
       </ul>
@@ -120,120 +120,168 @@
   <div class="hero__media">
     <!-- Stockfoto, zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto zodra die er is -->
     <picture>
-  <source type="image/avif" srcset="assets/fotos/hero-480.avif 480w, assets/fotos/hero-800.avif 800w, assets/fotos/hero-1200.avif 1200w, assets/fotos/hero-1600.avif 1600w" sizes="100vw">
-  <img src="assets/fotos/hero-800.webp" srcset="assets/fotos/hero-480.webp 480w, assets/fotos/hero-800.webp 800w, assets/fotos/hero-1200.webp 1200w, assets/fotos/hero-1600.webp 1600w" sizes="100vw" width="1600" height="1068" alt="Kinderen voetballen samen op een zonnig grasveld in het park" fetchpriority="high" decoding="async">
+  <source type="image/avif" srcset="assets/fotos/kring-480.avif 480w, assets/fotos/kring-800.avif 800w, assets/fotos/kring-1200.avif 1200w, assets/fotos/kring-1600.avif 1600w" sizes="100vw">
+  <img src="assets/fotos/kring-800.webp" srcset="assets/fotos/kring-480.webp 480w, assets/fotos/kring-800.webp 800w, assets/fotos/kring-1200.webp 1200w, assets/fotos/kring-1600.webp 1600w" sizes="100vw" width="1600" height="1068" alt="Een groep kinderen staat met de armen om elkaar heen op een zonnig grasveld" fetchpriority="high" decoding="async">
 </picture>
   </div>
   <div class="container hero__inner">
     <div class="hero__content">
       <p class="eyebrow">Buitenschoolse opvang in Amsterdam</p>
-      <h1 class="hero__title">De leukste, gezelligste én sportiefste BSO <span class="hero__title-sub">met oprechte aandacht voor ieder kind</span></h1>
-      <p class="lead">Hé, wat leuk dat je er bent! Na school is het bij ons tijd om te rennen, te spelen en lekker bij te kletsen. Jij hebt je handen vrij, wij zorgen voor een middag waar je kind blij van wordt.</p>
-      <div class="btn-group">
-        <a class="btn" href="aanmelden.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-userplus"></use></svg>Aanmelden</a>
-        <a class="btn btn--op-donker" href="diensten.html">Ontdek wat we doen<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+      <h1 class="hero__title">Sport, plezier en ontwikkeling <span class="hl">na schooltijd.</span></h1>
+      <div class="hero__onder">
+        <p class="lead">Bij BSO Sporty geloven we in de kracht van sport, samen spelen en groeien. Een plek waar kinderen van 5 t/m 13 jaar iedere dag met plezier in beweging komen.</p>
+        <div class="btn-group">
+          <a class="btn" href="over-ons.html">Ontdek BSO Sporty<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+          <a class="btn btn--secondary" href="diensten.html">Bekijk ons programma</a>
+        </div>
       </div>
-      <ul class="hero__facts">
-        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg>Open van maandag t/m vrijdag</li>
-        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg>In Amsterdam</li>
-      </ul>
     </div>
   </div>
 </section>
-<section class="slogan-band" aria-label="Waar Sporty voor staat">
-  <ul class="container slogan-band__lijst">
-    <li><span class="slogan-band__icoon" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-ball"></use></svg></span>Sport</li>
-    <li><span class="slogan-band__icoon" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-smile"></use></svg></span>Plezier</li>
-    <li><span class="slogan-band__icoon" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-users"></use></svg></span>Ontwikkeling</li>
-  </ul>
-</section>
 
-<section class="section section--alt" aria-labelledby="waarom-titel">
+<section class="section" aria-labelledby="waarden-titel">
   <div class="container">
-    <div class="section-head reveal">
-      <p class="eyebrow">Waarom Sporty?</p>
-      <h2 id="waarom-titel">Drie redenen om voor ons te kiezen</h2>
-      <p class="lead">Een BSO kies je niet zomaar. Dit is waar wij het verschil maken voor jouw kind.</p>
+    <div class="section-head center reveal">
+      <p class="eyebrow">Onze kernwaarden</p>
+      <h2 id="waarden-titel">Waar we elke middag <span class="hl">voor gaan</span></h2>
     </div>
-    <div class="grid grid--3 grid--stagger">
-      <article class="card usp-card reveal">
-        <div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg></div>
-        <h3>Oprechte aandacht voor ieder kind</h3>
-        <p>Ieder kind is anders, en dat vinden wij juist mooi. We nemen de tijd om te luisteren, kijken echt naar wat je kind nodig heeft en vieren samen elke kleine en grote overwinning.</p>
-      </article>
-      <article class="card usp-card reveal" style="--delay: 120ms;">
-        <div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-ball"></use></svg></div>
-        <h3>Volop sport en beweging</h3>
-        <p>Rennen, springen, balspellen en buiten ravotten: bij ons zit niemand de hele middag stil. We stimuleren kinderen om lekker te bewegen, op hun eigen niveau en vooral met veel plezier.</p>
-      </article>
-      <article class="card usp-card reveal" style="--delay: 240ms;">
-        <div class="icon-badge"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg></div>
-        <h3>Gezellig, net een tweede thuis</h3>
-        <p>Na een lange schooldag wil je vooral even jezelf kunnen zijn. Met vertrouwde gezichten, vriendjes en een warme sfeer wordt de BSO een plek waar je kind graag naartoe gaat.</p>
-      </article>
-    </div>
+    <ul class="kernwaarden">
+      <li class="reveal">
+        <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-ball"></use></svg></div>
+        <h3>Sport</h3>
+        <p>Elke middag in beweging: balspellen, tikspelletjes en lekker buiten ravotten. Ieder kind doet mee op z'n eigen niveau.</p>
+      </li>
+      <li class="reveal" style="--delay: 120ms;">
+        <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-smile"></use></svg></div>
+        <h3>Plezier</h3>
+        <p>Lachen, spelen en samen dingen ontdekken. Bij ons gaat je kind graag naartoe, en komt het blij weer thuis.</p>
+      </li>
+      <li class="reveal" style="--delay: 240ms;">
+        <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-users"></use></svg></div>
+        <h3>Ontwikkeling</h3>
+        <p>We zien ieder kind, moedigen aan om nieuwe dingen te proberen en vieren elke kleine en grote overwinning.</p>
+      </li>
+    </ul>
   </div>
 </section>
 
-<section class="section" aria-labelledby="opvang-titel">
-  <div class="container feature">
-    <div class="feature__media">
-    <div class="frame frame--left reveal">
-      <!-- Stockfoto, zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto zodra die er is -->
-      <div class="frame__img">
-        <picture>
-  <source type="image/avif" srcset="assets/fotos/sport-480.avif 480w, assets/fotos/sport-800.avif 800w, assets/fotos/sport-1200.avif 1200w, assets/fotos/sport-1600.avif 1600w" sizes="(min-width: 64em) 58vw, 100vw">
-  <img src="assets/fotos/sport-800.webp" srcset="assets/fotos/sport-480.webp 480w, assets/fotos/sport-800.webp 800w, assets/fotos/sport-1200.webp 1200w, assets/fotos/sport-1600.webp 1600w" sizes="(min-width: 64em) 58vw, 100vw" width="1600" height="1067" alt="Een groepje kinderen in kleurrijke kleren voetbalt enthousiast op het gras, met begeleiders erbij" loading="lazy" decoding="async">
-</picture>
-      </div>
-    </div>
-    </div>
-    <div class="feature__panel on-dark reveal" style="--delay: 150ms;">
-      <p class="eyebrow">Wat we doen</p>
-      <h2 id="opvang-titel">Buitenschoolse opvang vol plezier</h2>
-      <p>Na schooltijd komt je kind naar een plek waar het zich thuis voelt. We sporten, spelen, ontspannen en hebben het vooral gezellig met elkaar. En jij? Jij werkt of regelt je zaken met een gerust hart.</p>
-      <ul class="checklist">
-        <li>Volop ruimte om te sporten en te bewegen</li>
-        <li>Samen spelen, ontdekken en lol maken</li>
-        <li>Aandacht voor hoe het écht met je kind gaat</li>
-      </ul>
-      <div class="btn-group">
-        <a class="btn btn--light" href="diensten.html">Bekijk onze opvang<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
-        <a class="link-arrow" href="prijzen.html#rekentool">Bereken wat het jou kost<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section section--flush-top" aria-labelledby="over-titel">
+<section class="section section--alt" aria-labelledby="uniek-titel">
   <div class="container split">
-    <div class="split__text reveal">
-      <p class="eyebrow">Over ons</p>
-      <h2 id="over-titel">Hoi, wij zijn Sporty!</h2>
-      <p>Wij zijn een buitenschoolse opvang in Amsterdam met een groot hart voor kinderen. Wij geloven dat de middag na school net zo belangrijk is als de ochtend in de klas: tijd om te bewegen, vriendschappen te sluiten en te groeien in je eigen tempo.</p>
-      <p>We zijn betrouwbaar, eerlijk en zorgzaam, en we houden van een beetje gekkigheid. Want lachen hoort er gewoon bij!</p>
+    <div class="split__media reveal">
+      <div class="frame frame--left" style="--ratio: 5 / 4;">
+        <!-- Stockfoto, zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto zodra die er is -->
+        <div class="frame__img">
+          <picture>
+  <source type="image/avif" srcset="assets/fotos/hero-480.avif 480w, assets/fotos/hero-800.avif 800w, assets/fotos/hero-1200.avif 1200w, assets/fotos/hero-1600.avif 1600w" sizes="(min-width: 64em) 45vw, 100vw">
+  <img src="assets/fotos/hero-800.webp" srcset="assets/fotos/hero-480.webp 480w, assets/fotos/hero-800.webp 800w, assets/fotos/hero-1200.webp 1200w, assets/fotos/hero-1600.webp 1600w" sizes="(min-width: 64em) 45vw, 100vw" width="1600" height="1068" alt="Kinderen voetballen samen op een zonnig grasveld in het park" loading="lazy" decoding="async">
+</picture>
+        </div>
+      </div>
+    </div>
+    <div class="split__text reveal" style="--delay: 120ms;">
+      <p class="eyebrow">Waarom Sporty</p>
+      <h2 id="uniek-titel">De energie van een sportclub, de <span class="hl">warmte van thuis</span></h2>
+      <p>Een BSO kies je niet zomaar. Bij Sporty draait de middag om bewegen, samen spelen en groeien, met begeleiders die je kind écht zien.</p>
+      <ul class="punten">
+        <li>
+          <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-heart"></use></svg></div>
+          <h3>Oprechte aandacht voor ieder kind</h3>
+          <p>We nemen de tijd om te luisteren en kijken echt naar wat je kind nodig heeft.</p>
+        </li>
+        <li>
+          <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-ball"></use></svg></div>
+          <h3>Sport en beweging staan centraal</h3>
+          <p>Bij ons zit niemand de hele middag stil. We stimuleren kinderen om te bewegen, op hun eigen niveau en met veel plezier.</p>
+        </li>
+        <li>
+          <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-home"></use></svg></div>
+          <h3>Gezellig, net een tweede thuis</h3>
+          <p>Vertrouwde gezichten, vriendjes en een warme sfeer: een plek waar je kind graag naartoe gaat.</p>
+        </li>
+      </ul>
       <div class="btn-group">
         <a class="link-arrow" href="over-ons.html">Lees ons verhaal<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
         <a class="link-arrow" href="team.html">Ontmoet het team<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
       </div>
     </div>
-    <div class="split__media">
-    <div class="frame frame--tilt reveal">
-      <!-- Stockfoto, zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto zodra die er is -->
-      <div class="frame__img">
-        <picture>
-  <source type="image/avif" srcset="assets/fotos/aandacht-480.avif 480w, assets/fotos/aandacht-800.avif 800w, assets/fotos/aandacht-1200.avif 1200w, assets/fotos/aandacht-1600.avif 1600w" sizes="(min-width: 64em) 45vw, 100vw">
-  <img src="assets/fotos/aandacht-800.webp" srcset="assets/fotos/aandacht-480.webp 480w, assets/fotos/aandacht-800.webp 800w, assets/fotos/aandacht-1200.webp 1200w, assets/fotos/aandacht-1600.webp 1600w" sizes="(min-width: 64em) 45vw, 100vw" width="1600" height="1067" alt="Een begeleider geeft een meisje een high five aan een tafel vol knutselspullen, terwijl de andere kinderen lachen" loading="lazy" decoding="async">
-</picture>
+  </div>
+</section>
+
+<section class="section section--white" aria-labelledby="programma-titel">
+  <div class="container">
+    <div class="section-head section-head--met-knop reveal">
+      <div>
+        <p class="eyebrow">Ons programma</p>
+        <h2 id="programma-titel">Een middag vol <span class="hl">sport en spel</span></h2>
+        <p class="lead">Na de schoolbel begint het leukste deel van de dag. Dit kom je bij ons tegen.</p>
       </div>
-      <p class="bubble" aria-hidden="true">Hoi!</p>
+      <a class="btn btn--secondary" href="diensten.html">Bekijk ons programma<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
     </div>
+    <!-- TODO: welke sporten en activiteiten doen jullie precies? Dan de kaarten daarop aanpassen. -->
+    <div class="grid grid--3">
+      <article class="card foto-card reveal">
+        <div class="foto-card__img">
+          <!-- Stockfoto, zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto zodra die er is -->
+          <picture>
+  <source type="image/avif" srcset="assets/fotos/voetbal-480.avif 480w, assets/fotos/voetbal-800.avif 800w, assets/fotos/voetbal-1200.avif 1200w, assets/fotos/voetbal-1600.avif 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 100vw">
+  <img src="assets/fotos/voetbal-800.webp" srcset="assets/fotos/voetbal-480.webp 480w, assets/fotos/voetbal-800.webp 800w, assets/fotos/voetbal-1200.webp 1200w, assets/fotos/voetbal-1600.webp 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 100vw" width="1600" height="1067" alt="Close-up van een kind dat een voetbal wegtrapt op het gras" loading="lazy" decoding="async">
+</picture>
+        </div>
+        <div class="foto-card__body">
+          <h3>Sporten en bewegen</h3>
+          <p>Balspellen, tikspelletjes en lekker ravotten. Ieder kind doet mee op z'n eigen niveau, want plezier staat voorop.</p>
+        </div>
+      </article>
+      <article class="card foto-card reveal" style="--delay: 120ms;">
+        <div class="foto-card__img">
+          <!-- Stockfoto, zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto zodra die er is -->
+          <picture>
+  <source type="image/avif" srcset="assets/fotos/schilderen-480.avif 480w, assets/fotos/schilderen-800.avif 800w, assets/fotos/schilderen-1200.avif 1200w, assets/fotos/schilderen-1600.avif 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 100vw">
+  <img src="assets/fotos/schilderen-800.webp" srcset="assets/fotos/schilderen-480.webp 480w, assets/fotos/schilderen-800.webp 800w, assets/fotos/schilderen-1200.webp 1200w, assets/fotos/schilderen-1600.webp 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 100vw" width="1600" height="1068" alt="Een begeleider kijkt mee en helpt terwijl kinderen aan schildersezels schilderen" loading="lazy" decoding="async">
+</picture>
+        </div>
+        <div class="foto-card__body">
+          <h3>Aandacht en ontwikkeling</h3>
+          <p>We luisteren naar de verhalen van de dag, helpen als iets even lastig is en moedigen aan om nieuwe dingen te proberen.</p>
+        </div>
+      </article>
+      <article class="card foto-card reveal" style="--delay: 240ms;">
+        <div class="foto-card__img">
+          <!-- Stockfoto, zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto zodra die er is -->
+          <picture>
+  <source type="image/avif" srcset="assets/fotos/gezellig-480.avif 480w, assets/fotos/gezellig-800.avif 800w, assets/fotos/gezellig-1200.avif 1200w, assets/fotos/gezellig-1600.avif 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 100vw">
+  <img src="assets/fotos/gezellig-800.webp" srcset="assets/fotos/gezellig-480.webp 480w, assets/fotos/gezellig-800.webp 800w, assets/fotos/gezellig-1200.webp 1200w, assets/fotos/gezellig-1600.webp 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 100vw" width="1600" height="1067" alt="Kinderen zitten samen aan tafel, eten iets en kletsen gezellig" loading="lazy" decoding="async">
+</picture>
+        </div>
+        <div class="foto-card__body">
+          <h3>Samen en gezellig</h3>
+          <p>Samen spelen, kletsen en lachen in een warme, huiselijke sfeer waarin vriendschappen ontstaan.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="stappen-titel">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Aanmelden</p>
+      <h2 id="stappen-titel">In drie stappen <span class="hl">erbij</span></h2>
+      <p class="lead">Aanmelden is zo geregeld. Zo werkt het:</p>
+    </div>
+    <ol class="steps steps--3">
+      <li class="card reveal"><h3>Meld je kind online aan</h3><p>Vul het aanmeldformulier in, in een paar minuten. Je regelt meteen de automatische incasso.</p></li>
+      <li class="card reveal" style="--delay: 120ms;"><h3>Maak kennis</h3><p>We nemen contact met je op voor een kennismaking. Neem je kind gerust mee!</p></li>
+      <li class="card reveal" style="--delay: 240ms;"><h3>Kies de dagen en start</h3><p>Na de kennismaking kies je zelf de dagen in de agenda van Mijn BSO. Dan kan het sporten beginnen!</p></li>
+    </ol>
+    <div class="btn-group stappen__knoppen reveal">
+      <a class="btn" href="aanmelden.html">Meld je kind aan<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+      <a class="link-arrow" href="prijzen.html#rekentool">Bereken wat het jou kost<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
     </div>
   </div>
 </section>
 
 <!-- TODO: reviews van ouders toevoegen zodra die er zijn (alleen echte reviews, met toestemming) -->
-
 <section class="section section--flush-top cta-section">
   <div class="container">
     <div class="cta reveal">
@@ -249,8 +297,8 @@
       </div>
       <div class="cta__media">
         <picture>
-  <source type="image/avif" srcset="assets/fotos/samen-480.avif 480w, assets/fotos/samen-800.avif 800w, assets/fotos/samen-1200.avif 1200w, assets/fotos/samen-1600.avif 1600w" sizes="20rem">
-  <img src="assets/fotos/samen-800.webp" srcset="assets/fotos/samen-480.webp 480w, assets/fotos/samen-800.webp 800w, assets/fotos/samen-1200.webp 1200w, assets/fotos/samen-1600.webp 1600w" sizes="20rem" width="1600" height="1067" alt="" loading="lazy" decoding="async">
+  <source type="image/avif" srcset="assets/fotos/handen-480.avif 480w, assets/fotos/handen-800.avif 800w, assets/fotos/handen-1200.avif 1200w, assets/fotos/handen-1600.avif 1600w" sizes="20rem">
+  <img src="assets/fotos/handen-800.webp" srcset="assets/fotos/handen-480.webp 480w, assets/fotos/handen-800.webp 800w, assets/fotos/handen-1200.webp 1200w, assets/fotos/handen-1600.webp 1600w" sizes="20rem" width="1600" height="1068" alt="" loading="lazy" decoding="async">
 </picture>
       </div>
     </div>
@@ -262,6 +310,11 @@
     <div>
       <a class="logo logo--embleem" href="index.html" aria-label="Sporty, naar de homepage"><img src="assets/img/sporty-logo.svg" alt="" width="132" height="129" loading="lazy"></a>
       <p>Sportieve buitenschoolse opvang (BSO) in Amsterdam, met oprechte aandacht voor ieder kind.</p>
+      <ul class="footer-waarden" aria-label="Waar Sporty voor staat">
+        <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-ball"></use></svg></span>Sport</li>
+        <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-smile"></use></svg></span>Plezier</li>
+        <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-users"></use></svg></span>Ontwikkeling</li>
+      </ul>
       <h2>Volg ons</h2>
       <!-- TODO: links naar de social media-kanalen toevoegen, bijvoorbeeld:
       <ul class="footer-social"><li><a href="https://www.instagram.com/GEBRUIKERSNAAM/">Instagram</a></li><li><a href="https://www.facebook.com/PAGINA/">Facebook</a></li></ul> -->
@@ -289,7 +342,7 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="over-ons.html">Over ons</a></li>
-        <li><a href="diensten.html">Diensten</a></li>
+        <li><a href="diensten.html">Programma</a></li>
         <li><a href="prijzen.html">Prijzen</a></li>
         <li><a href="team.html">Team</a></li>
         <li><a href="veelgestelde-vragen.html">Veelgestelde vragen</a></li>

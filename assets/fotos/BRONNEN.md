@@ -17,17 +17,19 @@ Alle foto's vallen onder de [Pexels-licentie](https://www.pexels.com/license/): 
 
 | Bestand in `bron/` | Foto (Pexels) | Fotograaf | Waar op de site |
 |---|---|---|---|
-| `hero.jpg` | [Young Kids Playing Football on the Field](https://www.pexels.com/photo/young-kids-playing-football-on-the-field-8813564/) | Kampus Production | Home (hero), Engelse startpagina (hero), deelafbeelding `assets/img/og-image.jpg` |
-| `sport.jpg` | [Kids Playing Soccer](https://www.pexels.com/photo/kids-playing-soccer-8035099/) | RDNE Stock project | Home ("Wat we doen") |
-| `aandacht.jpg` | [Kids Playing with Teacher in the Classroom](https://www.pexels.com/photo/kids-playing-with-teacher-in-the-classroom-8363102/) | RDNE Stock project | Home ("Over ons") |
-| `samen.jpg` | [Group of Children Running in Garden](https://www.pexels.com/photo/group-of-children-running-in-garden-16724787/) | Yakup Polat | Afsluitend blok (rond beeld) op Home, Over ons, Diensten, Prijzen, Team en Veelgestelde vragen |
+| `kring.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813511/) | Kampus Production | Home en Engelse startpagina (hero: kinderen met de armen om elkaar, zoals in het logo), deelafbeelding `assets/img/og-image.jpg`, overzicht van het voorbeeld |
+| `handen.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813502/) | Kampus Production | Afsluitend blok (rond beeld) op Home, Over ons, Programma (diensten), Prijzen, Team en Veelgestelde vragen |
+| `hero.jpg` | [Young Kids Playing Football on the Field](https://www.pexels.com/photo/young-kids-playing-football-on-the-field-8813564/) | Kampus Production | Home ("Waarom Sporty") |
+| `sport.jpg` | [Kids Playing Soccer](https://www.pexels.com/photo/kids-playing-soccer-8035099/) | RDNE Stock project | Nu niet gebruikt (reserve) |
+| `aandacht.jpg` | [Kids Playing with Teacher in the Classroom](https://www.pexels.com/photo/kids-playing-with-teacher-in-the-classroom-8363102/) | RDNE Stock project | Nu niet gebruikt (reserve) |
+| `samen.jpg` | [Group of Children Running in Garden](https://www.pexels.com/photo/group-of-children-running-in-garden-16724787/) | Yakup Polat | Nu niet gebruikt (reserve) |
 | `binnen.jpg` | [Women Kneeling on the Floor with Children in a Room](https://www.pexels.com/photo/women-kneeling-on-the-floor-with-children-in-a-room-8441839/) | Pavel Danilyuk | Over ons (bovenaan) |
 | `luisteren.jpg` | [A Woman Talking to her Child at a Park](https://www.pexels.com/photo/a-woman-talking-to-her-child-at-a-park-7880785/) (liggend uitgesneden) | Barbara Olsen | Over ons ("Waarom Sporty?") |
 | `basketbal.jpg` | [Kids Playing Basketball with Their Coach](https://www.pexels.com/photo/kids-playing-basketball-with-their-coach-8336951/) | RDNE Stock project | Over ons ("Wat ons anders maakt") |
 | `plezier.jpg` | [Kids Having Fun at the Park](https://www.pexels.com/photo/kids-having-fun-at-the-park-8033873/) | RDNE Stock project | Diensten (bovenaan) |
-| `voetbal.jpg` | [Young Soccer Player Kicking Ball on Green Field](https://www.pexels.com/photo/person-field-playing-school-972513/) | Markus Spiske | Diensten ("Sporten en bewegen") |
-| `schilderen.jpg` | [Children Painting in the Art Class](https://www.pexels.com/photo/children-painting-in-the-art-class-8382373/) | Pavel Danilyuk | Diensten ("Aandacht en ontwikkeling") |
-| `gezellig.jpg` | [Students Eating Their Snacks at the School Canteen](https://www.pexels.com/photo/students-eating-their-snacks-at-the-school-canteen-8617514/) | Yan Krukau | Diensten ("Samen en gezellig") |
+| `voetbal.jpg` | [Young Soccer Player Kicking Ball on Green Field](https://www.pexels.com/photo/person-field-playing-school-972513/) | Markus Spiske | Programma/diensten ("Sporten en bewegen"), Home (kaart in "Ons programma") |
+| `schilderen.jpg` | [Children Painting in the Art Class](https://www.pexels.com/photo/children-painting-in-the-art-class-8382373/) | Pavel Danilyuk | Programma/diensten ("Aandacht en ontwikkeling"), Home (kaart in "Ons programma") |
+| `gezellig.jpg` | [Students Eating Their Snacks at the School Canteen](https://www.pexels.com/photo/students-eating-their-snacks-at-the-school-canteen-8617514/) | Yan Krukau | Programma/diensten ("Samen en gezellig"), Home (kaart in "Ons programma") |
 | `knutselen.jpg` | [Girl in Brown Apron Doing Rainbow Painting](https://www.pexels.com/photo/girl-in-brown-apron-doing-rainbow-painting-7025567/) | Vlada Karpovich | Prijzen (bovenaan) |
 | `spelletje.jpg` | [Kids Sitting on the Floor and Playing Game with Fingers on Eyes](https://www.pexels.com/photo/kids-sitting-on-the-floor-and-playing-game-with-fingers-on-eyes-8535602/) | Ksenia Chernaya | Team (bovenaan) |
 | `vragen.jpg` | [Children Raising Their Hands in a Classroom](https://www.pexels.com/photo/children-raising-their-hands-in-a-classroom-8613117/) | Yan Krukau | Veelgestelde vragen (bovenaan) |
@@ -51,6 +53,8 @@ Lever foto's liefst **minimaal 1600 px breed** aan, liggend (3:2 of 4:3). De web
 
 | Naam | Wat moet erop staan |
 |---|---|
+| `kring` | De hero: een brede foto van drie of meer kinderen die samen sporten of met de armen om elkaar heen staan (zoals in het logo), liefst in oranje Sporty-kleding. Laat boven in beeld ruimte voor de gezichten: de tekst staat onderaan. |
+| `handen` | Een groepje kinderen dat samen iets doet, bijvoorbeeld de handen op elkaar voor een spel. Wordt rond uitgesneden. |
 | `hero` | Kinderen die buiten sporten of spelen, bijvoorbeeld voetbal op een veld. Blij, in beweging, veel licht. |
 | `sport`, `voetbal`, `basketbal` | Een sport- of bewegingsactiviteit, liefst met een begeleider die meedoet. |
 | `aandacht`, `luisteren`, `schilderen` | Een begeleider die op ooghoogte met een kind praat, samen iets maakt of iets uitlegt. |

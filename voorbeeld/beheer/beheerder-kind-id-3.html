@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Elif Kaya · Beheer · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#f05a1a">
+<meta name="theme-color" content="#f26522">
 <link rel="icon" href="../../favicon.ico" sizes="32x32">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="../../assets/fonts/poppins-latin-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="../../assets/fonts/poppins-latin-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/dm-sans-latin-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../assets/fonts/poppins-latin-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../../design/tokens.css">
 <link rel="stylesheet" href="../../css/style.css">
 <link rel="stylesheet" href="assets/beheer.css">
@@ -59,7 +59,7 @@
     <section class="panel" aria-labelledby="gegevens-titel">
       <h2 id="gegevens-titel">Gegevens</h2>
       <dl class="gegevens">
-        <dt>Geboortedatum</dt><dd>29 augustus 2019</dd>
+        <dt>Geboortedatum</dt><dd>1 september 2019</dd>
         <dt>School</dt><dd>-</dd>
         <dt>Bijzonderheden</dt><dd><span class="let-op"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span>Allergisch voor noten</span></span></dd>
         <dt>Mag opgehaald worden door</dt><dd>Alleen de ouders</dd>
@@ -75,7 +75,7 @@
             <div class="field"><label for="achternaam">Achternaam</label><input id="achternaam" name="achternaam" value="Kaya"></div>
           </div>
           <div class="form__row">
-            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2019-08-29"></div>
+            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2019-09-01"></div>
             <div class="field"><label for="groep">Groep</label><select id="groep" name="groep"><option value="">Nog geen groep</option><option value="1" selected>De Bengels</option><option value="2">De Kanjers</option></select></div>
           </div>
           <div class="field"><label for="school">Basisschool</label><input id="school" name="school" value=""></div>
@@ -96,7 +96,7 @@
             <div class="kindrij__naam">Aylin Kaya <span class="badge">Ouder</span> <span class="badge">Contracthouder</span>              <span class="badge badge--geldig">Gezag gecontroleerd</span></div>
             <div class="kindrij__info">
               <span>Rechten: dagen kiezen en afmelden, gegevens en gedeelde observaties inzien, foto&#039;s ontvangen, berichten over het kind</span>
-<span>Vastgelegd op 8 oktober 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
+<span>Vastgelegd op 11 oktober 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
           </div>
           <details class="uitklap">
             <summary>Gezag en rechten van Aylin Kaya</summary>
@@ -167,7 +167,7 @@
         <form class="form" method="post" action="#">
           <input type="hidden" name="csrf" value="voorbeeld">          <input type="hidden" name="actie" value="observatie">
           <div class="form__row">
-            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-10-08" required value="2026-10-08"></div>
+            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-10-11" required value="2026-10-11"></div>
             <div class="field"><label for="obs_gebied">Ontwikkelgebied</label><select id="obs_gebied" name="gebied">
               <option value="sociaal">Sociaal-emotioneel</option>
               <option value="motoriek">Sport en bewegen</option>
@@ -190,12 +190,12 @@
     <section class="panel" aria-labelledby="komend-titel">
       <h2 id="komend-titel">Binnenkort</h2>
       <ul class="kindlijst">
-        <li class="kindrij"><span>Vrijdag 9 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Woensdag 14 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Vrijdag 16 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Woensdag 21 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Vrijdag 23 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Woensdag 28 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
+        <li class="kindrij"><span>Vrijdag 30 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
       </ul>
     </section>
     <section class="panel" aria-labelledby="geweest-titel">
@@ -204,6 +204,7 @@
         <table>
           <thead><tr><th scope="col">Dag</th><th scope="col">Status</th><th scope="col">Binnen</th><th scope="col">Opgehaald</th></tr></thead>
           <tbody>
+            <tr><td>vr 9 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 7 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>vr 2 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 30 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
@@ -213,14 +214,13 @@
             <tr><td>wo 16 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>vr 11 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 9 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
-            <tr><td>vr 4 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
           </tbody>
         </table>
       </div>
     </section>
     <section class="panel" aria-labelledby="fotos-titel">
       <div class="panel__kop"><h2 id="fotos-titel">Foto's</h2><a href="beheerder-fotos.html">Foto's delen</a></div>
-      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=3&amp;weergave=1"><img src="fotos/foto-3-klein.jpg" alt="Schilderen in de zon" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Schilderen in de zon</p><p class="muted">vandaag 16:31 · Elif</p></div></li></ul>
+      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=3&amp;weergave=1"><img src="fotos/foto-3-klein.jpg" alt="Schilderen in de zon" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Schilderen in de zon</p><p class="muted">vandaag 09:01 · Elif</p></div></li></ul>
     </section>
   </div>
 </div>

@@ -1,7 +1,9 @@
-Lettertypes van deze website. Alle drie gelicenseerd onder de SIL Open Font License 1.1 (tekst hieronder).
+Lettertypes van deze website. Alle vier gelicenseerd onder de SIL Open Font License 1.1 (tekst hieronder).
 
-- Poppins (koppen en tekst): poppins-*.woff2
+- Poppins (koppen, knoppen en labels): poppins-*.woff2
   Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins)
+- DM Sans (lopende tekst): dm-sans-*.woff2
+  Copyright 2014 The DM Sans Project Authors (https://github.com/googlefonts/dm-fonts)
 - Caveat Brush (slogans, alleen hoofdletters): caveat-brush-hoofdletters.woff2
   Copyright 2015 Google Inc. All Rights Reserved.
 - Pacifico (alleen als vorm in het woordmerk in assets/img/, niet als lettertypebestand)

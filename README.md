@@ -3,11 +3,11 @@
 Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutaire naam: Je Dag in Beeld). Gebouwd volgens de bouwinstructies in [`CLAUDE.md`](CLAUDE.md).
 
 - Gewone HTML, CSS en een klein beetje JavaScript. Geen framework en geen build-stap.
-- Huisstijl volgens het moodboard van de klant (`design/moodboard-sporty.jpg`): Sporty-oranje, wit en crème, Poppins, slogans in handgeschreven hoofdletters en het logo met drie kinderen en een lachje.
+- Huisstijl volgens het moodboard van de klant (`design/moodboard-sporty.jpg`) en de designprompt van 11 oktober 2026: Sporty-oranje met warm wit, beige en antraciet, koppen in Poppins ExtraBold, tekst in DM Sans, het logo met drie kinderen en een lachje, en de kernwaarden Sport · Plezier · Ontwikkeling. Sportief en strak: "een moderne sportclub met de warmte van een kinderopvang".
 - Intro op de homepage: de drie kinderen uit het logo rennen vanaf de rand van het scherm naar het midden, de ring sluit zich om ze heen en ze vormen samen het logo. Eén keer per bezoek (en bij opnieuw laden), over te slaan met een toets, klik, tik of scroll, en niet bij de instelling "minder beweging" of zonder JavaScript.
 - Met een beheeromgeving en ouderportaal in `beheer/` (PHP + SQLite): aanmelden als klant met kinderen, automatische incasso via Mollie, facturen online, groepsagenda met maximale groepsgrootte die twee kanten op werkt, kindvolgsysteem, foto's en berichten, en een overzicht van inkomsten en uitgaven. Met rechten per collega per menuonderdeel, toegang per groep en per verzorger (gecontroleerd gezag), tweestapsverificatie, versleutelde opslag en back-ups, een controleerbaar logboek, privacyverzoeken voor ouders, bewaartermijnen per soort gegevens en strikt gescheiden organisaties. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
 - Mobile-first en getest op 360, 768 en 1280 px breed, zonder horizontaal scrollen.
-- Lighthouse (mobiel): prestaties 97 op de homepage (met de intro), 98 op diensten en 97 op contact; toegankelijkheid, best practices en SEO 100.
+- Lighthouse (mobiel): prestaties 95–97 op de homepage (met de intro), 95 op programma (diensten) en 97 op contact; toegankelijkheid, best practices en SEO 100.
 - Automatische toegankelijkheidstest (axe, WCAG 2.1 AA): geen overtredingen op alle pagina's.
 - Privacy: geen tracking, lettertypen lokaal, Google Maps laadt pas na een klik.
 
@@ -95,7 +95,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Rekentool: opvangvormen (40 of 52 weken, vakantieopvang), uurtarief per opvangvorm en uren opvang per dag invullen in `js/rekentool/instellingen.js`. Bevestigen hoe de uren per maand in het contract worden berekend (nu: uren per week × weken ÷ 12, op twee decimalen).
 - [ ] Opzegtermijn, minimale afname en betaalwijze (Prijzen, Voorwaarden).
 - [ ] LRK-nummer, en bevestigen dat ouders kinderopvangtoeslag kunnen aanvragen (Prijzen, Veelgestelde vragen).
-- [ ] Exacte leeftijdsgrenzen (Diensten, Veelgestelde vragen).
+- [x] Leeftijd: 5 t/m 13 jaar (uit de designprompt van 11 oktober 2026; staat op Home, Programma en bij de veelgestelde vragen).
 - [ ] Welke sporten en activiteiten, en of er een eigen buitenruimte is (Diensten).
 - [ ] Vakantieopvang, opvang op studiedagen en ophalen van school: aanbieden of niet? (Diensten)
 - [ ] Oprichtingsverhaal (Over ons).

@@ -15,7 +15,8 @@ Bouw een complete, responsive website voor **Sporty** (bso) in Amsterdam. (Naam 
 - **Werkgebied:** Lokaal (Amsterdam)
 - **Doelen van de website:** Nieuwe klanten werven, informatie geven en professionele uitstraling
 - **Belangrijkste actie:** Aanmelden. De hoofdknop "Aanmelden" staat in de header en terug op elke pagina, als een knop naar de aanmeldpagina. Langskomen blijft mogelijk via een tekstlink naar het adres met routebeschrijving. (Gewijzigd op 30 september 2026; oorspronkelijk was de hoofdknop "Kom langs".)
-- **Kernboodschap (hero-kop op de homepage):** "Dat wij de leukste/gezelligste/sportiefste BSO zijn met oprechte aandacht voor ieder kind"
+- **Kernboodschap (hero-kop op de homepage):** "Sport, plezier en ontwikkeling na schooltijd." met "na schooltijd" in oranje (gewijzigd op 11 oktober 2026 via de designprompt; eerder: "Dat wij de leukste/gezelligste/sportiefste BSO zijn met oprechte aandacht voor ieder kind"). Ondersteunende tekst van de klant: "Bij BSO Sporty geloven we in de kracht van sport, samen spelen en groeien. Een plek waar kinderen van 5 t/m 13 jaar iedere dag met plezier in beweging komen." Knoppen in de hero: "Ontdek BSO Sporty" (oranje) en "Bekijk ons programma" (omlijnd). De hoofdknop "Aanmelden" blijft in de header en op elke pagina.
+- **Leeftijd:** kinderen van 5 t/m 13 jaar (uit de designprompt van 11 oktober 2026).
 - **Waarom klanten voor dit bedrijf kiezen (USP's, laat ze op de homepage zien):**
   - Oprechte aandacht voor ieder kind
   - Stimuleren sport en beweging met de kinderen
@@ -61,32 +62,46 @@ De klant heeft een moodboard aangeleverd: `design/moodboard-sporty.jpg`. Dat is 
 
 Kenmerken van het moodboard: Sporty-oranje met wit en crème, grote zonnige foto's van spelende kinderen, een website met een beeldvullende foto in de hero met een donkere overloop en witte tekst (de laatste regel oranje), het motto "Sport · Plezier · Ontwikkeling" met iconen in witte rondjes, de slogan "Samen sporten, samen groeien" in handgeschreven hoofdletters en een lachje onder het woordmerk.
 
+### Designprompt (11 oktober 2026)
+
+De klant heeft een uitgebreide designprompt gegeven. Samengevat: een moderne, energieke, sportieve en professionele site, "een moderne sportclub gecombineerd met een premium, eigentijds kindermerk". Geen standaard kinderopvangtemplate, geen kinderachtige vormgeving, geen willekeurige extra kleuren, geen overvolle pagina's en geen overdreven animaties. Het moodboard blijft de belangrijkste visuele referentie. Wat daaruit volgt:
+
+- **Hero:** een grote, brede foto van kinderen die samen sporten of met de armen om elkaar heen staan, met een donkere overloop en witte tekst (zie Opdracht voor kop, tekst en knoppen).
+- **Kernwaarden** "Sport · Plezier · Ontwikkeling" als herkenbaar element: drie iconen (wit op oranje) met korte tekst, naast elkaar op desktop en onder elkaar op mobiel. Ze staan ook in de footer.
+- **Wat ouders binnen een paar seconden moeten snappen:** wat Sporty is, waarom sport centraal staat, wat het uniek maakt, hoe het programma eruitziet en hoe je je kind aanmeldt. De homepage volgt die volgorde.
+- **Kaarten:** licht afgeronde hoeken (16–24px), subtiele schaduw, een foto of een eenvoudig lijnicoon, korte titel en tekst, en bij hover iets omhoog.
+- **Knoppen:** oranje, rond (pill), witte vette tekst, een pijl naar rechts bij belangrijke knoppen en een subtiele kleur- of schaalverandering bij hover.
+- **Grafische elementen:** eenvoudige sporticonen, subtiele ronde vormen die naar ballen en beweging verwijzen, kleine dynamische lijnen en af en toe een handgeschreven accent of speelse onderstreping (het lachje).
+- **Beweging:** rustige fade-in bij scrollen, subtiele beweging van foto's en kaarten die bij hover iets omhoog komen; altijd met respect voor "minder beweging".
+- **Header:** wit, links het logo, rechts een rustig menu en de oranje knop "Aanmelden"; sticky en iets compacter bij scrollen; op mobiel een strak hamburgermenu.
+
 ### Kleuren
 
-Thema: **licht** (lichte achtergrond, donkere tekst), met oranje vlakken en een donkere hero en footer.
+Thema: **licht** (warm witte achtergrond, antraciet tekst), met oranje accenten en vlakken, beige afwisselende secties en een donkere hero en footer. De hexkleuren komen uit de designprompt van 11 oktober 2026 (eerder: `#f05a1a`, crème en warm donkerbruin).
 
 | Rol (CSS-variabele) | Kleur | Tekstkleur erop |
 |---|---|---|
-| `--color-primary` — Sporty-oranje: logo, vlakken, iconen, grote tekst | `#f05a1a` | `#ffffff` (alleen grote tekst, 3,4:1) |
-| `--color-primary-strong` — Knoppen en kleine oranje tekst | `#c9450d` | `#ffffff` (4,8:1) |
-| `--color-secondary` — Crème (canvas tas, kaart) | `#f6ead8` | `#221a15` |
-| `--color-accent` — Licht oranje, alleen details zonder tekst | `#ff9a57` | `#221a15` |
-| `--color-surface` — Achtergrond | `#ffffff` |  |
-| `--color-surface-alt` — Achtergrond van afwisselende secties (licht crème) | `#fbf4ea` |  |
-| `--color-text` — Tekst (warm donkerbruin) | `#221a15` |  |
-| `--color-text-muted` — Tekst, minder nadruk | `#6b625a` |  |
-| `--color-link` — Tekstlinks | `#b63f0c` |  |
-| `--color-border` — Lijnen en randen | `#e8ddd0` |  |
-| `--color-dark` — Hero-overloop en footer | `#221a15` | `#f6ead8` |
+| `--color-primary` — Sporty Orange: knoppen, vlakken, iconen, logo, grote tekst | `#f26522` | `#ffffff` (3,2:1: alleen grote of vette tekst vanaf 18,66px; knoppen zijn 19px vet) |
+| `--color-primary-deep` — Deep Orange: hover en oranje woorden in koppen | `#d94e12` | `#ffffff` (grote tekst) |
+| `--color-primary-strong` — Knoppen met kleinere tekst in Mijn BSO | `#c9450d` | `#ffffff` (4,8:1) |
+| `--color-secondary` / `--color-surface-alt` — Soft Beige, afwisselende vlakken | `#f3e9dc` | `#222222` |
+| `--color-bg` — Warm White, achtergrond van de pagina | `#fff9f3` |  |
+| `--color-surface` — Pure White, kaarten en header | `#ffffff` |  |
+| `--color-text` — Charcoal, koppen en tekst | `#222222` |  |
+| `--color-text-muted` — Tekst, minder nadruk | `#5d5751` |  |
+| `--color-link` — Tekstlinks en kleine oranje tekst | `#b63f0c` |  |
+| `--color-border` — Lijnen en randen | `#e9dfd2` |  |
+| `--color-dark` — Hero-overloop en footer | `#222222` | `#fff9f3` |
 
 Controleer het contrast van tekst op elke achtergrond (minimaal 4,5:1; voor tekst vanaf 24px, of 18,66px vet, minimaal 3:1).
 
 ### Letters
 
-Gekozen op basis van het moodboard. Alle letters zijn gratis (Google Fonts), lokaal gehost met `font-display: swap`:
-- Koppen: **Poppins** (700)
-- Lopende tekst: **Poppins** (400, en 600 voor nadruk), basisgrootte 17–18px
-- Slogans en labels boven koppen: **Caveat Brush**, in hoofdletters, minimaal 24px
+Volgens de designprompt van 11 oktober 2026. Alle letters zijn gratis (Google Fonts), lokaal gehost met `font-display: swap`:
+- Koppen: **Poppins ExtraBold** (800; kleinere koppen 700), compact, met belangrijke woorden in oranje
+- Knoppen, menu en labels boven koppen: **Poppins** (600/700); labels in hoofdletters met een kort oranje streepje ervoor
+- Lopende tekst: **DM Sans** (400, en 700 voor nadruk), basisgrootte 17–18px, kleinste tekst 15–16px
+- Handgeschreven accent: **Caveat Brush**, in hoofdletters, minimaal 24px, alleen voor een enkel kort statement zoals "Samen sporten, samen groeien"
 - Woordmerk: **Pacifico**, alleen als vorm in het logo (geen lettertypebestand op de site)
 
 ### Logo en huisstijl

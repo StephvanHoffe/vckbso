@@ -225,7 +225,7 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
         <dt>Mag opgehaald worden door</dt><dd><?= e($kind['ophaalpersonen'] ?: 'Alleen de ouders') ?></dd>
         <dt>Groepsfoto's</dt><dd><?= $kind['foto_toestemming'] ? 'Mag op groepsfoto\'s' : 'Niet op groepsfoto\'s (alleen eigen foto\'s naar eigen ouders)' ?></dd>
 <?php if ($team): ?>
-        <dt>Ouder</dt><dd><a href="ouder.php?id=<?= (int) $ouder['id'] ?>"><?= e($ouder['naam']) ?></a><br><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $ouder['telefoon'])) ?>"><?= e($ouder['telefoon']) ?></a> · <a href="mailto:<?= e($ouder['email']) ?>"><?= e($ouder['email']) ?></a></dd>
+        <dt>Ouder</dt><dd><a href="ouder.php?id=<?= (int) $ouder['id'] ?>"><?= e($ouder['naam']) ?></a><br><?php if (trim((string) $ouder['telefoon']) !== ''): ?><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $ouder['telefoon'])) ?>"><?= e($ouder['telefoon']) ?></a> · <?php endif; ?><a href="mailto:<?= e($ouder['email']) ?>"><?= e($ouder['email']) ?></a></dd>
 <?php endif; ?>
       </dl>
 <?php if (!$team && !$magBeslissen): ?>

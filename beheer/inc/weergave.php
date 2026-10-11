@@ -42,7 +42,7 @@ function toon_dagoverzicht(string $datum, array $groepen, string $terug): void
         </div>
         <div class="kindrij__info">
 <?php if (($jaar = leeftijd($rij['geboortedatum'], $datum)) !== null): ?><span><?= $jaar ?> jaar</span><?php endif; ?>
-          <span><?= icoon('phone') ?> <a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $rij['oudertelefoon'])) ?>"><?= e($rij['oudernaam']) ?></a></span>
+          <span><?= icoon('phone') ?> <?php if (trim((string) $rij['oudertelefoon']) !== ''): ?><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $rij['oudertelefoon'])) ?>"><?= e($rij['oudernaam']) ?></a><?php else: ?><?= e($rij['oudernaam']) ?><?php endif; ?></span>
 <?php if ($rij['ophaalpersonen'] !== ''): ?><span>Ophalen: <?= e($rij['ophaalpersonen']) ?></span><?php endif; ?>
         </div>
 <?php if ($rij['bijzonderheden'] !== ''): ?>
