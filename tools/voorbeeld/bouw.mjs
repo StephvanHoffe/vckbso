@@ -202,7 +202,7 @@ if (BUNDEL) {
   rmSync(BUNDEL, { recursive: true, force: true });
   schrijfMomentopname(W, { site: "../", overzicht: "voorbeeld.html" });
   const siteBestanden = execFileSync("git", ["-C", REPO, "ls-files"]).toString().trim().split("\n")
-    .filter((p) => !/^(beheer|tools|tests|docs|content|voorbeeld|node_modules)\/|^assets\/fotos\/bron\/|^package|README|CLAUDE|briefing|vercel\.json|\.gitignore|robots\.txt|sitemap\.xml|^404\.html|BRONNEN\.md|OFL\.txt/.test(p));
+    .filter((p) => !/^(beheer|tools|tests|docs|content|voorbeeld|node_modules)\/|^assets\/fotos\/bron\/|^design\/(?!tokens\.css$)|^package|README|CLAUDE|briefing|vercel\.json|\.gitignore|robots\.txt|sitemap\.xml|^404\.html|BRONNEN\.md|OFL\.txt/.test(p));
   for (const p of siteBestanden) {
     if (!p.endsWith(".html")) { kopieer(REPO + p, W + p); continue; }
     const prefix = p.includes("/") ? "../" : "";
