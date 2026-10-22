@@ -85,12 +85,12 @@ De klant heeft een nieuwe briefing gegeven, met de officiële logo's, Henny de h
 - **Gevoel:** een sportieve BSO die de kinderen na school ophaalt en sportieve spellen met ze doet. Het moet voelen als een club of community waar je bij wilt horen: positief, energiek, speels en sportief, maar netjes en professioneel. Betrouwbaar en veilig voor ouders, aantrekkelijk voor kinderen én ouders.
 - **Humor als onderscheidend punt:** luchtige, grappige teksten. Voorbeelden van de klant: "Stuitert jouw kind na school door het huis? Dan zit-ie bij ons helemaal goed.", "Na school nog energie voor tien? Die raken we samen wel kwijt.", "Bij Sporty mag je lekker uitrazen." en "Rennen, springen, vliegen, duiken. Oké, dat laatste misschien niet." Op de teampagina GIF's van de medewerkers die een voetbaljuichmoment doen.
 - **Kleuren:** oranje, wit en zwart (zie hieronder). Bewegende elementen zijn welkom, maar niet te druk of afleidend.
-- **Fotografie:** volgt later; tot die tijd fotovakken ("Foto volgt"), zie `assets/fotos/BRONNEN.md`.
+- **Fotografie:** volgt later. Tot die tijd staan er op verzoek van de klant (22 oktober 2026) passende stockfoto's van Pexels; zie `assets/fotos/BRONNEN.md`. Bij de teamplekken staan bewust beelden waarop niemand herkenbaar is.
 - **Henny de hond (mascotte):** creatief inzetten, met een tekstwolkje (bijvoorbeeld "Je hebt je kleine topper bijna aangemeld, door naar de volgende stap!") en meerennend tijdens het aanmelden. Beelden in `assets/img/henny/`, originelen in `design/henny/`.
 - **Illustraties:** getekende elementen (sterren, pijlen, kroontjes, hartjes, krabbels) gecombineerd met fotografie, zoals in het voorbeeld "Team Sporty".
 - **Balans:** anders dan standaard BSO-websites, met humor en speelsheid, maar netjes en betrouwbaar.
 
-Uitwerking op de site: de hero op de homepage is oranje (zoals het logo) met "Let's Play", de kernboodschap in zwart met "na schooltijd." in wit, een fotovak en Henny met een bal; daaronder een zwarte band met Sport · Plezier · Ontwikkeling die meeschuift als je scrolt. Paginakoppen zijn zwart met een oranje fotovak, het afsluitende blok is oranje met Henny, en de teampagina heet "Team Sporty".
+Uitwerking op de site: de hero op de homepage is oranje (zoals het logo) met "Let's Play", de kernboodschap in zwart met "na schooltijd." in wit, een foto en Henny met een bal; daaronder een zwarte band met Sport · Plezier · Ontwikkeling die meeschuift als je scrolt. Paginakoppen zijn zwart met een foto in een wit kader, het afsluitende blok is oranje met Henny, en de teampagina heet "Team Sporty".
 
 ### Kleuren
 
@@ -261,7 +261,7 @@ Openingstijden:
 
 ## Beeld
 
-De klant levert de fotografie later aan (22 oktober 2026); tot die tijd staan er fotovakken ("Foto volgt") in plaats van stockfoto's. Welke foto waar komt en hoe je een fotovak vervangt, staat in `assets/fotos/BRONNEN.md`.
+De klant levert de fotografie later aan. Tot die tijd staan er passende stockfoto's van Pexels (op verzoek van de klant, 22 oktober 2026), met bron en fotograaf in `assets/fotos/BRONNEN.md`; daar staat ook welke eigen foto waar komt en hoe je een stockfoto vervangt. Gebruik geen herkenbare stockgezichten als teamlid, eigenaar of review.
 Wat er te zien moet zijn: mezelf en mijn team, klanten in actie, sfeer en omgeving.
 
 ## Domein en planning

@@ -129,9 +129,12 @@
     </div>
     <div class="hero__beeld">
       <div class="frame hero__foto">
-        <!-- TODO: grote foto van kinderen die samen sporten of met de armen om elkaar heen staan (de klant levert de fotografie later aan) -->
-        <div class="frame__img fotovak" data-foto="hero">
-          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Foto volgt</p><p class="fotovak__wat">Kinderen van Sporty die samen sporten en juichen</p></div>
+        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen grote foto van kinderen die samen sporten of met de armen om elkaar heen staan -->
+        <div class="frame__img" data-foto="hero">
+          <picture>
+            <source type="image/avif" srcset="assets/fotos/kring-480.avif 480w, assets/fotos/kring-800.avif 800w, assets/fotos/kring-1200.avif 1200w, assets/fotos/kring-1600.avif 1600w" sizes="(min-width: 64em) 34rem, 92vw">
+            <img src="assets/fotos/kring-800.webp" srcset="assets/fotos/kring-480.webp 480w, assets/fotos/kring-800.webp 800w, assets/fotos/kring-1200.webp 1200w, assets/fotos/kring-1600.webp 1600w" sizes="(min-width: 64em) 34rem, 92vw" width="1600" height="1068" alt="Een groep lachende kinderen staat met de armen om elkaar heen op een zonnig grasveld" fetchpriority="high" decoding="async">
+          </picture>
         </div>
       </div>
       <svg class="doodle doodle--vierkant hero__ster" aria-hidden="true" focusable="false"><use href="#d-ster"></use></svg>
@@ -180,9 +183,12 @@
   <div class="container split">
     <div class="split__media reveal">
       <div class="frame energie__beeld">
-        <!-- TODO: foto van kinderen die rennen of springen (de klant levert de fotografie later aan) -->
-        <div class="frame__img fotovak fotovak--oranje" data-foto="rennen" style="--ratio: 4 / 5;">
-          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Foto volgt</p><p class="fotovak__wat">Kinderen rennen lachend over het veld</p></div>
+        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van kinderen die rennen of springen -->
+        <div class="frame__img" data-foto="rennen" style="--ratio: 4 / 5;">
+          <picture>
+            <source type="image/avif" srcset="assets/fotos/samen-480.avif 480w, assets/fotos/samen-800.avif 800w, assets/fotos/samen-1200.avif 1200w, assets/fotos/samen-1600.avif 1600w" sizes="(min-width: 64em) 30rem, 92vw">
+            <img src="assets/fotos/samen-800.webp" srcset="assets/fotos/samen-480.webp 480w, assets/fotos/samen-800.webp 800w, assets/fotos/samen-1200.webp 1200w, assets/fotos/samen-1600.webp 1600w" sizes="(min-width: 64em) 30rem, 92vw" width="1600" height="1067" alt="Een groep kinderen rent juichend met de armen omhoog over een grasveld" loading="lazy" decoding="async">
+          </picture>
         </div>
         <svg class="doodle energie__pijl" aria-hidden="true" focusable="false"><use href="#d-pijl-lus"></use></svg>
         <p class="notitie energie__notitie" aria-hidden="true">Uitrazen mag!</p>
@@ -226,9 +232,12 @@
     <!-- TODO: welke sporten en activiteiten doen jullie precies, en van welke scholen halen jullie op? Dan de kaarten daarop aanpassen. -->
     <ol class="grid grid--3 middag">
       <li class="card foto-card reveal">
-        <!-- TODO: foto van het ophalen bij school (de klant levert de fotografie later aan) -->
-        <div class="foto-card__img fotovak" data-foto="ophalen">
-          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Foto volgt</p><p class="fotovak__wat">Een coach van Sporty haalt kinderen op bij school</p></div>
+        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van het ophalen bij school -->
+        <div class="foto-card__img" data-foto="ophalen">
+          <picture>
+            <source type="image/avif" srcset="assets/fotos/ophalen-480.avif 480w, assets/fotos/ophalen-800.avif 800w, assets/fotos/ophalen-1200.avif 1200w, assets/fotos/ophalen-1600.avif 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw">
+            <img src="assets/fotos/ophalen-800.webp" srcset="assets/fotos/ophalen-480.webp 480w, assets/fotos/ophalen-800.webp 800w, assets/fotos/ophalen-1200.webp 1200w, assets/fotos/ophalen-1600.webp 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw" width="1600" height="1067" alt="Een begeleider loopt met een groepje schoolkinderen over het plein bij een school" loading="lazy" decoding="async">
+          </picture>
         </div>
         <div class="foto-card__body">
           <p class="middag__stap">Eerst</p>
@@ -237,9 +246,12 @@
         </div>
       </li>
       <li class="card foto-card reveal" style="--delay: 120ms;">
-        <!-- TODO: foto van een balspel (de klant levert de fotografie later aan) -->
-        <div class="foto-card__img fotovak" data-foto="sporten">
-          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Foto volgt</p><p class="fotovak__wat">Kinderen spelen samen een balspel</p></div>
+        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van een balspel -->
+        <div class="foto-card__img" data-foto="sporten">
+          <picture>
+            <source type="image/avif" srcset="assets/fotos/sport-480.avif 480w, assets/fotos/sport-800.avif 800w, assets/fotos/sport-1200.avif 1200w, assets/fotos/sport-1600.avif 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw">
+            <img src="assets/fotos/sport-800.webp" srcset="assets/fotos/sport-480.webp 480w, assets/fotos/sport-800.webp 800w, assets/fotos/sport-1200.webp 1200w, assets/fotos/sport-1600.webp 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw" width="1600" height="1067" alt="Kinderen voetballen samen op een grasveld" loading="lazy" decoding="async">
+          </picture>
         </div>
         <div class="foto-card__body">
           <p class="middag__stap">Dan</p>
@@ -248,9 +260,12 @@
         </div>
       </li>
       <li class="card foto-card reveal" style="--delay: 240ms;">
-        <!-- TODO: foto van kinderen die samen even bijkomen (de klant levert de fotografie later aan) -->
-        <div class="foto-card__img fotovak" data-foto="samen">
-          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Foto volgt</p><p class="fotovak__wat">Kinderen zitten samen en kletsen na het sporten</p></div>
+        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van kinderen die samen even bijkomen -->
+        <div class="foto-card__img" data-foto="samen">
+          <picture>
+            <source type="image/avif" srcset="assets/fotos/spelletje-480.avif 480w, assets/fotos/spelletje-800.avif 800w, assets/fotos/spelletje-1200.avif 1200w, assets/fotos/spelletje-1600.avif 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw">
+            <img src="assets/fotos/spelletje-800.webp" srcset="assets/fotos/spelletje-480.webp 480w, assets/fotos/spelletje-800.webp 800w, assets/fotos/spelletje-1200.webp 1200w, assets/fotos/spelletje-1600.webp 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw" width="1600" height="1068" alt="Drie kinderen zitten op een kleed in een speelruimte en doen samen een spelletje" loading="lazy" decoding="async">
+          </picture>
         </div>
         <div class="foto-card__body">
           <p class="middag__stap">En tussendoor</p>
@@ -266,9 +281,12 @@
   <div class="container split split--reverse">
     <div class="split__media reveal">
       <div class="frame team-teaser__beeld">
-        <!-- TODO: teamfoto of GIF van het team dat een doelpunt viert (de klant levert de fotografie later aan) -->
-        <div class="frame__img fotovak" data-foto="team" style="--ratio: 5 / 4;">
-          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-play"></use></svg><p class="fotovak__label">GIF volgt</p><p class="fotovak__wat">Team Sporty viert een doelpunt</p></div>
+        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen teamfoto of GIF van het team dat een doelpunt viert -->
+        <div class="frame__img" data-foto="team" style="--ratio: 5 / 4;">
+          <picture>
+            <source type="image/avif" srcset="assets/fotos/team-handen-480.avif 480w, assets/fotos/team-handen-800.avif 800w, assets/fotos/team-handen-1200.avif 1200w, assets/fotos/team-handen-1600.avif 1600w" sizes="(min-width: 64em) 32rem, 92vw">
+            <img src="assets/fotos/team-handen-800.webp" srcset="assets/fotos/team-handen-480.webp 480w, assets/fotos/team-handen-800.webp 800w, assets/fotos/team-handen-1200.webp 1200w, assets/fotos/team-handen-1600.webp 1600w" sizes="(min-width: 64em) 32rem, 92vw" width="1600" height="1067" alt="Een team legt de handen op elkaar voor de start, met een oranje mouw vooraan" loading="lazy" decoding="async">
+          </picture>
         </div>
         <svg class="doodle team-teaser__kroon" aria-hidden="true" focusable="false"><use href="#d-kroon"></use></svg>
         <svg class="doodle doodle--vierkant team-teaser__hart" aria-hidden="true" focusable="false"><use href="#d-hart"></use></svg>

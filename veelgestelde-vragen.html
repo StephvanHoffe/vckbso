@@ -75,9 +75,12 @@
     <div class="page-hero__media">
       <svg class="doodle doodle--vierkant page-hero__doodle" aria-hidden="true" focusable="false"><use href="#d-ster"></use></svg>
     <div class="frame">
-      <!-- TODO: foto van Sporty (de klant levert de fotografie later aan; zie assets/fotos/BRONNEN.md) -->
-      <div class="frame__img fotovak fotovak--oranje" data-foto="vragen">
-        <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Foto volgt</p><p class="fotovak__wat">Kinderen op een rij stoeltjes steken enthousiast hun vinger op</p></div>
+      <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van Sporty -->
+      <div class="frame__img" data-foto="vragen">
+        <picture>
+          <source type="image/avif" srcset="assets/fotos/vragen-480.avif 480w, assets/fotos/vragen-800.avif 800w, assets/fotos/vragen-1200.avif 1200w, assets/fotos/vragen-1600.avif 1600w" sizes="(min-width: 64em) 30rem, 92vw">
+          <img src="assets/fotos/vragen-800.webp" srcset="assets/fotos/vragen-480.webp 480w, assets/fotos/vragen-800.webp 800w, assets/fotos/vragen-1200.webp 1200w, assets/fotos/vragen-1600.webp 1600w" sizes="(min-width: 64em) 30rem, 92vw" width="1600" height="1067" alt="Kinderen op een rij stoeltjes steken enthousiast hun vinger op" decoding="async">
+        </picture>
       </div>
     </div>
     </div>

@@ -124,9 +124,12 @@
     </div>
     <div class="hero__beeld">
       <div class="frame hero__foto">
-        <!-- TODO: grote foto van kinderen die samen sporten of met de armen om elkaar heen staan (de klant levert de fotografie later aan) -->
-        <div class="frame__img fotovak" data-foto="hero">
-          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Photo soon</p><p class="fotovak__wat">Sporty kids playing sports and cheering together</p></div>
+        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen grote foto van kinderen die samen sporten of met de armen om elkaar heen staan -->
+        <div class="frame__img" data-foto="hero">
+          <picture>
+            <source type="image/avif" srcset="../assets/fotos/kring-480.avif 480w, ../assets/fotos/kring-800.avif 800w, ../assets/fotos/kring-1200.avif 1200w, ../assets/fotos/kring-1600.avif 1600w" sizes="(min-width: 64em) 34rem, 92vw">
+            <img src="../assets/fotos/kring-800.webp" srcset="../assets/fotos/kring-480.webp 480w, ../assets/fotos/kring-800.webp 800w, ../assets/fotos/kring-1200.webp 1200w, ../assets/fotos/kring-1600.webp 1600w" sizes="(min-width: 64em) 34rem, 92vw" width="1600" height="1068" alt="A group of laughing children standing with their arms around each other on a sunny lawn" fetchpriority="high" decoding="async">
+          </picture>
         </div>
       </div>
       <svg class="doodle doodle--vierkant hero__ster" aria-hidden="true" focusable="false"><use href="#d-ster"></use></svg>
@@ -175,9 +178,12 @@
   <div class="container split">
     <div class="split__media reveal">
       <div class="frame energie__beeld">
-        <!-- TODO: foto van kinderen die rennen of springen (de klant levert de fotografie later aan) -->
-        <div class="frame__img fotovak fotovak--oranje" data-foto="rennen" style="--ratio: 4 / 5;">
-          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Photo soon</p><p class="fotovak__wat">Children running across the field, laughing</p></div>
+        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van kinderen die rennen of springen -->
+        <div class="frame__img" data-foto="rennen" style="--ratio: 4 / 5;">
+          <picture>
+            <source type="image/avif" srcset="../assets/fotos/samen-480.avif 480w, ../assets/fotos/samen-800.avif 800w, ../assets/fotos/samen-1200.avif 1200w, ../assets/fotos/samen-1600.avif 1600w" sizes="(min-width: 64em) 30rem, 92vw">
+            <img src="../assets/fotos/samen-800.webp" srcset="../assets/fotos/samen-480.webp 480w, ../assets/fotos/samen-800.webp 800w, ../assets/fotos/samen-1200.webp 1200w, ../assets/fotos/samen-1600.webp 1600w" sizes="(min-width: 64em) 30rem, 92vw" width="1600" height="1067" alt="A group of children running and cheering across a field with their arms in the air" loading="lazy" decoding="async">
+          </picture>
         </div>
         <svg class="doodle energie__pijl" aria-hidden="true" focusable="false"><use href="#d-pijl-lus"></use></svg>
         <p class="notitie energie__notitie" aria-hidden="true">Let off steam!</p>

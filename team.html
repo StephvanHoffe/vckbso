@@ -75,9 +75,12 @@
     <div class="page-hero__media">
       <svg class="doodle doodle--vierkant page-hero__doodle" aria-hidden="true" focusable="false"><use href="#d-ster"></use></svg>
       <div class="frame">
-        <!-- TODO: teamfoto (de klant levert de fotografie later aan; zie assets/fotos/BRONNEN.md) -->
-        <div class="frame__img fotovak fotovak--oranje" data-foto="team">
-          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Teamfoto volgt</p><p class="fotovak__wat">Het hele team van Sporty, met de armen om elkaar heen</p></div>
+        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen teamfoto -->
+        <div class="frame__img" data-foto="team">
+          <picture>
+            <source type="image/avif" srcset="assets/fotos/team-480.avif 480w, assets/fotos/team-800.avif 800w, assets/fotos/team-1200.avif 1200w, assets/fotos/team-1600.avif 1600w" sizes="(min-width: 64em) 30rem, 92vw">
+            <img src="assets/fotos/team-800.webp" srcset="assets/fotos/team-480.webp 480w, assets/fotos/team-800.webp 800w, assets/fotos/team-1200.webp 1200w, assets/fotos/team-1600.webp 1600w" sizes="(min-width: 64em) 30rem, 92vw" width="1600" height="1068" alt="Een groep mensen staat met de armen om elkaar heen op de rotsen bij het water, van achteren gezien" decoding="async">
+          </picture>
         </div>
       </div>
     </div>
@@ -93,15 +96,18 @@
     </div>
     <!--
       TODO: per teamlid een GIF (of liever een kort filmpje, dat laadt sneller) van een voetbaljuichmoment, plus naam, rol en een leuk weetje.
-      Vervang het fotovak dan door een div met class "gif frame__img", met daarin een video-element (muted, loop, playsinline,
+      Vervang de stockfoto dan door een div met class "gif frame__img", met daarin een video-element (muted, loop, playsinline,
       het filmpje uit assets/fotos/ en een aria-label zoals "NAAM viert een doelpunt") en een button met class "gif__knop" en de tekst "Speel af".
       js/main.js speelt het filmpje dan af met een pauzeknop, en niet vanzelf bij "minder beweging". Zie ook assets/fotos/BRONNEN.md.
     -->
     <ul class="team-lijst">
       <li class="team-lid reveal">
         <div class="frame team-lid__beeld">
-          <div class="frame__img fotovak" data-foto="team-1" style="--ratio: 4 / 5;">
-            <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-play"></use></svg><p class="fotovak__label">GIF volgt</p><p class="fotovak__wat">Juichmoment na een doelpunt</p></div>
+          <div class="frame__img" data-foto="team-1" style="--ratio: 4 / 5;">
+            <picture>
+              <source type="image/avif" srcset="assets/fotos/team-1-480.avif 480w, assets/fotos/team-1-800.avif 800w, assets/fotos/team-1-1200.avif 1200w, assets/fotos/team-1-1600.avif 1600w" sizes="(min-width: 72em) 19rem, (min-width: 48em) 45vw, 19rem">
+              <img src="assets/fotos/team-1-800.webp" srcset="assets/fotos/team-1-480.webp 480w, assets/fotos/team-1-800.webp 800w, assets/fotos/team-1-1200.webp 1200w, assets/fotos/team-1-1600.webp 1600w" sizes="(min-width: 72em) 19rem, (min-width: 48em) 45vw, 19rem" width="1600" height="2400" alt="Een voetbal ligt in het net van het doel" loading="lazy" decoding="async">
+            </picture>
           </div>
           <svg class="doodle team-lid__kroon" aria-hidden="true" focusable="false"><use href="#d-kroon"></use></svg>
           <p class="notitie team-lid__notitie" aria-hidden="true">Goal!</p>
@@ -112,8 +118,11 @@
       </li>
       <li class="team-lid reveal" style="--delay: 120ms;">
         <div class="frame team-lid__beeld">
-          <div class="frame__img fotovak" data-foto="team-2" style="--ratio: 4 / 5;">
-            <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-play"></use></svg><p class="fotovak__label">GIF volgt</p><p class="fotovak__wat">Juichmoment na een doelpunt</p></div>
+          <div class="frame__img" data-foto="team-2" style="--ratio: 4 / 5;">
+            <picture>
+              <source type="image/avif" srcset="assets/fotos/team-2-480.avif 480w, assets/fotos/team-2-800.avif 800w, assets/fotos/team-2-1200.avif 1200w, assets/fotos/team-2-1600.avif 1600w" sizes="(min-width: 72em) 19rem, (min-width: 48em) 45vw, 19rem">
+              <img src="assets/fotos/team-2-800.webp" srcset="assets/fotos/team-2-480.webp 480w, assets/fotos/team-2-800.webp 800w, assets/fotos/team-2-1200.webp 1200w, assets/fotos/team-2-1600.webp 1600w" sizes="(min-width: 72em) 19rem, (min-width: 48em) 45vw, 19rem" width="1600" height="1067" alt="Een sportteam legt de handen op elkaar" loading="lazy" decoding="async">
+            </picture>
           </div>
           <svg class="doodle doodle--vierkant team-lid__ster" aria-hidden="true" focusable="false"><use href="#d-ster"></use></svg>
           <p class="notitie team-lid__notitie" aria-hidden="true">Yes!</p>
@@ -124,8 +133,11 @@
       </li>
       <li class="team-lid reveal" style="--delay: 240ms;">
         <div class="frame team-lid__beeld">
-          <div class="frame__img fotovak" data-foto="team-3" style="--ratio: 4 / 5;">
-            <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-play"></use></svg><p class="fotovak__label">GIF volgt</p><p class="fotovak__wat">Juichmoment na een doelpunt</p></div>
+          <div class="frame__img" data-foto="team-3" style="--ratio: 4 / 5;">
+            <picture>
+              <source type="image/avif" srcset="assets/fotos/team-3-480.avif 480w, assets/fotos/team-3-800.avif 800w, assets/fotos/team-3-1200.avif 1200w, assets/fotos/team-3-1600.avif 1600w" sizes="(min-width: 72em) 19rem, (min-width: 48em) 45vw, 19rem">
+              <img src="assets/fotos/team-3-800.webp" srcset="assets/fotos/team-3-480.webp 480w, assets/fotos/team-3-800.webp 800w, assets/fotos/team-3-1200.webp 1200w, assets/fotos/team-3-1600.webp 1600w" sizes="(min-width: 72em) 19rem, (min-width: 48em) 45vw, 19rem" width="1600" height="2400" alt="Twee mensen geven elkaar een high five" loading="lazy" decoding="async">
+            </picture>
           </div>
           <svg class="doodle doodle--vierkant team-lid__hart" aria-hidden="true" focusable="false"><use href="#d-hart"></use></svg>
           <p class="notitie team-lid__notitie" aria-hidden="true">Hup!</p>

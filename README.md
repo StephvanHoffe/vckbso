@@ -5,11 +5,11 @@ Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutair
 - Gewone HTML, CSS en een klein beetje JavaScript. Geen framework en geen build-stap.
 - Huisstijl volgens de briefing "Look & Feel" van 22 oktober 2026 (en eerder het moodboard en de designprompt): oranje, wit en zwart, de officiële logo's (woordmerk "Sporty" en het ronde logo), de slogan "Let's Play", koppen in Poppins ExtraBold, tekst in DM Sans en de kernwaarden Sport · Plezier · Ontwikkeling. Voelt als een club waar je bij wilt horen: sportief, vrolijk en met humor ("Na school nog energie voor tien? Die raken we samen wel kwijt."), maar netjes en betrouwbaar voor ouders.
 - Henny de hond, de mascotte, met tekstwolkjes op de site en als hardloper tijdens het aanmelden: in het formulier rent hij naar het doel naarmate je verder invult, bij de machtiging staat hij vlak voor het doel en daarna juicht hij erbij. Getekende elementen (sterren, pijlen, kroontjes) over de beelden, zoals in het voorbeeld "Team Sporty" van de klant.
-- Nog geen foto's: de klant levert de fotografie later aan. Tot die tijd staan er duidelijke fotovakken ("Foto volgt"), zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
+- Foto's: tijdelijke stockfoto's van Pexels, gekozen bij elke plek, tot de klant de eigen fotografie aanlevert. Bij de teamplekken staan bewust beelden waarop niemand herkenbaar is. Bronnen en fotografen staan in [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
 - Intro op de homepage: de drie kinderen uit het logo rennen vanaf de rand van het scherm naar het midden, de ring sluit zich om ze heen en ze vormen samen het officiële ronde logo. Eén keer per bezoek (en bij opnieuw laden), over te slaan met een toets, klik, tik of scroll, en niet bij de instelling "minder beweging" of zonder JavaScript.
 - Met een beheeromgeving en ouderportaal in `beheer/` (PHP + SQLite): aanmelden als klant met kinderen, automatische incasso via Mollie, facturen online, groepsagenda met maximale groepsgrootte die twee kanten op werkt, kindvolgsysteem, foto's en berichten, en een overzicht van inkomsten en uitgaven. Met rechten per collega per menuonderdeel, toegang per groep en per verzorger (gecontroleerd gezag), tweestapsverificatie, versleutelde opslag en back-ups, een controleerbaar logboek, privacyverzoeken voor ouders, bewaartermijnen per soort gegevens en strikt gescheiden organisaties. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
 - Mobile-first en getest op 360, 768 en 1280 px breed, zonder horizontaal scrollen.
-- Lighthouse (mobiel, 22 oktober 2026): prestaties 95 op de homepage (met de intro) en 97 op team; toegankelijkheid, best practices en SEO 100.
+- Lighthouse (mobiel, 22 oktober 2026, met stockfoto's): prestaties 92–93 op de homepage (met de intro), 94 op team en 96 op programma; toegankelijkheid, best practices en SEO 100.
 - Automatische toegankelijkheidstest (axe, WCAG 2.1 AA): geen overtredingen op alle pagina's.
 - Privacy: geen tracking, lettertypen lokaal, Google Maps laadt pas na een klik.
 
@@ -58,7 +58,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `design/moodboard-sporty.jpg` | Het moodboard van de klant (eerste huisstijl, 8 oktober 2026) |
 | `design/logo/`, `design/henny/` | De logo's en Henny zoals de klant ze op 22 oktober 2026 aanleverde (originelen in PNG/JPG) |
 | `assets/img/henny/` | Henny de hond (zittend, rennend, met bal), uitgeknipt en als WebP |
-| `assets/fotos/` | Hier komen de eigen foto's (bronbestanden in `bron/`, AVIF en WebP via `npm run fotos`). Nu nog leeg: welke foto waar komt, staat in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
+| `assets/fotos/` | Foto's in AVIF en WebP (nu nog stockfoto's van Pexels), met de bronbestanden in `bron/` (`npm run fotos`). Fotografen, licentie en welke eigen foto waar komt staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
 | `assets/img/` | Favicon, app-iconen en de deelafbeelding (`og-image.jpg`) |
 | `tools/fotos.mjs` | Hulpscript om beelden om te zetten (`npm run fotos`). Niet nodig om de site te draaien. |
 | `tools/structured-data.mjs` | Zet de schema.org-gegevens (JSON-LD) in de pagina's, met kruimelpad en veelgestelde vragen uit de zichtbare HTML (`npm run seo`) |
@@ -109,7 +109,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Algemene voorwaarden (Voorwaarden).
 
 **Beeld**
-- [ ] Eigen foto's van het team, de kinderen (met toestemming van de ouders) en de locatie in de fotovakken zetten, met alt-teksten. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md) voor de lijst.
+- [ ] De tijdelijke stockfoto's (Pexels) vervangen door eigen foto's van het team, de kinderen (met toestemming van de ouders) en de locatie, met nieuwe alt-teksten. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md) voor de lijst.
 - [ ] GIF's (of korte filmpjes) van de teamleden die een doelpunt vieren (Team).
 
 **Techniek**
