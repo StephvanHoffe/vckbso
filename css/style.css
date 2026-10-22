@@ -3526,14 +3526,14 @@ a:hover {
 /* ---------- 23. Intro (homepage) ---------- */
 
 /*
- * De kinderen uit het logo rennen in beeld en vormen samen het logo. De lagen komen uit
- * tools/logo/maak-logo.mjs (npm run logo), de beweging staat hier. Alles beweegt met transform en
+ * De kinderen uit het logo rennen in beeld en vormen samen het logo. De lagen zijn de vormen van het officiële
+ * ronde logo (tools/logo/maak-logo.mjs, npm run logo); de beweging staat hier. Alles beweegt met transform en
  * opacity, zodat de browser het met de grafische kaart doet en de pagina er niet trager van wordt.
  * Alleen op de homepage, één keer per bezoek en niet bij "minder beweging": het script in de <head>
  * van index.html zet dan de klasse met-intro. Een toets, klik, tik of scroll slaat de intro over.
- * Tijdlijn: de kinderen rennen vanaf de rand van het scherm naar het midden 0,05–1,25 s · armen om elkaar
- * 1,2 s · de ring sluit zich om ze heen 1,42–1,84 s · de animatie vloeit over in het officiële logo 1,84–2,22 s ·
- * sprongetje 2,22 s · de intro verdwijnt 2,8–3,2 s.
+ * Tijdlijn: de kinderen rennen vanaf de rand van het scherm naar het midden 0,05–1,15 s · de ring sluit zich om
+ * ze heen 1,0–1,5 s · "BSO" ploft op het shirt 1,3 s · het woordmerk zwaait omhoog 1,45–2,0 s · het lachje
+ * 1,9–2,2 s · sprongetje 2,25 s · de intro verdwijnt 2,8–3,2 s.
  */
 .met-intro .intro[hidden] {
   display: grid !important;
@@ -3541,7 +3541,6 @@ a:hover {
 
 .intro {
   --intro-bg: var(--color-bg);
-  --e: calc(min(72vw, 50vh, 26rem) / 400); /* één eenheid van het logo (viewBox 400 × 392) */
   position: fixed;
   inset: 0;
   z-index: 200;
@@ -3555,15 +3554,17 @@ a:hover {
   animation: intro-weg-snel 250ms ease-in both, intro-verberg 1ms linear 250ms both;
 }
 
+/* Even groot als het logo in de viewBox (1985 × 2104), passend op elk scherm */
 .intro__logo {
   position: relative;
-  width: calc(400 * var(--e));
-  aspect-ratio: 400 / 392;
-  animation: intro-hoera 400ms ease-in-out 2.22s both;
+  width: min(70vw, 50vh, 24rem);
+  aspect-ratio: 1985 / 2104;
+  animation: intro-hoera 420ms ease-in-out 2.25s both;
 }
 
 .intro__laag {
   position: absolute;
+  inset: 0;
   transform-origin: var(--o);
 }
 
@@ -3575,121 +3576,55 @@ a:hover {
   transform-origin: var(--o);
 }
 
-/* Het logo in oranje; de halo's in de achtergrondkleur maken de witte randen tussen de delen */
-.intro__vlak {
+.intro__vorm,
+.intro__laag use {
   fill: var(--color-primary);
-}
-
-.intro__lijn,
-.intro__ring {
-  fill: none;
-  stroke: var(--color-primary);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.intro__vlak.intro__lijn {
-  fill: var(--color-primary);
-}
-
-.intro__halo {
-  fill: var(--intro-bg);
-  stroke: var(--intro-bg);
-  stroke-linejoin: round;
-}
-
-.intro__iris {
-  fill: var(--intro-bg);
-}
-
-.intro__halo-lijn {
-  fill: none;
-  stroke: var(--intro-bg);
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 /*
  * De kinderen rennen vanaf de rand van het scherm naar het midden: links het krullenkind, rechts het kind
- * met de pet, het meisje van onderen (zij rent het beeld in, dus ze wordt kleiner)
+ * met de pet, het meisje van onderen. Onderweg huppelen ze (de binnenste svg), bij aankomst veren ze even in.
  */
 .intro__kind {
   --start: 50ms;
-  animation: intro-van-links 1s cubic-bezier(0.3, 0.2, 0.55, 1) var(--start) both;
+  animation: intro-van-links 1.05s cubic-bezier(0.25, 0.3, 0.45, 1) var(--start) both;
 }
 
-.intro__kind--pet {
-  --start: 150ms;
+.intro__kind--rechts {
+  --start: 120ms;
   animation-name: intro-van-rechts;
 }
 
-.intro__kind--meisje {
-  --start: 250ms;
+.intro__kind--midden {
+  --start: 200ms;
   animation-name: intro-van-onder;
 }
 
-/* Rennen: zes passen met een sprongetje, de benen om de beurt omhoog */
 .intro__kind > svg {
-  animation: intro-hop 333ms linear var(--start) 3 both;
+  animation: intro-hop 300ms linear var(--start) 3 both;
 }
 
-.intro__been--a > svg {
-  animation-name: intro-been-a;
+.intro__kind--rechts > svg {
+  animation-direction: reverse;
 }
 
-.intro__been--b > svg {
-  animation-name: intro-been-b;
-}
-
-/* Daarna slaan ze de armen om elkaar */
-.intro__laag--arm-krul {
-  animation: intro-arm 250ms cubic-bezier(0.3, 0, 0.2, 1) 1.2s both;
-}
-
-.intro__laag--arm-meisje {
-  animation: intro-arm 250ms cubic-bezier(0.3, 0, 0.2, 1) 1.27s both;
-}
-
-/*
- * De ring sluit zich om ze heen. De iris (crème met een rond gat) krimpt mee en bedekt wat buiten de ring
- * valt: de benen en de buitenkant van de schouders. Tot dat moment is de iris onzichtbaar.
- */
-.intro__laag--iris {
-  opacity: 0;
-  animation: intro-iris 420ms cubic-bezier(0.55, 0, 0.3, 1) 1.42s forwards;
-}
-
+/* De ring sluit zich om de kinderen heen */
 .intro__laag--ring {
-  animation: intro-ring 420ms cubic-bezier(0.55, 0, 0.3, 1) 1.42s both;
+  animation: intro-ring 520ms cubic-bezier(0.3, 0, 0.2, 1) 1s both;
 }
 
-/* De nagetekende kinderen vloeien over in het officiële ronde logo (assets/img/sporty-logo.svg) */
-.intro__lagen {
-  position: absolute;
-  inset: 0;
-  animation: intro-uit 320ms ease-in 1.9s both;
+/* "BSO" ploft op het shirt */
+.intro__laag--bso {
+  animation: intro-plof 380ms cubic-bezier(0.3, 1.6, 0.5, 1) 1.3s both;
 }
 
-.intro__officieel {
-  position: absolute;
-  height: auto;
-  animation: intro-officieel 380ms var(--ease-out) 1.84s both;
+/* Het woordmerk zwaait van onderen omhoog, daarna verschijnt het lachje van links naar rechts */
+.intro__laag--woord {
+  animation: intro-woord 560ms cubic-bezier(0.2, 1.25, 0.4, 1) 1.45s both;
 }
 
-@keyframes intro-uit {
-  to { opacity: 0; }
-}
-
-@keyframes intro-officieel {
-  from {
-    opacity: 0;
-    transform: scale(0.97);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.intro__laag--lach {
+  animation: intro-lach 300ms cubic-bezier(0.3, 0, 0.2, 1) 1.9s both;
 }
 
 /* Terwijl de intro verdwijnt, schuift de tekst in de hero omhoog */
@@ -3707,27 +3642,27 @@ a:hover {
 }
 
 @keyframes intro-van-links {
-  0% { transform: translate(calc(-50vw - 230 * var(--e)), 0) rotate(7deg) scale(1, 1); }
-  84% { transform: translate(calc(8 * var(--e)), 0) rotate(3deg) scale(1, 1); }
-  92% { transform: translate(0, 0) rotate(-1deg) scale(1.04, 0.95); }
+  0% { transform: translate(calc(-50vw - 30%), 0) rotate(8deg); }
+  82% { transform: translate(2%, 0) rotate(2deg); }
+  91% { transform: translate(0, 0) rotate(-1deg) scale(1.03, 0.96); }
   100% { transform: translate(0, 0) rotate(0deg) scale(1, 1); }
 }
 
 @keyframes intro-van-rechts {
-  0% { transform: translate(calc(50vw + 230 * var(--e)), 0) rotate(-7deg) scale(1, 1); }
-  84% { transform: translate(calc(-8 * var(--e)), 0) rotate(-3deg) scale(1, 1); }
-  92% { transform: translate(0, 0) rotate(1deg) scale(1.04, 0.95); }
+  0% { transform: translate(calc(50vw + 30%), 0) rotate(-8deg); }
+  82% { transform: translate(-2%, 0) rotate(-2deg); }
+  91% { transform: translate(0, 0) rotate(1deg) scale(1.03, 0.96); }
   100% { transform: translate(0, 0) rotate(0deg) scale(1, 1); }
 }
 
 @keyframes intro-van-onder {
-  0% { transform: translate(0, calc(50vh + 330 * var(--e))) rotate(0deg) scale(1.5, 1.5); }
-  84% { transform: translate(0, calc(-8 * var(--e))) rotate(0deg) scale(1, 1); }
-  92% { transform: translate(0, 0) rotate(0deg) scale(1.04, 0.95); }
-  100% { transform: translate(0, 0) rotate(0deg) scale(1, 1); }
+  0% { transform: translate(0, calc(50vh + 40%)) scale(1.15); }
+  82% { transform: translate(0, -2%) scale(1); }
+  91% { transform: translate(0, 0) scale(1.03, 0.96); }
+  100% { transform: translate(0, 0) scale(1, 1); }
 }
 
-/* Per pas: omhoog (met een zwaai naar links of rechts) en weer neer */
+/* Per pas: omhoog met een zwaai naar links of rechts, en weer neer */
 @keyframes intro-hop {
   0%,
   50%,
@@ -3737,93 +3672,63 @@ a:hover {
   }
 
   25% {
-    transform: translateY(calc(-14 * var(--e))) rotate(-3deg);
+    transform: translateY(-5%) rotate(-3deg);
     animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.4);
   }
 
   75% {
-    transform: translateY(calc(-14 * var(--e))) rotate(3deg);
+    transform: translateY(-5%) rotate(3deg);
     animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.4);
-  }
-}
-
-/* Hetzelfde, en bij elke pas gaat één been omhoog */
-@keyframes intro-been-a {
-  0%,
-  50%,
-  100% {
-    transform: translateY(0) rotate(0deg) scaleY(1);
-    animation-timing-function: cubic-bezier(0.3, 0.6, 0.6, 1);
-  }
-
-  25% {
-    transform: translateY(calc(-14 * var(--e))) rotate(-3deg) scaleY(0.55);
-    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.4);
-  }
-
-  75% {
-    transform: translateY(calc(-14 * var(--e))) rotate(3deg) scaleY(1);
-    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.4);
-  }
-}
-
-@keyframes intro-been-b {
-  0%,
-  50%,
-  100% {
-    transform: translateY(0) rotate(0deg) scaleY(1);
-    animation-timing-function: cubic-bezier(0.3, 0.6, 0.6, 1);
-  }
-
-  25% {
-    transform: translateY(calc(-14 * var(--e))) rotate(-3deg) scaleY(1);
-    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.4);
-  }
-
-  75% {
-    transform: translateY(calc(-14 * var(--e))) rotate(3deg) scaleY(0.55);
-    animation-timing-function: cubic-bezier(0.4, 0, 0.7, 0.4);
-  }
-}
-
-@keyframes intro-iris {
-  from {
-    opacity: 1;
-    transform: scale(2.15);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 
 @keyframes intro-ring {
   0% {
     opacity: 0;
-    transform: scale(2.15);
+    transform: scale(1.7) rotate(-25deg);
   }
 
-  25% {
+  30% {
     opacity: 1;
   }
 
   100% {
     opacity: 1;
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
   }
 }
 
-@keyframes intro-arm {
+@keyframes intro-plof {
   from {
     opacity: 0;
-    transform: scaleX(0.2);
+    transform: scale(0.2);
   }
 
   to {
     opacity: 1;
-    transform: scaleX(1);
+    transform: scale(1);
   }
+}
+
+@keyframes intro-woord {
+  from {
+    opacity: 0;
+    transform: translateY(22%) rotate(-10deg);
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes intro-lach {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 @keyframes intro-hoera {

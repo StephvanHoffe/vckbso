@@ -6,9 +6,9 @@
  * design/logo/: assets/img/sporty-woordmerk(-wit, -zwart).svg en assets/img/sporty-logo(-wit, -zwart).svg.
  * TODO: vervang die door de vectorbestanden van de ontwerper zodra die er zijn.
  *
- * De intro: de drie kinderen uit het logo rennen vanaf de rand van het scherm naar het midden, slaan de armen
- * om elkaar, de ring sluit zich en de animatie vloeit over in het officiële ronde logo. De kinderen zijn
- * nagetekend (vormen hieronder in V), zodat ze los kunnen bewegen.
+ * De intro: gemaakt van de vormen van het officiële ronde logo. De drie kinderen rennen vanaf de rand van het
+ * scherm naar het midden, de ring sluit zich om ze heen, "BSO", het woordmerk en het lachje komen erbij, en
+ * aan het eind staat precies het logo.
  *
  * Gebruik: npm run logo
  * Schrijft favicon.svg, apple-touch-icon.png, icon-192.png, icon-512.png, icon-maskable-512.png en
@@ -26,110 +26,80 @@ const laad = (pad) => { const b = readFileSync(new URL(pad, import.meta.url)); r
 const pacifico = laad("./fonts/pacifico-latin-400.woff");
 
 
-// Vormen van het embleem (viewBox 0 0 400 392). Lagen van achter naar voren:
-// romp pet-kind, romp krullenkind, shirt + arm meisje, arm krullenkind, hoofden, paardenstaart, pet, "BSO".
-const GAT = 4.5; // witte rand tussen overlappende delen
-const ARM = 17;
-const krulCirkels = Array.from({ length: 12 }, (_, i) => {
-  const a = (i / 12) * Math.PI * 2 + 0.2;
-  return `<circle cx="${(121 + Math.cos(a) * 29).toFixed(1)}" cy="${(126 + Math.sin(a) * 29).toFixed(1)}" r="12.5"/>`;
-});
-const V = {
-  krul: `<circle cx="121" cy="126" r="31"/>${krulCirkels.join("")}`,
-  staart: "M214 112 C212 92 198 81 179 81 C162 81 149 90 145 105 C156 96 170 94 182 100 C190 104 195 112 193 121 Z",
-  meisje: `<circle cx="201" cy="138" r="33"/>`,
-  petHoofd: `<circle cx="281" cy="132" r="33"/>`,
-  pet: "M247 128 C247 99 266 86 285 86 C307 86 321 101 321 126 Z",
-  klep: "M309 121 C326 115 346 121 350 131 C340 138 322 138 306 134 Z",
-  knoop: { cx: 285, cy: 85, r: 4.5 },
-  naad: "M285 89 C281 101 279 113 281 127",
-  rompR: "M362 340 L362 214 C356 184 330 168 296 166 L248 166 C238 168 232 176 232 190 L232 340 Z",
-  rompL: "M38 340 L38 214 C44 184 70 168 104 166 L154 166 C164 168 170 176 170 190 L170 340 Z",
-  shirt: "M166 180 C178 168 224 168 236 180 L244 340 L158 340 Z",
-  kraag: "M185 171 C193 185 209 185 217 171",
-  armMeisje: "M230 180 C258 168 294 167 324 184",
-  armKrul: "M144 184 C164 172 188 168 212 176",
-  mouwL: "M74 186 C88 206 92 240 88 330",
-  mouwR: "M326 186 C312 206 308 240 312 330",
-  glimlach: "M166 368 Q203 385 240 368",
-};
-
-/** Omhullende rechthoek van paden (alleen absolute M/L/C/Q/Z, zoals hierboven) en cirkels, met marge. */
-function omhulling(delen) {
-  let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
-  const neem = (x, y, m) => { x1 = Math.min(x1, x - m); y1 = Math.min(y1, y - m); x2 = Math.max(x2, x + m); y2 = Math.max(y2, y + m); };
-  for (const { d, cirkels, marge = 0 } of delen) {
-    if (d) {
-      const getallen = d.match(/-?\d*\.?\d+/g).map(Number);
-      for (let i = 0; i < getallen.length; i += 2) neem(getallen[i], getallen[i + 1], marge);
-    }
-    for (const [, cx, cy, r] of (cirkels || "").matchAll(/cx="([\d.]+)" cy="([\d.]+)" r="([\d.]+)"/g)) neem(+cx, +cy, +r + marge);
-  }
-  return { x: Math.floor(x1), y: Math.floor(y1), b: Math.ceil(x2) - Math.floor(x1), h: Math.ceil(y2) - Math.floor(y1) };
-}
+// De intro gebruikt de vormen van het officiële ronde logo zelf (één pad met losse delen, zie maakIntro)
+const LOGO_SVG = readFileSync(IMG + "sporty-logo.svg", "utf8");
 
 /**
- * Het logo voor de intro op de homepage: dezelfde vormen, verdeeld over lagen die elk apart kunnen
- * bewegen. De kinderen (met benen) rennen vanaf de rand van het scherm naar het midden, slaan de armen
- * om elkaar, de ring sluit zich om ze heen en daarna komen "BSO", het woordmerk en het lachje.
- * In plaats van maskers krijgt elke laag een "halo" in de achtergrondkleur (dezelfde witte rand als in het logo),
- * zodat de lagen ook tijdens het bewegen goed over elkaar vallen. Elke laag is een eigen HTML-element, zodat de
- * browser de beweging met de grafische kaart doet en de pagina niet trager wordt.
- * Aan het eind staat alles op zijn plek en is het beeld gelijk aan sporty-logo.svg.
- * Kleuren en beweging staan in css/style.css (sectie Intro); dit is alleen de vorm.
+ * Verdeelt het pad van het officiële logo in de delen die in de intro apart bewegen. Het pad bestaat uit losse
+ * contouren ("M … Z"); die worden op hun plek in het logo ingedeeld:
+ *  - ring: de open cirkel, de enige contour die bovenaan het logo begint;
+ *  - lach: het lachje onder het woordmerk;
+ *  - woord: "Sporty" (alles vanaf de onderkant van de ring);
+ *  - bso: de letters op het shirt van het middelste kind;
+ *  - kinderen: de drie kinderen met hun armen om elkaar heen (één vorm, met gaten).
+ * Komen er vectorbestanden van de ontwerper (TODO), controleer dan of deze indeling nog klopt.
  */
-export function maakIntro(pre = "") {
-  const GAT2 = 2 * GAT;
-  const pad = (klasse, d, extra = "") => `<path${klasse ? ` class="${klasse}"` : ""} d="${d}"${extra}/>`;
-  const breed = (b) => ` stroke-width="${b}"`;
-  const metKlasse = (cirkels, klasse, extra = "") => cirkels.replaceAll("<circle", `<circle class="${klasse}"${extra}`);
-  const pct = (waarde, totaal) => `${+((waarde / totaal) * 100).toFixed(3)}%`;
-  const VOET = { krul: [104, 340], pet: [296, 340], meisje: [201, 340] }; // heup: draaipunt bij het rennen
+export function logoDelen(svg = LOGO_SVG) {
+  const viewBox = svg.match(/viewBox="([^"]+)"/)[1].split(/\s+/).map(Number);
+  const d = svg.match(/ d="([^"]+)"/)[1];
+  const delen = { ring: [], kinderen: [], bso: [], woord: [], lach: [] };
+  for (const sub of d.split(/(?=M )/).map((x) => x.trim()).filter(Boolean)) {
+    const getallen = sub.match(/-?\d+(\.\d+)?/g).map(Number);
+    const xs = getallen.filter((_, i) => i % 2 === 0), ys = getallen.filter((_, i) => i % 2 === 1);
+    const x0 = Math.min(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+    const soort = y0 < viewBox[1] + 100 && x0 < viewBox[0] + 100 ? "ring"
+      : y0 >= 1850 && y1 - y0 < 250 ? "lach"
+      : y0 >= 1280 ? "woord"
+      : y0 >= 1100 ? "bso"
+      : "kinderen";
+    delen[soort].push(sub);
+  }
+  return { viewBox, delen: Object.fromEntries(Object.entries(delen).map(([k, v]) => [k, v.join(" ")])) };
+}
 
-  // Tijdens het rennen hebben de kinderen een broek en benen; die vallen straks buiten de ring
-  const BROEK = {
-    krul: "M46 345 L162 345 L162 364 C162 371 157 375 150 375 L58 375 C51 375 46 371 46 364 Z",
-    pet: "M240 345 L352 345 L352 364 C352 371 347 375 340 375 L252 375 C245 375 240 371 240 364 Z",
-    meisje: "M163 348 L239 348 L240 366 C240 372 236 375 230 375 L172 375 C166 375 162 372 162 366 Z",
+// Knippaden tussen de kinderen (in de maten van het logo), langs de witte ruimte tussen haren en shirts.
+// Links het krullenkind, in het midden het meisje met het BSO-shirt, rechts het kind met de pet.
+const NAAD_LINKS = [[1205, 0], [1205, 740], [1130, 805], [1125, 960], [1185, 1120], [1185, 2300]];
+const NAAD_RECHTS = [[1758, 0], [1758, 940], [1790, 1120], [1840, 1400], [1840, 2300]];
+
+/**
+ * De intro op de homepage, gemaakt van het officiële ronde logo (assets/img/sporty-logo.svg): de drie kinderen
+ * rennen vanaf de rand van het scherm naar het midden en slaan de armen om elkaar, de ring sluit zich om ze heen,
+ * "BSO" ploft op het shirt, het woordmerk zwaait omhoog en het lachje verschijnt. Aan het eind liggen alle delen
+ * precies op hun plek en is het beeld gelijk aan het logo.
+ * Elke laag is een eigen HTML-element ter grootte van het hele logo, zodat de browser de beweging met de grafische
+ * kaart doet. De drie kinderen zijn dezelfde vorm met elk een eigen knippad; de knippaden overlappen een paar
+ * eenheden, zodat er geen naadje te zien is. De beweging staat in css/style.css (sectie Intro).
+ */
+export function maakIntro() {
+  const { viewBox: [vx, vy, vb, vh], delen } = logoDelen();
+  const vak = `${vx} ${vy} ${vb} ${vh}`;
+  const pct = (waarde, totaal) => `${+((waarde / totaal) * 100).toFixed(2)}%`;
+  const punten = (lijn, dx) => lijn.map(([x, y]) => `${x + dx},${y}`);
+  const L = vx - 50, R = vx + vb + 50, B = 2300;
+  const knip = {
+    links: [`${L},0`, ...punten(NAAD_LINKS, 3), `${L},${B}`],
+    midden: [...punten(NAAD_LINKS, -3), ...punten(NAAD_RECHTS, 3).reverse()],
+    rechts: [...punten(NAAD_RECHTS, -3), `${R},${B}`, `${R},0`],
   };
-  const BENEN = { krul: [[78, 130], 26], pet: [[270, 322], 26], meisje: [[185, 217], 22] };
-  const broek = (wie) => pad("intro__halo", BROEK[wie], breed(GAT2)) + pad("intro__vlak", BROEK[wie]);
-  const benen = Object.entries(BENEN).flatMap(([wie, [xen, dikte]]) => xen.map((x, i) => {
-    const d = `M${x} 368 L${x} 452`;
-    return { naam: `been-${wie}-${"ab"[i]}`, kind: wie, been: "ab"[i], delen: [{ d, marge: dikte / 2 }], inhoud: pad("intro__lijn", d, breed(dikte)) };
-  }));
-
-  // Van achter naar voren, net als de lagen van het logo. De iris (crème met een rond gat) sluit zich op het
-  // eind om de kinderen heen en snijdt af wat buiten de ring valt, net als het knippad van het logo.
+  // Draaipunt van elk kind: onder het shirt (daar "landen" ze na het rennen)
+  const voet = { links: [880, 1420], midden: [1500, 1480], rechts: [2110, 1420] };
+  const svg = (inhoud) => `<svg viewBox="${vak}" focusable="false">${inhoud}</svg>`;
+  const laag = (naam, inhoud, [ox, oy] = [vx + vb / 2, vy + vh / 2], extra = "") =>
+    `<div class="intro__laag intro__laag--${naam}${extra}" style="--o:${pct(ox - vx, vb)} ${pct(oy - vy, vh)}">${svg(inhoud)}</div>`;
+  const vorm = (d) => `<path class="intro__vorm" fill-rule="evenodd" d="${d}"/>`;
+  const kind = (wie, i) => laag(wie, `<clipPath id="intro-knip-${wie}"><polygon points="${knip[wie].join(" ")}"/></clipPath>`
+    + (i === 0 ? `<defs><path id="intro-kinderen" fill-rule="evenodd" d="${delen.kinderen}"/></defs>` : "")
+    + `<use class="intro__vorm" href="#intro-kinderen" clip-path="url(#intro-knip-${wie})"/>`,
+  voet[wie], ` intro__kind intro__kind--${wie}`);
   const lagen = [
-    ...benen,
-    { naam: "pet-romp", kind: "pet", delen: [{ d: V.rompR, marge: 3 }, { d: BROEK.pet, marge: GAT }], inhoud: pad("intro__vlak", V.rompR) + pad("intro__halo-lijn", V.mouwR, breed(GAT)) + broek("pet") },
-    { naam: "krul-romp", kind: "krul", delen: [{ d: V.rompL, marge: 3 }, { d: BROEK.krul, marge: GAT }], inhoud: pad("intro__vlak", V.rompL) + pad("intro__halo-lijn", V.mouwL, breed(GAT)) + broek("krul") },
-    { naam: "meisje-shirt", kind: "meisje", delen: [{ d: V.shirt, marge: GAT }, { d: BROEK.meisje, marge: GAT }], inhoud: pad("intro__halo", V.shirt, breed(GAT2)) + pad("intro__lijn", V.shirt, breed(6)) + pad("intro__lijn", V.kraag, breed(6)) + broek("meisje") },
-    // De arm van het meisje hoort bij haar shirt: de halo laat het shirt heel
-    { naam: "arm-meisje", oorsprong: [230, 180], delen: [{ d: V.armMeisje, marge: (ARM + GAT2) / 2 }], inhoud: (vak) => `<mask id="intro-shirt" maskUnits="userSpaceOnUse" x="${vak.x}" y="${vak.y}" width="${vak.b}" height="${vak.h}"><rect x="${vak.x}" y="${vak.y}" width="${vak.b}" height="${vak.h}" fill="#fff"/><path d="${V.shirt}" stroke="#000" stroke-width="6"/></mask>` + pad("intro__halo-lijn", V.armMeisje, breed(ARM + GAT2) + ' mask="url(#intro-shirt)"') + pad("intro__lijn", V.armMeisje, breed(ARM)) },
-    { naam: "arm-krul", oorsprong: [144, 184], delen: [{ d: V.armKrul, marge: (ARM + GAT2) / 2 }], inhoud: pad("intro__halo-lijn", V.armKrul, breed(ARM + GAT2)) + pad("intro__lijn", V.armKrul, breed(ARM)) },
-    { naam: "krul-hoofd", kind: "krul", delen: [{ cirkels: V.krul, marge: GAT }], inhoud: `<g class="intro__halo"${breed(GAT2)}>${V.krul}</g><g class="intro__vlak">${V.krul}</g>` },
-    { naam: "meisje-hoofd", kind: "meisje", delen: [{ cirkels: V.meisje, marge: GAT }, { d: V.staart, marge: GAT }], inhoud: metKlasse(V.meisje, "intro__halo", breed(GAT2)) + metKlasse(V.meisje, "intro__vlak") + pad("intro__halo", V.staart, breed(GAT2)) + pad("intro__vlak", V.staart) },
-    { naam: "pet-hoofd", kind: "pet", delen: [{ cirkels: V.petHoofd, marge: GAT }, { d: V.pet, marge: GAT }, { d: V.klep, marge: GAT }], inhoud: metKlasse(V.petHoofd, "intro__halo", breed(GAT2)) + metKlasse(V.petHoofd, "intro__vlak") + `<g class="intro__halo"${breed(GAT2)}>${pad("", V.pet)}${pad("", V.klep)}</g>` + pad("intro__lijn", V.pet, breed(5)) + pad("intro__vlak intro__lijn", V.klep, breed(5)) + `<circle class="intro__vlak" cx="${V.knoop.cx}" cy="${V.knoop.cy}" r="${V.knoop.r}"/>` + pad("intro__lijn", V.naad, breed(3.5)) },
-    { naam: "iris", oorsprong: [200, 186], vak: { x: -130, y: -144, b: 660, h: 660 }, inhoud: pad("intro__iris", "M-130 186a330 330 0 1 0 660 0a330 330 0 1 0-660 0ZM49 186a151 151 0 1 0 302 0a151 151 0 1 0-302 0Z", ' fill-rule="evenodd"') },
-    { naam: "ring", oorsprong: [200, 186], vak: { x: 31, y: 17, b: 338, h: 338 }, inhoud: pad("intro__ring", "M200 23a163 163 0 1 1 0 326a163 163 0 1 1 0-326", breed(7)) },
+    laag("ring", vorm(delen.ring), [1498.5, 1038.5]),
+    ...["links", "rechts", "midden"].map(kind),
+    laag("bso", vorm(delen.bso), [1500, 1215]),
+    laag("woord", vorm(delen.woord), [1500, 2000]),
+    laag("lach", vorm(delen.lach), [1213, 1990]),
   ];
-
-  const html = (laag) => {
-    const vak = laag.vak || omhulling(laag.delen);
-    const [ox, oy] = laag.kind ? VOET[laag.kind] : laag.oorsprong;
-    const klassen = `intro__laag intro__laag--${laag.naam}${laag.kind ? ` intro__kind intro__kind--${laag.kind}` : ""}${laag.been ? ` intro__been intro__been--${laag.been}` : ""}`;
-    const stijl = `left:${pct(vak.x, 400)};top:${pct(vak.y, 392)};width:${pct(vak.b, 400)};height:${pct(vak.h, 392)};--o:${pct(ox - vak.x, vak.b)} ${pct(oy - vak.y, vak.h)}`;
-    const inhoud = typeof laag.inhoud === "function" ? laag.inhoud(vak) : laag.inhoud;
-    return `<div class="${klassen}" style="${stijl}"><svg viewBox="${vak.x} ${vak.y} ${vak.b} ${vak.h}" focusable="false">${inhoud}</svg></div>`;
-  };
-  // Het officiële ronde logo (assets/img/sporty-logo.svg), zo geplaatst dat de ring precies over de ring
-  // van de animatie valt: middelpunt (200, 186) en straal 163, tegen middelpunt (1498,5; 1038,5) en straal 960
-  // in de viewBox van het logo (507 46 1985 2104). Aan het eind vloeit de animatie hierin over.
-  const k = 163 / 960;
-  const officieel = `<img class="intro__officieel" src="${pre}assets/img/sporty-logo.svg" alt="" width="337" height="357" style="left:${pct(200 - (1498.5 - 507) * k, 400)};top:${pct(186 - (1038.5 - 46) * k, 392)};width:${pct(1985 * k, 400)}">`;
-  return `<div class="intro__logo">\n<div class="intro__lagen">\n${lagen.map(html).join("\n")}\n</div>\n${officieel}\n</div>`;
+  return `<div class="intro__logo">\n${lagen.join("\n")}\n</div>`;
 }
 
 export const INTRO_PAGINAS = ["index.html", "en/index.html"];
@@ -138,8 +108,7 @@ const INTRO = /(<!-- intro: gemaakt met npm run logo -->\n)[\s\S]*?(<!-- \/intro
 /** De pagina met de huidige intro tussen de markeringen. */
 export function metIntro(html) {
   if (!INTRO.test(html)) throw new Error("Markeringen voor de intro ontbreken");
-  const pre = /<link rel="canonical" href="[^"]*\/en\/">/.test(html) ? "../" : "";
-  return html.replace(INTRO, (_, begin, eind) => `${begin}<div class="intro" hidden aria-hidden="true">\n${maakIntro(pre)}\n</div>\n${eind}`);
+  return html.replace(INTRO, (_, begin, eind) => `${begin}<div class="intro" hidden aria-hidden="true">\n${maakIntro()}\n</div>\n${eind}`);
 }
 
 // Favicon en app-iconen: oranje vlak met een witte script-S

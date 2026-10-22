@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { INTRO_PAGINAS, metIntro } from "../tools/logo/maak-logo.mjs";
+import { INTRO_PAGINAS, metIntro, logoDelen } from "../tools/logo/maak-logo.mjs";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const lees = (pagina) => readFileSync(join(ROOT, pagina), "utf8");
@@ -41,4 +41,14 @@ test("de CSS heeft alle animaties van de intro", () => {
   for (const naam of ["intro-weg", "intro-weg-snel"]) assert.ok(gebruikt.has(naam), `${naam} wordt niet gebruikt`);
   // Het script haalt de intro weg als deze animaties klaar zijn
   for (const pagina of INTRO_PAGINAS) assert.match(lees(pagina), /animationName === "intro-weg"/, pagina);
+});
+
+test("de intro is gemaakt van alle delen van het officiële ronde logo", () => {
+  const svg = lees("assets/img/sporty-logo.svg");
+  const contouren = (d) => (d.match(/M /g) || []).length;
+  const { delen } = logoDelen(svg);
+  const totaal = contouren(svg.match(/ d="([^"]+)"/)[1]);
+  assert.equal(Object.values(delen).reduce((n, d) => n + contouren(d), 0), totaal, "elke contour van het logo hoort bij een deel van de intro");
+  for (const [naam, d] of Object.entries(delen)) assert.ok(contouren(d) > 0, `het deel "${naam}" is leeg: klopt de indeling in logoDelen nog?`);
+  assert.equal(contouren(delen.ring), 1, "de ring is één contour");
 });
