@@ -15,7 +15,7 @@ Bouw een complete, responsive website voor **Sporty** (bso) in Amsterdam. (Naam 
 - **Werkgebied:** Lokaal (Amsterdam)
 - **Doelen van de website:** Nieuwe klanten werven, informatie geven en professionele uitstraling
 - **Belangrijkste actie:** Aanmelden. De hoofdknop "Aanmelden" staat in de header en terug op elke pagina, als een knop naar de aanmeldpagina. Langskomen blijft mogelijk via een tekstlink naar het adres met routebeschrijving. (Gewijzigd op 30 september 2026; oorspronkelijk was de hoofdknop "Kom langs".)
-- **Slogan:** "Let's Play!" (22 oktober 2026)
+- **Slogan:** "Let's Play" (22 oktober 2026)
 - **Kernboodschap (hero-kop op de homepage):** "Sport, plezier en ontwikkeling na schooltijd." met "na schooltijd" in oranje (gewijzigd op 11 oktober 2026 via de designprompt; eerder: "Dat wij de leukste/gezelligste/sportiefste BSO zijn met oprechte aandacht voor ieder kind"). Ondersteunende tekst van de klant: "Bij BSO Sporty geloven we in de kracht van sport, samen spelen en groeien. Een plek waar kinderen van 5 t/m 13 jaar iedere dag met plezier in beweging komen." Knoppen in de hero: "Ontdek BSO Sporty" (oranje) en "Bekijk ons programma" (omlijnd). De hoofdknop "Aanmelden" blijft in de header en op elke pagina.
 - **Leeftijd:** kinderen van 5 t/m 13 jaar (uit de designprompt van 11 oktober 2026).
 - **Waarom klanten voor dit bedrijf kiezen (USP's, laat ze op de homepage zien):**
@@ -81,7 +81,7 @@ De klant heeft een uitgebreide designprompt gegeven. Samengevat: een moderne, en
 De klant heeft een nieuwe briefing gegeven, met de officiële logo's, Henny de hond en een voorbeeld "Team Sporty" als bijlage. Waar deze briefing iets anders zegt dan hierboven, geldt deze. Samengevat:
 
 - **Logo's:** "Sporty" is het woordmerk (in de header), "Sporty rond" is het logo (footer, intro, iconen). De aangeleverde bestanden staan in `design/logo/`; de SVG's in `assets/img/` zijn daaruit gemaakt.
-- **Slogan:** "Let's Play!" (Engels, met `lang="en"` op een Nederlandse pagina), handgeschreven in de hero, het afsluitende blok en de footer.
+- **Slogan:** "Let's Play" (Engels, met `lang="en"` op een Nederlandse pagina), handgeschreven in de hero, het afsluitende blok en de footer.
 - **Gevoel:** een sportieve BSO die de kinderen na school ophaalt en sportieve spellen met ze doet. Het moet voelen als een club of community waar je bij wilt horen: positief, energiek, speels en sportief, maar netjes en professioneel. Betrouwbaar en veilig voor ouders, aantrekkelijk voor kinderen én ouders.
 - **Humor als onderscheidend punt:** luchtige, grappige teksten. Voorbeelden van de klant: "Stuitert jouw kind na school door het huis? Dan zit-ie bij ons helemaal goed.", "Na school nog energie voor tien? Die raken we samen wel kwijt.", "Bij Sporty mag je lekker uitrazen." en "Rennen, springen, vliegen, duiken. Oké, dat laatste misschien niet." Op de teampagina GIF's van de medewerkers die een voetbaljuichmoment doen.
 - **Kleuren:** oranje, wit en zwart (zie hieronder). Bewegende elementen zijn welkom, maar niet te druk of afleidend.
@@ -90,7 +90,7 @@ De klant heeft een nieuwe briefing gegeven, met de officiële logo's, Henny de h
 - **Illustraties:** getekende elementen (sterren, pijlen, kroontjes, hartjes, krabbels) gecombineerd met fotografie, zoals in het voorbeeld "Team Sporty".
 - **Balans:** anders dan standaard BSO-websites, met humor en speelsheid, maar netjes en betrouwbaar.
 
-Uitwerking op de site: de hero op de homepage is oranje (zoals het logo) met "Let's Play!", de kernboodschap in zwart met "na schooltijd." in wit, een fotovak en Henny met een bal; daaronder een zwarte band met Sport · Plezier · Ontwikkeling die meeschuift als je scrolt. Paginakoppen zijn zwart met een oranje fotovak, het afsluitende blok is oranje met Henny, en de teampagina heet "Team Sporty".
+Uitwerking op de site: de hero op de homepage is oranje (zoals het logo) met "Let's Play", de kernboodschap in zwart met "na schooltijd." in wit, een fotovak en Henny met een bal; daaronder een zwarte band met Sport · Plezier · Ontwikkeling die meeschuift als je scrolt. Paginakoppen zijn zwart met een oranje fotovak, het afsluitende blok is oranje met Henny, en de teampagina heet "Team Sporty".
 
 ### Kleuren
 
@@ -117,7 +117,7 @@ Volgens de designprompt van 11 oktober 2026. Alle letters zijn gratis (Google Fo
 - Koppen: **Poppins ExtraBold** (800; kleinere koppen 700), compact, met belangrijke woorden in oranje
 - Knoppen, menu en labels boven koppen: **Poppins** (600/700); labels in hoofdletters met een kort oranje streepje ervoor
 - Lopende tekst: **DM Sans** (400, en 700 voor nadruk), basisgrootte 17–18px, kleinste tekst 15–16px
-- Handgeschreven accent: **Caveat Brush**, in hoofdletters, minimaal 24px, alleen voor korte statements zoals de slogan "Let's Play!" en krabbels bij beelden ("Goal!")
+- Handgeschreven accent: **Caveat Brush**, in hoofdletters, minimaal 24px, alleen voor korte statements zoals de slogan "Let's Play" en krabbels bij beelden ("Goal!")
 - Woordmerk: het officiële logobestand (`assets/img/sporty-woordmerk.svg`), geen lettertype
 
 ### Logo en huisstijl

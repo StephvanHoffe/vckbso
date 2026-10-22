@@ -826,7 +826,7 @@ a:hover {
 /* ---------- 5. Hero (home) ---------- */
 
 /*
- * Oranje, net als het logo: grote zwarte kop, het handgeschreven "Let's Play!", en rechts een (voorlopig leeg)
+ * Oranje, net als het logo: grote zwarte kop, het handgeschreven "Let's Play", en rechts een (voorlopig leeg)
  * fotovak met getekende elementen en Henny die erlangs rent. Mobiel staat alles onder elkaar.
  */
 .hero {
@@ -1724,16 +1724,17 @@ a:hover {
   padding: var(--space-xl) var(--space-m);
   border-radius: var(--radius-l);
   background: var(--color-dark);
-  color: var(--color-on-primary);
+  color: var(--color-on-dark);
   box-shadow: var(--shadow-l);
 }
 
 .feature__panel h2 {
+  color: var(--color-on-dark);
   font-size: var(--step-3);
 }
 
 .feature__panel a:not(.btn) {
-  color: var(--color-on-primary);
+  color: var(--color-on-dark);
 }
 
 .feature__panel .eyebrow {
@@ -3028,7 +3029,7 @@ a:hover {
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 50%;
-  background: var(--color-primary-strong);
+  background: var(--color-primary);
   color: var(--color-on-primary);
   font-family: var(--font-heading);
   font-weight: var(--font-weight-heading);
@@ -3131,7 +3132,7 @@ a:hover {
 /* ---------- 18. Afsluitend blok (CTA) ---------- */
 
 /*
- * Oranje, net als het logo: "Let's Play!" in handschrift, een zwarte kop en tekst, een zwarte knop,
+ * Oranje, net als het logo: "Let's Play" in handschrift, een zwarte kop en tekst, een zwarte knop,
  * en Henny die om de hoek kijkt. Op de achtergrond subtiele ronde vormen (bal, middencirkel).
  */
 .cta {
@@ -3360,12 +3361,18 @@ a:hover {
   margin-top: var(--space-2xs);
 }
 
+/* Het ronde logo zoals aangeleverd: wit op een oranje tegel */
 .logo--embleem {
+  display: inline-block;
   margin-bottom: var(--space-s);
+  padding: 0.85rem;
+  border-radius: var(--radius-m);
+  background: var(--color-primary);
 }
 
 .logo--embleem img {
-  width: 8.25rem;
+  display: block;
+  width: 7.5rem;
   height: auto;
 }
 

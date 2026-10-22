@@ -49,7 +49,7 @@ if (is_post()) {
     }
     demo_machtiging($ouder, $naam);
     flash('succes', 'Demo: de machtiging is gesimuleerd. In de echte omgeving loopt dit via je eigen bank.');
-    redirect('index.php');
+    redirect('machtiging.php');
 }
 
 pagina_begin('Machtiging automatische incasso', 'profiel.php');
@@ -58,6 +58,13 @@ pagina_kop('Automatische incasso', 'Zo hoef jij nergens meer aan te denken: je f
 <div class="kolommen">
   <div class="panel">
 <?php if (in_array($ouder['mandaat_status'], ['geldig', 'demo'], true)): ?>
+    <div class="henny-baan henny-baan--vast is-klaar" style="--voortgang: 1;">
+      <p class="tekstwolk henny-baan__wolk">Goal! Alles is geregeld. Tot snel bij Sporty!</p>
+      <div class="henny-baan__spoor" aria-hidden="true">
+        <img class="henny-baan__henny" src="../assets/img/henny/henny-rent-180.webp" srcset="../assets/img/henny/henny-rent-180.webp 180w, ../assets/img/henny/henny-rent-360.webp 360w" sizes="3rem" width="180" height="239" alt="">
+        <svg class="henny-baan__doel" viewBox="0 0 44 30" focusable="false"><path d="M3 29V3h38v26"/><path d="M3 3l6 6h26l6-6M9 9v20M35 9v20M15.5 9v20M22 9v20M28.5 9v20M9 15.5h26M9 22h26"/></svg>
+      </div>
+    </div>
     <h2>Je machtiging is geregeld</h2>
     <dl class="gegevens">
       <dt>Status</dt><dd><?= status_badge($ouder['mandaat_status']) ?></dd>
@@ -67,6 +74,14 @@ pagina_kop('Automatische incasso', 'Zo hoef jij nergens meer aan te denken: je f
     </dl>
     <p class="muted">Wil je een andere rekening gebruiken of de machtiging intrekken? Stuur ons een <a href="berichten.php">bericht</a>.</p>
 <?php else: ?>
+    <!-- Henny rent mee door het aanmelden: na het formulier is dit de laatste stap -->
+    <div class="henny-baan henny-baan--vast" style="--voortgang: 0.86;">
+      <p class="tekstwolk henny-baan__wolk">Bijna bij het doel! Nog één stap: de machtiging via je eigen bank.</p>
+      <div class="henny-baan__spoor" aria-hidden="true">
+        <img class="henny-baan__henny" src="../assets/img/henny/henny-rent-180.webp" srcset="../assets/img/henny/henny-rent-180.webp 180w, ../assets/img/henny/henny-rent-360.webp 360w" sizes="3rem" width="180" height="239" alt="">
+        <svg class="henny-baan__doel" viewBox="0 0 44 30" focusable="false"><path d="M3 29V3h38v26"/><path d="M3 3l6 6h26l6-6M9 9v20M35 9v20M15.5 9v20M22 9v20M28.5 9v20M9 15.5h26M9 22h26"/></svg>
+      </div>
+    </div>
     <h2>Machtiging afgeven</h2>
 <?php if ($ouder['mandaat_status'] === 'in_behandeling'): ?>
     <p><?= status_badge('in_behandeling') ?> We wachten nog op de bevestiging van je bank. Dat duurt meestal maar even. Ging er iets mis? Probeer het dan hieronder opnieuw.</p>

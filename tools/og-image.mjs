@@ -37,7 +37,7 @@ const svg64 = (pad) => `data:image/svg+xml;base64,${base64(pad)}`;
 const font = (pad, familie, gewicht) => `@font-face { font-family: "${familie}"; font-weight: ${gewicht}; src: url(data:font/woff2;base64,${base64(pad)}) format("woff2"); }`;
 const tokensZonderFonts = tokens.replace(/@font-face\s*{[^}]*}/g, "");
 
-// Zoals de hero op de homepage: oranje vlak met het witte ronde logo, "Let's Play!" in handschrift,
+// Zoals de hero op de homepage: oranje vlak met het witte ronde logo, "Let's Play" in handschrift,
 // een zwarte kop, Henny met een tekstwolkje en een zwarte band met de kernwaarden
 const html = `<!doctype html>
 <html lang="nl"><head><meta charset="utf-8">
@@ -64,7 +64,7 @@ h1 span { color: #fff; }
 <body>
   <div class="tekst">
     <img class="logo" src="${svg64("assets/img/sporty-logo-wit.svg")}" alt="Sporty">
-    <p class="slogan">Let's Play!</p>
+    <p class="slogan">Let's Play</p>
     <h1>Sport, plezier en ontwikkeling <span>na schooltijd.</span></h1>
   </div>
   <img class="henny" src="data:image/webp;base64,${base64(HENNY)}" alt="Henny, de hond van Sporty">

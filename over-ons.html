@@ -116,15 +116,14 @@
       <a class="link-arrow" href="team.html">Maak kennis met het team<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
     </div>
     <div class="split__media reveal">
-      <!-- TODO: vervangen door een echte teamfoto -->
-      <div class="frame frame--left" style="--ratio: 1 / 1;">
-        <div class="frame__img team-placeholder" style="background: var(--color-sun-soft);">
-          <svg viewBox="0 0 400 400" role="img" aria-label="Plek voor een foto van het team van Sporty">
-            <circle cx="130" cy="170" r="42" style="fill: var(--color-primary)"/><path d="M58 330c0-50 32-84 72-84s72 34 72 84z" style="fill: var(--color-primary)"/>
-            <circle cx="270" cy="170" r="42" style="fill: var(--color-accent)"/><path d="M198 330c0-50 32-84 72-84s72 34 72 84z" style="fill: var(--color-accent)"/>
-            <circle cx="200" cy="200" r="48" style="fill: var(--color-sand)"/><path d="M118 360c0-58 36-96 82-96s82 38 82 96z" style="fill: var(--color-sand)"/>
-          </svg>
+      <div class="frame team-teaser__beeld">
+        <!-- TODO: foto van de eigenaar met het team (de klant levert de fotografie later aan; zie assets/fotos/BRONNEN.md) -->
+        <div class="frame__img fotovak" data-foto="team-eigenaar" style="--ratio: 1 / 1;">
+          <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Teamfoto volgt</p><p class="fotovak__wat">De eigenaar van Sporty met het hele team</p></div>
         </div>
+        <svg class="doodle team-teaser__kroon" aria-hidden="true" focusable="false"><use href="#d-kroon"></use></svg>
+        <svg class="doodle doodle--vierkant team-teaser__hart" aria-hidden="true" focusable="false"><use href="#d-hart"></use></svg>
+        <p class="notitie team-teaser__notitie" aria-hidden="true">Team Sporty!</p>
       </div>
     </div>
   </div>
@@ -152,7 +151,7 @@
     <div class="feature__media">
     <div class="frame  reveal">
       <!-- TODO: foto van Sporty (de klant levert de fotografie later aan; zie assets/fotos/BRONNEN.md) -->
-      <div class="frame__img fotovak" data-foto="basketbal">
+      <div class="frame__img fotovak fotovak--oranje" data-foto="basketbal">
         <div class="fotovak__inhoud" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-camera"></use></svg><p class="fotovak__label">Foto volgt</p><p class="fotovak__wat">Een begeleider speelt basketbal met een paar kinderen op een buitenveld</p></div>
       </div>
     </div>
@@ -174,7 +173,7 @@
   <div class="container">
     <div class="cta op-oranje reveal">
       <div class="cta__tekst">
-        <p class="slogan cta__slogan" lang="en">Let's Play!</p>
+        <p class="slogan cta__slogan" lang="en">Let's Play</p>
         <h2>Zin om erbij te komen? Meld je kind aan!</h2>
         <p>Aanmelden doe je online, in een paar minuten. Daarna nemen we contact met je op voor een kennismaking. Neem je kind gerust mee: samen ontdekken is het leukst!</p>
         <div class="btn-group">
@@ -193,9 +192,9 @@
 <footer class="site-footer on-dark">
   <div class="container site-footer__grid">
     <div>
-      <a class="logo logo--embleem" href="index.html" aria-label="Sporty, naar de homepage"><img src="assets/img/sporty-logo.svg" alt="" width="132" height="140" loading="lazy"></a>
+      <a class="logo logo--embleem" href="index.html" aria-label="Sporty, naar de homepage"><img src="assets/img/sporty-logo-wit.svg" alt="" width="132" height="140" loading="lazy"></a>
       <p>Sportieve buitenschoolse opvang (BSO) in Amsterdam, met oprechte aandacht voor ieder kind.</p>
-      <p class="slogan footer-slogan" lang="en">Let's Play!</p>
+      <p class="slogan footer-slogan" lang="en">Let's Play</p>
       <ul class="footer-waarden" aria-label="Waar Sporty voor staat">
         <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-ball"></use></svg></span>Sport</li>
         <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-smile"></use></svg></span>Plezier</li>
