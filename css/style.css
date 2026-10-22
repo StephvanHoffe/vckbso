@@ -1558,6 +1558,19 @@ a:hover {
   }
 }
 
+/* Werken bij: krabbel bij de foto in het zwarte blok, en de link vanaf de teampagina */
+.section--zwart .werken__notitie {
+  color: var(--color-primary);
+}
+
+.team-werken {
+  margin-top: var(--space-l);
+}
+
+.section--zwart .team-werken a {
+  color: var(--color-on-dark);
+}
+
 /* Henny op een oranje vlak, net als in het logo (teampagina, aanmelden) */
 .henny-vak {
   display: grid;
@@ -2807,6 +2820,30 @@ a:hover {
   background-color: #fff8f6;
 }
 
+/* Bestand kiezen (cv): de knop in de stijl van de site */
+.field input[type="file"] {
+  padding: 0.45rem;
+  cursor: pointer;
+}
+
+.field input[type="file"]::file-selector-button {
+  margin-right: 0.85rem;
+  padding: 0.5em 1.1em;
+  border: var(--border-width) solid var(--color-dark);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-button);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+
+.field input[type="file"]:hover::file-selector-button {
+  background: var(--color-dark);
+  color: var(--color-on-dark);
+}
+
 .field__error {
   display: flex;
   align-items: flex-start;
@@ -2954,6 +2991,12 @@ a:hover {
   font-weight: var(--font-weight-strong);
   cursor: pointer;
   transition: background-color var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+}
+
+/* Ook binnen een .field (waar labels anders als blok staan) */
+.field .choice {
+  display: inline-flex;
+  margin-bottom: 0;
 }
 
 .choice:hover {

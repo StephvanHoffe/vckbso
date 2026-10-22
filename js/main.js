@@ -147,6 +147,14 @@
       else if (v.patternMismatch) text = msg("pattern", "Controleer dit veld nog even.");
       else if (v.tooShort) text = msg("short", "Dit is wat kort.");
       else if (v.rangeOverflow || v.rangeUnderflow) text = msg("range", "Controleer dit veld nog even.");
+      // Bestanden (zoals een cv): soort en grootte
+      if (!text && field.type === "file" && field.files && field.files.length) {
+        var file = field.files[0];
+        var maxMb = parseFloat(field.getAttribute("data-max-mb") || "0");
+        var accept = (field.getAttribute("accept") || "").split(",").map(function (ext) { return ext.trim().toLowerCase(); }).filter(Boolean);
+        if (accept.length && !accept.some(function (ext) { return file.name.toLowerCase().slice(-ext.length) === ext; })) text = msg("filetype", "Dit soort bestand kunnen we niet ontvangen.");
+        else if (maxMb && file.size > maxMb * 1024 * 1024) text = msg("size", "Dit bestand is te groot.");
+      }
       var error = document.getElementById(field.id + "-fout");
       field.setAttribute("aria-invalid", text ? "true" : "false");
       if (error) {
@@ -164,7 +172,7 @@
     });
     ["input", "change"].forEach(function (type) {
       form.addEventListener(type, function (event) {
-        if (isField(event.target) && event.target.getAttribute("aria-invalid") === "true") validate(event.target);
+        if (isField(event.target) && (event.target.getAttribute("aria-invalid") === "true" || event.target.type === "file")) validate(event.target);
       });
     });
 
@@ -239,6 +247,8 @@
         var value = field.value.trim();
         if (!value) return;
         if (field.type === "date") value = value.split("-").reverse().join("-");
+        // Een bestand gaat niet mee in een mailto-link: noem de naam en vraag om het als bijlage toe te voegen
+        if (field.type === "file") value = Array.prototype.map.call(field.files, function (f) { return f.name; }).join(", ") + " (voeg dit bestand als bijlage toe)";
         if (field.type === "checkbox" && !field.closest("[data-choice-group]")) value = "ja";
         var label = labelOf(field);
         if (!(label in values)) {

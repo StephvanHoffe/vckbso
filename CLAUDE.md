@@ -214,6 +214,8 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 - Wat is ieders rol of specialiteit?
 - Een leuk weetje per persoon?
 
+**Werken bij (22 oktober 2026):** op de teampagina is de knop in de header "Werken bij" in plaats van "Aanmelden"; die gaat naar `werken-bij.html`. Daar staat dat er nu geen vacatures zijn en kun je een open sollicitatie sturen met een formulier (gegevens, motivatie, cv als bijlage). "Aanmelden" blijft op de teampagina zelf staan, in de paginakop en het afsluitende blok.
+
 ### Veelgestelde vragen (`veelgestelde-vragen`)
 
 Opbouw (voorstel):

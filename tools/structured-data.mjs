@@ -57,6 +57,7 @@ export const PAGINAS = [
   "diensten.html",
   "prijzen.html",
   "team.html",
+  "werken-bij.html",
   "veelgestelde-vragen.html",
   "contact.html",
   "aanmelden.html",
