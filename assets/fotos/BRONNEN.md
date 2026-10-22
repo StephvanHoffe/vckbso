@@ -1,68 +1,52 @@
-# Beeld: bronnen en fotolijst
+# Beeld: foto's, placeholders en bronnen
 
-## Huidige stand
+## Huidige stand (22 oktober 2026)
 
-Alle foto's op de site zijn **tijdelijke stockfoto's van [Pexels](https://www.pexels.com/)**. Ze laten de sfeer zien die past bij Sporty: buiten sporten en spelen, aandacht voor ieder kind en samen gezellig. Het zijn geen foto's van Sporty zelf.
+De klant levert de fotografie later aan ("Voor nu kun je op de website placeholders voor de foto's plaatsen"). Daarom staan er op de site **geen stockfoto's meer**, maar duidelijke fotovakken: een zwart (of oranje) vlak met een camera, "Foto volgt" en wat er op de foto moet komen. In de HTML herken je ze aan `class="… fotovak"` en `data-foto="naam"`.
 
-De klant wil uiteindelijk eigen beeld laten zien: "mezelf en mijn team, klanten in actie, sfeer en omgeving". Vervang de stockfoto's daarom stap voor stap door eigen foto's (zie onderaan).
+De stockfoto's van Pexels die er eerder stonden, zijn op 22 oktober 2026 weggehaald (ze staan nog in de git-geschiedenis). Alleen vier ervan worden nog gebruikt, als verzonnen voorbeeldfoto's in de momentopname van Mijn BSO (`tools/voorbeeld/demofotos/`, zie onderaan).
 
-### Licentie
+Wel op de site: de officiële logo's (`assets/img/sporty-*.svg`) en Henny de hond (`assets/img/henny/`), allebei aangeleverd door de klant.
 
-Alle foto's vallen onder de [Pexels-licentie](https://www.pexels.com/license/): gratis te gebruiken, ook commercieel, en naamsvermelding is niet verplicht. Let op de voorwaarden:
+## Welke foto komt waar?
 
-- Wek niet de indruk dat de mensen op de foto's Sporty aanbevelen, of dat het de kinderen of medewerkers van Sporty zijn. Gebruik stockfoto's daarom **niet** als foto van een teamlid, de eigenaar of een review.
-- Verkoop de foto's niet los en zet ze niet ongewijzigd op een andere fotosite.
+Lever foto's liefst **minimaal 1600 px breed** aan. De website snijdt ze zelf bij; in de kaders blijft vooral het midden zichtbaar.
 
-### Gebruikte foto's
-
-| Bestand in `bron/` | Foto (Pexels) | Fotograaf | Waar op de site |
-|---|---|---|---|
-| `kring.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813511/) | Kampus Production | Home en Engelse startpagina (hero: kinderen met de armen om elkaar, zoals in het logo), deelafbeelding `assets/img/og-image.jpg`, overzicht van het voorbeeld |
-| `handen.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813502/) | Kampus Production | Afsluitend blok (rond beeld) op Home, Over ons, Programma (diensten), Prijzen, Team en Veelgestelde vragen |
-| `hero.jpg` | [Young Kids Playing Football on the Field](https://www.pexels.com/photo/young-kids-playing-football-on-the-field-8813564/) | Kampus Production | Home ("Waarom Sporty") |
-| `sport.jpg` | [Kids Playing Soccer](https://www.pexels.com/photo/kids-playing-soccer-8035099/) | RDNE Stock project | Nu niet gebruikt (reserve) |
-| `aandacht.jpg` | [Kids Playing with Teacher in the Classroom](https://www.pexels.com/photo/kids-playing-with-teacher-in-the-classroom-8363102/) | RDNE Stock project | Nu niet gebruikt (reserve) |
-| `samen.jpg` | [Group of Children Running in Garden](https://www.pexels.com/photo/group-of-children-running-in-garden-16724787/) | Yakup Polat | Nu niet gebruikt (reserve) |
-| `binnen.jpg` | [Women Kneeling on the Floor with Children in a Room](https://www.pexels.com/photo/women-kneeling-on-the-floor-with-children-in-a-room-8441839/) | Pavel Danilyuk | Over ons (bovenaan) |
-| `luisteren.jpg` | [A Woman Talking to her Child at a Park](https://www.pexels.com/photo/a-woman-talking-to-her-child-at-a-park-7880785/) (liggend uitgesneden) | Barbara Olsen | Over ons ("Waarom Sporty?") |
-| `basketbal.jpg` | [Kids Playing Basketball with Their Coach](https://www.pexels.com/photo/kids-playing-basketball-with-their-coach-8336951/) | RDNE Stock project | Over ons ("Wat ons anders maakt") |
-| `plezier.jpg` | [Kids Having Fun at the Park](https://www.pexels.com/photo/kids-having-fun-at-the-park-8033873/) | RDNE Stock project | Diensten (bovenaan) |
-| `voetbal.jpg` | [Young Soccer Player Kicking Ball on Green Field](https://www.pexels.com/photo/person-field-playing-school-972513/) | Markus Spiske | Programma/diensten ("Sporten en bewegen"), Home (kaart in "Ons programma") |
-| `schilderen.jpg` | [Children Painting in the Art Class](https://www.pexels.com/photo/children-painting-in-the-art-class-8382373/) | Pavel Danilyuk | Programma/diensten ("Aandacht en ontwikkeling"), Home (kaart in "Ons programma") |
-| `gezellig.jpg` | [Students Eating Their Snacks at the School Canteen](https://www.pexels.com/photo/students-eating-their-snacks-at-the-school-canteen-8617514/) | Yan Krukau | Programma/diensten ("Samen en gezellig"), Home (kaart in "Ons programma") |
-| `knutselen.jpg` | [Girl in Brown Apron Doing Rainbow Painting](https://www.pexels.com/photo/girl-in-brown-apron-doing-rainbow-painting-7025567/) | Vlada Karpovich | Prijzen (bovenaan) |
-| `spelletje.jpg` | [Kids Sitting on the Floor and Playing Game with Fingers on Eyes](https://www.pexels.com/photo/kids-sitting-on-the-floor-and-playing-game-with-fingers-on-eyes-8535602/) | Ksenia Chernaya | Team (bovenaan) |
-| `vragen.jpg` | [Children Raising Their Hands in a Classroom](https://www.pexels.com/photo/children-raising-their-hands-in-a-classroom-8613117/) | Yan Krukau | Veelgestelde vragen (bovenaan) |
-| `welkom.jpg` | [Father and Children Running in a Park](https://www.pexels.com/photo/father-and-children-running-in-a-park-4543646/) | Elina Fairytale | Contact (bovenaan) |
-| `amsterdam.jpg` | [Blue City Bike on Bridge](https://www.pexels.com/photo/blue-city-bike-on-bridge-2366108/) | Jimme Deknatel | Contact (achter de kaart), Engelse startpagina ("Come and say hello!") |
-| `hand-in-hand.jpg` | [Children Running Through Park Alley Holding Hands](https://www.pexels.com/photo/children-running-through-park-alley-holding-hands-4894738/) | Gustavo Fring | Aanmelden (bovenaan) |
-| `bal.jpg` | [Colorful Soccer Ball on Grass Field in Sunlight](https://www.pexels.com/photo/colorful-soccer-ball-on-grass-field-in-sunlight-30188923/) | Pablo Gómez | Foutpagina 404 |
-
-De bestanden in `bron/` zijn verkleind tot 1600 px breed. De website gebruikt de AVIF- en WebP-versies in `assets/fotos/` die het script daarvan maakt.
-
-## Nog geen foto (bewust)
-
-| Wat | Waar | Waarom nog niet |
+| `data-foto` | Pagina | Wat moet erop staan |
 |---|---|---|
-| Teamportretten | Team (nu placeholder-avatars in de HTML) | Een stockfoto van een onbekende zou lijken op een echt teamlid. Dat is misleidend voor ouders en mag niet volgens de Pexels-licentie. |
-| Teamfoto | Over ons ("Vertrouwde gezichten voor je kind", nu een placeholder in de HTML) | Idem: hier hoort de eigenaar met het echte team. |
+| `hero` | Home (NL en EN), bovenaan | Een brede foto van kinderen die samen sporten of met de armen om elkaar heen staan, liefst in oranje Sporty-kleding. Staand of vierkant werkt het best. |
+| `rennen` | Home (NL en EN), "Na school nog energie voor tien?" | Kinderen die rennen, springen of juichen. Staand (4:5). |
+| `ophalen` | Home, "Zo ziet een middag bij Sporty eruit" | Een coach van Sporty die kinderen ophaalt bij school. |
+| `sporten` | Home, idem | Een balspel of andere sport. |
+| `samen` | Home, idem | Kinderen die samen even bijkomen en kletsen. |
+| `team` | Home ("Team Sporty") en Team (bovenaan) | Het hele team, of een GIF van het team dat een doelpunt viert. |
+| `team-1`, `team-2`, … | Team | Per teamlid een GIF of kort filmpje van een voetbaljuichmoment (zie hieronder). |
+| `binnen`, `luisteren`, `basketbal` | Over ons | Het team aan het werk: spelen met de kinderen, op ooghoogte luisteren, samen sporten. |
+| `plezier`, `voetbal`, `schilderen`, `gezellig` | Programma (diensten) | Bewegen, aandacht van een begeleider en samen gezellig. |
+| `knutselen` | Prijzen (bovenaan) | Sfeer bij Sporty. |
+| `vragen` | Veelgestelde vragen (bovenaan) | Kinderen die enthousiast hun vinger opsteken, of een begeleider die iets uitlegt. |
+| `welkom` | Contact (bovenaan) | Een warm welkom: kinderen en een coach bij de ingang of op het veld. |
 
-## Eigen foto's: wat komt waar?
+Getekende elementen (sterren, pijlen, kroontjes, hartjes) en handgeschreven krabbels staan al óp de fotovakken. Die blijven staan als de foto's komen, net als in het voorbeeld "Team Sporty" van de klant.
 
-Lever foto's liefst **minimaal 1600 px breed** aan, liggend (3:2 of 4:3). De website snijdt ze zelf bij. Op de plekken met een rond of vierkant kader (bovenaan de subpagina's en in het afsluitende blok) blijft vooral het midden van de foto zichtbaar.
+## Een fotovak vervangen door een foto
 
-| Naam | Wat moet erop staan |
-|---|---|
-| `kring` | De hero: een brede foto van drie of meer kinderen die samen sporten of met de armen om elkaar heen staan (zoals in het logo), liefst in oranje Sporty-kleding. Laat boven in beeld ruimte voor de gezichten: de tekst staat onderaan. |
-| `handen` | Een groepje kinderen dat samen iets doet, bijvoorbeeld de handen op elkaar voor een spel. Wordt rond uitgesneden. |
-| `hero` | Kinderen die buiten sporten of spelen, bijvoorbeeld voetbal op een veld. Blij, in beweging, veel licht. |
-| `sport`, `voetbal`, `basketbal` | Een sport- of bewegingsactiviteit, liefst met een begeleider die meedoet. |
-| `aandacht`, `luisteren`, `schilderen` | Een begeleider die op ooghoogte met een kind praat, samen iets maakt of iets uitlegt. |
-| `samen`, `gezellig`, `hand-in-hand`, `welkom` | Een groepje kinderen dat samen speelt, lacht of aan tafel zit. |
-| `binnen`, `spelletje`, `knutselen`, `plezier`, `vragen` | Sfeer in de eigen ruimte en op het eigen buitenterrein. |
-| `amsterdam` | De locatie zelf: het gebouw, de ingang of de buurt. |
-| Teamportretten | Per teamlid een vriendelijke, vierkante portretfoto. |
-| Teamfoto | De eigenaar met het hele team. |
+1. Zet de foto als `.jpg` of `.png` in `assets/fotos/bron/` met de naam uit de tabel (bijvoorbeeld `hero.jpg`).
+2. Draai `npm install` (eenmalig) en daarna `npm run fotos`. Het script maakt AVIF- en WebP-versies in 480, 800, 1200 en 1600 px breed in `assets/fotos/`.
+3. Vervang in de HTML het fotovak (`<div class="frame__img fotovak" data-foto="hero">…</div>`) door de foto, met een Nederlandse `alt`-tekst die zegt wat er te zien is:
+   ```html
+   <div class="frame__img">
+     <picture>
+       <source type="image/avif" srcset="assets/fotos/hero-480.avif 480w, assets/fotos/hero-800.avif 800w, assets/fotos/hero-1200.avif 1200w, assets/fotos/hero-1600.avif 1600w" sizes="(min-width: 64em) 40vw, 100vw">
+       <img src="assets/fotos/hero-800.webp" srcset="assets/fotos/hero-480.webp 480w, assets/fotos/hero-800.webp 800w, assets/fotos/hero-1200.webp 1200w, assets/fotos/hero-1600.webp 1600w" sizes="(min-width: 64em) 40vw, 100vw" width="1600" height="1067" alt="…" loading="lazy" decoding="async">
+     </picture>
+   </div>
+   ```
+   Laat `loading="lazy"` weg bij de foto bovenaan de homepage (die moet meteen laden). In een programmakaart heet het kader `foto-card__img` in plaats van `frame__img`.
+
+## GIF's van het team
+
+Lever de juichmomenten liefst aan als kort filmpje (MP4, een paar seconden): dat is veel kleiner dan een GIF en laadt sneller. Op de teampagina staat in een opmerking welke code je gebruikt; `js/main.js` speelt het filmpje dan in een lus af met een pauzeknop, en niet vanzelf als iemand "minder beweging" heeft ingesteld.
 
 ## Privacy bij foto's van kinderen
 
@@ -70,9 +54,13 @@ Lever foto's liefst **minimaal 1600 px breed** aan, liggend (3:2 of 4:3). De web
 - Laat bij twijfel kinderen van achteren of onherkenbaar zien, of kies voor handen en details.
 - Vermeld geen namen van kinderen bij foto's.
 
-## Een foto vervangen
+## Voorbeeldfoto's in de momentopname van Mijn BSO
 
-1. Zet de nieuwe foto als `.jpg` of `.png` in `assets/fotos/bron/` met dezelfde naam (bijvoorbeeld `hero.jpg`) en overschrijf de oude.
-2. Draai `npm install` (eenmalig) en daarna `npm run fotos`. Het script maakt AVIF- en WebP-versies in 480, 800, 1200 en 1600 px breed.
-3. Pas in de HTML de `alt`-tekst aan. Zoek daarvoor op de naam van de foto (bijvoorbeeld `hero-800.webp`).
-4. Werk de tabel "Gebruikte foto's" hierboven bij.
+De momentopname van Mijn BSO (`npm run voorbeeld`, map `voorbeeld/`) laat zien hoe ouders foto's van de middag zien. Daarvoor gebruiken we vier stockfoto's van [Pexels](https://www.pexels.com/) (gratis, ook commercieel; naamsvermelding niet verplicht, zie de [Pexels-licentie](https://www.pexels.com/license/)). Ze staan niet op de website zelf.
+
+| Bestand in `tools/voorbeeld/demofotos/` | Foto (Pexels) | Fotograaf |
+|---|---|---|
+| `voetbal.jpg` | [Young Soccer Player Kicking Ball on Green Field](https://www.pexels.com/photo/person-field-playing-school-972513/) | Markus Spiske |
+| `schilderen.jpg` | [Children Painting in the Art Class](https://www.pexels.com/photo/children-painting-in-the-art-class-8382373/) | Pavel Danilyuk |
+| `knutselen.jpg` | [Girl in Brown Apron Doing Rainbow Painting](https://www.pexels.com/photo/girl-in-brown-apron-doing-rainbow-painting-7025567/) | Vlada Karpovich |
+| `bal.jpg` | [Colorful Soccer Ball on Grass Field in Sunlight](https://www.pexels.com/photo/colorful-soccer-ball-on-grass-field-in-sunlight-30188923/) | Pablo Gómez |

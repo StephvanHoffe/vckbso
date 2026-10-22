@@ -309,4 +309,19 @@
         });
     });
   });
+
+  /* ---------- Juich-GIF's van het team (team.html): spelen in een lus met een pauzeknop, niet vanzelf bij "minder beweging" ---------- */
+  document.querySelectorAll(".gif").forEach(function (gif) {
+    var video = gif.querySelector("video");
+    var knop = gif.querySelector(".gif__knop");
+    if (!video || !knop) return;
+
+    var zet = function (speelt) {
+      if (speelt) video.play().catch(function () {}); else video.pause();
+      knop.textContent = speelt ? "Pauzeer" : "Speel af";
+    };
+
+    zet(!reduceMotion);
+    knop.addEventListener("click", function () { zet(video.paused); });
+  });
 })();

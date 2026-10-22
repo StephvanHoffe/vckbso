@@ -8,7 +8,7 @@
 <!-- Overzichtspagina van de voorbeeldweergave. Gemaakt door tools/voorbeeld/bouw.mjs: ../ is de hoofdmap van de website,  de map van het voorbeeld. -->
 <style>
   /* Layout: kop met het Sporty-woordmerk, daarna twee blokken (website, beheeromgeving per rol) en praktische punten.
-     Huisstijl van de website (moodboard en designprompt): Sporty-oranje, warm wit en antraciet, Poppins en DM Sans.
+     Huisstijl van de website (briefing 22 oktober 2026): Sporty-oranje, wit en zwart, Poppins en DM Sans, Henny de hond.
      Bewust alleen een licht thema, gelijk aan de website zelf. */
   @font-face { font-family: "Poppins"; font-style: normal; font-weight: 700; font-display: swap; src: url("../assets/fonts/poppins-latin-700.woff2") format("woff2"); }
   @font-face { font-family: "Poppins"; font-style: normal; font-weight: 800; font-display: swap; src: url("../assets/fonts/poppins-latin-800.woff2") format("woff2"); }
@@ -16,17 +16,17 @@
   @font-face { font-family: "DM Sans"; font-style: normal; font-weight: 700; font-display: swap; src: url("../assets/fonts/dm-sans-latin-700.woff2") format("woff2"); }
   :root {
     color-scheme: light;
-    --oranje: #f26522;                /* knoppen met 19px vette tekst: wit erop geldt als grote tekst (3,2:1) */
-    --oranje-sterk: #b63f0c;          /* kleine oranje tekst: 5,7:1 op wit */
-    --oranje-diep: #d94e12;
-    --oranje-zacht: #fde6d6;
-    --zon: #ffc49c;
-    --zon-zacht: #fff1e6;
-    --zand: #fff9f3;
+    --oranje: #fc6200;                /* gelijk aan het logo; zwarte tekst erop 6,2:1 */
+    --oranje-sterk: #b84a00;          /* kleine oranje tekst: 5,2:1 op wit */
+    --oranje-diep: #e85a00;
+    --oranje-zacht: #ffe8d9;
+    --zon: #111111;
+    --zon-zacht: #f5f5f5;
+    --zand: #ffffff;
     --wit: #ffffff;
-    --inkt: #222222;
-    --inkt-zacht: #5d5751;
-    --lijn: #e9dfd2;
+    --inkt: #111111;
+    --inkt-zacht: #5c5c5c;
+    --lijn: #e6e6e6;
     --font: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
     --kopfont: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
     --rond: 24px;
@@ -55,18 +55,19 @@
   h2 { margin: 0; font-family: var(--kopfont); font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem); line-height: 1.12; letter-spacing: -0.02em; font-weight: 800; text-wrap: balance; }
   h3 { margin: 0; font-family: var(--kopfont); font-size: 1.2rem; font-weight: 700; }
   p { margin: 0; }
-  .knop { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 3rem; padding: 0.55rem 1.35rem; border-radius: var(--pil); background: var(--oranje); color: var(--wit); font-family: var(--kopfont); font-size: 1.1875rem; font-weight: 700; text-decoration: none; transition: background-color 200ms, scale 200ms; }
-  .knop:hover { background: var(--oranje-diep); scale: 1.03; }
+  .knop { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 3rem; padding: 0.55rem 1.35rem; border: 2px solid var(--inkt); border-radius: var(--pil); background: var(--oranje); color: var(--inkt); font-family: var(--kopfont); font-size: 1.1875rem; font-weight: 700; text-decoration: none; transition: background-color 200ms, scale 200ms; }
+  .knop:hover { background: var(--inkt); color: var(--wit); scale: 1.03; }
   .knop--licht { background: var(--wit); color: var(--inkt); border: 2px solid var(--inkt); }
   .knop--licht:hover { background: var(--inkt); color: var(--wit); }
   .pijl { width: 1.1em; height: 1.1em; }
 
-  .website { display: grid; gap: 1.5rem; align-items: center; background: var(--wit); border-radius: var(--rond); padding: clamp(1.25rem, 3vw, 2.5rem); box-shadow: 0 12px 40px rgb(60 30 10 / 0.08); }
-  .website img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 20px 20px 90px 20px; }
+  .website { display: grid; gap: 1.5rem; align-items: center; background: var(--wit); border: 3px solid var(--inkt); border-radius: var(--rond); padding: clamp(1.25rem, 3vw, 2.5rem); box-shadow: 8px 8px 0 var(--oranje); }
+  .website__beeld { display: grid; place-items: center; aspect-ratio: 3 / 2; border-radius: 20px; background: var(--oranje); }
+  .website__beeld img { width: auto; height: 86%; }
   .website__tekst { display: grid; gap: 1rem; min-width: 0; }
   .paginas { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
-  .paginas a { display: inline-block; padding: 0.3rem 0.85rem; border-radius: var(--pil); background: var(--oranje-zacht); color: var(--oranje-sterk); font-weight: 600; font-size: 0.95rem; text-decoration: none; }
-  .paginas a:hover { background: var(--oranje-sterk); color: var(--wit); }
+  .paginas a { display: inline-block; padding: 0.3rem 0.85rem; border-radius: var(--pil); background: var(--oranje-zacht); color: var(--inkt); font-weight: 600; font-size: 0.95rem; text-decoration: none; }
+  .paginas a:hover { background: var(--inkt); color: var(--wit); }
 
   .beheer { display: grid; gap: 1.5rem; }
   .beheer__kop { display: grid; gap: 0.5rem; max-width: 62ch; }
@@ -99,14 +100,14 @@
 
 <main class="pagina">
   <header class="kop">
-    <span class="merk"><img src="../assets/img/sporty-woordmerk.svg" alt="Sporty" width="116" height="52"></span>
+    <span class="merk"><img src="../assets/img/sporty-woordmerk.svg" alt="Sporty" width="110" height="52"></span>
     <span class="label">Voorbeeldweergave</span>
     <h1>De website en Mijn BSO om door te klikken</h1>
     <p class="intro">Bekijk de website zoals bezoekers hem zien, en de beheeromgeving vanuit drie rollen. De beheeromgeving is een momentopname van de echte schermen met verzonnen gegevens: er wordt niets opgeslagen.</p>
   </header>
 
   <section class="website" aria-labelledby="website-titel">
-    <img src="../assets/fotos/kring-800.webp" width="800" height="534" alt="Een groep kinderen staat met de armen om elkaar heen op een zonnig grasveld">
+    <div class="website__beeld"><img src="../assets/img/henny/henny-zit-320.webp" width="320" height="406" alt="Henny, de hond van Sporty"></div>
     <div class="website__tekst">
       <h2 id="website-titel">Website</h2>
       <p>Alle pagina's uit de sitemap, mobiel eerst. De knop "Aanmelden" staat in de header en op elke pagina.</p>

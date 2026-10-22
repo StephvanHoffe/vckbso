@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 /**
- * Maakt het Sporty-logo en de iconen, nagetekend naar het moodboard (design/moodboard-sporty.jpg):
- * een rond embleem met drie kinderen (krullen, paardenstaart, pet) die de armen om elkaar slaan,
- * "BSO" op het middelste shirt, het woordmerk "Sporty" in script en een lachje eronder.
- * Het logo is één kleur, zodat het oranje op wit en wit op oranje werkt.
+ * Maakt de iconen (favicon en app-iconen), het logo voor Google (sporty-logo-512.png) en de intro op de homepage.
+ *
+ * De logo's zelf zijn de officiële logo's van Sporty (aangeleverd op 22 oktober 2026), gevectoriseerd uit
+ * design/logo/: assets/img/sporty-woordmerk(-wit, -zwart).svg en assets/img/sporty-logo(-wit, -zwart).svg.
+ * TODO: vervang die door de vectorbestanden van de ontwerper zodra die er zijn.
+ *
+ * De intro: de drie kinderen uit het logo rennen vanaf de rand van het scherm naar het midden, slaan de armen
+ * om elkaar, de ring sluit zich en de animatie vloeit over in het officiële ronde logo. De kinderen zijn
+ * nagetekend (vormen hieronder in V), zodat ze los kunnen bewegen.
  *
  * Gebruik: npm run logo
- * Schrijft naar assets/img/: sporty-logo(.svg, -wit.svg, -512.png), sporty-woordmerk(.svg, -wit.svg),
- * favicon.svg, apple-touch-icon.png, icon-192.png, icon-512.png, icon-maskable-512.png en favicon.ico.
- * Zet ook de intro (de kinderen rennen het logo in) in index.html en en/index.html.
- *
- * TODO: vervang de SVG's door de originele logobestanden van de ontwerper zodra die er zijn.
- * Letters: Pacifico (woordmerk) en Poppins ExtraBold ("BSO"), beide SIL Open Font License (assets/fonts/OFL.txt).
+ * Schrijft favicon.svg, apple-touch-icon.png, icon-192.png, icon-512.png, icon-maskable-512.png en
+ * sporty-logo-512.png naar assets/img/, favicon.ico naar de hoofdmap, en de intro in index.html en en/index.html.
+ * Letters: Pacifico (de S van het icoon), SIL Open Font License (assets/fonts/OFL.txt).
  */
 import opentype from "opentype.js";
 import sharp from "sharp";
@@ -22,20 +24,11 @@ const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const IMG = ROOT + "assets/img/";
 const laad = (pad) => { const b = readFileSync(new URL(pad, import.meta.url)); return opentype.parse(b.buffer.slice(b.byteOffset, b.byteOffset + b.byteLength)); };
 const pacifico = laad("./fonts/pacifico-latin-400.woff");
-const poppins = laad("./fonts/poppins-latin-800.woff");
 
-const tekstPad = (font, tekst, grootte, cx, basislijn) => {
-  const breedte = font.getAdvanceWidth(tekst, grootte);
-  const p = font.getPath(tekst, 0, 0, grootte);
-  const bb = p.getBoundingBox();
-  const x = cx - (bb.x1 + bb.x2) / 2;
-  return { d: font.getPath(tekst, x, basislijn, grootte).toPathData(1), breedte, bb: { x1: bb.x1 + x, x2: bb.x2 + x, y1: bb.y1 + basislijn, y2: bb.y2 + basislijn } };
-};
 
 // Vormen van het embleem (viewBox 0 0 400 392). Lagen van achter naar voren:
 // romp pet-kind, romp krullenkind, shirt + arm meisje, arm krullenkind, hoofden, paardenstaart, pet, "BSO".
 const GAT = 4.5; // witte rand tussen overlappende delen
-const KO = 9; // ruimte rond het woordmerk
 const ARM = 17;
 const krulCirkels = Array.from({ length: 12 }, (_, i) => {
   const a = (i / 12) * Math.PI * 2 + 0.2;
@@ -61,46 +54,6 @@ const V = {
   glimlach: "M166 368 Q203 385 240 368",
 };
 
-export function maakLogo({ kleur = "#F26522", achtergrond = null, alleenWoord = false } = {}) {
-  const woord = tekstPad(pacifico, "Sporty", alleenWoord ? 100 : 104, 200, alleenWoord ? 100 : 330);
-  if (alleenWoord) {
-    // Woordmerk met lachje, voor de header
-    const vb = { x: woord.bb.x1 - 4, y: woord.bb.y1 - 4, w: woord.bb.x2 - woord.bb.x1 + 8, h: woord.bb.y2 - woord.bb.y1 + 8 };
-    return { svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vb.x.toFixed(1)} ${vb.y.toFixed(1)} ${vb.w.toFixed(1)} ${vb.h.toFixed(1)}"><path fill="${kleur}" d="${woord.d}"/></svg>`, vb };
-  }
-  const bso = tekstPad(poppins, "BSO", 27, 201, 238);
-  const GAT2 = 2 * GAT;
-
-  // teken = wat je ziet, vorm = silhouet dat lagen erachter uitspaart
-  const lijn = (d, b) => `<path d="${d}" fill="none" stroke="${kleur}" stroke-width="${b}" stroke-linecap="round" stroke-linejoin="round"/>`;
-  const lijnVorm = (d, b) => `<path d="${d}" fill="none" stroke="#000" stroke-width="${b}" stroke-linecap="round" stroke-linejoin="round"/>`;
-  const lagen = [
-    { teken: `<path d="${V.rompR}" fill="${kleur}"/>`, vorm: `<path d="${V.rompR}"/>`, eigenSnede: lijnVorm(V.mouwR, GAT) },
-    { teken: `<path d="${V.rompL}" fill="${kleur}"/>`, vorm: `<path d="${V.rompL}"/>`, eigenSnede: lijnVorm(V.mouwL, GAT) },
-    { teken: lijn(V.shirt, 6) + lijn(V.kraag, 6) + lijn(V.armMeisje, ARM), vorm: `<path d="${V.shirt}"/>`, vormLijn: lijnVorm(V.armMeisje, ARM + GAT2) },
-    { teken: lijn(V.armKrul, ARM), vorm: "", vormLijn: lijnVorm(V.armKrul, ARM + GAT2) },
-    { teken: `<g fill="${kleur}">${V.krul}${V.meisje}${V.petHoofd}</g>`, vorm: V.krul + V.meisje + V.petHoofd },
-    { teken: `<path d="${V.staart}" fill="${kleur}"/>`, vorm: `<path d="${V.staart}"/>` },
-    { teken: `<path d="${V.pet}" fill="none" stroke="${kleur}" stroke-width="5" stroke-linejoin="round"/><path d="${V.klep}" fill="${kleur}" stroke="${kleur}" stroke-width="5" stroke-linejoin="round"/><circle cx="${V.knoop.cx}" cy="${V.knoop.cy}" r="${V.knoop.r}" fill="${kleur}"/><path d="${V.naad}" fill="none" stroke="${kleur}" stroke-width="3.5" stroke-linecap="round"/>`, vorm: `<path d="${V.pet}"/><path d="${V.klep}"/>` },
-    { teken: `<path d="${bso.d}" fill="${kleur}"/>`, vorm: "" },
-  ];
-
-  const woordKO = `<use href="#w" fill="#000" stroke="#000" stroke-width="${2 * KO}" stroke-linejoin="round"/><use href="#gl" fill="none" stroke="#000" stroke-width="${11 + 2 * KO}" stroke-linecap="round"/>`;
-  const maskers = lagen.map((laag, i) => {
-    const ervoor = lagen.slice(i + 1).map((l) => (l.vorm ? `<g fill="#000" stroke="#000" stroke-width="${GAT2}" stroke-linejoin="round">${l.vorm}</g>` : "") + (l.vormLijn || "")).join("");
-    return `<mask id="m${i}" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="400"><rect width="400" height="400" fill="#fff"/>${ervoor}${laag.eigenSnede || ""}${woordKO}</mask>`;
-  });
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 392">
-<defs><path id="w" d="${woord.d}"/><path id="gl" d="${V.glimlach}"/><clipPath id="binnen"><circle cx="200" cy="186" r="151"/></clipPath>${maskers.join("")}<mask id="mRing" maskUnits="userSpaceOnUse" x="0" y="0" width="400" height="400"><rect width="400" height="400" fill="#fff"/>${woordKO}</mask></defs>
-${achtergrond ? `<rect width="400" height="392" fill="${achtergrond}"/>` : ""}
-<circle cx="200" cy="186" r="163" fill="none" stroke="${kleur}" stroke-width="11" mask="url(#mRing)"/>
-<g clip-path="url(#binnen)">${lagen.map((l, i) => `<g mask="url(#m${i})">${l.teken}</g>`).join("")}</g>
-<use href="#w" fill="${kleur}"/>
-<use href="#gl" fill="none" stroke="${kleur}" stroke-width="11" stroke-linecap="round"/>
-</svg>`;
-  return { svg };
-}
-
 /** Omhullende rechthoek van paden (alleen absolute M/L/C/Q/Z, zoals hierboven) en cirkels, met marge. */
 function omhulling(delen) {
   let x1 = Infinity, y1 = Infinity, x2 = -Infinity, y2 = -Infinity;
@@ -125,9 +78,7 @@ function omhulling(delen) {
  * Aan het eind staat alles op zijn plek en is het beeld gelijk aan sporty-logo.svg.
  * Kleuren en beweging staan in css/style.css (sectie Intro); dit is alleen de vorm.
  */
-export function maakIntro() {
-  const woord = tekstPad(pacifico, "Sporty", 104, 200, 330);
-  const bso = tekstPad(poppins, "BSO", 27, 201, 238);
+export function maakIntro(pre = "") {
   const GAT2 = 2 * GAT;
   const pad = (klasse, d, extra = "") => `<path${klasse ? ` class="${klasse}"` : ""} d="${d}"${extra}/>`;
   const breed = (b) => ` stroke-width="${b}"`;
@@ -161,11 +112,8 @@ export function maakIntro() {
     { naam: "krul-hoofd", kind: "krul", delen: [{ cirkels: V.krul, marge: GAT }], inhoud: `<g class="intro__halo"${breed(GAT2)}>${V.krul}</g><g class="intro__vlak">${V.krul}</g>` },
     { naam: "meisje-hoofd", kind: "meisje", delen: [{ cirkels: V.meisje, marge: GAT }, { d: V.staart, marge: GAT }], inhoud: metKlasse(V.meisje, "intro__halo", breed(GAT2)) + metKlasse(V.meisje, "intro__vlak") + pad("intro__halo", V.staart, breed(GAT2)) + pad("intro__vlak", V.staart) },
     { naam: "pet-hoofd", kind: "pet", delen: [{ cirkels: V.petHoofd, marge: GAT }, { d: V.pet, marge: GAT }, { d: V.klep, marge: GAT }], inhoud: metKlasse(V.petHoofd, "intro__halo", breed(GAT2)) + metKlasse(V.petHoofd, "intro__vlak") + `<g class="intro__halo"${breed(GAT2)}>${pad("", V.pet)}${pad("", V.klep)}</g>` + pad("intro__lijn", V.pet, breed(5)) + pad("intro__vlak intro__lijn", V.klep, breed(5)) + `<circle class="intro__vlak" cx="${V.knoop.cx}" cy="${V.knoop.cy}" r="${V.knoop.r}"/>` + pad("intro__lijn", V.naad, breed(3.5)) },
-    { naam: "bso", oorsprong: [201, 228], delen: [{ d: bso.d, marge: 1 }], inhoud: pad("intro__vlak", bso.d) },
     { naam: "iris", oorsprong: [200, 186], vak: { x: -130, y: -144, b: 660, h: 660 }, inhoud: pad("intro__iris", "M-130 186a330 330 0 1 0 660 0a330 330 0 1 0-660 0ZM49 186a151 151 0 1 0 302 0a151 151 0 1 0-302 0Z", ' fill-rule="evenodd"') },
-    { naam: "ring", oorsprong: [200, 186], vak: { x: 31, y: 17, b: 338, h: 338 }, inhoud: pad("intro__ring", "M200 23a163 163 0 1 1 0 326a163 163 0 1 1 0-326", breed(11)) },
-    { naam: "woord", oorsprong: [200, 308], delen: [{ d: woord.d, marge: KO }, { d: V.glimlach, marge: (11 + 2 * KO) / 2 }], inhoud: `<defs><path id="intro-w" d="${woord.d}"/></defs><use class="intro__halo" href="#intro-w"${breed(2 * KO)}/>` + pad("intro__halo-lijn", V.glimlach, breed(11 + 2 * KO)) + `<use class="intro__vlak" href="#intro-w"/>` },
-    { naam: "lach", oorsprong: [203, 372], delen: [{ d: V.glimlach, marge: 5.5 }], inhoud: pad("intro__lijn", V.glimlach, breed(11)) },
+    { naam: "ring", oorsprong: [200, 186], vak: { x: 31, y: 17, b: 338, h: 338 }, inhoud: pad("intro__ring", "M200 23a163 163 0 1 1 0 326a163 163 0 1 1 0-326", breed(7)) },
   ];
 
   const html = (laag) => {
@@ -176,7 +124,12 @@ export function maakIntro() {
     const inhoud = typeof laag.inhoud === "function" ? laag.inhoud(vak) : laag.inhoud;
     return `<div class="${klassen}" style="${stijl}"><svg viewBox="${vak.x} ${vak.y} ${vak.b} ${vak.h}" focusable="false">${inhoud}</svg></div>`;
   };
-  return `<div class="intro__logo">\n${lagen.map(html).join("\n")}\n</div>`;
+  // Het officiële ronde logo (assets/img/sporty-logo.svg), zo geplaatst dat de ring precies over de ring
+  // van de animatie valt: middelpunt (200, 186) en straal 163, tegen middelpunt (1498,5; 1038,5) en straal 960
+  // in de viewBox van het logo (507 46 1985 2104). Aan het eind vloeit de animatie hierin over.
+  const k = 163 / 960;
+  const officieel = `<img class="intro__officieel" src="${pre}assets/img/sporty-logo.svg" alt="" width="337" height="357" style="left:${pct(200 - (1498.5 - 507) * k, 400)};top:${pct(186 - (1038.5 - 46) * k, 392)};width:${pct(1985 * k, 400)}">`;
+  return `<div class="intro__logo">\n<div class="intro__lagen">\n${lagen.map(html).join("\n")}\n</div>\n${officieel}\n</div>`;
 }
 
 export const INTRO_PAGINAS = ["index.html", "en/index.html"];
@@ -185,11 +138,12 @@ const INTRO = /(<!-- intro: gemaakt met npm run logo -->\n)[\s\S]*?(<!-- \/intro
 /** De pagina met de huidige intro tussen de markeringen. */
 export function metIntro(html) {
   if (!INTRO.test(html)) throw new Error("Markeringen voor de intro ontbreken");
-  return html.replace(INTRO, (_, begin, eind) => `${begin}<div class="intro" hidden aria-hidden="true">\n${maakIntro()}\n</div>\n${eind}`);
+  const pre = /<link rel="canonical" href="[^"]*\/en\/">/.test(html) ? "../" : "";
+  return html.replace(INTRO, (_, begin, eind) => `${begin}<div class="intro" hidden aria-hidden="true">\n${maakIntro(pre)}\n</div>\n${eind}`);
 }
 
 // Favicon en app-iconen: oranje vlak met een witte script-S
-export function maakIcoon({ kleur = "#F26522", letter = "#ffffff", vorm = "rond", marge = 0 } = {}) {
+export function maakIcoon({ kleur = "#FC6200", letter = "#ffffff", vorm = "rond", marge = 0 } = {}) {
   const grootte = 44 * (1 - marge);
   const p = pacifico.getPath("S", 0, 0, grootte); const bb = p.getBoundingBox();
   const x = 32 - (bb.x1 + bb.x2) / 2, y = 32 - (bb.y1 + bb.y2) / 2 + 1;
@@ -199,15 +153,9 @@ export function maakIcoon({ kleur = "#F26522", letter = "#ffffff", vorm = "rond"
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const kopregel = "<!-- Sporty-logo, nagetekend naar het moodboard (design/moodboard-sporty.jpg). TODO: vervangen door het originele logobestand van de ontwerper. -->\n";
-  const svgs = {
-    "sporty-logo.svg": kopregel + maakLogo().svg,
-    "sporty-logo-wit.svg": kopregel + maakLogo({ kleur: "#ffffff" }).svg,
-    "sporty-woordmerk.svg": kopregel + maakLogo({ alleenWoord: true }).svg,
-    "sporty-woordmerk-wit.svg": kopregel + maakLogo({ alleenWoord: true, kleur: "#ffffff" }).svg,
-    "favicon.svg": maakIcoon(),
-  };
-  for (const [naam, inhoud] of Object.entries(svgs)) writeFileSync(IMG + naam, inhoud);
+  // De logo's zelf (sporty-logo*.svg en sporty-woordmerk*.svg) zijn de officiële logo's van de klant,
+  // gevectoriseerd uit design/logo/. Dit script maakt alleen de iconen, het logo voor Google en de intro.
+  writeFileSync(IMG + "favicon.svg", maakIcoon());
 
   // De intro op de homepages (tussen de markeringen, zie ook css/style.css sectie Intro)
   for (const pagina of INTRO_PAGINAS) {
@@ -223,7 +171,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     if (achtergrond) beeld = beeld.flatten({ background: achtergrond });
     return beeld.png({ compressionLevel: 9 }).toBuffer();
   };
-  writeFileSync(IMG + "sporty-logo-512.png", await png(maakLogo().svg, 512, "#ffffff")); // voor schema.org (Google)
+  // voor schema.org (Google): het officiële ronde logo op wit
+  writeFileSync(IMG + "sporty-logo-512.png", await sharp(IMG + "sporty-logo.svg", { density: 40 }).resize(512, 512, { fit: "contain", background: "#ffffff" }).flatten({ background: "#ffffff" }).png({ compressionLevel: 9 }).toBuffer());
   writeFileSync(IMG + "apple-touch-icon.png", await png(maakIcoon({ vorm: "vierkant" }), 180));
   writeFileSync(IMG + "icon-192.png", await png(maakIcoon({ vorm: "vierkant" }), 192));
   writeFileSync(IMG + "icon-512.png", await png(maakIcoon({ vorm: "vierkant" }), 512));

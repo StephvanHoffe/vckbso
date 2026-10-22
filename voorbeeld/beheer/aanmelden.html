@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kind aanmelden · Beheer · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#f26522">
+<meta name="theme-color" content="#fc6200">
 <link rel="icon" href="../../favicon.ico" sizes="32x32">
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="../../assets/fonts/dm-sans-latin-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -29,7 +29,7 @@
 <div class="vb-melding" role="status" aria-live="polite" hidden></div>
 <header class="app-header">
   <div class="app-header__inner">
-    <a class="logo" href="../../index.html" aria-label="Sporty, naar de website"><img class="logo__woordmerk" src="../../assets/img/sporty-woordmerk.svg" alt="" width="89" height="40"><span class="app-header__omgeving">Beheer</span></a>
+    <a class="logo" href="../../index.html" aria-label="Sporty, naar de website"><img class="logo__woordmerk" src="../../assets/img/sporty-woordmerk.svg" alt="" width="84" height="40"><span class="app-header__omgeving">Beheer</span></a>
     <a class="link-arrow app-header__terug" href="../../index.html">Naar de website<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
   </div>
 </header>
@@ -41,7 +41,15 @@
     <p>Wat leuk dat je voor ons kiest! Je maakt meteen een account aan. Daarmee kies je straks zelf de dagen in de agenda, stuur je ons berichtjes en vind je je facturen terug.</p>
     <p class="muted">Velden met een * zijn verplicht. Heb je al een account? <a href="inloggen.html">Log dan in</a>.</p>
         <form class="form form--sections" method="post" action="#" novalidate>
-      <input type="hidden" name="csrf" value="voorbeeld">      <fieldset>
+      <input type="hidden" name="csrf" value="voorbeeld">      <!-- Henny rent mee naar het doel terwijl je het formulier invult (beheer.js); zonder JavaScript blijft dit verborgen -->
+      <div class="henny-baan" data-henny-baan hidden>
+        <p class="tekstwolk henny-baan__wolk" role="status" data-henny-wolk>Woef! Zullen we beginnen?</p>
+        <div class="henny-baan__spoor" aria-hidden="true">
+          <img class="henny-baan__henny" src="../../assets/img/henny/henny-rent-180.webp" srcset="../../assets/img/henny/henny-rent-180.webp 180w, ../../assets/img/henny/henny-rent-360.webp 360w" sizes="3rem" width="180" height="239" alt="">
+          <svg class="henny-baan__doel" viewBox="0 0 44 30" focusable="false"><path d="M3 29V3h38v26"/><path d="M3 3l6 6h26l6-6M9 9v20M35 9v20M15.5 9v20M22 9v20M28.5 9v20M9 15.5h26M9 22h26"/></svg>
+        </div>
+      </div>
+      <fieldset>
         <legend class="legend-title">Jouw gegevens</legend>
         <div class="form__row">
           <div class="field">
@@ -103,7 +111,7 @@
                 <div class="form__row">
                   <div class="field">
                     <label for="kind0-geboortedatum">Geboortedatum *</label>
-                    <input id="kind0-geboortedatum" name="kinderen[0][geboortedatum]" type="date" required max="2026-10-11" value="">
+                    <input id="kind0-geboortedatum" name="kinderen[0][geboortedatum]" type="date" required max="2026-10-22" value="">
                                       </div>
                   <div class="field">
                     <label for="kind0-school">Basisschool <span class="field__hint">(optioneel)</span></label>
@@ -159,7 +167,7 @@
                 <div class="form__row">
                   <div class="field">
                     <label for="kind__INDEX__-geboortedatum">Geboortedatum *</label>
-                    <input id="kind__INDEX__-geboortedatum" name="kinderen[__INDEX__][geboortedatum]" type="date" required max="2026-10-11" value="">
+                    <input id="kind__INDEX__-geboortedatum" name="kinderen[__INDEX__][geboortedatum]" type="date" required max="2026-10-22" value="">
                                       </div>
                   <div class="field">
                     <label for="kind__INDEX__-school">Basisschool <span class="field__hint">(optioneel)</span></label>
@@ -219,7 +227,7 @@
         <div class="form__row">
           <div class="field">
             <label for="startdatum">Gewenste startdatum <span class="field__hint">(optioneel)</span></label>
-            <input id="startdatum" name="startdatum" type="date" min="2026-10-11" value="">
+            <input id="startdatum" name="startdatum" type="date" min="2026-10-22" value="">
                       </div>
         </div>
         <div class="field">

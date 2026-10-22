@@ -206,6 +206,14 @@ pagina_begin('Kind aanmelden', '', ['publiek' => true]);
     <?= foutensamenvatting($fouten) ?>
     <form class="form form--sections" method="post" action="aanmelden.php" novalidate>
       <?= csrf_veld() ?>
+      <!-- Henny rent mee naar het doel terwijl je het formulier invult (beheer.js); zonder JavaScript blijft dit verborgen -->
+      <div class="henny-baan" data-henny-baan hidden>
+        <p class="tekstwolk henny-baan__wolk" role="status" data-henny-wolk>Woef! Zullen we beginnen?</p>
+        <div class="henny-baan__spoor" aria-hidden="true">
+          <img class="henny-baan__henny" src="../assets/img/henny/henny-rent-180.webp" srcset="../assets/img/henny/henny-rent-180.webp 180w, ../assets/img/henny/henny-rent-360.webp 360w" sizes="3rem" width="180" height="239" alt="">
+          <svg class="henny-baan__doel" viewBox="0 0 44 30" focusable="false"><path d="M3 29V3h38v26"/><path d="M3 3l6 6h26l6-6M9 9v20M35 9v20M15.5 9v20M22 9v20M28.5 9v20M9 15.5h26M9 22h26"/></svg>
+        </div>
+      </div>
       <fieldset>
         <legend class="legend-title">Jouw gegevens</legend>
         <div class="form__row">

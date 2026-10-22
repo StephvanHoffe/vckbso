@@ -165,7 +165,10 @@ function herschrijfBeheer(rol, html, { site, overzicht }) {
   });
   html = html.replace(/action="uitloggen\.php"/g, 'action="inloggen.html" data-vb-uitloggen');
   html = html.replace(/action="[a-z-]+\.php[^"]*"/g, 'action="#"');
-  if (site !== "../") html = html.replace(/((?:href|src)=")\.\.\//g, `$1${site}`);
+  if (site !== "../") {
+    html = html.replace(/((?:href|src)=")\.\.\//g, `$1${site}`);
+    html = html.replace(/(srcset=")([^"]*)"/g, (_, attr, lijst) => `${attr}${lijst.replace(/(^|,\s*)\.\.\//g, `$1${site}`)}"`);
+  }
   return injecteer(html, rol || "publiek", { vb: "../", site, overzicht });
 }
 

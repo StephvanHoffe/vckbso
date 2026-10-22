@@ -1,8 +1,8 @@
 /*
  * Design tokens Sporty
- * Huisstijl volgens het moodboard (design/moodboard-sporty.jpg) en de designprompt van 11 oktober 2026:
- * krachtig Sporty-oranje met (warm) wit, zacht beige en antraciet; koppen in Poppins ExtraBold,
- * lopende tekst in DM Sans en af en toe een handgeschreven accent.
+ * Huisstijl volgens de officiële logo's en de briefing van 22 oktober 2026: oranje, wit en zwart,
+ * speels en sportief maar strak; koppen in Poppins ExtraBold, lopende tekst in DM Sans en
+ * handgeschreven notities (Caveat Brush) als getekend accent, zoals "Let's Play!".
  * Gebruik overal deze variabelen in plaats van losse kleurcodes of maten.
  */
 
@@ -108,41 +108,43 @@
 }
 
 :root {
-  /* ---------- Kleuren (designprompt, 11 oktober 2026) ---------- */
-  --color-primary: #f26522;          /* Sporty Orange: knoppen, vlakken, iconen, logo en grote tekst */
-  --color-on-primary: #ffffff;       /* wit op oranje is 3,2:1: alleen voor grote of vette tekst (knoppen zijn 19px vet) */
-  --color-primary-deep: #d94e12;     /* Deep Orange: hover en oranje woorden in koppen op lichte vlakken (≥ 3,4:1) */
-  --color-primary-strong: #c9450d;   /* oranje voor kleine tekst en knoppen met kleine tekst in Mijn BSO (wit erop 4,8:1) */
-  --color-primary-dark: #a33a0b;     /* hover van die knoppen (wit erop 6,3:1) */
-  --color-primary-soft: #fde6d6;     /* zachte oranje tint; tekst erop in --color-text */
-  --color-secondary: #f3e9dc;        /* Soft Beige: afwisselende vlakken */
-  --color-on-secondary: #222222;
-  --color-accent: #ffb27a;           /* licht oranje, alleen voor details zonder tekst */
-  --color-on-accent: #222222;
-  --color-bg: #fff9f3;               /* Warm White: achtergrond van de pagina en rustige secties */
-  --color-surface: #ffffff;          /* Pure White: kaarten, header, invoervelden */
-  --color-surface-alt: #f3e9dc;      /* Soft Beige: afwisselende secties */
-  --color-text: #222222;             /* Charcoal: koppen en tekst, 15,9:1 op warm wit */
-  --color-text-muted: #5d5751;       /* 7,0:1 op wit, 5,9:1 op beige */
-  --color-link: #b63f0c;             /* kleine oranje tekst en links: 5,7:1 op wit, 4,7:1 op beige */
-  --color-border: #e9dfd2;
+  /* ---------- Kleuren (oranje, wit en zwart: briefing van 22 oktober 2026) ---------- */
+  --color-primary: #fc6200;          /* Sporty-oranje, gelijk aan het logo: vlakken, knoppen, iconen. Zwarte tekst erop 6,2:1; wit alleen groot (3,05:1) */
+  --color-on-primary: #111111;       /* tekst op oranje: zwart */
+  --color-primary-deep: #e85a00;     /* hover van oranje knoppen en oranje woorden in koppen op wit (3,6:1, koppen zijn groot) */
+  --color-primary-strong: #c24e00;   /* kleine oranje tekst en knoppen met kleine witte tekst in Mijn BSO (4,8:1) */
+  --color-primary-dark: #a33e00;     /* hover van die knoppen (wit erop 6,1:1) */
+  --color-primary-soft: #ffe8d9;     /* zachte oranje tint; tekst erop in --color-text */
+  --color-secondary: #f5f5f5;        /* licht grijs voor rustige vlakken */
+  --color-on-secondary: #111111;
+  --color-accent: #ffb07a;           /* licht oranje, alleen voor details zonder tekst */
+  --color-on-accent: #111111;
+  --color-bg: #ffffff;               /* achtergrond van de pagina */
+  --color-surface: #ffffff;          /* kaarten, header, invoervelden */
+  --color-surface-alt: #f5f5f5;      /* afwisselende, rustige secties */
+  --color-text: #111111;             /* zwart: koppen en tekst */
+  --color-text-muted: #5c5c5c;       /* 6,7:1 op wit, 6,1:1 op lichtgrijs */
+  --color-link: #b84a00;             /* kleine oranje tekst: 5,2:1 op wit */
+  --color-border: #e6e6e6;
 
-  /* Donker vlak: de overloop over de foto in de hero en de footer */
-  --color-dark: #222222;
-  --color-on-dark: #fff9f3;
+  /* Zwart vlak: hero's, banden en de footer */
+  --color-dark: #111111;
+  --color-on-dark: #ffffff;
+  --color-on-dark-muted: #bdbdbd;    /* 10:1 op zwart */
+  --color-dark-surface: #1e1e1e;     /* kaarten op zwart */
 
-  /* Zachte tinten voor vlakken en labels (alleen oranje en beige: geen extra kleuren) */
-  --color-sand: #eadbc6;
-  --color-sun: #ffc49c;
+  /* Zachte tinten (alleen oranje en grijs: geen extra kleuren) */
+  --color-sand: #ececec;
+  --color-sun: #ffc59c;
   --color-sun-soft: #fff1e6;
-  --color-coral-soft: #fde6d6;
+  --color-coral-soft: #ffe8d9;
 
   /* Alleen voor status en indeling in Mijn BSO (groen = gelukt, koraal en mint als groepskleuren) */
   --color-mint: #06d6a0;
   --color-mint-soft: #d4f7ec;
   --color-coral: #ff6b6b;
 
-  --color-focus: #222222;
+  --color-focus: #111111;
   --color-error: #a8321f;            /* 6,7:1 op wit */
   --color-success: #0d6e52;          /* 6,2:1 op wit */
 
@@ -157,8 +159,8 @@
   --font-weight-button: 700;
   --font-weight-heading: 800;
 
-  /* Knoppen: 19px vet, zodat wit op oranje als grote tekst geldt (WCAG: vanaf 18,66px vet 3:1) */
-  --font-size-button: 1.1875rem;
+  /* Knoppen: zwarte tekst op oranje of witte tekst op zwart, dus gewone grootte */
+  --font-size-button: 1.0625rem;
 
   /* Basisgrootte 17px op mobiel, 18px vanaf tablet */
   --font-size-base: clamp(1.0625rem, 1.02rem + 0.2vw, 1.125rem);
@@ -206,9 +208,10 @@
   --border-width: 2px;
 
   /* Subtiele schaduwen in plaats van randen */
-  --shadow-s: 0 1px 2px rgb(60 30 10 / 0.06), 0 4px 14px -6px rgb(60 30 10 / 0.10);
-  --shadow-m: 0 2px 6px -2px rgb(60 30 10 / 0.08), 0 16px 36px -18px rgb(60 30 10 / 0.22);
-  --shadow-l: 0 6px 16px -8px rgb(60 30 10 / 0.12), 0 28px 56px -28px rgb(60 30 10 / 0.30);
+  --shadow-s: 0 1px 2px rgb(0 0 0 / 0.06), 0 4px 14px -6px rgb(0 0 0 / 0.10);
+  --shadow-m: 0 2px 6px -2px rgb(0 0 0 / 0.08), 0 16px 36px -18px rgb(0 0 0 / 0.22);
+  --shadow-l: 0 6px 16px -8px rgb(0 0 0 / 0.12), 0 28px 56px -28px rgb(0 0 0 / 0.30);
+  --shadow-hard: 6px 6px 0 var(--color-dark);   /* sportieve, harde schaduw voor accenten */
 
   /* ---------- Beweging (300–600ms) ---------- */
   --duration-fast: 300ms;

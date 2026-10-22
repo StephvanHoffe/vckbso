@@ -46,7 +46,7 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($titel) ?> · <?= e($omgeving) ?> · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#f26522">
+<meta name="theme-color" content="#fc6200">
 <link rel="icon" href="../favicon.ico" sizes="32x32">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="../assets/fonts/dm-sans-latin-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -64,7 +64,7 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 <a class="skip-link" href="#inhoud">Naar de inhoud</a>
 <header class="app-header">
   <div class="app-header__inner">
-    <a class="logo" href="<?= $gebruiker ? 'index.php' : '../index.html' ?>" aria-label="Sporty, <?= $gebruiker ? 'naar het overzicht' : 'naar de website' ?>"><img class="logo__woordmerk" src="../assets/img/sporty-woordmerk.svg" alt="" width="89" height="40"><span class="app-header__omgeving"><?= e($omgeving) ?></span></a>
+    <a class="logo" href="<?= $gebruiker ? 'index.php' : '../index.html' ?>" aria-label="Sporty, <?= $gebruiker ? 'naar het overzicht' : 'naar de website' ?>"><img class="logo__woordmerk" src="../assets/img/sporty-woordmerk.svg" alt="" width="84" height="40"><span class="app-header__omgeving"><?= e($omgeving) ?></span></a>
 <?php if ($gebruiker): ?>
     <ul class="app-account">
       <li><a href="profiel.php"<?= $actief === 'profiel.php' ? ' aria-current="page"' : '' ?>><?= icoon('user') ?><span class="app-account__label"><?= e(explode(' ', $gebruiker['naam'])[0]) ?><span class="visually-hidden">, mijn gegevens</span></span></a></li>

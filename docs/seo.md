@@ -38,7 +38,7 @@ Op volgorde van effect. Deze punten staan ook als TODO in de code.
 5. **LRK-nummer** op de website zetten (Prijzen, Veelgestelde vragen) zodra de registratie in het Landelijk Register Kinderopvang rond is. Ouders zoeken ook in het LRK, en de vermelding daar versterkt het vertrouwen.
 6. **Vermeldingen en links** van anderen: scholen in de buurt, sportverenigingen waar jullie mee samenwerken, wijkwebsites en vergelijkingssites voor kinderopvang. Zorg dat naam, adres en telefoonnummer overal precies gelijk zijn.
 7. **Social media**: de links in de footer invullen en ze als `sameAs` toevoegen in `tools/structured-data.mjs`.
-8. **Eigen foto's** in plaats van de stockfoto's, met een beschrijvende bestandsnaam en alt-tekst.
+8. **Eigen foto's** in de fotovakken (nu staat er "Foto volgt"), met een beschrijvende bestandsnaam en alt-tekst.
 9. **Meer inhoud** die ouders zoeken, zodra het aanbod vaststaat: vakantieopvang, studiedagen, ophalen van school, welke sporten jullie doen. Een eigen pagina per onderwerp scoort beter dan één lange pagina.
 10. **Engelse pagina's** uitbreiden: veel ouders in Amsterdam zoeken in het Engels ("after-school care Amsterdam").
 

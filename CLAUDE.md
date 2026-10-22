@@ -15,6 +15,7 @@ Bouw een complete, responsive website voor **Sporty** (bso) in Amsterdam. (Naam 
 - **Werkgebied:** Lokaal (Amsterdam)
 - **Doelen van de website:** Nieuwe klanten werven, informatie geven en professionele uitstraling
 - **Belangrijkste actie:** Aanmelden. De hoofdknop "Aanmelden" staat in de header en terug op elke pagina, als een knop naar de aanmeldpagina. Langskomen blijft mogelijk via een tekstlink naar het adres met routebeschrijving. (Gewijzigd op 30 september 2026; oorspronkelijk was de hoofdknop "Kom langs".)
+- **Slogan:** "Let's Play!" (22 oktober 2026)
 - **Kernboodschap (hero-kop op de homepage):** "Sport, plezier en ontwikkeling na schooltijd." met "na schooltijd" in oranje (gewijzigd op 11 oktober 2026 via de designprompt; eerder: "Dat wij de leukste/gezelligste/sportiefste BSO zijn met oprechte aandacht voor ieder kind"). Ondersteunende tekst van de klant: "Bij BSO Sporty geloven we in de kracht van sport, samen spelen en groeien. Een plek waar kinderen van 5 t/m 13 jaar iedere dag met plezier in beweging komen." Knoppen in de hero: "Ontdek BSO Sporty" (oranje) en "Bekijk ons programma" (omlijnd). De hoofdknop "Aanmelden" blijft in de header en op elke pagina.
 - **Leeftijd:** kinderen van 5 t/m 13 jaar (uit de designprompt van 11 oktober 2026).
 - **Waarom klanten voor dit bedrijf kiezen (USP's, laat ze op de homepage zien):**
@@ -75,23 +76,38 @@ De klant heeft een uitgebreide designprompt gegeven. Samengevat: een moderne, en
 - **Beweging:** rustige fade-in bij scrollen, subtiele beweging van foto's en kaarten die bij hover iets omhoog komen; altijd met respect voor "minder beweging".
 - **Header:** wit, links het logo, rechts een rustig menu en de oranje knop "Aanmelden"; sticky en iets compacter bij scrollen; op mobiel een strak hamburgermenu.
 
+### Briefing look & feel (22 oktober 2026)
+
+De klant heeft een nieuwe briefing gegeven, met de officiële logo's, Henny de hond en een voorbeeld "Team Sporty" als bijlage. Waar deze briefing iets anders zegt dan hierboven, geldt deze. Samengevat:
+
+- **Logo's:** "Sporty" is het woordmerk (in de header), "Sporty rond" is het logo (footer, intro, iconen). De aangeleverde bestanden staan in `design/logo/`; de SVG's in `assets/img/` zijn daaruit gemaakt.
+- **Slogan:** "Let's Play!" (Engels, met `lang="en"` op een Nederlandse pagina), handgeschreven in de hero, het afsluitende blok en de footer.
+- **Gevoel:** een sportieve BSO die de kinderen na school ophaalt en sportieve spellen met ze doet. Het moet voelen als een club of community waar je bij wilt horen: positief, energiek, speels en sportief, maar netjes en professioneel. Betrouwbaar en veilig voor ouders, aantrekkelijk voor kinderen én ouders.
+- **Humor als onderscheidend punt:** luchtige, grappige teksten. Voorbeelden van de klant: "Stuitert jouw kind na school door het huis? Dan zit-ie bij ons helemaal goed.", "Na school nog energie voor tien? Die raken we samen wel kwijt.", "Bij Sporty mag je lekker uitrazen." en "Rennen, springen, vliegen, duiken. Oké, dat laatste misschien niet." Op de teampagina GIF's van de medewerkers die een voetbaljuichmoment doen.
+- **Kleuren:** oranje, wit en zwart (zie hieronder). Bewegende elementen zijn welkom, maar niet te druk of afleidend.
+- **Fotografie:** volgt later; tot die tijd fotovakken ("Foto volgt"), zie `assets/fotos/BRONNEN.md`.
+- **Henny de hond (mascotte):** creatief inzetten, met een tekstwolkje (bijvoorbeeld "Je hebt je kleine topper bijna aangemeld, door naar de volgende stap!") en meerennend tijdens het aanmelden. Beelden in `assets/img/henny/`, originelen in `design/henny/`.
+- **Illustraties:** getekende elementen (sterren, pijlen, kroontjes, hartjes, krabbels) gecombineerd met fotografie, zoals in het voorbeeld "Team Sporty".
+- **Balans:** anders dan standaard BSO-websites, met humor en speelsheid, maar netjes en betrouwbaar.
+
+Uitwerking op de site: de hero op de homepage is oranje (zoals het logo) met "Let's Play!", de kernboodschap in zwart met "na schooltijd." in wit, een fotovak en Henny met een bal; daaronder een zwarte band met Sport · Plezier · Ontwikkeling die meeschuift als je scrolt. Paginakoppen zijn zwart met een oranje fotovak, het afsluitende blok is oranje met Henny, en de teampagina heet "Team Sporty".
+
 ### Kleuren
 
-Thema: **licht** (warm witte achtergrond, antraciet tekst), met oranje accenten en vlakken, beige afwisselende secties en een donkere hero en footer. De hexkleuren komen uit de designprompt van 11 oktober 2026 (eerder: `#f05a1a`, crème en warm donkerbruin).
+Thema: **oranje, wit en zwart** (briefing van 22 oktober 2026): een witte pagina met zwarte tekst, oranje vlakken (hero, afsluitend blok) en zwarte vlakken (banden, paginakoppen, footer). Het oranje is gelijk aan het logo. Eerder: `#f26522` met warm wit, beige en antraciet (designprompt van 11 oktober 2026).
 
 | Rol (CSS-variabele) | Kleur | Tekstkleur erop |
 |---|---|---|
-| `--color-primary` — Sporty Orange: knoppen, vlakken, iconen, logo, grote tekst | `#f26522` | `#ffffff` (3,2:1: alleen grote of vette tekst vanaf 18,66px; knoppen zijn 19px vet) |
-| `--color-primary-deep` — Deep Orange: hover en oranje woorden in koppen | `#d94e12` | `#ffffff` (grote tekst) |
-| `--color-primary-strong` — Knoppen met kleinere tekst in Mijn BSO | `#c9450d` | `#ffffff` (4,8:1) |
-| `--color-secondary` / `--color-surface-alt` — Soft Beige, afwisselende vlakken | `#f3e9dc` | `#222222` |
-| `--color-bg` — Warm White, achtergrond van de pagina | `#fff9f3` |  |
-| `--color-surface` — Pure White, kaarten en header | `#ffffff` |  |
-| `--color-text` — Charcoal, koppen en tekst | `#222222` |  |
-| `--color-text-muted` — Tekst, minder nadruk | `#5d5751` |  |
-| `--color-link` — Tekstlinks en kleine oranje tekst | `#b63f0c` |  |
-| `--color-border` — Lijnen en randen | `#e9dfd2` |  |
-| `--color-dark` — Hero-overloop en footer | `#222222` | `#fff9f3` |
+| `--color-primary` — Sporty-oranje: knoppen, vlakken, iconen, logo | `#fc6200` | `#111111` (6,2:1); wit alleen in grote handgeschreven tekst en koppen (3,05:1) |
+| `--color-primary-deep` — oranje woorden in koppen op wit, hover | `#e85a00` | (alleen grote tekst: 3,6:1 op wit) |
+| `--color-primary-strong` — kleine oranje accenten in Mijn BSO | `#c24e00` | `#ffffff` (4,8:1) |
+| `--color-surface-alt` — rustige lichtgrijze vlakken | `#f5f5f5` | `#111111` |
+| `--color-bg` / `--color-surface` — wit | `#ffffff` |  |
+| `--color-text` — zwart, koppen en tekst | `#111111` |  |
+| `--color-text-muted` — tekst, minder nadruk | `#5c5c5c` |  |
+| `--color-link` — kleine oranje tekst | `#b84a00` | (5,2:1 op wit) |
+| `--color-border` — lijnen en randen | `#e6e6e6` |  |
+| `--color-dark` — zwarte vlakken en footer | `#111111` | `#ffffff`; oranje tekst erop 6,2:1 |
 
 Controleer het contrast van tekst op elke achtergrond (minimaal 4,5:1; voor tekst vanaf 24px, of 18,66px vet, minimaal 3:1).
 
@@ -101,14 +117,14 @@ Volgens de designprompt van 11 oktober 2026. Alle letters zijn gratis (Google Fo
 - Koppen: **Poppins ExtraBold** (800; kleinere koppen 700), compact, met belangrijke woorden in oranje
 - Knoppen, menu en labels boven koppen: **Poppins** (600/700); labels in hoofdletters met een kort oranje streepje ervoor
 - Lopende tekst: **DM Sans** (400, en 700 voor nadruk), basisgrootte 17–18px, kleinste tekst 15–16px
-- Handgeschreven accent: **Caveat Brush**, in hoofdletters, minimaal 24px, alleen voor een enkel kort statement zoals "Samen sporten, samen groeien"
-- Woordmerk: **Pacifico**, alleen als vorm in het logo (geen lettertypebestand op de site)
+- Handgeschreven accent: **Caveat Brush**, in hoofdletters, minimaal 24px, alleen voor korte statements zoals de slogan "Let's Play!" en krabbels bij beelden ("Goal!")
+- Woordmerk: het officiële logobestand (`assets/img/sporty-woordmerk.svg`), geen lettertype
 
 ### Logo en huisstijl
 
-Het logo uit het moodboard: een rond embleem met drie kinderen van achteren (krullen, paardenstaart, pet) die de armen om elkaar slaan, "BSO" op het middelste shirt, het woordmerk "Sporty" in script en een lachje eronder. In de header staat alleen het woordmerk. De logobestanden staan in `assets/img/` en worden gemaakt met `npm run logo` (`tools/logo/maak-logo.mjs`). Het is een nagetekende versie; vervang die door de originele logobestanden zodra de klant die aanlevert (TODO).
+De officiële logo's van de klant (22 oktober 2026): het woordmerk "Sporty" in script met een lachje (header, Mijn BSO) en het ronde logo met drie kinderen van achteren, "BSO" op het middelste shirt en het woordmerk eronder (footer, intro, favicon en app-iconen). De SVG's in `assets/img/` (`sporty-woordmerk*.svg`, `sporty-logo*.svg`, in oranje, wit en zwart) zijn met de computer omgezet uit de aangeleverde afbeeldingen in `design/logo/`; vervang ze door de vectorbestanden van de ontwerper zodra die er zijn (TODO) en draai `npm run logo` voor de iconen en de intro.
 
-**Intro op de homepage (9 oktober 2026):** de klant wil een preloader op de homepage waarin de kinderen uit het logo komen aanrennen en samen het logo vormen; ze rennen vanaf de rand van het scherm (9 oktober 2026: "meer van buiten het logo"). Die staat in `index.html` en `en/index.html` en wordt gemaakt met `npm run logo`; de beweging staat in `css/style.css` (sectie Intro). Alleen bij het eerste bezoek, over te slaan, en niet bij "minder beweging".
+**Intro op de homepage (9 oktober 2026):** de klant wil een preloader op de homepage waarin de kinderen uit het logo komen aanrennen en samen het logo vormen; ze rennen vanaf de rand van het scherm (9 oktober 2026: "meer van buiten het logo") en vloeien over in het officiële ronde logo. Die staat in `index.html` en `en/index.html` en wordt gemaakt met `npm run logo`; de beweging staat in `css/style.css` (sectie Intro). Alleen bij het eerste bezoek, over te slaan, en niet bij "minder beweging".
 
 ### Voorbeeldsites die de klant mooi vindt
 
@@ -245,7 +261,7 @@ Openingstijden:
 
 ## Beeld
 
-Gebruik passende rechtenvrije foto's (bijvoorbeeld Unsplash of Pexels) die echt bij dit bedrijf passen, geen clichés. Noteer de bronnen in `assets/fotos/BRONNEN.md`.
+De klant levert de fotografie later aan (22 oktober 2026); tot die tijd staan er fotovakken ("Foto volgt") in plaats van stockfoto's. Welke foto waar komt en hoe je een fotovak vervangt, staat in `assets/fotos/BRONNEN.md`.
 Wat er te zien moet zijn: mezelf en mijn team, klanten in actie, sfeer en omgeving.
 
 ## Domein en planning

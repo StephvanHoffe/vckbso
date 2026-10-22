@@ -3,11 +3,13 @@
 Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutaire naam: Je Dag in Beeld). Gebouwd volgens de bouwinstructies in [`CLAUDE.md`](CLAUDE.md).
 
 - Gewone HTML, CSS en een klein beetje JavaScript. Geen framework en geen build-stap.
-- Huisstijl volgens het moodboard van de klant (`design/moodboard-sporty.jpg`) en de designprompt van 11 oktober 2026: Sporty-oranje met warm wit, beige en antraciet, koppen in Poppins ExtraBold, tekst in DM Sans, het logo met drie kinderen en een lachje, en de kernwaarden Sport · Plezier · Ontwikkeling. Sportief en strak: "een moderne sportclub met de warmte van een kinderopvang".
-- Intro op de homepage: de drie kinderen uit het logo rennen vanaf de rand van het scherm naar het midden, de ring sluit zich om ze heen en ze vormen samen het logo. Eén keer per bezoek (en bij opnieuw laden), over te slaan met een toets, klik, tik of scroll, en niet bij de instelling "minder beweging" of zonder JavaScript.
+- Huisstijl volgens de briefing "Look & Feel" van 22 oktober 2026 (en eerder het moodboard en de designprompt): oranje, wit en zwart, de officiële logo's (woordmerk "Sporty" en het ronde logo), de slogan "Let's Play!", koppen in Poppins ExtraBold, tekst in DM Sans en de kernwaarden Sport · Plezier · Ontwikkeling. Voelt als een club waar je bij wilt horen: sportief, vrolijk en met humor ("Na school nog energie voor tien? Die raken we samen wel kwijt."), maar netjes en betrouwbaar voor ouders.
+- Henny de hond, de mascotte, met tekstwolkjes op de site en als hardloper in het aanmeldformulier: hij rent naar het doel naarmate je verder invult. Getekende elementen (sterren, pijlen, kroontjes) over de beelden, zoals in het voorbeeld "Team Sporty" van de klant.
+- Nog geen foto's: de klant levert de fotografie later aan. Tot die tijd staan er duidelijke fotovakken ("Foto volgt"), zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
+- Intro op de homepage: de drie kinderen uit het logo rennen vanaf de rand van het scherm naar het midden, de ring sluit zich om ze heen en ze vormen samen het officiële ronde logo. Eén keer per bezoek (en bij opnieuw laden), over te slaan met een toets, klik, tik of scroll, en niet bij de instelling "minder beweging" of zonder JavaScript.
 - Met een beheeromgeving en ouderportaal in `beheer/` (PHP + SQLite): aanmelden als klant met kinderen, automatische incasso via Mollie, facturen online, groepsagenda met maximale groepsgrootte die twee kanten op werkt, kindvolgsysteem, foto's en berichten, en een overzicht van inkomsten en uitgaven. Met rechten per collega per menuonderdeel, toegang per groep en per verzorger (gecontroleerd gezag), tweestapsverificatie, versleutelde opslag en back-ups, een controleerbaar logboek, privacyverzoeken voor ouders, bewaartermijnen per soort gegevens en strikt gescheiden organisaties. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
 - Mobile-first en getest op 360, 768 en 1280 px breed, zonder horizontaal scrollen.
-- Lighthouse (mobiel): prestaties 95–97 op de homepage (met de intro), 95 op programma (diensten) en 97 op contact; toegankelijkheid, best practices en SEO 100.
+- Lighthouse (mobiel, 22 oktober 2026): prestaties 95 op de homepage (met de intro) en 97 op team; toegankelijkheid, best practices en SEO 100.
 - Automatische toegankelijkheidstest (axe, WCAG 2.1 AA): geen overtredingen op alle pagina's.
 - Privacy: geen tracking, lettertypen lokaal, Google Maps laadt pas na een klik.
 
@@ -53,12 +55,14 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `js/rekentool/` | Rekentool kinderopvangtoeslag op de prijzenpagina: officiële bedragen per jaar (`toeslag-2026.js`), de tarieven van Sporty (`instellingen.js`), de berekening (`berekening.js`) en het formulier (`rekentool.js`). Zie [Rekentool](#rekentool-kinderopvangtoeslag). |
 | `tests/` | Automatische tests (`npm test`): de rekentool, met de tabel uit de brochure van Dienst Toeslagen als tweede bron, en de SEO-basis van alle pagina's |
 | `assets/fonts/` | Poppins en Caveat Brush (alleen hoofdletters), lokaal gehost, OFL-licentie |
-| `design/moodboard-sporty.jpg` | Het moodboard van de klant: de huisstijl van de website |
-| `assets/fotos/` | Foto's in AVIF en WebP (nu nog stockfoto's van Pexels), met de bronbestanden in `bron/`. Fotografen, licentie en de fotolijst staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
+| `design/moodboard-sporty.jpg` | Het moodboard van de klant (eerste huisstijl, 8 oktober 2026) |
+| `design/logo/`, `design/henny/` | De logo's en Henny zoals de klant ze op 22 oktober 2026 aanleverde (originelen in PNG/JPG) |
+| `assets/img/henny/` | Henny de hond (zittend, rennend, met bal), uitgeknipt en als WebP |
+| `assets/fotos/` | Hier komen de eigen foto's (bronbestanden in `bron/`, AVIF en WebP via `npm run fotos`). Nu nog leeg: welke foto waar komt, staat in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
 | `assets/img/` | Favicon, app-iconen en de deelafbeelding (`og-image.jpg`) |
 | `tools/fotos.mjs` | Hulpscript om beelden om te zetten (`npm run fotos`). Niet nodig om de site te draaien. |
 | `tools/structured-data.mjs` | Zet de schema.org-gegevens (JSON-LD) in de pagina's, met kruimelpad en veelgestelde vragen uit de zichtbare HTML (`npm run seo`) |
-| `tools/logo/` | Maakt het logo (embleem en woordmerk), de favicon, de app-iconen en de intro op de homepage (`npm run logo`), nagetekend naar het moodboard |
+| `tools/logo/` | Maakt de favicon, de app-iconen en de intro op de homepage (`npm run logo`) op basis van de officiële logo's in `assets/img/` |
 | `tools/og-image.mjs` | Maakt de deelafbeelding `assets/img/og-image.jpg` opnieuw (`npm run og-image`, vereist Playwright) |
 | `tools/beheer-demodata.php` | Vult een lege test-omgeving van de beheeromgeving met verzonnen demogegevens |
 | `voorbeeld/` | Doorklikbare momentopname van Mijn BSO met verzonnen gegevens, voor Vercel. Gemaakt door `npm run voorbeeld`, niet met de hand aanpassen. Zie [Voorbeeld op Vercel](#voorbeeld-op-vercel). |
@@ -87,7 +91,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Adres (straat, huisnummer, postcode). Dit moet op de contactpagina, in de footer, bij de routelink, in de kaart-URL en in de schema.org-gegevens.
 - [ ] Informatie over parkeren, fietsenstalling en openbaar vervoer (contactpagina).
 - [ ] Bevestigen dat het domein sporty.nl van Sporty is en dat info@sporty.nl werkt (nu staat er een andere website op sporty.nl). Zie [Live zetten](#live-zetten).
-- [ ] Originele logobestanden (SVG, of PNG in hoge resolutie) van de ontwerper. Het logo op de site is nagetekend naar het moodboard; vervang de bestanden in `assets/img/sporty-logo*.svg` en `sporty-woordmerk*.svg` en maak de iconen opnieuw.
+- [ ] Vectorbestanden (SVG of PDF) van de logo's van de ontwerper. De logo's op de site zijn met de computer omgezet uit de aangeleverde afbeeldingen (`design/logo/`); vervang `assets/img/sporty-logo*.svg` en `sporty-woordmerk*.svg` door de bestanden van de ontwerper en draai `npm run logo`.
 - [ ] KvK-nummer (footer).
 - [ ] Links naar social media (footer).
 - [ ] Openingstijden controleren: zijn 09:00–17:00 de opvangtijden of de kantoortijden? Een BSO is meestal na schooltijd tot 18:00 of 18:30 uur open.
@@ -97,15 +101,16 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] LRK-nummer, en bevestigen dat ouders kinderopvangtoeslag kunnen aanvragen (Prijzen, Veelgestelde vragen).
 - [x] Leeftijd: 5 t/m 13 jaar (uit de designprompt van 11 oktober 2026; staat op Home, Programma en bij de veelgestelde vragen).
 - [ ] Welke sporten en activiteiten, en of er een eigen buitenruimte is (Diensten).
-- [ ] Vakantieopvang, opvang op studiedagen en ophalen van school: aanbieden of niet? (Diensten)
+- [ ] Vakantieopvang en opvang op studiedagen: aanbieden of niet? (Diensten)
+- [ ] Ophalen van school: van welke scholen, en hoe (lopend, fietsend, met de bus)? (Home, Programma, Veelgestelde vragen)
 - [ ] Oprichtingsverhaal (Over ons).
-- [ ] Teamleden: foto, naam, rol en een leuk weetje (Team, Over ons).
+- [ ] Teamleden: naam, rol, een leuk weetje en een GIF (of kort filmpje) van een voetbaljuichmoment (Team, Over ons).
 - [ ] Reviews van ouders, alleen echte en met toestemming (Home).
 - [ ] Algemene voorwaarden (Voorwaarden).
 
 **Beeld**
-- [ ] De tijdelijke stockfoto's (Pexels) stap voor stap vervangen door eigen foto's van het team, de kinderen (met toestemming van de ouders) en de locatie, en de alt-teksten aanpassen. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
-- [ ] Teamportretten (Team) en de teamfoto (Over ons). Hier staan bewust geen stockfoto's: die zouden lijken op echte teamleden.
+- [ ] Eigen foto's van het team, de kinderen (met toestemming van de ouders) en de locatie in de fotovakken zetten, met alt-teksten. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md) voor de lijst.
+- [ ] GIF's (of korte filmpjes) van de teamleden die een doelpunt vieren (Team).
 
 **Techniek**
 - [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@sporty.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.

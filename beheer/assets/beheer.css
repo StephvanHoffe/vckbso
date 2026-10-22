@@ -25,12 +25,14 @@ body.beheer {
 /* ---------- Kop en menu ---------- */
 
 /*
- * Knoppen in Mijn BSO zijn compacter dan op de website (kleinere tekst). Daarom het donkerdere oranje:
- * daarop is ook kleine witte tekst goed leesbaar (4,8:1, bij hover 6,3:1).
+ * Knoppen in Mijn BSO zijn compacter dan op de website (kleinere tekst). Oranje met zwarte tekst is ook
+ * klein goed leesbaar (6,2:1); bij hover zwart met witte tekst.
  */
 .beheer .btn {
-  --btn-bg: var(--color-primary-strong);
-  --btn-bg-hover: var(--color-primary-dark);
+  --btn-bg: var(--color-primary);
+  --btn-fg: var(--color-on-primary);
+  --btn-bg-hover: var(--color-dark);
+  --btn-fg-hover: var(--color-on-dark);
 }
 
 .beheer .btn:not(.btn--mini) {
@@ -39,14 +41,19 @@ body.beheer {
 }
 
 .beheer .btn--secondary,
-.beheer .btn--light,
-.beheer .btn--gevaar {
+.beheer .btn--light {
   --btn-bg: var(--color-surface);
-  --btn-bg-hover: var(--color-surface);
+  --btn-fg: var(--color-text);
+  --btn-border: var(--color-text);
+  --btn-bg-hover: var(--color-dark);
+  --btn-fg-hover: var(--color-on-dark);
 }
 
-.beheer .btn--secondary {
-  --btn-fg: var(--color-text);
+.beheer .btn--gevaar {
+  --btn-bg: var(--color-surface);
+  --btn-fg: var(--color-error);
+  --btn-bg-hover: var(--color-coral-soft);
+  --btn-fg-hover: var(--color-error);
 }
 
 .app-header {
@@ -196,8 +203,8 @@ body.beheer {
 }
 
 .app-nav a[aria-current="page"] {
-  background: var(--color-primary-soft);
-  color: var(--color-link);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 .teller {
@@ -1701,5 +1708,92 @@ code {
 @media (min-width: 64em) {
   .boeking__kop {
     min-width: 16rem;
+  }
+}
+
+/* ---------- Aanmelden: Henny rent mee ---------- */
+
+/*
+ * Boven het formulier rent Henny naar het doel, zo ver als je bent met de verplichte velden
+ * (--voortgang van 0 tot 1, gezet door beheer.js). Op hogere schermen blijft de balk in beeld.
+ */
+.henny-baan {
+  --voortgang: 0;
+  margin-bottom: var(--space-l);
+  padding: var(--space-s) var(--space-s) 0;
+  border: var(--border-width) solid var(--color-dark);
+  border-radius: var(--radius-m);
+  background: var(--color-primary);
+  container-type: inline-size;
+}
+
+@media (min-height: 40em) {
+  .henny-baan {
+    position: sticky;
+    top: calc(var(--kop-hoogte, 4rem) + 0.5rem);
+    z-index: 10;
+  }
+}
+
+.henny-baan__wolk.tekstwolk {
+  position: relative;
+  max-width: min(24rem, 100%);
+  margin: 0 0 0.85rem;
+  font-size: var(--step--1);
+  translate: calc(var(--voortgang) * (100cqw - 100%)) 0;
+}
+
+.henny-baan__wolk.tekstwolk::after {
+  left: calc(1rem + var(--voortgang) * (100% - 3rem));
+}
+
+.henny-baan__spoor {
+  position: relative;
+  height: 3.75rem;
+  margin-right: 3.25rem;
+  border-bottom: 3px dashed var(--color-dark);
+  container-type: inline-size;
+}
+
+.henny-baan__henny {
+  position: absolute;
+  bottom: -0.35rem;
+  left: 0;
+  width: 3rem;
+  height: auto;
+  translate: calc(var(--voortgang) * (100cqw - 100%)) 0;
+}
+
+.henny-baan__doel {
+  position: absolute;
+  right: -3.25rem;
+  bottom: 0;
+  width: 3rem;
+  height: auto;
+  fill: none;
+  stroke: var(--color-dark);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.henny-baan__doel path:first-child {
+  stroke-width: 3.5;
+  stroke: var(--color-surface);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .henny-baan__henny,
+  .henny-baan__wolk.tekstwolk {
+    transition: translate 600ms var(--ease-out);
+  }
+
+  .henny-baan__wolk.tekstwolk::after {
+    transition: left 600ms var(--ease-out);
+  }
+
+  .henny-baan.is-klaar .henny-baan__henny {
+    animation: henny-wiebel 1.2s ease-in-out 2;
+    transform-origin: 50% 90%;
   }
 }

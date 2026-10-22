@@ -151,4 +151,54 @@
       vakjes.forEach(function (v) { v.checked = !allemaal; });
     });
   });
+
+  /* Aanmelden: Henny rent mee naar het doel terwijl je de verplichte velden invult */
+  document.querySelectorAll("[data-henny-baan]").forEach(function (baan) {
+    var form = baan.closest("form");
+    var wolk = baan.querySelector("[data-henny-wolk]");
+    if (!form || !wolk) return;
+    var kop = document.querySelector(".app-header");
+    var secties = Array.prototype.filter.call(form.children, function (el) { return el.tagName === "FIELDSET"; });
+    // Wat Henny zegt zodra deze stap aan de beurt is (op volgorde van de secties in het formulier)
+    var zinnen = [
+      "Woef! Zullen we beginnen?",
+      "Top! En nu: wie is je kleine topper?",
+      "Lekker bezig! Wanneer komt je kind sporten?",
+      "Bijna! Nog een wachtwoord. Ik kijk niet, beloofd.",
+      "Nog twee vinkjes en we zijn bij het doel!"
+    ];
+    var klaarZin = "Je hebt je kleine topper bijna aangemeld, door naar de volgende stap!";
+    var verplicht = function (el) {
+      return Array.prototype.filter.call(el.querySelectorAll("input[required], select[required], textarea[required]"), function (veld) {
+        return !veld.disabled && !veld.closest("template");
+      });
+    };
+
+    var begonnen = false;
+    var bijwerken = function (event) {
+      if (event) begonnen = true;
+      var velden = verplicht(form);
+      var goed = velden.filter(function (veld) { return veld.value.trim() !== "" && veld.checkValidity(); }).length;
+      var voortgang = velden.length ? goed / velden.length : 0;
+      var beurt = secties.findIndex(function (sectie) {
+        return verplicht(sectie).some(function (veld) { return veld.value.trim() === "" || !veld.checkValidity(); });
+      });
+      var zin = beurt === -1 ? klaarZin : beurt === 0 && begonnen ? "Goed zo! Eerst nog even jouw gegevens." : zinnen[Math.min(beurt, zinnen.length - 1)];
+      baan.style.setProperty("--voortgang", voortgang.toFixed(3));
+      baan.classList.toggle("is-klaar", beurt === -1);
+      if (wolk.textContent !== zin) wolk.textContent = zin;
+    };
+
+    var kopHoogte = function () {
+      if (kop) document.documentElement.style.setProperty("--kop-hoogte", kop.offsetHeight + "px");
+    };
+
+    baan.hidden = false;
+    kopHoogte();
+    bijwerken();
+    form.addEventListener("input", bijwerken);
+    form.addEventListener("change", bijwerken);
+    form.addEventListener("click", function (event) { window.setTimeout(function () { bijwerken(event); }, 0); });
+    window.addEventListener("resize", kopHoogte);
+  });
 })();

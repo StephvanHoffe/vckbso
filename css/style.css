@@ -97,17 +97,22 @@ strong {
   font-weight: var(--font-weight-strong);
 }
 
+/* Links: zwart met een oranje streep eronder */
 a {
-  color: var(--color-link);
-  text-decoration-thickness: 0.08em;
-  text-underline-offset: 0.18em;
+  color: var(--color-text);
+  text-decoration-color: var(--color-primary);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
   transition: color var(--duration-fast) var(--ease-out), text-decoration-thickness var(--duration-fast) var(--ease-out);
 }
 
 a:hover {
   color: var(--color-text);
-  text-decoration-color: var(--color-primary);
-  text-decoration-thickness: 0.14em;
+  text-decoration-thickness: 4px;
+}
+
+.on-dark a:not(.btn) {
+  color: var(--color-on-dark);
 }
 
 :focus-visible {
@@ -117,7 +122,7 @@ a:hover {
 }
 
 .on-dark :focus-visible {
-  outline-color: var(--color-on-primary);
+  outline-color: var(--color-on-dark);
 }
 
 ::selection {
@@ -198,9 +203,44 @@ a:hover {
   background: var(--color-sand);
 }
 
-.section--primary {
+.section--primary,
+.section--oranje {
   background: var(--color-primary);
   color: var(--color-on-primary);
+}
+
+.section--zwart {
+  background: var(--color-dark);
+  color: var(--color-on-dark);
+}
+
+.section--zwart h2,
+.section--zwart h3 {
+  color: var(--color-on-dark);
+}
+
+.section--zwart .lead,
+.section--zwart p {
+  color: var(--color-on-dark-muted);
+}
+
+.section--zwart .eyebrow,
+.on-dark .eyebrow {
+  --eyebrow-color: var(--color-primary);
+}
+
+.section--zwart .hl,
+.on-dark .hl {
+  color: var(--color-primary);
+}
+
+.op-oranje .eyebrow {
+  --eyebrow-color: var(--color-text);
+  --eyebrow-line: var(--color-text);
+}
+
+.op-oranje .hl {
+  color: var(--color-surface); /* wit op oranje alleen in grote koppen */
 }
 
 .section--flush-top {
@@ -239,7 +279,7 @@ a:hover {
   align-items: center;
   gap: 0.75em;
   margin: 0 0 var(--space-s);
-  color: var(--eyebrow-color, var(--color-link));
+  color: var(--eyebrow-color, var(--color-text));
   font-family: var(--font-ui);
   font-size: var(--step--1);
   font-weight: 700;
@@ -317,20 +357,22 @@ a:hover {
 /* ---------- 3. Knoppen en labels ---------- */
 
 /*
- * Oranje, rond, met witte vette tekst. De tekst is 19px vet: zo geldt wit op Sporty-oranje als grote tekst
- * (WCAG AA vraagt dan 3:1, het is 3,2:1). Bij hover wordt de knop donkerder en iets groter.
+ * Knoppen: rond, stevig en sportief. Oranje met zwarte tekst (6,2:1), zwart met witte tekst, of omlijnd.
+ * Bij hover wordt de knop iets groter en schuift de pijl op.
  */
 .btn {
   --btn-bg: var(--color-primary);
   --btn-fg: var(--color-on-primary);
   --btn-bg-hover: var(--color-primary-deep);
+  --btn-fg-hover: var(--btn-fg);
   --btn-border: transparent;
+  --btn-border-hover: var(--btn-border);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.55em;
-  min-height: 3.5rem;
-  padding: 0.8em 1.6em;
+  min-height: 3.25rem;
+  padding: 0.75em 1.5em;
   border: var(--border-width) solid var(--btn-border);
   border-radius: var(--radius-pill);
   background: var(--btn-bg);
@@ -339,7 +381,6 @@ a:hover {
   font-size: var(--font-size-button);
   font-weight: var(--font-weight-button);
   line-height: 1.2;
-  letter-spacing: -0.005em;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
@@ -352,7 +393,8 @@ a:hover {
 
 .btn:hover {
   background: var(--btn-bg-hover);
-  color: var(--btn-fg);
+  border-color: var(--btn-border-hover);
+  color: var(--btn-fg-hover);
   scale: 1.03;
 }
 
@@ -371,54 +413,53 @@ a:hover {
   translate: 4px 0;
 }
 
-/* Wit met een subtiele rand */
+/* Zwart met witte tekst; bij hover oranje */
+.btn--dark {
+  --btn-bg: var(--color-dark);
+  --btn-fg: var(--color-on-dark);
+  --btn-bg-hover: var(--color-primary);
+  --btn-fg-hover: var(--color-on-primary);
+}
+
+/* Omlijnd: zwarte rand, bij hover zwart */
 .btn--secondary {
-  --btn-bg: var(--color-surface);
+  --btn-bg: transparent;
   --btn-fg: var(--color-text);
-  --btn-bg-hover: var(--color-surface);
-  --btn-border: var(--color-border);
+  --btn-border: var(--color-text);
+  --btn-bg-hover: var(--color-text);
+  --btn-fg-hover: var(--color-surface);
 }
 
-.btn--secondary:hover {
-  border-color: var(--color-text);
-}
-
-/* Witte knop op een oranje vlak */
+/* Witte knop (op oranje of zwart) */
 .btn--light {
   --btn-bg: var(--color-surface);
-  --btn-fg: var(--color-primary-deep);
-  --btn-bg-hover: var(--color-bg);
+  --btn-fg: var(--color-text);
+  --btn-bg-hover: var(--color-dark);
+  --btn-fg-hover: var(--color-on-dark);
 }
 
-/* Omlijnde knop op een donker of oranje vlak, of op een foto */
+/* Omlijnd op een zwart vlak */
 .btn--op-donker,
-.hero .btn--secondary,
-.page-hero--foto .btn--secondary,
-.on-dark .btn--secondary {
+.on-dark .btn--secondary,
+.page-hero--foto .btn--secondary {
   --btn-bg: transparent;
-  --btn-fg: var(--color-on-primary);
-  --btn-bg-hover: var(--color-on-primary);
-  --btn-border: rgb(255 255 255 / 0.75);
+  --btn-fg: var(--color-on-dark);
+  --btn-border: var(--color-on-dark);
+  --btn-bg-hover: var(--color-on-dark);
+  --btn-fg-hover: var(--color-text);
 }
 
-.btn--op-donker:hover,
-.hero .btn--secondary:hover,
-.page-hero--foto .btn--secondary:hover,
-.on-dark .btn--secondary:hover {
-  border-color: var(--color-on-primary);
-  color: var(--color-text);
+/* Op een oranje vlak: de hoofdknop wordt zwart */
+.op-oranje .btn:not(.btn--secondary, .btn--light) {
+  --btn-bg: var(--color-dark);
+  --btn-fg: var(--color-on-dark);
+  --btn-bg-hover: var(--color-surface);
+  --btn-fg-hover: var(--color-text);
 }
 
-.btn--dark {
-  --btn-bg: var(--color-text);
-  --btn-fg: var(--color-surface);
-  --btn-bg-hover: #000;
-}
-
-/* Compacter, maar met dezelfde tekstgrootte (wit op oranje moet groot blijven) */
 .btn--small {
-  min-height: 2.875rem;
-  padding: 0.5em 1.2em;
+  min-height: 2.75rem;
+  padding: 0.5em 1.15em;
 }
 
 .btn[disabled],
@@ -785,166 +826,337 @@ a:hover {
 /* ---------- 5. Hero (home) ---------- */
 
 /*
- * Een grote, brede foto van kinderen die samen sporten, met een donkere overloop en witte tekst.
- * Mobiel: foto bovenaan die overloopt in een donker vlak met de tekst.
- * Vanaf 64em: foto over de hele breedte; de kop staat breed onderaan (de gezichten blijven vrij),
- * met daaronder de tekst en de knoppen naast elkaar.
+ * Oranje, net als het logo: grote zwarte kop, het handgeschreven "Let's Play!", en rechts een (voorlopig leeg)
+ * fotovak met getekende elementen en Henny die erlangs rent. Mobiel staat alles onder elkaar.
  */
 .hero {
   position: relative;
-  display: grid;
-  background: var(--color-dark);
+  padding-block: var(--space-xl);
+  background: var(--color-primary);
   color: var(--color-on-primary);
   overflow: clip;
   isolation: isolate;
 }
 
-.hero__media {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  max-height: 60vh;
-  width: 100%;
-}
-
-.hero__media picture {
-  display: block;
-  height: 100%;
-}
-
-.hero__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: 50% 30%;
-}
-
-/* Overloop naar het donkere vlak eronder */
-.hero__media::after {
+/* Grote, subtiele ronde vormen op de achtergrond: een bal en de middencirkel van een veld */
+.hero::before,
+.hero::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgb(34 34 34 / 0) 50%, rgb(34 34 34 / 0.7) 84%, var(--color-dark) 100%);
+  z-index: -1;
+  border-radius: 50%;
+  pointer-events: none;
 }
 
-.hero__inner {
-  position: relative;
-  z-index: 1;
-  margin-top: -2.5rem;
-  padding-bottom: var(--space-2xl);
+.hero::before {
+  top: -12rem;
+  right: -10rem;
+  width: 34rem;
+  aspect-ratio: 1;
+  border: 3px solid rgb(255 255 255 / 0.35);
 }
 
-.hero .eyebrow {
-  --eyebrow-color: var(--color-on-dark);
+.hero::after {
+  left: -6rem;
+  bottom: -8rem;
+  width: 18rem;
+  aspect-ratio: 1;
+  background: rgb(255 255 255 / 0.12);
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+.hero__slogan {
+  margin-bottom: var(--space-2xs);
+  color: var(--color-surface); /* handgeschreven, minstens 36px: groot genoeg voor wit op oranje */
+  font-size: clamp(2.25rem, 1.7rem + 2.4vw, 3.5rem);
+  rotate: -4deg;
+  transform-origin: left center;
 }
 
 .hero__title {
   margin-bottom: var(--space-m);
-  color: var(--color-on-primary);
-  font-size: clamp(2.5rem, 1.55rem + 3.4vw, 4.25rem);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-}
-
-.hero .hl {
-  color: var(--color-primary);
+  color: var(--color-text);
+  font-size: clamp(2.625rem, 1.5rem + 4.4vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
 }
 
 .hero .lead {
-  max-width: 34rem;
-  color: var(--color-on-dark);
-}
-
-.hero__facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2xs) var(--space-l);
-  margin: var(--space-l) 0 0;
-  padding: 0;
-  list-style: none;
-  color: var(--color-on-dark);
-  font-family: var(--font-ui);
-  font-size: var(--step--1);
-  font-weight: var(--font-weight-ui);
-}
-
-.hero__facts li {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-}
-
-.hero__facts .icon {
-  color: var(--color-primary);
+  max-width: 32rem;
+  color: var(--color-text);
 }
 
 .hero :focus-visible {
-  outline-color: var(--color-on-primary);
+  outline-color: var(--color-text);
+}
+
+.hero__beeld {
+  position: relative;
+  max-width: 34rem;
+  margin-inline: auto;
+  width: 100%;
+  padding: 0 var(--space-s) var(--space-xl);
+}
+
+.hero__foto {
+  --ratio: 4 / 4.4;
+  border: 4px solid var(--color-dark);
+  box-shadow: 10px 10px 0 var(--color-dark);
+  rotate: 2deg;
+}
+
+.hero__henny {
+  position: absolute;
+  left: -0.5rem;
+  bottom: -0.5rem;
+  --henny-breedte: clamp(8.5rem, 34%, 12.5rem);
+}
+
+.hero__henny .tekstwolk {
+  left: 72%;
+  top: -1.25rem;
+}
+
+.hero__ster {
+  top: -1.25rem;
+  left: -0.75rem;
+  --maat: 3.5rem;
+  color: var(--color-surface);
+  rotate: -12deg;
+}
+
+.hero__straal {
+  top: -1.75rem;
+  right: 0.5rem;
+  --maat: 3.25rem;
+  color: var(--color-dark);
+  rotate: 70deg;
+}
+
+.hero__notitie {
+  right: 2.25rem;
+  top: 2.5rem;
+  --notitie-kleur: var(--color-on-dark);
+  rotate: 8deg;
+}
+
+.hero__pijl {
+  right: 3rem;
+  top: 52%;
+  --maat: 4rem;
+  color: var(--color-on-dark);
+  rotate: 70deg;
 }
 
 @media (min-width: 64em) {
   .hero {
-    min-height: min(calc(100svh - var(--header-height)), 54rem);
-    align-items: end;
+    padding-block: var(--space-2xl) var(--space-3xl);
   }
 
-  .hero__media {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    aspect-ratio: auto;
-    max-height: none;
+  .hero__grid {
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    gap: var(--space-3xl);
   }
 
-  .hero__media img {
-    object-position: 50% 28%;
+  .hero__beeld {
+    padding: 0 0 var(--space-xl) var(--space-l);
   }
 
-  /* Donkere overloop van onderen (en een beetje van links), zodat de witte tekst goed leesbaar is */
-  .hero__media::after {
-    background:
-      linear-gradient(to top, rgb(34 34 34 / 0.94) 0, rgb(34 34 34 / 0.8) 32%, rgb(34 34 34 / 0) 64%),
-      linear-gradient(90deg, rgb(34 34 34 / 0.55) 0, rgb(34 34 34 / 0.2) 40%, rgb(34 34 34 / 0) 60%);
-  }
-
-  .hero__inner {
-    margin-top: 0;
-    padding-block: var(--space-3xl) var(--space-2xl);
-  }
-
-  .hero__title {
-    max-width: 18ch;
-  }
-
-  .hero__onder {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: var(--space-xl);
-  }
-
-  .hero .lead {
-    margin-bottom: 0;
-  }
-
-  .hero__onder .btn-group {
-    flex: none;
+  .hero__henny {
+    left: -2rem;
   }
 }
 
-@media (min-width: 64em) and (prefers-reduced-motion: no-preference) {
-  /* De foto komt rustig tot stilstand */
-  .hero__media img {
-    animation: hero-foto 1.6s var(--ease-out) both;
-  }
+/* Lopende band met de kernwoorden: beweegt mee als je scrolt (geen beweging zonder dat je iets doet) */
+.band {
+  overflow: hidden;
+  padding-block: var(--space-s);
+  background: var(--color-dark);
+  color: var(--color-primary);
+  border-block: 4px solid var(--color-primary);
+}
 
-  @keyframes hero-foto {
-    from { scale: 1.06; }
+.band__spoor {
+  display: flex;
+  width: max-content;
+}
+
+.band__lijst {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-ui);
+  font-size: clamp(1.25rem, 1rem + 1.2vw, 2rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.band__lijst li {
+  display: flex;
+  align-items: center;
+}
+
+.band__lijst li::after {
+  content: "★";
+  margin-inline: 0.9em;
+  color: var(--color-on-dark);
+  font-size: 0.7em;
+}
+
+.band__lijst .band__slogan {
+  font-family: var(--font-slogan);
+  font-weight: 400;
+  font-size: 1.15em;
+  letter-spacing: 0.02em;
+  color: var(--color-on-dark);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .band__spoor {
+      animation: band-schuif linear both;
+      animation-timeline: view();
+    }
+
+    @keyframes band-schuif {
+      from { transform: translateX(0); }
+      to { transform: translateX(-25%); }
+    }
   }
+}
+
+/* Energie (zwart): fotovak met een getekende lus en een krabbel */
+.energie__beeld {
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+.energie__beeld .frame__img {
+  border: 4px solid var(--color-on-dark);
+  box-shadow: 10px 10px 0 var(--color-primary);
+  rotate: -2deg;
+}
+
+.energie__pijl {
+  right: -0.5rem;
+  bottom: -2.25rem;
+  --maat: 5.5rem;
+  color: var(--color-on-dark);
+  rotate: -12deg;
+}
+
+.section--zwart .energie__notitie {
+  left: 0.75rem;
+  bottom: -2.75rem;
+  --notitie-kleur: var(--color-primary);
+}
+
+/* Een middag bij Sporty: drie kaarten, met een klein label boven de kop */
+.middag {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.middag__stap {
+  margin: 0 0 var(--space-3xs);
+  color: var(--color-link);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: var(--letter-spacing-label);
+  text-transform: uppercase;
+}
+
+/* Team Sporty: plek voor een GIF van het team dat juicht, met getekende kroon en hartje */
+.team-teaser__beeld {
+  max-width: 32rem;
+  margin-inline: auto;
+}
+
+.team-teaser__beeld .frame__img {
+  border: 4px solid var(--color-dark);
+  box-shadow: 10px 10px 0 var(--color-primary);
+  rotate: 1.5deg;
+}
+
+.team-teaser__kroon {
+  top: -2.25rem;
+  left: 1.5rem;
+  --maat: 4.25rem;
+  color: var(--color-primary);
+  rotate: -14deg;
+}
+
+.team-teaser__hart {
+  right: -0.25rem;
+  bottom: -1.5rem;
+  --maat: 3rem;
+  color: var(--color-primary);
+  rotate: 12deg;
+}
+
+.team-teaser__notitie {
+  right: 1rem;
+  top: -2rem;
+  --notitie-kleur: var(--color-text);
+  rotate: 5deg;
+}
+
+/* Stappen naar aanmelden: Henny rent over de kaarten mee terwijl je scrolt */
+.stappen-baan {
+  position: relative;
+  padding-top: 5.75rem;
+  container-type: inline-size;
+}
+
+.stappen-baan__henny {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  width: 5.5rem;
+  height: auto;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .stappen-baan__henny {
+      animation: henny-rent linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 65%;
+    }
+
+    @keyframes henny-rent {
+      from { translate: 0 0; }
+      to { translate: calc(100cqw - 100%) 0; }
+    }
+  }
+}
+
+/* Engelse homepage: Henny zwaait bij "Visit us" */
+.visit__henny {
+  margin-top: var(--space-l);
+}
+
+.visit__henny .henny {
+  margin-bottom: 0;
 }
 
 /* ---------- 6. Pagina-kop (subpagina's) ---------- */
 
-/* Zonder foto: rustig warm wit met de kop */
+/* Zonder beeld: rustig wit met de kop */
 .page-hero {
   position: relative;
   padding-block: var(--space-xl) var(--space-2xl);
@@ -963,6 +1175,8 @@ a:hover {
 .page-hero h1 {
   max-width: 20ch;
   font-size: clamp(2.375rem, 1.6rem + 3vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
 }
 
 .page-hero .lead {
@@ -996,74 +1210,77 @@ a:hover {
 }
 
 /*
- * Met foto: net als de hero op de homepage een brede foto met een donkere overloop.
- * Mobiel staat de foto bovenaan, vanaf 64em over de hele breedte met de tekst links.
+ * Met beeld: zwart, met de kop links en rechts een gekanteld fotovak met een oranje schaduw en getekende
+ * elementen. Mobiel staat het fotovak onder de tekst.
  */
 .page-hero--foto {
-  padding: 0 0 var(--space-2xl);
+  padding-block: var(--space-xl) var(--space-3xl);
   background: var(--color-dark);
-  color: var(--color-on-primary);
-}
-
-.page-hero--foto .page-hero__grid {
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 0;
-}
-
-.page-hero--foto .page-hero__media {
-  position: relative;
-  margin-inline: calc(var(--gutter) * -1);
-  aspect-ratio: 16 / 10;
-  max-height: 52vh;
-}
-
-.page-hero--foto .page-hero__media::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgb(34 34 34 / 0) 45%, rgb(34 34 34 / 0.7) 82%, var(--color-dark) 100%);
-}
-
-.page-hero--foto .frame,
-.page-hero--foto .frame__img,
-.page-hero--foto picture {
-  height: 100%;
-}
-
-.page-hero--foto .frame__img {
-  aspect-ratio: auto;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.page-hero--foto .page-hero__content {
-  position: relative;
-  z-index: 1;
-  margin-top: -2rem;
-}
-
-.page-hero--foto h1 {
-  color: var(--color-on-primary);
-}
-
-.page-hero--foto .lead {
   color: var(--color-on-dark);
 }
 
+.page-hero--foto::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -8rem;
+  top: -10rem;
+  width: 28rem;
+  aspect-ratio: 1;
+  border: 3px solid rgb(252 98 0 / 0.45);
+  border-radius: 50%;
+}
+
+.page-hero--foto h1 {
+  color: var(--color-on-dark);
+}
+
+.page-hero--foto .hl {
+  color: var(--color-primary);
+}
+
+.page-hero--foto .lead {
+  color: var(--color-on-dark-muted);
+}
+
 .page-hero--foto .eyebrow {
-  --eyebrow-color: var(--color-on-dark);
+  --eyebrow-color: var(--color-primary);
 }
 
 .page-hero--foto .breadcrumb ol,
 .page-hero--foto .breadcrumb li + li::before,
 .page-hero--foto .breadcrumb a,
 .page-hero--foto .breadcrumb [aria-current="page"] {
+  color: var(--color-on-dark-muted);
+}
+
+.page-hero--foto .breadcrumb [aria-current="page"] {
   color: var(--color-on-dark);
 }
 
 .page-hero--foto :focus-visible {
-  outline-color: var(--color-on-primary);
+  outline-color: var(--color-on-dark);
+}
+
+.page-hero__media {
+  position: relative;
+  width: min(100%, 30rem);
+  margin-inline: auto;
+}
+
+.page-hero--foto .frame__img {
+  --ratio: 4 / 3;
+  border: 4px solid var(--color-on-dark);
+  box-shadow: 10px 10px 0 var(--color-primary);
+  rotate: -2deg;
+}
+
+.page-hero__doodle {
+  top: -1.5rem;
+  right: -0.75rem;
+  --maat: 3.5rem;
+  color: var(--color-on-dark);
+  rotate: 14deg;
 }
 
 @media (min-width: 64em) {
@@ -1071,33 +1288,13 @@ a:hover {
     padding-block: var(--space-2xl) var(--space-3xl);
   }
 
-  .page-hero--foto {
-    display: grid;
-    align-items: center;
-    min-height: min(68vh, 36rem);
-    padding-block: var(--space-3xl);
-  }
-
-  .page-hero--foto .page-hero__media {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    margin: 0;
-    aspect-ratio: auto;
-    max-height: none;
-  }
-
-  .page-hero--foto .page-hero__media::after {
-    background: linear-gradient(90deg, rgb(34 34 34 / 0.9) 0, rgb(34 34 34 / 0.8) max(42%, 34rem), rgb(34 34 34 / 0.05) calc(max(42%, 34rem) + 24rem));
-  }
-
-  .page-hero--foto .page-hero__content {
-    max-width: 40rem;
-    margin-top: 0;
+  .page-hero--foto .page-hero__grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: var(--space-3xl);
   }
 }
 
-/* ---------- 7. Beeldkaders ---------- */
+/* ---------- 7. Beeldkaders en fotovakken ---------- */
 
 .frame {
   position: relative;
@@ -1105,9 +1302,9 @@ a:hover {
 }
 
 .frame__img {
+  position: relative;
   overflow: hidden;
   border-radius: var(--radius-l);
-  box-shadow: var(--shadow-m);
   aspect-ratio: var(--ratio, 4 / 3);
   background: var(--color-surface-alt);
 }
@@ -1123,7 +1320,7 @@ a:hover {
   scale: 1.03;
 }
 
-/* Een subtiele "bal" die achter de foto uitsteekt: een verwijzing naar sport en beweging */
+/* Een "bal" die achter het beeld uitsteekt: een verwijzing naar sport en beweging */
 .frame--left::before,
 .frame--tilt::before {
   content: "";
@@ -1179,21 +1376,243 @@ a:hover {
   }
 }
 
+/*
+ * Fotovak: een duidelijke plek voor een foto die later komt (de klant levert de fotografie later aan).
+ * Zwart met oranje stippen, een getekende camera en wat er komt te staan. Vervangen door een <picture>:
+ * zie assets/fotos/BRONNEN.md.
+ */
+.fotovak {
+  display: grid;
+  place-items: center;
+  aspect-ratio: var(--ratio, 4 / 3);
+  overflow: hidden;
+  border-radius: var(--radius-l);
+  background-color: var(--color-dark);
+  background-image: radial-gradient(circle, rgb(252 98 0 / 0.4) 1.3px, transparent 1.8px);
+  background-size: 18px 18px;
+  color: var(--color-on-dark);
+  text-align: center;
+}
+
+.fotovak__inhoud {
+  display: grid;
+  justify-items: center;
+  gap: 0.3rem;
+  max-width: 22rem;
+  padding: var(--space-m);
+}
+
+.fotovak__inhoud .icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-primary);
+}
+
+.fotovak .fotovak__label {
+  margin: 0;
+  color: var(--color-primary);
+  font-family: var(--font-slogan);
+  font-size: 1.75rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.fotovak .fotovak__wat {
+  margin: 0;
+  color: var(--color-on-dark-muted);
+  font-size: var(--step--1);
+  line-height: 1.4;
+}
+
+.fotovak--oranje {
+  background-color: var(--color-primary);
+  background-image: radial-gradient(circle, rgb(17 17 17 / 0.16) 1.3px, transparent 1.8px);
+}
+
+.fotovak--oranje .fotovak__inhoud .icon,
+.fotovak--oranje .fotovak__label,
+.fotovak--oranje .fotovak__wat {
+  color: var(--color-text);
+}
+
+.fotovak--licht {
+  background-color: var(--color-surface-alt);
+  background-image: radial-gradient(circle, rgb(252 98 0 / 0.35) 1.3px, transparent 1.8px);
+}
+
+.fotovak--licht .fotovak__label {
+  color: var(--color-primary-deep);
+}
+
+.fotovak--licht .fotovak__wat {
+  color: var(--color-text-muted);
+}
+
+/* Getekende elementen over en naast beelden (pijlen, sterren, hartjes): wit, zwart of oranje */
+.doodle {
+  position: absolute;
+  z-index: 2;
+  width: var(--maat, 3rem);
+  height: auto;
+  aspect-ratio: 4 / 3;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.doodle--vierkant {
+  aspect-ratio: 1;
+}
+
+/* Handgeschreven notitie, zoals een krabbel op een foto */
+.notitie {
+  position: absolute;
+  z-index: 2;
+  max-width: 9em;
+  margin: 0;
+  color: var(--notitie-kleur, var(--color-on-dark));
+  font-family: var(--font-slogan);
+  font-size: clamp(1.5rem, 1.25rem + 0.8vw, 2rem);
+  line-height: 1;
+  text-transform: uppercase;
+  text-wrap: balance;
+  rotate: -6deg;
+  pointer-events: none;
+}
+
+/* Getekende lijnen tekenen zichzelf zodra ze in beeld komen */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-on .reveal .doodle,
+  .reveal-on .doodle.reveal {
+    stroke-dasharray: 1 2;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 900ms var(--ease-out) calc(var(--delay, 0ms) + 350ms);
+  }
+
+  .reveal-on .reveal.is-visible .doodle,
+  .reveal-on .doodle.reveal.is-visible {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Henny, de hond van Sporty, met een tekstwolkje */
+.henny {
+  position: relative;
+  z-index: 3;
+  width: var(--henny-breedte, 12rem);
+  margin: 0;
+}
+
+.henny img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.tekstwolk {
+  position: absolute;
+  z-index: 1;
+  width: max-content;
+  max-width: 14rem;
+  margin: 0;
+  padding: 0.55em 0.85em;
+  border: var(--border-width) solid var(--color-dark);
+  border-radius: 18px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: 4px 4px 0 var(--color-dark);
+  font-family: var(--font-ui);
+  font-size: var(--step-0);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.tekstwolk::after {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  bottom: -9px;
+  width: 14px;
+  height: 14px;
+  border-right: var(--border-width) solid var(--color-dark);
+  border-bottom: var(--border-width) solid var(--color-dark);
+  background: var(--color-surface);
+  rotate: 45deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Henny kwispelt even als hij in beeld komt */
+  .henny img {
+    animation: henny-wiebel 1.6s ease-in-out 0.4s 3;
+    transform-origin: 50% 90%;
+  }
+
+  @keyframes henny-wiebel {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-3deg) translateY(-3px); }
+    75% { transform: rotate(3deg); }
+  }
+}
+
+/* Henny op een oranje vlak, net als in het logo (teampagina, aanmelden) */
+.henny-vak {
+  display: grid;
+  place-items: end center;
+  margin: 0;
+  padding: var(--space-m) var(--space-m) 0;
+  border: 4px solid var(--color-dark);
+  background: var(--color-primary);
+  box-shadow: 10px 10px 0 var(--color-dark);
+}
+
+.frame__img.henny-vak img {
+  width: 82%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.henny-vak__wolk {
+  top: var(--space-m);
+  left: var(--space-m);
+  max-width: 13rem;
+}
+
+.page-hero__media .henny-vak img {
+  width: 52%;
+}
+
+.frame__img.henny-vak--bal img {
+  width: min(60%, 214px);
+  margin-bottom: var(--space-m);
+}
+
 /* ---------- 8. Kaarten ---------- */
 
-/* Witte kaart met licht afgeronde hoeken en een subtiele schaduw; bij hover komt hij iets omhoog */
+/* Witte kaart met een strakke zwarte rand; bij hover schuift hij iets op en krijgt hij een oranje schaduw */
 .card {
   position: relative;
   padding: var(--space-l);
+  border: var(--border-width) solid var(--color-dark);
   border-radius: var(--radius-m);
   background: var(--color-surface);
-  box-shadow: var(--shadow-s);
   transition: translate var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out);
 }
 
 .card:hover {
-  translate: 0 -6px;
-  box-shadow: var(--shadow-m);
+  translate: -4px -4px;
+  box-shadow: 8px 8px 0 var(--color-primary);
+}
+
+/* Op zwart: donkere kaart, oranje schaduw blijft */
+.section--zwart .card {
+  border-color: #3a3a3a;
+  background: var(--color-dark-surface);
+  color: var(--color-on-dark);
 }
 
 .card h3 {
@@ -1260,7 +1679,12 @@ a:hover {
 .foto-card__img {
   aspect-ratio: 4 / 3;
   overflow: hidden;
-  background: var(--color-surface-alt);
+  background-color: var(--color-surface-alt);
+}
+
+.foto-card__img.fotovak {
+  border-radius: 0;
+  background-color: var(--color-dark);
 }
 
 .foto-card__img picture {
@@ -1403,9 +1827,10 @@ a:hover {
   gap: var(--space-l);
   margin: 0;
   padding: var(--space-l);
+  border: var(--border-width) solid var(--color-dark);
   border-radius: var(--radius-l);
   background: var(--color-surface);
-  box-shadow: var(--shadow-s);
+  box-shadow: 8px 8px 0 var(--color-primary);
   list-style: none;
 }
 
@@ -1502,6 +1927,10 @@ a:hover {
   color: var(--color-text-muted);
 }
 
+.section--zwart .punten p {
+  color: var(--color-on-dark-muted);
+}
+
 .stappen__knoppen {
   margin-top: var(--space-xl);
 }
@@ -1550,7 +1979,7 @@ a:hover {
   background: var(--color-primary);
   color: var(--color-on-primary);
   font-family: var(--font-heading);
-  font-size: var(--step-2); /* minimaal 24px vet: groot genoeg voor wit op oranje */
+  font-size: var(--step-2);
   font-weight: var(--font-weight-heading);
   line-height: 1;
 }
@@ -1580,7 +2009,7 @@ a:hover {
     top: calc(var(--space-l) + 1.75rem);
     left: calc(var(--space-l) + 3.5rem);
     right: calc(100% / var(--stappen, 4) - var(--space-l));
-    border-top: 2px dashed var(--color-accent);
+    border-top: 2px dashed var(--color-primary);
     pointer-events: none;
   }
 
@@ -1651,10 +2080,11 @@ a:hover {
   display: grid;
   gap: var(--space-m);
   padding: var(--space-xl) var(--space-l);
+  border: var(--border-width) solid var(--color-dark);
+  border-top: 8px solid var(--color-primary);
   border-radius: var(--radius-m);
   background: var(--color-surface);
-  box-shadow: var(--shadow-m);
-  border-top: 6px solid var(--color-primary);
+  box-shadow: 8px 8px 0 var(--color-dark);
 }
 
 .price-card > .pill {
@@ -1975,6 +2405,139 @@ a:hover {
   color: var(--color-link);
 }
 
+/* Team Sporty: per teamlid een GIF van een juichmoment, met getekende accenten (kroon, ster, hartje) */
+.team-lijst {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2xl) var(--space-l);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.team-lid {
+  text-align: center;
+}
+
+.team-lid__beeld {
+  max-width: 19rem;
+  margin: 0 auto var(--space-l);
+}
+
+.team-lid__beeld .frame__img {
+  border: 4px solid var(--color-dark);
+  box-shadow: 8px 8px 0 var(--color-primary);
+  rotate: -1.5deg;
+  transition: rotate var(--duration) var(--ease-out), translate var(--duration) var(--ease-out);
+}
+
+.team-lid:nth-child(even) .team-lid__beeld .frame__img {
+  rotate: 1.5deg;
+}
+
+.team-lid:hover .team-lid__beeld .frame__img {
+  rotate: 0deg;
+  translate: 0 -4px;
+}
+
+.team-lid h3 {
+  margin-bottom: var(--space-2xs);
+  font-size: var(--step-2);
+}
+
+.team-lid .pill {
+  margin-bottom: var(--space-s);
+}
+
+.team-lid__weetje {
+  max-width: 19rem;
+  margin: 0 auto;
+  padding: var(--space-s) var(--space-m);
+  border: var(--border-width) dashed var(--color-dark);
+  border-radius: var(--radius-m);
+  text-align: left;
+}
+
+.team-lid__weetje strong {
+  display: block;
+  color: var(--color-link);
+  font-size: var(--step--1);
+}
+
+.team-lid__kroon {
+  top: -2.4rem;
+  left: 50%;
+  margin-left: -2rem;
+  --maat: 4rem;
+  color: var(--color-primary);
+  rotate: -8deg;
+}
+
+.team-lid__ster,
+.team-lid__hart,
+.team-lid__straal {
+  top: -1.5rem;
+  right: -1rem;
+  --maat: 3rem;
+  color: var(--color-primary);
+  rotate: 12deg;
+}
+
+.team-lid__notitie {
+  left: 1rem;
+  bottom: 1rem;
+  --notitie-kleur: var(--color-on-dark);
+  rotate: -8deg;
+}
+
+.team-lid--henny .team-lid__notitie {
+  --notitie-kleur: var(--color-text);
+}
+
+.team-lid--henny .team-lid__straal {
+  color: var(--color-dark);
+}
+
+
+/* Klaar voor de GIF's: een filmpje dat in een lus speelt, met een knop om te pauzeren */
+.gif {
+  position: relative;
+}
+
+.gif video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gif__knop {
+  position: absolute;
+  right: var(--space-xs);
+  bottom: var(--space-xs);
+  min-height: 2.75rem;
+  padding: 0.4rem 0.9rem;
+  border: var(--border-width) solid var(--color-dark);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+@media (min-width: 48em) {
+  .team-lijst {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 72em) {
+  .team-lijst {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 /* ---------- 14. Veelgestelde vragen ---------- */
 
 .faq {
@@ -1992,15 +2555,16 @@ a:hover {
 }
 
 .faq details {
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-m);
   background: var(--color-surface);
-  box-shadow: var(--shadow-s);
-  transition: box-shadow var(--duration) var(--ease-out);
+  transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration) var(--ease-out);
 }
 
 .faq details:hover,
 .faq details[open] {
-  box-shadow: var(--shadow-m);
+  border-color: var(--color-dark);
+  box-shadow: 6px 6px 0 var(--color-primary);
 }
 
 .faq summary {
@@ -2475,15 +3039,17 @@ a:hover {
 .map {
   position: relative;
   overflow: hidden;
+  border: 4px solid var(--color-dark);
   border-radius: var(--radius-l);
-  box-shadow: var(--shadow-m);
+  box-shadow: 10px 10px 0 var(--color-primary);
   height: clamp(24rem, 40vw, 30rem);
   background: var(--color-surface-alt);
 }
 
 .map picture,
 .map img,
-.map iframe {
+.map iframe,
+.map__tekening {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -2519,8 +3085,38 @@ a:hover {
 }
 
 .map.is-loaded .map__overlay,
-.map.is-loaded picture {
+.map.is-loaded picture,
+.map.is-loaded .map__tekening {
   display: none;
+}
+
+/* Getekende kaart (in plaats van een foto) tot de echte kaart geladen is */
+.map__grond {
+  fill: var(--color-surface-alt);
+}
+
+.map__water {
+  fill: none;
+  stroke: var(--color-sand);
+  stroke-width: 22;
+}
+
+.map__straat {
+  fill: none;
+  stroke: var(--color-surface);
+  stroke-width: 9;
+}
+
+.map__speld path {
+  fill: var(--color-primary);
+  stroke: var(--color-dark);
+  stroke-width: 3;
+}
+
+.map__speld circle {
+  fill: var(--color-surface);
+  stroke: var(--color-dark);
+  stroke-width: 3;
 }
 
 @media (min-width: 48em) {
@@ -2535,18 +3131,19 @@ a:hover {
 /* ---------- 18. Afsluitend blok (CTA) ---------- */
 
 /*
- * Krachtig Sporty-oranje met een zacht verloop, het handgeschreven accent "Samen sporten, samen groeien"
- * en witte tekst. Wit op oranje is alleen groot genoeg vanaf 18,66px vet: alle tekst hier is daarom groot of vet.
- * Op de achtergrond twee subtiele ronde vormen, als een bal en de middencirkel van een veld.
+ * Oranje, net als het logo: "Let's Play!" in handschrift, een zwarte kop en tekst, een zwarte knop,
+ * en Henny die om de hoek kijkt. Op de achtergrond subtiele ronde vormen (bal, middencirkel).
  */
 .cta {
   position: relative;
   display: grid;
   gap: var(--space-xl);
-  padding: var(--space-xl) var(--space-l);
+  padding: var(--space-xl) var(--space-l) 0;
+  border: 4px solid var(--color-dark);
   border-radius: var(--radius-l);
-  background: linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 80%, var(--color-primary-deep)) 100%);
+  background: var(--color-primary);
   color: var(--color-on-primary);
+  box-shadow: 10px 10px 0 var(--color-dark);
   overflow: hidden;
   isolation: isolate;
 }
@@ -2558,16 +3155,15 @@ a:hover {
 
 .cta p {
   max-width: 34em;
-  font-size: clamp(1.1875rem, 1.12rem + 0.3vw, 1.375rem);
-  font-weight: var(--font-weight-strong);
 }
 
 .cta a:not(.btn) {
-  color: var(--color-on-primary);
+  color: var(--color-text);
+  text-decoration-color: var(--color-text);
 }
 
 .cta :focus-visible {
-  outline-color: var(--color-on-primary);
+  outline-color: var(--color-text);
 }
 
 .cta__slogan {
@@ -2575,7 +3171,10 @@ a:hover {
   flex-direction: column;
   align-items: flex-start;
   gap: 0.1em;
-  color: var(--color-on-primary);
+  color: var(--color-surface); /* handgeschreven en groot: wit op oranje mag hier */
+  font-size: clamp(2.25rem, 1.8rem + 2vw, 3.25rem);
+  rotate: -3deg;
+  transform-origin: left center;
 }
 
 .cta__slogan::after {
@@ -2589,40 +3188,29 @@ a:hover {
 
 .cta__extra {
   margin: var(--space-m) 0 0;
+  font-weight: var(--font-weight-strong);
 }
 
-/* Witte knop met oranje tekst, en een omlijnde witte knop */
-.cta .btn {
-  --btn-bg: var(--color-surface);
-  --btn-fg: var(--color-primary-deep);
-  --btn-bg-hover: var(--color-bg);
+.cta__tekst {
+  padding-bottom: var(--space-xl);
 }
 
-.cta .btn--secondary {
-  --btn-bg: transparent;
-  --btn-fg: var(--color-on-primary);
-  --btn-bg-hover: var(--color-on-primary);
-  --btn-border: rgb(255 255 255 / 0.8);
-}
-
-.cta .btn--secondary:hover {
-  color: var(--color-primary-deep);
-}
-
+/* Henny kijkt vanaf de onderkant om de hoek */
 .cta__media {
+  position: relative;
   justify-self: center;
-  width: min(100%, 20rem);
-  aspect-ratio: 1;
-  border: 8px solid var(--color-surface);
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: var(--shadow-l);
+  align-self: end;
+  width: min(100%, 17rem);
 }
 
-.cta__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.cta__media .henny {
+  --henny-breedte: 100%;
+  margin-bottom: -2.5rem;
+}
+
+.cta__media .tekstwolk {
+  right: 55%;
+  top: 0.5rem;
 }
 
 .cta::before,
@@ -2639,7 +3227,7 @@ a:hover {
   right: -7rem;
   width: 26rem;
   aspect-ratio: 1;
-  border: 2px solid rgb(255 255 255 / 0.22);
+  border: 3px solid rgb(255 255 255 / 0.35);
 }
 
 .cta::after {
@@ -2647,19 +3235,17 @@ a:hover {
   bottom: -3rem;
   width: 9rem;
   aspect-ratio: 1;
-  background: rgb(255 255 255 / 0.1);
+  background: rgb(255 255 255 / 0.14);
 }
 
 @media (min-width: 64em) {
   .cta {
     grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.6fr);
-    align-items: center;
-    padding: var(--space-2xl) var(--space-2xl);
+    padding: var(--space-2xl) var(--space-2xl) 0;
   }
 
-  .cta__media {
-    width: 100%;
-    max-width: 19rem;
+  .cta__tekst {
+    padding-bottom: var(--space-2xl);
   }
 }
 
@@ -2720,6 +3306,14 @@ a:hover {
   font-size: var(--step-1);
   font-weight: 700;
   letter-spacing: -0.01em;
+}
+
+.footer-slogan {
+  margin: var(--space-m) 0 0;
+  color: var(--color-primary);
+  font-size: 2rem;
+  rotate: -3deg;
+  transform-origin: left center;
 }
 
 /* Sport · Plezier · Ontwikkeling, met witte iconen in oranje rondjes */
@@ -2931,7 +3525,7 @@ a:hover {
  * Alleen op de homepage, één keer per bezoek en niet bij "minder beweging": het script in de <head>
  * van index.html zet dan de klasse met-intro. Een toets, klik, tik of scroll slaat de intro over.
  * Tijdlijn: de kinderen rennen vanaf de rand van het scherm naar het midden 0,05–1,25 s · armen om elkaar
- * 1,2 s · de ring sluit zich om ze heen 1,42–1,84 s · BSO, woordmerk en lachje 1,62–2,27 s ·
+ * 1,2 s · de ring sluit zich om ze heen 1,42–1,84 s · de animatie vloeit over in het officiële logo 1,84–2,22 s ·
  * sprongetje 2,22 s · de intro verdwijnt 2,8–3,2 s.
  */
 .met-intro .intro[hidden] {
@@ -3062,16 +3656,33 @@ a:hover {
   animation: intro-ring 420ms cubic-bezier(0.55, 0, 0.3, 1) 1.42s both;
 }
 
-.intro__laag--bso {
-  animation: intro-plop 340ms var(--ease-bounce) 1.62s both;
+/* De nagetekende kinderen vloeien over in het officiële ronde logo (assets/img/sporty-logo.svg) */
+.intro__lagen {
+  position: absolute;
+  inset: 0;
+  animation: intro-uit 320ms ease-in 1.9s both;
 }
 
-.intro__laag--woord {
-  animation: intro-woord 400ms var(--ease-bounce) 1.72s both;
+.intro__officieel {
+  position: absolute;
+  height: auto;
+  animation: intro-officieel 380ms var(--ease-out) 1.84s both;
 }
 
-.intro__laag--lach {
-  animation: intro-lach 300ms var(--ease-out) 1.97s both;
+@keyframes intro-uit {
+  to { opacity: 0; }
+}
+
+@keyframes intro-officieel {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Terwijl de intro verdwijnt, schuift de tekst in de hero omhoog */
@@ -3200,35 +3811,6 @@ a:hover {
   from {
     opacity: 0;
     transform: scaleX(0.2);
-  }
-
-  to {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
-@keyframes intro-plop {
-  from { transform: scale(0); }
-  to { transform: scale(1); }
-}
-
-@keyframes intro-woord {
-  from {
-    opacity: 0;
-    transform: translateY(calc(16 * var(--e))) scale(0.6);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes intro-lach {
-  from {
-    opacity: 0;
-    transform: scaleX(0);
   }
 
   to {
