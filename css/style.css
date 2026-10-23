@@ -1196,6 +1196,11 @@ a:hover {
   display: none;
 }
 
+/* Op een lichtgrijs vlak (Engelse homepage): het donkerder oranje, voor genoeg contrast */
+.quiz-sectie.section--alt .quiz-sectie__notitie {
+  color: var(--color-primary-deep);
+}
+
 .quiz-kaart {
   --voortgang: 0;
   position: relative;

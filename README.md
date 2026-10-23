@@ -1,6 +1,6 @@
 # Website Sporty
 
-Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutaire naam: Je Dag in Beeld). Gebouwd volgens de bouwinstructies in [`CLAUDE.md`](CLAUDE.md).
+Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutaire naam: Sporty; tot 23 oktober 2026: Je Dag in Beeld). Gebouwd volgens de bouwinstructies in [`CLAUDE.md`](CLAUDE.md).
 
 - Gewone HTML, CSS en een klein beetje JavaScript. Geen framework en geen build-stap.
 - Huisstijl volgens de briefing "Look & Feel" van 22 oktober 2026 (en eerder het moodboard en de designprompt): oranje, wit en zwart, de officiële logo's (woordmerk "Sporty" en het ronde logo), de slogan "Let's Play", koppen in Poppins ExtraBold, tekst in DM Sans en de kernwaarden Sport · Plezier · Ontwikkeling. Voelt als een club waar je bij wilt horen: sportief, vrolijk en met humor ("Na school nog energie voor tien? Die raken we samen wel kwijt."), maar netjes en betrouwbaar voor ouders.
@@ -53,7 +53,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `design/tokens.css` | Design tokens: kleuren, letters, ruimte, vormen en beweging. Ook de `@font-face`-regels. |
 | `css/style.css` | Alle opmaak, mobile-first |
 | `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole van het contact- en sollicitatieformulier (ook soort en grootte van het cv) |
-| `js/quiz.js` | De Sporty-quiz op de homepage ("Past jouw kind bij Sporty?"). De vragen, Henny's reacties en de uitslagen staan in `index.html` (sectie `#quiz`) en zijn daar aan te passen; elk antwoord hoort bij een van vier types (Stuiterbal, Teamcaptain, Spelbedenker, Chillkampioen). De laatste vraag is de leeftijd (5 t/m 13 jaar). Er wordt niets opgeslagen of verstuurd. |
+| `js/quiz.js` | De Sporty-quiz op de homepage ("Past jouw kind bij Sporty?", in het Engels "Is your child a Sporty kid?"). De vragen, Henny's reacties, de knopteksten en de uitslagen staan per taal in `index.html` en `en/index.html` (sectie `#quiz`) en zijn daar aan te passen; elk antwoord hoort bij een van vier types (Stuiterbal, Teamcaptain, Spelbedenker, Chillkampioen). De laatste vraag is de leeftijd (5 t/m 13 jaar). Er wordt niets opgeslagen of verstuurd. |
 | `js/rekentool/` | Rekentool kinderopvangtoeslag op de prijzenpagina: officiële bedragen per jaar (`toeslag-2026.js`), de tarieven van Sporty (`instellingen.js`), de berekening (`berekening.js`) en het formulier (`rekentool.js`). Zie [Rekentool](#rekentool-kinderopvangtoeslag). |
 | `tests/` | Automatische tests (`npm test`): de rekentool, met de tabel uit de brochure van Dienst Toeslagen als tweede bron, de SEO-basis van alle pagina's en de quiz op de homepage |
 | `assets/fonts/` | Poppins en Caveat Brush (alleen hoofdletters), lokaal gehost, OFL-licentie |

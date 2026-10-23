@@ -438,6 +438,9 @@ function migreer(PDO $pdo): void
 
         // Nieuw e-mailadres: info@vckbso.nl wordt info@sporty.nl (alleen als het adres nog niet zelf was aangepast)
         6 => "UPDATE instellingen SET waarde = 'info@sporty.nl' WHERE sleutel = 'email' AND waarde = 'info@vckbso.nl';",
+
+        // Statutaire naam: Je Dag in Beeld wordt Sporty (23 oktober 2026; alleen als de naam nog niet zelf was aangepast)
+        7 => "UPDATE instellingen SET waarde = 'Sporty' WHERE sleutel = 'statutaire_naam' AND waarde = 'Je Dag in Beeld';",
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

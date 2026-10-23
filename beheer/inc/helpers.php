@@ -256,6 +256,14 @@ function instelling_zet(string $sleutel, string $waarde): void
     instelling('__reset');
 }
 
+/** Wie de incasso doet: de statutaire naam, met de bedrijfsnaam erachter als die anders is. */
+function incassant(): string
+{
+    $statutair = instelling('statutaire_naam', 'Sporty');
+    $naam = instelling('bedrijfsnaam', 'Sporty');
+    return $statutair === $naam || $naam === '' ? $statutair : $statutair . ' (' . $naam . ')';
+}
+
 /* ---------- Logboek ---------- */
 
 const LOG_SOORTEN = [

@@ -63,7 +63,7 @@
 <script src="js/main.js" defer></script>
 <script src="js/quiz.js" defer></script>
 <!-- TODO: straat en postcode toevoegen aan de schema.org-gegevens in tools/structured-data.mjs zodra het adres bekend is (daarna npm run seo) -->
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ChildCare","@id":"https://bsovck.nl/#sporty","name":"Sporty","alternateName":"BSO Sporty","legalName":"Je Dag in Beeld","description":"Sportieve buitenschoolse opvang (BSO) in Amsterdam met oprechte aandacht voor ieder kind en volop sport en beweging.","url":"https://bsovck.nl/","image":"https://bsovck.nl/assets/img/og-image.jpg","logo":"https://bsovck.nl/assets/img/sporty-logo-512.png","telephone":"+31612345678","email":"info@sporty.nl","address":{"@type":"PostalAddress","addressLocality":"Amsterdam","addressCountry":"NL"},"areaServed":{"@type":"City","name":"Amsterdam"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"17:00"}]},{"@type":"WebSite","@id":"https://bsovck.nl/#website","url":"https://bsovck.nl/","name":"Sporty","alternateName":"BSO Sporty","inLanguage":"nl-NL","publisher":{"@id":"https://bsovck.nl/#sporty"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ChildCare","@id":"https://bsovck.nl/#sporty","name":"Sporty","alternateName":"BSO Sporty","legalName":"Sporty","description":"Sportieve buitenschoolse opvang (BSO) in Amsterdam met oprechte aandacht voor ieder kind en volop sport en beweging.","url":"https://bsovck.nl/","image":"https://bsovck.nl/assets/img/og-image.jpg","logo":"https://bsovck.nl/assets/img/sporty-logo-512.png","telephone":"+31612345678","email":"info@sporty.nl","address":{"@type":"PostalAddress","addressLocality":"Amsterdam","addressCountry":"NL"},"areaServed":{"@type":"City","name":"Amsterdam"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"17:00"}]},{"@type":"WebSite","@id":"https://bsovck.nl/#website","url":"https://bsovck.nl/","name":"Sporty","alternateName":"BSO Sporty","inLanguage":"nl-NL","publisher":{"@id":"https://bsovck.nl/#sporty"}}]}</script>
 </head>
 <body>
 <!-- intro: gemaakt met npm run logo -->
@@ -382,7 +382,7 @@
         <p class="quiz__fout" id="quiz-fout" role="alert" data-quiz-fout hidden>Kies eerst een antwoord. Gokken mag ook!</p>
 
         <div class="quiz__knoppen">
-          <button class="btn" type="submit" data-quiz-verder><span>Volgende vraag</span><svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></button>
+          <button class="btn" type="submit" data-quiz-verder data-laatste="Bekijk de uitslag"><span>Volgende vraag</span><svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></button>
           <button class="link-button" type="button" data-quiz-terug hidden>Vorige vraag</button>
         </div>
       </form>
@@ -416,12 +416,11 @@
             <a class="link-arrow" href="diensten.html">Bekijk ons programma<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
           </div>
         </div>
-        <!-- TODO: kunnen ouders een kind van 4 alvast aanmelden? Zet dan hier de knop "Meld je kind aan". -->
         <div class="quiz__conclusie" data-leeftijd="jong" hidden>
-          <p><strong>Nog even geduld, kleine topper!</strong> Sporty is er voor kinderen van 5 t/m 13 jaar. Nog even oefenen met veters strikken dus. Zodra je kind 5 is, staan we te juichen langs de lijn!</p>
+          <p><strong>Nog even geduld, kleine topper!</strong> Sporty is er voor kinderen van 5 t/m 13 jaar. Nog even oefenen met veters strikken dus. Je kunt je kind wel alvast aanmelden, dan staan we te juichen langs de lijn zodra het 5 is!</p>
           <div class="btn-group">
-            <a class="btn" href="contact.html">Stel ons je vraag<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
-            <a class="link-arrow" href="diensten.html">Bekijk ons programma<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+            <a class="btn" href="aanmelden.html">Meld je kind alvast aan<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+            <a class="link-arrow" href="contact.html">Stel ons je vraag<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
           </div>
         </div>
         <div class="quiz__conclusie" data-leeftijd="oud" hidden>

@@ -27,7 +27,7 @@ export const BSO = {
   "@id": `${SITE}/#sporty`,
   name: "Sporty",
   alternateName: "BSO Sporty",
-  legalName: "Je Dag in Beeld",
+  legalName: "Sporty",
   description: "Sportieve buitenschoolse opvang (BSO) in Amsterdam met oprechte aandacht voor ieder kind en volop sport en beweging.",
   url: `${SITE}/`,
   image: `${SITE}/assets/img/og-image.jpg`,

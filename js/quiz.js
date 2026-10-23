@@ -1,7 +1,8 @@
 /*
  * Sporty-quiz op de homepage: past jouw kind bij Sporty?
  *
- * De vragen, antwoorden en uitslagen staan in index.html (sectie #quiz). Elk antwoord hoort
+ * De vragen, antwoorden en uitslagen staan in index.html en en/index.html (sectie #quiz), dus ook alle
+ * teksten per taal; het script zelf bevat geen tekst. Elk antwoord hoort
  * bij een type (value); het type dat het vaakst gekozen is, is de uitslag. De laatste vraag
  * (leeftijd) bepaalt welke conclusie eronder staat. Er wordt niets opgeslagen of verstuurd.
  *
@@ -34,7 +35,10 @@
 
   var kaart = quiz.parentNode;
   var vragen = [].slice.call(quiz.querySelectorAll("[data-vraag]"));
-  var verder = quiz.querySelector("[data-quiz-verder] span");
+  var verderKnop = quiz.querySelector("[data-quiz-verder]");
+  var verder = verderKnop.querySelector("span");
+  var verderTekst = verder.textContent;
+  var laatsteTekst = verderKnop.getAttribute("data-laatste") || verderTekst;
   var terug = quiz.querySelector("[data-quiz-terug]");
   var fout = quiz.querySelector("[data-quiz-fout]");
   var reactie = kaart.querySelector("[data-quiz-reactie]");
@@ -64,7 +68,7 @@
       vraag.hidden = i !== index;
     });
     terug.hidden = index === 0;
-    verder.textContent = index === vragen.length - 1 ? "Bekijk de uitslag" : "Volgende vraag";
+    verder.textContent = index === vragen.length - 1 ? laatsteTekst : verderTekst;
     fout.hidden = true;
     kaart.style.setProperty("--voortgang", String(index / vragen.length));
     if (metFocus) focusOp(vragen[index]);

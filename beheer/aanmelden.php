@@ -330,7 +330,7 @@ pagina_begin('Kind aanmelden', '', ['publiek' => true]);
         <div class="field">
           <div class="consent">
             <input id="incasso" name="incasso" type="checkbox" value="1" required<?= !empty($_POST['incasso']) ? ' checked' : '' ?><?= aria_fout($fouten, 'incasso') ?>>
-            <label for="incasso">Ik geef na het aanmelden een machtiging aan <?= e(instelling('statutaire_naam', 'Je Dag in Beeld')) ?> (Sporty) om de facturen voor de opvang automatisch af te schrijven. *</label>
+            <label for="incasso">Ik geef na het aanmelden een machtiging aan <?= e(incassant()) ?> om de facturen voor de opvang automatisch af te schrijven. *</label>
           </div>
           <?= veldfout($fouten, 'incasso') ?>
         </div>

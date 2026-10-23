@@ -59,7 +59,7 @@
     <section class="panel" aria-labelledby="gegevens-titel">
       <h2 id="gegevens-titel">Gegevens</h2>
       <dl class="gegevens">
-        <dt>Geboortedatum</dt><dd>12 september 2017</dd>
+        <dt>Geboortedatum</dt><dd>13 september 2017</dd>
         <dt>School</dt><dd>-</dd>
         <dt>Bijzonderheden</dt><dd>Geen</dd>
         <dt>Mag opgehaald worden door</dt><dd>Alleen de ouders</dd>
@@ -75,7 +75,7 @@
             <div class="field"><label for="achternaam">Achternaam</label><input id="achternaam" name="achternaam" value="de Jong"></div>
           </div>
           <div class="form__row">
-            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2017-09-12"></div>
+            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2017-09-13"></div>
             <div class="field"><label for="groep">Groep</label><select id="groep" name="groep"><option value="">Nog geen groep</option><option value="1">De Bengels</option><option value="2" selected>De Kanjers</option></select></div>
           </div>
           <div class="field"><label for="school">Basisschool</label><input id="school" name="school" value=""></div>
@@ -96,7 +96,7 @@
             <div class="kindrij__naam">Sam de Jong <span class="badge">Ouder</span> <span class="badge">Contracthouder</span>              <span class="badge badge--geldig">Gezag gecontroleerd</span></div>
             <div class="kindrij__info">
               <span>Rechten: dagen kiezen en afmelden, gegevens en gedeelde observaties inzien, foto&#039;s ontvangen, berichten over het kind</span>
-<span>Vastgelegd op 22 oktober 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
+<span>Vastgelegd op 23 oktober 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
           </div>
           <details class="uitklap">
             <summary>Gezag en rechten van Sam de Jong</summary>
@@ -167,7 +167,7 @@
         <form class="form" method="post" action="#">
           <input type="hidden" name="csrf" value="voorbeeld">          <input type="hidden" name="actie" value="observatie">
           <div class="form__row">
-            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-10-22" required value="2026-10-22"></div>
+            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-10-23" required value="2026-10-23"></div>
             <div class="field"><label for="obs_gebied">Ontwikkelgebied</label><select id="obs_gebied" name="gebied">
               <option value="sociaal">Sociaal-emotioneel</option>
               <option value="motoriek">Sport en bewegen</option>
@@ -186,7 +186,7 @@
         <li class="gebied-motoriek">
           <div class="tijdlijn__meta">
             <strong>Sport en bewegen</strong>
-            <span>5 oktober 2026</span>
+            <span>10 oktober 2026</span>
             <span>Demo Begeleider</span>
             <span class="badge badge--bevestigd" style="text-decoration: none">Gedeeld met ouders</span>
           </div>
@@ -204,12 +204,12 @@
     <section class="panel" aria-labelledby="komend-titel">
       <h2 id="komend-titel">Binnenkort</h2>
       <ul class="kindlijst">
-        <li class="kindrij"><span>Donderdag 22 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Dinsdag 27 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Donderdag 29 oktober</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Dinsdag 3 november</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Donderdag 5 november</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Dinsdag 10 november</span><span class="badge badge--bevestigd">Komt</span></li>
+        <li class="kindrij"><span>Donderdag 12 november</span><span class="badge badge--bevestigd">Komt</span></li>
       </ul>
     </section>
     <section class="panel" aria-labelledby="geweest-titel">
@@ -218,6 +218,7 @@
         <table>
           <thead><tr><th scope="col">Dag</th><th scope="col">Status</th><th scope="col">Binnen</th><th scope="col">Opgehaald</th></tr></thead>
           <tbody>
+            <tr><td>do 22 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>di 20 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>do 15 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>di 13 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
@@ -227,14 +228,13 @@
             <tr><td>di 29 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>do 24 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>di 22 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
-            <tr><td>do 17 sep</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
           </tbody>
         </table>
       </div>
     </section>
     <section class="panel" aria-labelledby="fotos-titel">
       <div class="panel__kop"><h2 id="fotos-titel">Foto's</h2><a href="beheerder-fotos.html">Foto's delen</a></div>
-      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=4&amp;weergave=1"><img src="fotos/foto-4-klein.jpg" alt="Balspelletje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Balspelletje</p><p class="muted">vandaag 19:39 · Finn</p></div></li><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=1&amp;weergave=1"><img src="fotos/foto-1-klein.jpg" alt="Voetballen op het veldje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Voetballen op het veldje</p><p class="muted">vandaag 19:39 · Finn</p></div></li></ul>
+      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=4&amp;weergave=1"><img src="fotos/foto-4-klein.jpg" alt="Balspelletje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Balspelletje</p><p class="muted">vandaag 19:08 · Finn</p></div></li><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=1&amp;weergave=1"><img src="fotos/foto-1-klein.jpg" alt="Voetballen op het veldje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Voetballen op het veldje</p><p class="muted">vandaag 19:08 · Finn</p></div></li></ul>
     </section>
   </div>
 </div>

@@ -164,7 +164,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 - Welke drie dingen wil je uitlichten?
 - Wat wil je dat de bezoeker daarna doet?
 
-**Quiz (23 oktober 2026):** de klant wil op een strategisch slimme plek op de homepage een quiz met grappige vragen: past jouw kind bij Sporty? De quiz staat tussen "Team Sporty" en "In drie stappen erbij": als ouders weten wat Sporty is, en vlak voordat ze lezen hoe aanmelden werkt. In de hero staat een link ernaartoe. Zes vragen (vijf grappige en de leeftijd), Henny reageert op elk antwoord, en de uitslag is een type (Stuiterbal, Teamcaptain, Spelbedenker of Chillkampioen) met de knop "Meld je kind aan". Eerlijk blijven: kinderen jonger dan 5 of ouder dan 13 krijgen een eerlijke uitslag in plaats van een aanmeldknop voor zichzelf.
+**Quiz (23 oktober 2026):** de klant wil op een strategisch slimme plek op de homepage een quiz met grappige vragen: past jouw kind bij Sporty? De quiz staat tussen "Team Sporty" en "In drie stappen erbij": als ouders weten wat Sporty is, en vlak voordat ze lezen hoe aanmelden werkt. In de hero staat een link ernaartoe. Zes vragen (vijf grappige en de leeftijd), Henny reageert op elk antwoord, en de uitslag is een type (Stuiterbal, Teamcaptain, Spelbedenker of Chillkampioen) met de knop "Meld je kind aan". Eerlijk blijven: kinderen jonger dan 5 of ouder dan 13 krijgen een eerlijke uitslag. Een kind van 4 mag alvast worden aangemeld (bevestigd door de klant op 23 oktober 2026); bij 14 jaar of ouder staat er geen aanmeldknop voor het kind zelf. Na akkoord van de klant (23 oktober 2026) staat dezelfde quiz in het Engels op `en/index.html`, tussen "Still enough energy for ten?" en "Visit us".
 
 ### Over ons (`over-ons`)
 
@@ -250,7 +250,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 
 ## Gegevens op de website
 
-- Bedrijfsnaam: Sporty (statutair: Je Dag in Beeld; tot 30 september 2026: BSO VCK)
+- Bedrijfsnaam: Sporty, ook statutair (bevestigd door de klant op 23 oktober 2026; eerder statutair: Je Dag in Beeld; tot 30 september 2026: BSO VCK)
 - E-mail: info@sporty.nl (als `mailto:`-link; gewijzigd op 6 oktober 2026, eerder info@vckbso.nl)
 - Telefoon: 0612345678 (als `tel:`-link)
 
