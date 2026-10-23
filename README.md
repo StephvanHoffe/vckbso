@@ -53,8 +53,9 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `design/tokens.css` | Design tokens: kleuren, letters, ruimte, vormen en beweging. Ook de `@font-face`-regels. |
 | `css/style.css` | Alle opmaak, mobile-first |
 | `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole van het contact- en sollicitatieformulier (ook soort en grootte van het cv) |
+| `js/quiz.js` | De Sporty-quiz op de homepage ("Past jouw kind bij Sporty?"). De vragen, Henny's reacties en de uitslagen staan in `index.html` (sectie `#quiz`) en zijn daar aan te passen; elk antwoord hoort bij een van vier types (Stuiterbal, Teamcaptain, Spelbedenker, Chillkampioen). De laatste vraag is de leeftijd (5 t/m 13 jaar). Er wordt niets opgeslagen of verstuurd. |
 | `js/rekentool/` | Rekentool kinderopvangtoeslag op de prijzenpagina: officiële bedragen per jaar (`toeslag-2026.js`), de tarieven van Sporty (`instellingen.js`), de berekening (`berekening.js`) en het formulier (`rekentool.js`). Zie [Rekentool](#rekentool-kinderopvangtoeslag). |
-| `tests/` | Automatische tests (`npm test`): de rekentool, met de tabel uit de brochure van Dienst Toeslagen als tweede bron, en de SEO-basis van alle pagina's |
+| `tests/` | Automatische tests (`npm test`): de rekentool, met de tabel uit de brochure van Dienst Toeslagen als tweede bron, de SEO-basis van alle pagina's en de quiz op de homepage |
 | `assets/fonts/` | Poppins en Caveat Brush (alleen hoofdletters), lokaal gehost, OFL-licentie |
 | `design/moodboard-sporty.jpg` | Het moodboard van de klant (eerste huisstijl, 8 oktober 2026) |
 | `design/logo/`, `design/henny/` | De logo's en Henny zoals de klant ze op 22 oktober 2026 aanleverde (originelen in PNG/JPG) |

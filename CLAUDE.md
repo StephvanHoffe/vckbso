@@ -164,6 +164,8 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 - Welke drie dingen wil je uitlichten?
 - Wat wil je dat de bezoeker daarna doet?
 
+**Quiz (23 oktober 2026):** de klant wil op een strategisch slimme plek op de homepage een quiz met grappige vragen: past jouw kind bij Sporty? De quiz staat tussen "Team Sporty" en "In drie stappen erbij": als ouders weten wat Sporty is, en vlak voordat ze lezen hoe aanmelden werkt. In de hero staat een link ernaartoe. Zes vragen (vijf grappige en de leeftijd), Henny reageert op elk antwoord, en de uitslag is een type (Stuiterbal, Teamcaptain, Spelbedenker of Chillkampioen) met de knop "Meld je kind aan". Eerlijk blijven: kinderen jonger dan 5 of ouder dan 13 krijgen een eerlijke uitslag in plaats van een aanmeldknop voor zichzelf.
+
 ### Over ons (`over-ons`)
 
 Opbouw (voorstel):
