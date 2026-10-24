@@ -22,6 +22,7 @@ const ONDERDELEN = [
     'facturen' => ['facturen.php', 'Facturen', 'euro', 'Facturen maken en incasso starten'],
     'financien' => ['financien.php', 'Financiën', 'chart', 'Inkomsten, uitgaven en bonnetjes'],
     'team' => ['medewerkers.php', 'Team', 'key', "Collega's uitnodigen en rechten geven"],
+    'sollicitaties' => ['sollicitaties.php', 'Sollicitaties', 'briefcase', "Open sollicitaties en cv's van de website"],
     'verzoeken' => ['verzoeken.php', 'Privacyverzoeken', 'shield', 'Privacyverzoeken van ouders afhandelen'],
     'instellingen' => ['instellingen.php', 'Instellingen', 'gear', 'Instellingen, logboek en beveiligingsstatus'],
 ];

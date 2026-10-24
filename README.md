@@ -44,7 +44,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | Pad | Inhoud |
 |---|---|
 | `index.html`, `over-ons.html`, `diensten.html`, `prijzen.html`, `team.html`, `veelgestelde-vragen.html`, `contact.html` | De pagina's uit de sitemap |
-| `werken-bij.html` | Werken bij Sporty: geen vacatures op dit moment, wel een open sollicitatie met cv. Bereikbaar via de knop "Werken bij" in de header van de teampagina en via de footer. Het formulier gaat naar dezelfde formulierendienst als contact (TODO: endpoint met bijlagen). |
+| `werken-bij.html` | Werken bij Sporty: geen vacatures op dit moment, wel een open sollicitatie met cv. Bereikbaar via de knop "Werken bij" in de header van de teampagina en via de footer. Het formulier gaat naar de eigen beheeromgeving (`beheer/solliciteren.php`): gratis, het cv wordt versleuteld bewaard en het team ziet alles in de beheeromgeving bij Sollicitaties. Zonder beheeromgeving (zoals op Vercel) opent het e-mailprogramma. |
 | `aanmelden.html` | Uitleg over aanmelden, met de knop naar het aanmeldproces in Mijn BSO (`beheer/aanmelden.php`). Bereikbaar via de knop "Aanmelden" in de header. |
 | `beheer/` | Beheeromgeving voor het team en Mijn BSO voor ouders (PHP 8.2+, SQLite). Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md). |
 | `beheer/cli/` | Dagelijks onderhoud (bewaartermijnen), versleutelde back-up en herstel, via cron of de opdrachtregel |

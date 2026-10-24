@@ -57,7 +57,7 @@ for (let poging = 0; ; poging++) {
 
 // ---------- Rollen en sessies ----------
 const ROLLEN = {
-  beheerder: { id: 1, seeds: ["index.php", "agenda.php", `agenda.php?dag=${VANDAAG}`, "kinderen.php", "ouders.php", "berichten.php", "fotos.php", "groepen.php", "facturen.php", "financien.php", "medewerkers.php", "verzoeken.php", "instellingen.php", "beveiliging.php", "logboek.php", "profiel.php", "tweestaps.php"] },
+  beheerder: { id: 1, seeds: ["index.php", "agenda.php", `agenda.php?dag=${VANDAAG}`, "kinderen.php", "ouders.php", "berichten.php", "fotos.php", "groepen.php", "facturen.php", "financien.php", "medewerkers.php", "sollicitaties.php", "verzoeken.php", "instellingen.php", "beveiliging.php", "logboek.php", "profiel.php", "tweestaps.php"] },
   begeleider: { id: 2, seeds: ["index.php", "agenda.php", `agenda.php?dag=${VANDAAG}`, "kinderen.php", "ouders.php", "berichten.php", "fotos.php", "profiel.php"] },
   ouder: { id: 3, seeds: ["index.php", "agenda.php", "berichten.php", "fotos.php", "kinderen.php", "facturen.php", "privacy.php", "profiel.php", "tweestaps.php"] },
 };
@@ -70,9 +70,9 @@ for (const [rol, r] of Object.entries(ROLLEN)) {
 }
 
 // Niet in de momentopname: acties, downloads, exports
-const OVERSLAAN = /^(uitloggen|export|agenda-actie|mollie-webhook|machtiging|installeren|inloggen-code|wachtwoord-instellen|foto)\.php|csv=|export=|download=|bijlage=|bewerk=/;
+const OVERSLAAN = /^(uitloggen|export|agenda-actie|mollie-webhook|machtiging|installeren|inloggen-code|wachtwoord-instellen|foto|solliciteren)\.php|csv=|export=|download=|bijlage=|bewerk=|cv=/;
 // Detailpagina's die ook twee klikken diep worden meegenomen
-const DETAIL = /^((kind|ouder|factuur|verzoeken)\.php\?id=\d+|berichten\.php\?ouder=\d+|logboek\.php\?onderwerp=[a-z]+%3A\d+)$/;
+const DETAIL = /^((kind|ouder|factuur|verzoeken|sollicitaties)\.php\?id=\d+|berichten\.php\?ouder=\d+|logboek\.php\?onderwerp=[a-z]+%3A\d+)$/;
 // Deze week en deze maand zijn gelijk aan de standaardweergave van de agenda
 const maandag = new Date(VANDAAG); maandag.setDate(maandag.getDate() - ((maandag.getDay() + 6) % 7));
 const ALIASSEN = { [`agenda.php?week=${maandag.toISOString().slice(0, 10)}`]: "agenda.php", [`agenda.php?maand=${VANDAAG.slice(0, 7)}`]: "agenda.php" };

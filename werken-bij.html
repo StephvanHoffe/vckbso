@@ -142,12 +142,12 @@
       <h2 id="sollicitatie-titel">Vertel ons wie <span class="hl">je bent!</span></h2>
       <p>Vul het formulier in en stuur je cv mee. We lezen alles en nemen zo snel mogelijk contact met je op.</p>
       <!--
-        TODO: een formulierendienst instellen die ook bijlagen (het cv) kan ontvangen, bijvoorbeeld Formspree (met bijlagen) of Basin,
-        en de endpoint-URL hieronder in action invullen. Sollicitaties gaan naar info@sporty.nl.
-        Zolang er geen endpoint is, opent het formulier het e-mailprogramma van de bezoeker; het cv voeg je dan zelf als bijlage toe.
+        Sollicitaties komen binnen in de eigen beheeromgeving (beheer/solliciteren.php, gratis en zonder externe dienst):
+        het cv wordt versleuteld bewaard en het team ziet alles in de beheeromgeving bij Sollicitaties.
+        Draait de beheeromgeving niet (zoals op de statische voorbeeldsite), dan opent het formulier het
+        e-mailprogramma van de bezoeker (data-mailto-fallback); het cv voeg je dan zelf als bijlage toe.
       -->
-      <form class="form" action="https://formspree.io/f/TODO-sollicitatie-id" method="post" enctype="multipart/form-data" data-form data-mailto="info@sporty.nl" data-subject="Open sollicitatie via de website" data-success="Joepie, je sollicitatie is binnen! We nemen zo snel mogelijk contact met je op." data-mailto-success="Je e-mailprogramma wordt geopend met je sollicitatie erin. Voeg je cv toe als bijlage en verstuur de mail, dan komt hij bij ons binnen!">
-        <input type="hidden" name="_subject" value="Open sollicitatie via de website van Sporty">
+      <form class="form" action="beheer/solliciteren.php" method="post" enctype="multipart/form-data" data-form data-mailto-fallback data-mailto="info@sporty.nl" data-subject="Open sollicitatie via de website" data-success="Joepie, je sollicitatie is binnen! Je krijgt een bevestiging per mail, en we nemen zo snel mogelijk contact met je op." data-mailto-success="Je e-mailprogramma wordt geopend met je sollicitatie erin. Voeg je cv toe als bijlage en verstuur de mail, dan komt hij bij ons binnen!">
         <div class="form__row">
           <div class="field">
             <label for="naam">Naam *</label>
@@ -184,11 +184,11 @@
         <fieldset class="field" data-choice-group>
           <legend class="legend-label">Op welke dagen zou je kunnen werken? <span class="field__hint">(optioneel)</span></legend>
           <div class="choices">
-            <label class="choice"><input type="checkbox" name="dagen" value="maandag">Maandag</label>
-            <label class="choice"><input type="checkbox" name="dagen" value="dinsdag">Dinsdag</label>
-            <label class="choice"><input type="checkbox" name="dagen" value="woensdag">Woensdag</label>
-            <label class="choice"><input type="checkbox" name="dagen" value="donderdag">Donderdag</label>
-            <label class="choice"><input type="checkbox" name="dagen" value="vrijdag">Vrijdag</label>
+            <label class="choice"><input type="checkbox" name="dagen[]" value="maandag">Maandag</label>
+            <label class="choice"><input type="checkbox" name="dagen[]" value="dinsdag">Dinsdag</label>
+            <label class="choice"><input type="checkbox" name="dagen[]" value="woensdag">Woensdag</label>
+            <label class="choice"><input type="checkbox" name="dagen[]" value="donderdag">Donderdag</label>
+            <label class="choice"><input type="checkbox" name="dagen[]" value="vrijdag">Vrijdag</label>
           </div>
         </fieldset>
         <div class="field">

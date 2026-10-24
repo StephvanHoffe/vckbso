@@ -441,6 +441,33 @@ function migreer(PDO $pdo): void
 
         // Statutaire naam: Je Dag in Beeld wordt Sporty (23 oktober 2026; alleen als de naam nog niet zelf was aangepast)
         7 => "UPDATE instellingen SET waarde = 'Sporty' WHERE sleutel = 'statutaire_naam' AND waarde = 'Je Dag in Beeld';",
+
+        // Open sollicitaties via de website (24 oktober 2026). Beheerders krijgen het nieuwe menuonderdeel meteen.
+        8 => <<<'SQL'
+            CREATE TABLE sollicitaties (
+                id INTEGER PRIMARY KEY,
+                status TEXT NOT NULL DEFAULT 'nieuw' CHECK (status IN ('nieuw', 'gesprek', 'afgewezen', 'aangenomen')),
+                naam TEXT NOT NULL,
+                email TEXT NOT NULL,
+                telefoon TEXT NOT NULL DEFAULT '',
+                woonplaats TEXT NOT NULL DEFAULT '',
+                functie TEXT NOT NULL DEFAULT '',
+                dagen TEXT NOT NULL DEFAULT '',
+                motivatie TEXT NOT NULL DEFAULT '',
+                link TEXT NOT NULL DEFAULT '',
+                notitie TEXT NOT NULL DEFAULT '',
+                cv_bestand TEXT,
+                cv_naam TEXT,
+                cv_type TEXT,
+                cv_grootte INTEGER,
+                bewaren INTEGER NOT NULL DEFAULT 0,
+                aangemaakt_op TEXT NOT NULL,
+                afgerond_op TEXT,
+                verwijderen_op TEXT NOT NULL
+            );
+            CREATE INDEX sollicitaties_verwijderen ON sollicitaties(verwijderen_op);
+            INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) SELECT id, 'sollicitaties' FROM gebruikers WHERE rol = 'beheerder';
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

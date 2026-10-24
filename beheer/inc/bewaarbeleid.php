@@ -94,10 +94,17 @@ function voer_bewaarbeleid_uit(): array
         AND NOT EXISTS (SELECT 1 FROM kinderen k WHERE k.ouder_id = gebruikers.id)")->rowCount();
     q("DELETE FROM avg_verzoeken WHERE status IN ('afgerond', 'afgewezen') AND afgehandeld_op < ?", [grens(bewaartermijn('bewaar_logboek_maanden'))]);
 
-    // 8. Logboek
+    // 8. Open sollicitaties (termijnen: zie sollicitaties.php in inc/)
+    $telling['sollicitaties'] = 0;
+    foreach (rijen('SELECT id, cv_bestand FROM sollicitaties WHERE verwijderen_op < ?', [nu()]) as $sollicitatie) {
+        verwijder_sollicitatie($sollicitatie, 'bewaartermijn', false);
+        $telling['sollicitaties']++;
+    }
+
+    // 9. Logboek
     $telling['logboek'] = q('DELETE FROM logboek WHERE aangemaakt_op < ?', [grens(bewaartermijn('bewaar_logboek_maanden'))])->rowCount();
 
-    // 9. Kortlevende gegevens: links, inlogpogingen, exports, e-maillog
+    // 10. Kortlevende gegevens: links, inlogpogingen, exports, e-maillog
     q('DELETE FROM tokens WHERE verloopt_op < ? OR gebruikt = 1', [nu()]);
     q('DELETE FROM inlogpogingen WHERE tijd < ?', [date('Y-m-d H:i:s', time() - 86400)]);
     foreach (rijen('SELECT id, export_bestand FROM avg_verzoeken WHERE export_bestand IS NOT NULL AND export_verloopt_op < ?', [nu()]) as $rij) {
@@ -254,6 +261,9 @@ function herhaal_verwijderingen(): int
             $aantal++;
         } elseif ($item['soort'] === 'foto' && ($foto = rij('SELECT * FROM fotos WHERE id = ?', [$id]))) {
             verwijder_foto($foto);
+            $aantal++;
+        } elseif ($item['soort'] === 'sollicitatie' && ($sollicitatie = rij('SELECT id, cv_bestand FROM sollicitaties WHERE id = ?', [$id]))) {
+            verwijder_sollicitatie($sollicitatie, 'opnieuw na herstel back-up', false);
             $aantal++;
         }
     }

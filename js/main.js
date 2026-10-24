@@ -111,7 +111,7 @@
     });
   });
 
-  /* ---------- Formulieren (contact en aanmelden) ---------- */
+  /* ---------- Formulieren (contact, aanmelden en solliciteren) ---------- */
   var todayIso = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 
   document.querySelectorAll("form[data-form]").forEach(function (form) {
@@ -155,13 +155,18 @@
         if (accept.length && !accept.some(function (ext) { return file.name.toLowerCase().slice(-ext.length) === ext; })) text = msg("filetype", "Dit soort bestand kunnen we niet ontvangen.");
         else if (maxMb && file.size > maxMb * 1024 * 1024) text = msg("size", "Dit bestand is te groot.");
       }
+      setError(field, text);
+      return !text;
+    };
+
+    // Melding onder een veld tonen of weghalen (ook voor meldingen van de server)
+    var setError = function (field, text) {
       var error = document.getElementById(field.id + "-fout");
       field.setAttribute("aria-invalid", text ? "true" : "false");
       if (error) {
         error.querySelector("[data-error-text]").textContent = text;
         error.hidden = !text;
       }
-      return !text;
     };
 
     form.addEventListener("focusout", function (event) {
@@ -282,13 +287,17 @@
       var data = new FormData(form);
       var endpoint = form.getAttribute("action") || "";
 
-      // Zolang er nog geen formulierendienst is ingesteld, openen we het e-mailprogramma.
-      if (!endpoint || endpoint.indexOf("TODO") !== -1) {
+      var openMail = function () {
         var subject = data.get("onderwerp") || form.getAttribute("data-subject") || "Bericht via de website";
         var mailtoUrl = "mailto:" + mailto + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(summary());
         var mailtoText = form.getAttribute("data-mailto-success") || "Je e-mailprogramma wordt geopend met je bericht erin. Verstuur het daar, dan komt het bij ons binnen!";
         window.location.href = mailtoUrl;
         showStatus("success", mailtoText);
+      };
+
+      // Zolang er nog geen formulierendienst is ingesteld, openen we het e-mailprogramma.
+      if (!endpoint || endpoint.indexOf("TODO") !== -1) {
+        openMail();
         return;
       }
 
@@ -300,14 +309,36 @@
 
       fetch(endpoint, { method: "POST", body: data, headers: { Accept: "application/json" } })
         .then(function (response) {
-          if (!response.ok) throw new Error("Versturen mislukt");
-          form.reset();
-          getFields().forEach(function (field) { field.removeAttribute("aria-invalid"); });
-          showStatus("success", form.getAttribute("data-success") || "Joepie, je bericht is verstuurd! We reageren zo snel mogelijk.");
-          status.setAttribute("tabindex", "-1");
-          status.focus();
+          // Geen JSON terug: dan draait er hier geen server die het formulier ontvangt (bijvoorbeeld een statische voorbeeldsite)
+          if ((response.headers.get("Content-Type") || "").indexOf("application/json") === -1) throw { geenServer: true };
+          return response.json().then(function (body) { return { ok: response.ok && body.ok !== false, body: body }; });
         })
-        .catch(function () {
+        .then(function (result) {
+          if (result.ok) {
+            form.reset();
+            getFields().forEach(function (field) { field.removeAttribute("aria-invalid"); });
+            showStatus("success", form.getAttribute("data-success") || "Joepie, je bericht is verstuurd! We reageren zo snel mogelijk.");
+            status.setAttribute("tabindex", "-1");
+            status.focus();
+            return;
+          }
+          // Meldingen van de server onder de velden zetten
+          var fouten = result.body.fouten || {};
+          var eerste = null;
+          Object.keys(fouten).forEach(function (name) {
+            var field = form.querySelector('[name="' + name + '"], [name="' + name + '[]"]');
+            if (!field) return;
+            setError(field, fouten[name]);
+            eerste = eerste || field;
+          });
+          showStatus("error", result.body.melding || "Oeps, het versturen is niet gelukt. Probeer het nog eens of mail ons direct via " + mailto + ".");
+          if (eerste) eerste.focus();
+        })
+        .catch(function (error) {
+          if (error && error.geenServer && form.hasAttribute("data-mailto-fallback")) {
+            openMail();
+            return;
+          }
           showStatus("error", "Oeps, het versturen is niet gelukt. Probeer het nog eens of mail ons direct via " + mailto + ".");
         })
         .then(function () {

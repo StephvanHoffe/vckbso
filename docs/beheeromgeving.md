@@ -26,7 +26,7 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | **Toegang per organisatie**: gegevens van meerdere opvangorganisaties strikt gescheiden | Elke organisatie krijgt een eigen domein, database, fotomap, sessiemap, encryptiesleutel, back-upsleutel en eventueel Mollie-account (zie [Meerdere organisaties](#meerdere-organisaties)). Er is geen gedeelde database waarin een fout filter gegevens kan laten doorlekken. Een onbekend domein krijgt geen toegang; twee organisaties met dezelfde map of sleutel weigert het systeem. |
 | **Persoonlijke accounts** | Iedereen logt in met een eigen e-mailadres. Team en tweede verzorgers worden per persoon uitgenodigd met een eenmalige link. Er zijn geen gedeelde accounts. |
 | **Meervoudige authenticatie** | Tweestapsverificatie met een authenticator-app (TOTP) en 10 eenmalige herstelcodes. Verplicht voor het hele team (kan niet worden overgeslagen); voor ouders aanbevolen of verplicht, naar keuze van de beheerder. Een code werkt maar één keer. |
-| **Versleuteling** | Https met HSTS. Gevoelige velden (bijzonderheden en allergieën, ophaalpersonen, observaties, berichten, privacyverzoeken, het MFA-geheim) en alle foto's en exports worden versleuteld opgeslagen (libsodium, XSalsa20-Poly1305) met een sleutel die niet in de database staat. Wachtwoorden en herstelcodes alleen als hash. |
+| **Versleuteling** | Https met HSTS. Gevoelige velden (bijzonderheden en allergieën, ophaalpersonen, observaties, berichten, privacyverzoeken, motivaties van sollicitanten, het MFA-geheim) en alle foto's, cv's en exports worden versleuteld opgeslagen (libsodium, XSalsa20-Poly1305) met een sleutel die niet in de database staat. Wachtwoorden en herstelcodes alleen als hash. |
 | **Veilige back-ups** | `php beheer/cli/backup.php` maakt dagelijks een versleutelde back-up (XChaCha20-Poly1305, eigen sleutel) van database, foto's, bonnetjes en verwijderregister. Back-ups worden na 30 dagen automatisch verwijderd. |
 | **Bijgewerkte software** | PHP 8.2 of hoger, geen pakketten van derden (alleen één meegeleverde QR-bibliotheek). De pagina Beveiligingsstatus waarschuwt als de PHP-versie binnen drie maanden geen beveiligingsupdates meer krijgt. |
 | **Controleerbaarheid** | Het logboek registreert inzage (dossier bekeken, foto's, berichten, facturen), wijzigingen, exports, inloggen en beveiligingsacties, per kind of ouder te filteren. Elke regel is met een hashketen aan de vorige gekoppeld: aanpassen of weghalen valt op bij "Controleer logboek". Het logboek zelf is als CSV te exporteren (dat wordt ook gelogd). Bewaartermijn standaard 24 maanden. |
@@ -51,6 +51,7 @@ Onder **Team** zet je per collega elk menuonderdeel aan of uit. Een onderdeel da
 | Facturen | Facturen maken en incasso starten |
 | Financiën | Inkomsten, uitgaven en bonnetjes |
 | Team | Collega's uitnodigen en rechten geven |
+| Sollicitaties | Open sollicitaties en cv's van de website (Werken bij) |
 | Privacyverzoeken | Privacyverzoeken van ouders afhandelen |
 | Instellingen | Instellingen, logboek en beveiligingsstatus |
 
@@ -64,6 +65,19 @@ Snelknoppen: **Alles aan** (beheerder), **Begeleider** (Vandaag, Agenda, Kindere
 Zo raak je nooit buitengesloten: je kunt je eigen toegang tot Team niet uitzetten, en er blijft altijd minstens één actieve collega die het team beheert. Iemand zonder onderdelen ziet na het inloggen een uitleg; iemand zonder Vandaag komt op het eerste onderdeel dat wel aan staat. Elke wijziging staat in het logboek (soort Beveiliging).
 
 **Ouders en verzorgers** zien in Mijn BSO alleen de kinderen waaraan ze gekoppeld zijn, met de rechten die per kind zijn ingesteld. De contracthouder ziet ook de facturen.
+
+## Sollicitaties
+
+Het formulier op **Werken bij** (`werken-bij.html`) verstuurt open sollicitaties naar de eigen beheeromgeving (`beheer/solliciteren.php`): gratis en zonder externe formulierendienst.
+
+- **Wat er binnenkomt:** naam, e-mail, telefoon, woonplaats, gewenste functie en dagen, motivatie, een link en het cv (pdf of Word, hooguit 5 MB). Het soort bestand wordt aan de inhoud gecontroleerd, niet alleen aan de naam.
+- **Veilig bewaard:** het cv staat versleuteld in de datamap (`sollicitaties/`, gaat mee in de back-up), de motivatie, de link en de notities van het team versleuteld in de database.
+- **Melding:** het team krijgt een e-mail op het adres `team_email` uit `config.php`, zonder persoonsgegevens, met een link naar de sollicitatie. De sollicitant krijgt een ontvangstbevestiging.
+- **Afhandelen:** onder **Sollicitaties** (eigen recht, standaard alleen voor beheerders) zie je alle sollicitaties, open je het cv (staat in het logboek als inzage), zet je de status (Nieuw, Uitgenodigd, Geen plek, Aangenomen), schrijf je een notitie en kun je een sollicitatie meteen verwijderen. Het menu toont hoeveel nieuwe er zijn.
+- **Bewaren:** elke sollicitatie toont de datum waarop hij vanzelf wordt verwijderd (zie de tabel bij Bewaarbeleid).
+- **Tegen spam:** een verborgen veld, alleen vanaf de eigen website, en hooguit 5 verstuurde sollicitaties per kwartier vanaf hetzelfde adres.
+- **Uploadgrootte:** de server moet bestanden van 5 MB accepteren (`upload_max_filesize`; zie de instellingen voor foto's bij de installatie).
+- **Zonder beheeromgeving** (zoals op de statische voorbeeldsite op Vercel) opent het formulier het e-mailprogramma van de bezoeker, met de sollicitatie erin; het cv voegt die dan zelf als bijlage toe.
 
 ## Financiën
 
@@ -101,6 +115,7 @@ De beheerder stelt de termijnen in onder **Instellingen → Bewaartermijnen**. D
 | Account en contactgegevens van gestopte klanten | 3 maanden na vertrek | Gewist; naam en adres blijven bij de facturen |
 | Financiële administratie (facturen, betalingen, opvangdagen, boekingen en bonnetjes onder Financiën) | 7 jaar | Verwijderd. Korter dan 7 jaar kan niet (fiscale bewaarplicht) |
 | Logboek | 24 maanden | Verwijderd |
+| Open sollicitaties (gegevens, motivatie en cv) | 4 weken na afronden (geen plek of aangenomen); met toestemming van de sollicitant een jaar na binnenkomst; nog niet afgerond: na 3 maanden (met toestemming na een jaar) | Verwijderd, ook het cv. Vaste termijnen, zoals in de privacyverklaring |
 | Exports voor een inzageverzoek | 30 dagen | Verwijderd |
 | Back-ups | 30 dagen | Verwijderd |
 
@@ -231,7 +246,7 @@ Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met b
 - [ ] Afmeldtijd bevestigen (nu 12:00 uur op de dag zelf).
 - [ ] Btw-regel op de factuur laten controleren door de boekhouder (nu: "Kinderopvang is vrijgesteld van btw").
 - [ ] Categorieën van Financiën afstemmen met de boekhouder (`beheer/inc/financien.php`), en bepalen of btw apart moet worden bijgehouden.
-- [ ] Per collega de rechten nalopen onder Team: wie mag Facturen, Financiën, Privacyverzoeken en Klanten beheren?
+- [ ] Per collega de rechten nalopen onder Team: wie mag Facturen, Financiën, Sollicitaties, Privacyverzoeken en Klanten beheren?
 - [ ] Werkafspraak voor het controleren van gezag: welk bewijs vraag je (uittreksel gezagsregister, geboorteakte, beschikking) en wie controleert het?
 
 **Privacy (AVG)**

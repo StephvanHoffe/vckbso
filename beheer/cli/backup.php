@@ -43,8 +43,8 @@ db()->exec('VACUUM INTO ' . db()->quote($kopie));
 
 // 2. Welke bestanden gaan mee?
 $bestanden = ['beheer.sqlite' => $kopie];
-// Foto's en bonnetjes (Financiën); beide al versleuteld op schijf
-foreach (['fotos', 'bijlagen'] as $submap) {
+// Foto's, bonnetjes (Financiën) en cv's (Sollicitaties); alle al versleuteld op schijf
+foreach (['fotos', 'bijlagen', 'sollicitaties'] as $submap) {
     $bronmap = data_dir() . '/' . $submap;
     if (!is_dir($bronmap)) {
         continue;

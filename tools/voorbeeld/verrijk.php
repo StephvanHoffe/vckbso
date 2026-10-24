@@ -55,6 +55,20 @@ instelling_zet('volle_dagen', '2');
 // Privacyverzoek van een ouder
 q('INSERT INTO avg_verzoeken (gebruiker_id, kind_id, over_naam, soort, toelichting, deadline, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?)', [$sam, $noor['id'], kindnaam($noor), 'inzage', versleutel('Ik wil graag weten welke gegevens jullie over Noor bewaren.'), date('Y-m-d', strtotime('+1 month')), nu()]);
 
+// Open sollicitaties via Werken bij, met een (verzonnen) cv
+$cvInhoud = "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/MediaBox[0 0 595 842]/Parent 2 0 R>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF\n";
+foreach ([
+    ['Demo Sollicitant', 'sollicitant@demo.bsovck.nl', '06 98 76 54 32', 'Amsterdam', 'Sport en spel begeleiden', 'dinsdag,donderdag', 'Ik ben zelf jeugdtrainer bij de voetbalclub en sta het liefst de hele middag op het veld. Bij Sporty lijkt het me geweldig om sport en spel te begeleiden!', true, 'nieuw', '-2 days'],
+    ['Demo Stagiair', 'stagiair@demo.bsovck.nl', '06 11 22 33 44', 'Amstelveen', 'Stage lopen', 'maandag,woensdag,vrijdag', 'Ik studeer Sport en Bewegen en zoek een stageplek waar kinderen na school lekker kunnen bewegen. Sporty past daar precies bij.', false, 'gesprek', '-9 days'],
+] as [$naam, $email, $telefoon, $woonplaats, $functie, $dagen, $motivatie, $bewaren, $status, $wanneer]) {
+    $bestand = bin2hex(random_bytes(16));
+    versleutel_bestand(cv_map() . '/' . $bestand . '.bin', $cvInhoud);
+    $binnen = date('Y-m-d H:i:s', strtotime($wanneer));
+    q('INSERT INTO sollicitaties (status, naam, email, telefoon, woonplaats, functie, dagen, motivatie, cv_bestand, cv_naam, cv_type, cv_grootte, bewaren, aangemaakt_op, verwijderen_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        $status, $naam, $email, $telefoon, $woonplaats, $functie, $dagen, versleutel($motivatie), $bestand, 'cv-' . strtolower(explode(' ', $naam)[1]) . '.pdf', 'application/pdf', strlen($cvInhoud), $bewaren ? 1 : 0, $binnen, sollicitatie_verwijderdatum($status, $bewaren, $binnen),
+    ]);
+}
+
 // Facturen van vorige maand; de meeste betaald
 [$aantal] = maak_facturen(date('Y-m', strtotime('first day of last month')));
 q("UPDATE facturen SET status = 'betaald', betaald_op = ? WHERE id IN (SELECT id FROM facturen ORDER BY id LIMIT 3)", [nu()]);
