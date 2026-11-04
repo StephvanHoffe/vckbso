@@ -17,7 +17,7 @@ Bouw een complete, responsive website voor **Sporty** (bso) in Amsterdam. (Naam 
 - **Belangrijkste actie:** Aanmelden. De hoofdknop "Aanmelden" staat in de header en terug op elke pagina, als een knop naar de aanmeldpagina. Langskomen blijft mogelijk via een tekstlink naar het adres met routebeschrijving. (Gewijzigd op 30 september 2026; oorspronkelijk was de hoofdknop "Kom langs".)
 - **Slogan:** "Let's Play" (22 oktober 2026)
 - **Kernboodschap (hero-kop op de homepage):** "Sport, plezier en ontwikkeling na schooltijd." met "na schooltijd" in oranje (gewijzigd op 11 oktober 2026 via de designprompt; eerder: "Dat wij de leukste/gezelligste/sportiefste BSO zijn met oprechte aandacht voor ieder kind"). Ondersteunende tekst van de klant: "Bij BSO Sporty geloven we in de kracht van sport, samen spelen en groeien. Een plek waar kinderen van 5 t/m 13 jaar iedere dag met plezier in beweging komen." Knoppen in de hero: "Ontdek BSO Sporty" (oranje) en "Bekijk ons programma" (omlijnd). De hoofdknop "Aanmelden" blijft in de header en op elke pagina.
-- **Leeftijd:** kinderen van 5 t/m 13 jaar (uit de designprompt van 11 oktober 2026).
+- **Leeftijd:** alle kinderen van 4 t/m 12 jaar (teksten van november 2026; eerder 5 t/m 13 jaar uit de designprompt van 11 oktober 2026).
 - **Waarom klanten voor dit bedrijf kiezen (USP's, laat ze op de homepage zien):**
   - Oprechte aandacht voor ieder kind
   - Stimuleren sport en beweging met de kinderen
@@ -90,7 +90,18 @@ De klant heeft een nieuwe briefing gegeven, met de officiële logo's, Henny de h
 - **Illustraties:** getekende elementen (sterren, pijlen, kroontjes, hartjes, krabbels) gecombineerd met fotografie, zoals in het voorbeeld "Team Sporty".
 - **Balans:** anders dan standaard BSO-websites, met humor en speelsheid, maar netjes en betrouwbaar.
 
-Uitwerking op de site: de hero op de homepage is oranje (zoals het logo) met "Let's Play", de kernboodschap in zwart met "na schooltijd." in wit, een foto en Henny met een bal; daaronder een zwarte band met Sport · Plezier · Ontwikkeling die meeschuift als je scrolt. Paginakoppen zijn zwart met een foto in een wit kader, het afsluitende blok is oranje met Henny, en de teampagina heet "Team Sporty".
+Uitwerking op de site: paginakoppen zijn zwart met een foto in een wit kader, het afsluitende blok is oranje met Henny, en de teampagina heet "Team Sporty". De homepage is sinds november 2026 opgebouwd volgens de teksten hieronder.
+
+### Teksten en indeling (november 2026)
+
+De klant heeft alle teksten aangeleverd als Word-documenten, met per pagina een notitie voor de websitebouwer en een overzicht ("00 Overzicht website"). Waar die teksten iets anders zeggen dan hierboven, gelden de teksten. Samengevat:
+
+- **Hoofdmenu:** Alles over Sporty · Een middag bij Sporty · Locaties · Team · Word Sporty coach · Contact, met als opvallende knop **"Kom bij de club"** (naar `aanmelden.html`). Alle knoppen "Boek een (gratis) proefdag" gaan naar `proefdag.html`.
+- **Pagina's:** Home; Alles over Sporty (visie en droom) met Abonnement en kosten (met de rekentool), Vakantie- en studiedagen, Welkom bij de club (community) en Pauzebegeleiding voor scholen; Een middag bij Sporty; Locaties (`locaties/sportpark-middenmeer.html`); Team; Word Sporty coach; Contact met de veelgestelde vragen; Proefdag; Kom bij de club (aanmelden); Klachtenregeling (footer). De oude pagina's (over ons, diensten, prijzen, veelgestelde vragen, werken bij) sturen door naar de nieuwe.
+- **Homepage:** een grote foto met "Let's play" en "Sporty is meer dan een sport BSO, we zijn een club!", de knoppen "Kom bij de club" en "Boek een proefdag" en een link naar de quiz; "Sporty is voor iedereen"; de kernwaarden; een middag in vijf stappen; weetjes over bewegen (met bron); de quiz; ervaringen van ouders; het afsluitende blok.
+- **Kernwaarden:** Plezier · Vriendschap · Groei (in plaats van Sport · Plezier · Ontwikkeling), met getekende iconen. Sport is het middel, geen doel; iedereen is welkom, ook wie niet goed kan sporten of liever knutselt.
+- **Reviews:** aangeleverd door de klant; de namen volgen zodra de ouders toestemming hebben gegeven (tot die tijd "Ouder van een Sporty-kid").
+- **Nog aan te leveren door de klant** (staat als TODO in de code): telefoonnummer, WhatsApp-nummer en e-mailadressen, LRK-nummer, algemene en privacyvoorwaarden, de tekst van de bevestigingsmail, het GGD-inspectierapport, de tijden van het middagprogramma, de abonnementsstap in het aanmeldformulier, en foto's en video's (ook van het team).
 
 ### Kleuren
 
@@ -216,7 +227,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 - Wat is ieders rol of specialiteit?
 - Een leuk weetje per persoon?
 
-**Werken bij (22 oktober 2026):** op de teampagina is de knop in de header "Werken bij" in plaats van "Aanmelden"; die gaat naar `werken-bij.html`. Daar staat dat er nu geen vacatures zijn en kun je een open sollicitatie sturen met een formulier (gegevens, motivatie, cv als bijlage). Sinds 24 oktober 2026 (de klant: "Zorg er zelf voor dat dit kan. Het moet wel gratis.") komen sollicitaties met cv binnen in de eigen beheeromgeving, onder Sollicitaties, zonder externe formulierendienst; zie `docs/beheeromgeving.md`. "Aanmelden" blijft op de teampagina zelf staan, in de paginakop en het afsluitende blok.
+**Word Sporty coach (november 2026, eerder "Werken bij"):** solliciteren gaat via `word-sporty-coach.html` (in het hoofdmenu), met naam, e-mail, telefoon, een cv en een motivatie (allebei pdf of Word). Sinds 24 oktober 2026 (de klant: "Zorg er zelf voor dat dit kan. Het moet wel gratis.") komen sollicitaties binnen in de eigen beheeromgeving, onder Sollicitaties, zonder externe formulierendienst; zie `docs/beheeromgeving.md`. Sinds het nieuwe hoofdmenu staat in de header van de teampagina weer de gewone knop "Kom bij de club".
 
 ### Veelgestelde vragen (`veelgestelde-vragen`)
 
@@ -254,14 +265,13 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 - E-mail: info@sporty.nl (als `mailto:`-link; gewijzigd op 6 oktober 2026, eerder info@vckbso.nl)
 - Telefoon: 0612345678 (als `tel:`-link)
 
-Openingstijden:
-- Maandag: 09:00–17:00
-- Dinsdag: 09:00–17:00
-- Woensdag: 09:00–17:00
-- Donderdag: 09:00–17:00
-- Vrijdag: 09:00–17:00
-- Zaterdag: gesloten
-- Zondag: gesloten
+- Adres: Sporty, Voorlandpad 17, 1098 TZ Amsterdam (clubhuis op Sportpark Middenmeer, Watergraafsmeer; teksten van november 2026)
+
+Openingstijden (teksten van november 2026; eerder ma t/m vr 09:00–17:00):
+- Schooldagen: na school tot 18.30 uur
+- Vakantie- en studiedagen: 08.00–18.30 uur
+- Telefonisch bereikbaar: maandag t/m vrijdag 9.00–13.30 uur
+- Feestdagen: gesloten
 
 ## Beeld
 

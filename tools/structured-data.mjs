@@ -3,8 +3,8 @@
  * Zet de schema.org-gegevens (JSON-LD) in de <head> van de pagina's.
  *
  * - Homepage: de BSO zelf (ChildCare) en de website (WebSite, voor de sitenaam in Google).
- * - Contact: de BSO zelf en het kruimelpad.
- * - Veelgestelde vragen: het kruimelpad en alle vragen (FAQPage).
+ * - Locatie (Sportpark Middenmeer): de BSO zelf en het kruimelpad.
+ * - Contact: de BSO zelf, het kruimelpad en alle veelgestelde vragen (FAQPage).
  * - Overige pagina's: het kruimelpad.
  *
  * Kruimelpad en vragen komen uit de zichtbare HTML, zodat ze altijd overeenkomen met wat
@@ -21,24 +21,32 @@ export const SITE = "https://bsovck.nl";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 // Gegevens van de BSO. Houd deze gelijk aan wat op de website staat.
-// TODO: streetAddress en postalCode toevoegen zodra het adres bekend is, en sameAs met de links naar social media en het Google Bedrijfsprofiel
+// TODO: sameAs met de links naar social media en het Google Bedrijfsprofiel toevoegen zodra die er zijn.
+// TODO: openingstijden (openingHoursSpecification) toevoegen zodra de tijden van het middagprogramma bekend zijn;
+// nu staan alleen de telefonische bereikbaarheid en het adres erin (op schooldagen open na school tot 18.30 uur,
+// in vakanties en op studiedagen 08.00–18.30 uur).
 export const BSO = {
   "@type": "ChildCare",
   "@id": `${SITE}/#sporty`,
   name: "Sporty",
   alternateName: "BSO Sporty",
   legalName: "Sporty",
-  description: "Sportieve buitenschoolse opvang (BSO) in Amsterdam met oprechte aandacht voor ieder kind en volop sport en beweging.",
+  description: "Sportieve buitenschoolse opvang (BSO) op Sportpark Middenmeer in Amsterdam-Oost, voor alle kinderen van 4 t/m 12 jaar. Een club vol plezier, vriendschap en groei.",
   url: `${SITE}/`,
   image: `${SITE}/assets/img/og-image.jpg`,
   logo: `${SITE}/assets/img/sporty-logo-512.png`,
   telephone: "+31612345678",
   email: "info@sporty.nl",
-  address: { "@type": "PostalAddress", addressLocality: "Amsterdam", addressCountry: "NL" },
+  address: { "@type": "PostalAddress", streetAddress: "Voorlandpad 17", postalCode: "1098 TZ", addressLocality: "Amsterdam", addressCountry: "NL" },
   areaServed: { "@type": "City", name: "Amsterdam" },
-  openingHoursSpecification: [
-    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "17:00" },
-  ],
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "customer service",
+    telephone: "+31612345678",
+    email: "info@sporty.nl",
+    availableLanguage: ["nl", "en"],
+    hoursAvailable: { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "13:30" },
+  },
 };
 
 const WEBSITE = {
@@ -53,14 +61,19 @@ const WEBSITE = {
 
 export const PAGINAS = [
   "index.html",
-  "over-ons.html",
-  "diensten.html",
-  "prijzen.html",
+  "alles-over-sporty.html",
+  "abonnementen.html",
+  "vakantie-en-studiedagen.html",
+  "community.html",
+  "pauzebegeleiding.html",
+  "een-middag-bij-sporty.html",
+  "locaties/sportpark-middenmeer.html",
   "team.html",
-  "werken-bij.html",
-  "veelgestelde-vragen.html",
+  "word-sporty-coach.html",
   "contact.html",
+  "proefdag.html",
   "aanmelden.html",
+  "klachtenregeling.html",
   "privacy.html",
   "voorwaarden.html",
   "en/index.html",
@@ -119,7 +132,7 @@ export function vragen(html) {
 export function gegevensVoor(pagina, html) {
   const graaf = [];
   if (pagina === "index.html") graaf.push(BSO, WEBSITE);
-  if (pagina === "contact.html") graaf.push(BSO);
+  if (pagina === "contact.html" || pagina === "locaties/sportpark-middenmeer.html") graaf.push(BSO);
   if (pagina === "en/index.html") {
     graaf.push({
       "@type": "WebPage",
@@ -133,7 +146,7 @@ export function gegevensVoor(pagina, html) {
   }
   const pad = kruimelpad(html);
   if (pad) graaf.push(pad);
-  if (pagina === "veelgestelde-vragen.html") graaf.push(vragen(html));
+  if (pagina === "contact.html") graaf.push(vragen(html));
   return { "@context": "https://schema.org", "@graph": graaf };
 }
 

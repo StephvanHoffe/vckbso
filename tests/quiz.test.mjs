@@ -49,7 +49,7 @@ for (const [pagina, taal] of Object.entries(PAGINAS)) {
     for (const leeftijd of LEEFTIJDEN) assert.match(quiz, new RegExp(`data-leeftijd="${leeftijd}" hidden>[\\s\\S]*?class="btn"`), leeftijd);
     assert.ok(html.includes(`<script src="${taal.script}" defer></script>`));
     assert.match(html, /<symbol id="i-idee"/);
-    assert.match(html, /class="hero__quiz"><a [^>]*href="#quiz"/);
+    assert.match(html, /class="(?:hero|held)__quiz"><a [^>]*href="#quiz"/);
   });
 }
 

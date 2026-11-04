@@ -3,7 +3,8 @@
 Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutaire naam: Sporty; tot 23 oktober 2026: Je Dag in Beeld). Gebouwd volgens de bouwinstructies in [`CLAUDE.md`](CLAUDE.md).
 
 - Gewone HTML, CSS en een klein beetje JavaScript. Geen framework en geen build-stap.
-- Huisstijl volgens de briefing "Look & Feel" van 22 oktober 2026 (en eerder het moodboard en de designprompt): oranje, wit en zwart, de officiële logo's (woordmerk "Sporty" en het ronde logo), de slogan "Let's Play", koppen in Poppins ExtraBold, tekst in DM Sans en de kernwaarden Sport · Plezier · Ontwikkeling. Voelt als een club waar je bij wilt horen: sportief, vrolijk en met humor ("Na school nog energie voor tien? Die raken we samen wel kwijt."), maar netjes en betrouwbaar voor ouders.
+- Teksten en indeling volgens de teksten die Sporty in november 2026 aanleverde ("00 Overzicht website" en een document per pagina): hoofdmenu Alles over Sporty · Een middag bij Sporty · Locaties · Team · Word Sporty coach · Contact, met de opvallende knop "Kom bij de club". Sporty is er voor alle kinderen van 4 t/m 12 jaar, op Sportpark Middenmeer (Voorlandpad 17, Amsterdam).
+- Huisstijl volgens de briefing "Look & Feel" van 22 oktober 2026 (en eerder het moodboard en de designprompt): oranje, wit en zwart, de officiële logo's (woordmerk "Sporty" en het ronde logo), de slogan "Let's Play", koppen in Poppins ExtraBold, tekst in DM Sans en de kernwaarden Plezier · Vriendschap · Groei. Voelt als een club waar je bij wilt horen: sportief, vrolijk en met humor ("Na school nog energie voor tien? Die raken we samen wel kwijt."), maar netjes en betrouwbaar voor ouders.
 - Henny de hond, de mascotte, met tekstwolkjes op de site en als hardloper tijdens het aanmelden: in het formulier rent hij naar het doel naarmate je verder invult, bij de machtiging staat hij vlak voor het doel en daarna juicht hij erbij. Getekende elementen (sterren, pijlen, kroontjes) over de beelden, zoals in het voorbeeld "Team Sporty" van de klant.
 - Foto's: tijdelijke stockfoto's van Pexels, gekozen bij elke plek, tot de klant de eigen fotografie aanlevert. Bij de teamplekken staan bewust beelden waarop niemand herkenbaar is. Bronnen en fotografen staan in [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
 - Intro op de homepage, gemaakt van de vormen van het officiële ronde logo: de drie kinderen rennen vanaf de rand van het scherm naar het midden, de ring sluit zich om ze heen, "BSO" ploft op het shirt, het woordmerk zwaait omhoog en het lachje verschijnt; het eindbeeld is precies het logo. Eén keer per bezoek (en bij opnieuw laden), over te slaan met een toets, klik, tik of scroll, en niet bij de instelling "minder beweging" of zonder JavaScript.
@@ -43,18 +44,24 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 
 | Pad | Inhoud |
 |---|---|
-| `index.html`, `over-ons.html`, `diensten.html`, `prijzen.html`, `team.html`, `veelgestelde-vragen.html`, `contact.html` | De pagina's uit de sitemap |
-| `werken-bij.html` | Werken bij Sporty: geen vacatures op dit moment, wel een open sollicitatie met cv. Bereikbaar via de knop "Werken bij" in de header van de teampagina en via de footer. Het formulier gaat naar de eigen beheeromgeving (`beheer/solliciteren.php`): gratis, het cv wordt versleuteld bewaard en het team ziet alles in de beheeromgeving bij Sollicitaties. Zonder beheeromgeving (zoals op Vercel) opent het e-mailprogramma. |
-| `aanmelden.html` | Uitleg over aanmelden, met de knop naar het aanmeldproces in Mijn BSO (`beheer/aanmelden.php`). Bereikbaar via de knop "Aanmelden" in de header. |
+| `index.html` | Homepage: "Let's play", Sporty is voor iedereen, de kernwaarden, een middag in vijf stappen, weetjes over bewegen, de quiz, ervaringen van ouders |
+| `alles-over-sporty.html` met `abonnementen.html`, `vakantie-en-studiedagen.html`, `community.html` en `pauzebegeleiding.html` | Alles over Sporty (visie en droom) en de onderdelen eronder, met een eigen submenu. Op `abonnementen.html#rekentool` staat de rekentool kinderopvangtoeslag. |
+| `een-middag-bij-sporty.html`, `locaties/sportpark-middenmeer.html`, `team.html`, `contact.html` | Een middag bij Sporty, het clubhuis op Sportpark Middenmeer (met kaart na een klik), Team Sporty, en contact met de veelgestelde vragen (`contact.html#veelgestelde-vragen`) |
+| `word-sporty-coach.html` | Solliciteren als Sporty coach met cv en motivatie (pdf of Word). Het formulier gaat naar de eigen beheeromgeving (`beheer/solliciteren.php`): gratis, de bestanden worden versleuteld bewaard en het team ziet alles in de beheeromgeving bij Sollicitaties. Zonder beheeromgeving (zoals op Vercel) opent het e-mailprogramma. |
+| `proefdag.html` | Boek een gratis proefdag (alle knoppen "Boek een proefdag" komen hier uit) |
+| `aanmelden.html` | Kom bij de club: uitleg over aanmelden, met de knop naar het aanmeldproces in Mijn BSO (`beheer/aanmelden.php`). Bereikbaar via de knop "Kom bij de club" in de header. |
+| `klachtenregeling.html` | Klachtenregeling (link in de footer) |
+| `.htaccess` | Stuurt de adressen van de eerste versie van de site (`over-ons.html`, `diensten.html`, `prijzen.html`, `veelgestelde-vragen.html`, `werken-bij.html`) blijvend door naar de nieuwe pagina's (Apache); op Vercel doet `vercel.json` dat |
 | `beheer/` | Beheeromgeving voor het team en Mijn BSO voor ouders (PHP 8.2+, SQLite). Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md). |
 | `beheer/cli/` | Dagelijks onderhoud (bewaartermijnen), versleutelde back-up en herstel, via cron of de opdrachtregel |
 | `privacy.html`, `voorwaarden.html`, `404.html` | Privacyverklaring, algemene voorwaarden en foutpagina |
-| `en/index.html` | Eerste opzet van de Engelse versie (taalkeuze NL/EN in de header) |
+| `en/index.html` | Eerste opzet van de Engelse versie (taalkeuze NL/EN in de header). Volgt nog de eerste indeling; de gegevens (adres, tijden, leeftijd) zijn bijgewerkt. |
+| `tools/site/` en `tools/kop-en-voet.mjs` | De gedeelde header (`kop.html`), footer (`voet.html`) en iconenset (`sprite.svg`) van alle Nederlandse pagina's. Pas ze hier aan en draai `npm run kop-en-voet`. |
 | `design/tokens.css` | Design tokens: kleuren, letters, ruimte, vormen en beweging. Ook de `@font-face`-regels. |
 | `css/style.css` | Alle opmaak, mobile-first |
 | `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole van het contact- en sollicitatieformulier (ook soort en grootte van het cv) |
-| `js/quiz.js` | De Sporty-quiz op de homepage ("Past jouw kind bij Sporty?", in het Engels "Is your child a Sporty kid?"). De vragen, Henny's reacties, de knopteksten en de uitslagen staan per taal in `index.html` en `en/index.html` (sectie `#quiz`) en zijn daar aan te passen; elk antwoord hoort bij een van vier types (Stuiterbal, Teamcaptain, Spelbedenker, Chillkampioen). De laatste vraag is de leeftijd (5 t/m 13 jaar). Er wordt niets opgeslagen of verstuurd. |
-| `js/rekentool/` | Rekentool kinderopvangtoeslag op de prijzenpagina: officiële bedragen per jaar (`toeslag-2026.js`), de tarieven van Sporty (`instellingen.js`), de berekening (`berekening.js`) en het formulier (`rekentool.js`). Zie [Rekentool](#rekentool-kinderopvangtoeslag). |
+| `js/quiz.js` | De Sporty-quiz op de homepage ("Past jouw kind bij Sporty?", in het Engels "Is your child a Sporty kid?"). De vragen, Henny's reacties, de knopteksten en de uitslagen staan per taal in `index.html` en `en/index.html` (sectie `#quiz`) en zijn daar aan te passen; elk antwoord hoort bij een van vier types (Stuiterbal, Teamcaptain, Spelbedenker, Chillkampioen). De laatste vraag is de leeftijd (4 t/m 12 jaar). De eerste drie vragen komen van Sporty. Er wordt niets opgeslagen of verstuurd. |
+| `js/rekentool/` | Rekentool kinderopvangtoeslag op de pagina Abonnement en kosten: officiële bedragen per jaar (`toeslag-2026.js`), de tarieven van Sporty (`instellingen.js`), de berekening (`berekening.js`) en het formulier (`rekentool.js`). Zie [Rekentool](#rekentool-kinderopvangtoeslag). |
 | `tests/` | Automatische tests (`npm test`): de rekentool, met de tabel uit de brochure van Dienst Toeslagen als tweede bron, de SEO-basis van alle pagina's en de quiz op de homepage |
 | `assets/fonts/` | Poppins en Caveat Brush (alleen hoofdletters), lokaal gehost, OFL-licentie |
 | `design/moodboard-sporty.jpg` | Het moodboard van de klant (eerste huisstijl, 8 oktober 2026) |
@@ -69,46 +76,44 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `tools/beheer-demodata.php` | Vult een lege test-omgeving van de beheeromgeving met verzonnen demogegevens |
 | `voorbeeld/` | Doorklikbare momentopname van Mijn BSO met verzonnen gegevens, voor Vercel. Gemaakt door `npm run voorbeeld`, niet met de hand aanpassen. Zie [Voorbeeld op Vercel](#voorbeeld-op-vercel). |
 | `tools/voorbeeld/` | Bouwscript (`bouw.mjs`), extra demogegevens, de overzichtspagina en de voorbeeldbalk |
-| `vercel.json` | Alleen voor Vercel: stuurt `/beheer/` door naar het voorbeeld en zet `noindex` op het voorbeeld |
+| `vercel.json` | Alleen voor Vercel: stuurt `/beheer/` door naar het voorbeeld, stuurt de oude adressen door naar de nieuwe pagina's en zet `noindex` op het voorbeeld |
 | `docs/seo.md` | Wat er voor de vindbaarheid is gedaan, wat Sporty nog zelf moet regelen (domein, adres, Google Bedrijfsprofiel) en onderhoud |
 | `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, de verplichte eisen (toegang, beveiliging, logboek, ouderrechten, bewaarbeleid), installatie, back-ups, Mollie en TODO's |
 
-Header, footer en de iconenset staan in elke pagina. Pas je iets aan in de navigatie of footer, doe dat dan op alle pagina's (zoek en vervang).
+Header, footer en de iconenset staan in elke pagina, zodat elke pagina gewone HTML blijft. Pas ze aan in `tools/site/` en draai `npm run kop-en-voet`; het script zet ze in alle Nederlandse pagina's. De Engelse pagina heeft een eigen header en footer.
 
 ## Rekentool kinderopvangtoeslag
 
-Op de prijzenpagina (`prijzen.html#rekentool`) rekenen ouders uit wat ze per maand betalen na aftrek van de kinderopvangtoeslag. De berekening gebeurt in de browser; er wordt niets verstuurd of opgeslagen.
+Op de pagina Abonnement en kosten (`abonnementen.html#rekentool`) rekenen ouders uit wat ze per maand betalen na aftrek van de kinderopvangtoeslag. De berekening gebeurt in de browser; er wordt niets verstuurd of opgeslagen.
 
 - **Hoe er gerekend wordt:** precies volgens de 7 stappen uit de brochure [Berekening kinderopvangtoeslag 2026](https://download.belastingdienst.nl/toeslagen/docs/berekening_kinderopvangtoeslag_tg0801z61fd.pdf) van Dienst Toeslagen: maximale uurprijs, maximaal 230 uur per kind per maand, het 1e kind is het kind met de meeste uren (bij gelijke uren de hoogste kosten), percentage uit de tabel bij het gezamenlijke toetsingsinkomen. Bedragen worden per stap op centen afgerond, zoals in de rekenvoorbeelden van de brochure. Er wordt alleen met hele getallen gerekend (centen), dus zonder afrondingsfouten.
 - **Gecontroleerd met `npm test`:** de tabel is vergeleken met twee officiële bronnen (rijksoverheid.nl en de brochure), de 4 officiële rekenvoorbeelden komen tot op de cent uit, elke grens van alle 69 inkomensschijven is getest, en 20.000 willekeurige situaties geven dezelfde uitkomst als een tweede, apart geschreven berekening.
 - **Wat de rekentool niet weet:** de uitkomst is een schatting. De Belastingdienst stelt de toeslag vast, en die hangt ook af van het aantal maanden dat jij en je partner werken. Dat staat ook bij de rekentool.
 - **Tarieven van Sporty invullen:** in `js/rekentool/instellingen.js` (uurtarief, schoolweken, vakantieweken, uren per dag). Draai daarna `npm test`: de test meldt ontbrekende of ongeldige gegevens. Zolang er geen tarieven zijn, vult de bezoeker zelf een uurprijs en het aantal uren in.
-- **Elk jaar in januari bijwerken:** maak `js/rekentool/toeslag-<jaar>.js` met de nieuwe tabel en maximale uurprijzen (bron: rijksoverheid.nl, "Bedragen kinderopvangtoeslag"), zet de nieuwe brochuretabel in `tests/bronnen/`, pas `jaar` aan in `instellingen.js`, zet het nieuwe bestand in `prijzen.html` en draai `npm test`. Het kabinet wil de toeslag vanaf 2029 vervangen door een nieuw stelsel; dan moet de rekentool opnieuw worden bekeken.
+- **Elk jaar in januari bijwerken:** maak `js/rekentool/toeslag-<jaar>.js` met de nieuwe tabel en maximale uurprijzen (bron: rijksoverheid.nl, "Bedragen kinderopvangtoeslag"), zet de nieuwe brochuretabel in `tests/bronnen/`, pas `jaar` aan in `instellingen.js`, zet het nieuwe bestand in `abonnementen.html` en draai `npm test`. Het kabinet wil de toeslag vanaf 2029 vervangen door een nieuw stelsel; dan moet de rekentool opnieuw worden bekeken.
 
 ## Nog te doen (TODO)
 
 Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek op `TODO` voor de exacte plekken. Er is niets verzonnen: geen prijzen, namen, reviews of adresgegevens.
 
 **Gegevens van de klant**
-- [ ] Adres (straat, huisnummer, postcode). Dit moet op de contactpagina, in de footer, bij de routelink, in de kaart-URL en in de schema.org-gegevens.
-- [ ] Informatie over parkeren, fietsenstalling en openbaar vervoer (contactpagina).
+- [x] Adres: Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer), uit de teksten van november 2026.
+- [ ] Telefoonnummer, WhatsApp-nummer en e-mailadressen op het nieuwe domein (nu staan het oude nummer en info@sporty.nl er als tijdelijke gegevens).
+- [ ] LRK-nummer (footer, Abonnement en kosten, veelgestelde vragen) en het GGD-inspectierapport (footer).
+- [ ] De tijden van het middagprogramma (homepage en Een middag bij Sporty; ook voor de openingstijden in de schema.org-gegevens).
+- [ ] Antwoorden op de veelgestelde vragen die nog openstaan (staan als TODO in `contact.html`).
 - [ ] Bevestigen dat het domein sporty.nl van Sporty is en dat info@sporty.nl werkt (nu staat er een andere website op sporty.nl). Zie [Live zetten](#live-zetten).
 - [ ] Vectorbestanden (SVG of PDF) van de logo's van de ontwerper. De logo's op de site zijn met de computer omgezet uit de aangeleverde afbeeldingen (`design/logo/`); vervang `assets/img/sporty-logo*.svg` en `sporty-woordmerk*.svg` door de bestanden van de ontwerper en draai `npm run logo`.
 - [ ] KvK-nummer (footer).
 - [ ] Links naar social media (footer).
-- [ ] Openingstijden controleren: zijn 09:00–17:00 de opvangtijden of de kantoortijden? Een BSO is meestal na schooltijd tot 18:00 of 18:30 uur open.
-- [ ] Uurtarief, wat er precies bij de prijs zit en eventuele extra kosten (Prijzen).
-- [ ] Rekentool: opvangvormen (40 of 52 weken, vakantieopvang), uurtarief per opvangvorm en uren opvang per dag invullen in `js/rekentool/instellingen.js`. Bevestigen hoe de uren per maand in het contract worden berekend (nu: uren per week × weken ÷ 12, op twee decimalen).
-- [ ] Opzegtermijn, minimale afname en betaalwijze (Prijzen, Voorwaarden).
-- [ ] LRK-nummer, en bevestigen dat ouders kinderopvangtoeslag kunnen aanvragen (Prijzen, Veelgestelde vragen).
-- [x] Leeftijd: 5 t/m 13 jaar (uit de designprompt van 11 oktober 2026; staat op Home, Programma en bij de veelgestelde vragen).
-- [ ] Welke sporten en activiteiten, en of er een eigen buitenruimte is (Diensten).
-- [ ] Vakantieopvang en opvang op studiedagen: aanbieden of niet? (Diensten)
-- [ ] Ophalen van school: van welke scholen, en hoe (lopend, fietsend, met de bus)? (Home, Programma, Veelgestelde vragen)
-- [ ] Oprichtingsverhaal (Over ons).
-- [ ] Teamleden: naam, rol, een leuk weetje en een GIF (of kort filmpje) van een voetbaljuichmoment (Team, Over ons).
-- [ ] Reviews van ouders, alleen echte en met toestemming (Home).
-- [ ] Algemene voorwaarden (Voorwaarden).
+- [x] Openingstijden: op schooldagen na school tot 18.30 uur, in vakanties en op studiedagen 08.00–18.30 uur, telefonisch ma t/m vr 9.00–13.30 uur.
+- [x] Uurtarief en wat erbij zit: het Sporty Abonnement (52 weken) à € 10,31 per uur, met een vast gemiddelde van 27,5 uur per maand per dag (Abonnement en kosten, rekentool).
+- [ ] Rekentool: de tabel van 2027 toevoegen zodra die bekend is (zie [Rekentool](#rekentool-kinderopvangtoeslag)). Let op: in 2026 is de maximale uurprijs voor de bso € 9,98; het deel boven die prijs krijgen ouders niet vergoed.
+- [ ] Opzegtermijn en betaalwijze in de algemene voorwaarden.
+- [x] Leeftijd: 4 t/m 12 jaar (teksten van november 2026; eerder 5 t/m 13 jaar).
+- [x] Team: Sureyo Macrander, Tim van Eldonk en Henny de hond (Team). Nog nodig: een GIF (of kort filmpje) per teamlid.
+- [ ] Namen bij de reviews, zodra de ouders toestemming hebben gegeven (nu: "Ouder van een Sporty-kid").
+- [ ] Algemene voorwaarden en privacyvoorwaarden (Voorwaarden, Privacy) en de klachtenregeling als pdf.
 
 **Beeld**
 - [ ] De tijdelijke stockfoto's (Pexels) vervangen door eigen foto's van het team, de kinderen (met toestemming van de ouders) en de locatie, met nieuwe alt-teksten. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md) voor de lijst.
@@ -119,7 +124,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Privacyverklaring laten controleren: bewaartermijnen, verwerkers (formulierendienst, hosting, Mollie) en de verwerking van gegevens van kinderen in Mijn BSO.
 - [ ] Domein kiezen bij de nieuwe naam Sporty (nu staat overal nog het eerder gewenste `bsovck.nl`). Vervang daarna `https://bsovck.nl` in de `<head>` van elke pagina, in `sitemap.xml`, `robots.txt` en `tools/structured-data.mjs`, en draai `npm run seo` en `npm test`.
 - [ ] SEO-stappen die alleen Sporty zelf kan zetten: Google Bedrijfsprofiel, Search Console, LRK-nummer, vermeldingen bij scholen en verenigingen. Zie [`docs/seo.md`](docs/seo.md#nog-te-doen-door-sporty).
-- [ ] Engelse teksten na akkoord van de klant op de Nederlandse teksten. Nu staat er alleen een Engelse startpagina.
+- [ ] Engelse teksten na akkoord van de klant op de Nederlandse teksten van november 2026. Nu staat er alleen een Engelse startpagina, met de eerste indeling (de quiz en de gegevens zijn bijgewerkt).
 - [ ] Beheeromgeving live zetten: hosting met PHP 8.2+ en https, `beheer/config.php` met twee sleutels, cron voor onderhoud en back-ups, Mollie koppelen, uurtarief en groepen instellen. Bewaartermijnen laten bevestigen. De volledige lijst staat in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#nog-te-doen-todo).
 
 ## Live zetten

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sporty · Sportieve buitenschoolse opvang (BSO) in Amsterdam</title>
-<meta name="description" content="Sport, plezier en ontwikkeling na schooltijd. Sporty is een sportieve BSO in Amsterdam voor kinderen van 5 t/m 13 jaar, met oprechte aandacht voor ieder kind.">
+<title>Sporty · Sportieve BSO op Sportpark Middenmeer, Amsterdam</title>
+<meta name="description" content="Let’s play! Sporty is meer dan een sport-BSO: we zijn een club. Voor alle kinderen van 4 t/m 12 jaar, op Sportpark Middenmeer in Amsterdam-Oost.">
 <!-- TODO: domein kiezen bij de nieuwe naam Sporty (nu nog bsovck.nl) en de URL's aanpassen; zie docs/seo.md -->
 <link rel="canonical" href="https://bsovck.nl/">
 <link rel="alternate" hreflang="nl" href="https://bsovck.nl/">
@@ -14,8 +14,8 @@
 <meta property="og:locale" content="nl_NL">
 <meta property="og:locale:alternate" content="en_GB">
 <meta property="og:site_name" content="Sporty">
-<meta property="og:title" content="Sporty · Sportieve buitenschoolse opvang (BSO) in Amsterdam">
-<meta property="og:description" content="Sport, plezier en ontwikkeling na schooltijd. Sporty is een sportieve BSO in Amsterdam voor kinderen van 5 t/m 13 jaar, met oprechte aandacht voor ieder kind.">
+<meta property="og:title" content="Sporty · Sportieve BSO op Sportpark Middenmeer, Amsterdam">
+<meta property="og:description" content="Let’s play! Sporty is meer dan een sport-BSO: we zijn een club. Voor alle kinderen van 4 t/m 12 jaar, op Sportpark Middenmeer in Amsterdam-Oost.">
 <meta property="og:url" content="https://bsovck.nl/">
 <meta property="og:image" content="https://bsovck.nl/assets/img/og-image.jpg">
 <meta property="og:image:width" content="1200">
@@ -29,6 +29,7 @@
 <link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="assets/fonts/dm-sans-latin-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/poppins-latin-800.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/caveat-brush-hoofdletters.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="design/tokens.css">
 <link rel="stylesheet" href="css/style.css">
 <script>document.documentElement.classList.add("js","reveal-on");setTimeout(function(){if(!window.vckReady)document.documentElement.classList.remove("reveal-on")},3000);</script>
@@ -63,9 +64,9 @@
 <script src="js/main.js" defer></script>
 <script src="js/quiz.js" defer></script>
 <!-- TODO: straat en postcode toevoegen aan de schema.org-gegevens in tools/structured-data.mjs zodra het adres bekend is (daarna npm run seo) -->
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ChildCare","@id":"https://bsovck.nl/#sporty","name":"Sporty","alternateName":"BSO Sporty","legalName":"Sporty","description":"Sportieve buitenschoolse opvang (BSO) in Amsterdam met oprechte aandacht voor ieder kind en volop sport en beweging.","url":"https://bsovck.nl/","image":"https://bsovck.nl/assets/img/og-image.jpg","logo":"https://bsovck.nl/assets/img/sporty-logo-512.png","telephone":"+31612345678","email":"info@sporty.nl","address":{"@type":"PostalAddress","addressLocality":"Amsterdam","addressCountry":"NL"},"areaServed":{"@type":"City","name":"Amsterdam"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"17:00"}]},{"@type":"WebSite","@id":"https://bsovck.nl/#website","url":"https://bsovck.nl/","name":"Sporty","alternateName":"BSO Sporty","inLanguage":"nl-NL","publisher":{"@id":"https://bsovck.nl/#sporty"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"ChildCare","@id":"https://bsovck.nl/#sporty","name":"Sporty","alternateName":"BSO Sporty","legalName":"Sporty","description":"Sportieve buitenschoolse opvang (BSO) op Sportpark Middenmeer in Amsterdam-Oost, voor alle kinderen van 4 t/m 12 jaar. Een club vol plezier, vriendschap en groei.","url":"https://bsovck.nl/","image":"https://bsovck.nl/assets/img/og-image.jpg","logo":"https://bsovck.nl/assets/img/sporty-logo-512.png","telephone":"+31612345678","email":"info@sporty.nl","address":{"@type":"PostalAddress","streetAddress":"Voorlandpad 17","postalCode":"1098 TZ","addressLocality":"Amsterdam","addressCountry":"NL"},"areaServed":{"@type":"City","name":"Amsterdam"},"contactPoint":{"@type":"ContactPoint","contactType":"customer service","telephone":"+31612345678","email":"info@sporty.nl","availableLanguage":["nl","en"],"hoursAvailable":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"13:30"}}},{"@type":"WebSite","@id":"https://bsovck.nl/#website","url":"https://bsovck.nl/","name":"Sporty","alternateName":"BSO Sporty","inLanguage":"nl-NL","publisher":{"@id":"https://bsovck.nl/#sporty"}}]}</script>
 </head>
-<body>
+<body class="home">
 <!-- intro: gemaakt met npm run logo -->
 <div class="intro" hidden aria-hidden="true">
 <div class="intro__logo">
@@ -79,7 +80,7 @@
 </div>
 </div>
 <!-- /intro -->
-<svg xmlns="http://www.w3.org/2000/svg" hidden><symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3.5h3.2l1.6 4-2 1.3a11 11 0 0 0 5.4 5.4l1.3-2 4 1.6V17a3 3 0 0 1-3 3A15.5 15.5 0 0 1 2 6.5a3 3 0 0 1 3-3z"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.1A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20z"/></symbol><symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7.8 3.6 2.6-1.4 4.2H9.8l-1.4-4.2z"/><path d="M12 3v4.8M15.6 10.4l4.7-1.5M14.2 14.6l2.8 3.9M9.8 14.6 7 18.5M8.4 10.4 3.7 8.9"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.8M21.5 20a6.5 6.5 0 0 0-4-6"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol><symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.4 3 7.8 7 9.5 4-1.7 7-5.1 7-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.5"/><path d="m8.5 13.5-1.5 7.5 5-2.5 5 2.5-1.5-7.5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M8 9h8M8 12.5h5"/></symbol><symbol id="i-balloon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 1 6 6c0 4-3.5 7-6 7s-6-3-6-7a6 6 0 0 1 6-6z"/><path d="M12 16v1.5c0 1.5-2 2-2 3.5"/></symbol><symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 10c0-3.3 2.5-5 6-5 0 3.3-2.5 5-6 5z"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></symbol><symbol id="i-euro" viewBox="0 0 24 24"><path d="M17.5 6.5a7 7 0 1 0 0 11"/><path d="M4 10h9M4 14h9"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="m4 12 16-8-5 17-3-7z"/><path d="m12 14 8-10"/></symbol><symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id="i-userplus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M19 8v6M16 11h6"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.6-2.5h6.8L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.6"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></symbol><symbol id="i-idee" viewBox="0 0 24 24"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.7 10.7c.8.7 1.2 1.4 1.2 2.3h5c0-.9.4-1.6 1.2-2.3A6 6 0 0 0 12 3z"/></symbol><symbol id="d-pijl" viewBox="0 0 64 44"><path pathLength="1" d="M5 9C22 3 41 9 50 30"/><path pathLength="1" d="M39 26l11 6 4-12"/></symbol><symbol id="d-pijl-lus" viewBox="0 0 80 44"><path pathLength="1" d="M4 38C10 16 30 8 34 20c3 9-9 12-10 4C23 12 46 6 70 14"/><path pathLength="1" d="M62 7l9 7-9 7"/></symbol><symbol id="d-ster" viewBox="0 0 48 48"><path pathLength="1" d="M24 5l5 14 15 .5-12 9 4.5 15L24 35 11.5 43.5 16 28.5 4 19.5 19 19z"/></symbol><symbol id="d-hart" viewBox="0 0 48 44"><path pathLength="1" d="M24 40C9 29 4 20 8 12c4-7 13-7 16 1 3-8 12-8 16-1 4 8-1 17-16 28z"/></symbol><symbol id="d-kroon" viewBox="0 0 60 48"><path pathLength="1" d="M8 40L5 13l14 12 11-19 11 19 14-12-3 27z"/><path pathLength="1" d="M10 44c13-3 27-3 40 0"/></symbol><symbol id="d-straal" viewBox="0 0 48 48"><path pathLength="1" d="M6 34l14-9M10 44l18-4M8 18l9-2"/></symbol><symbol id="d-krul" viewBox="0 0 120 20"><path pathLength="1" d="M4 14C30 4 62 3 116 9"/></symbol><symbol id="d-zigzag" viewBox="0 0 80 20"><path pathLength="1" d="M4 14l10-9 10 9 10-9 10 9 10-9 10 9 10-9"/></symbol></svg>
+<svg xmlns="http://www.w3.org/2000/svg" hidden><symbol id="i-inloggen" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c1.4-3.9 4.2-5.8 7.5-5.8s6.1 1.9 7.5 5.8"/></symbol><symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol><symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 3.5h3.2l1.6 4-2 1.3a11 11 0 0 0 5.4 5.4l1.3-2 4 1.6V17a3 3 0 0 1-3 3A15.5 15.5 0 0 1 2 6.5a3 3 0 0 1 3-3z"/></symbol><symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol><symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol><symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.1A4.4 4.4 0 0 1 12 7.2a4.4 4.4 0 0 1 7.5 2.7C19.5 15.4 12 20 12 20z"/></symbol><symbol id="i-ball" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m12 7.8 3.6 2.6-1.4 4.2H9.8l-1.4-4.2z"/><path d="M12 3v4.8M15.6 10.4l4.7-1.5M14.2 14.6l2.8 3.9M9.8 14.6 7 18.5M8.4 10.4 3.7 8.9"/></symbol><symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol><symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></symbol><symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.8M21.5 20a6.5 6.5 0 0 0-4-6"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol><symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v5.5c0 4.4 3 7.8 7 9.5 4-1.7 7-5.1 7-9.5V6z"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.5"/><path d="m8.5 13.5-1.5 7.5 5-2.5 5 2.5-1.5-7.5"/></symbol><symbol id="i-chat" viewBox="0 0 24 24"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 4v-4H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M8 9h8M8 12.5h5"/></symbol><symbol id="i-balloon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 1 6 6c0 4-3.5 7-6 7s-6-3-6-7a6 6 0 0 1 6-6z"/><path d="M12 16v1.5c0 1.5-2 2-2 3.5"/></symbol><symbol id="i-sprout" viewBox="0 0 24 24"><path d="M12 21v-9"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6zM12 10c0-3.3 2.5-5 6-5 0 3.3-2.5 5-6 5z"/></symbol><symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol><symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5h.01"/></symbol><symbol id="i-euro" viewBox="0 0 24 24"><path d="M17.5 6.5a7 7 0 1 0 0 11"/><path d="M4 10h9M4 14h9"/></symbol><symbol id="i-send" viewBox="0 0 24 24"><path d="m4 12 16-8-5 17-3-7z"/><path d="m12 14 8-10"/></symbol><symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol><symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol><symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol><symbol id="i-userplus" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M19 8v6M16 11h6"/></symbol><symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.6-2.5h6.8L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.6"/></symbol><symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></symbol><symbol id="d-pijl" viewBox="0 0 64 44"><path pathLength="1" d="M5 9C22 3 41 9 50 30"/><path pathLength="1" d="M39 26l11 6 4-12"/></symbol><symbol id="d-pijl-lus" viewBox="0 0 80 44"><path pathLength="1" d="M4 38C10 16 30 8 34 20c3 9-9 12-10 4C23 12 46 6 70 14"/><path pathLength="1" d="M62 7l9 7-9 7"/></symbol><symbol id="d-ster" viewBox="0 0 48 48"><path pathLength="1" d="M24 5l5 14 15 .5-12 9 4.5 15L24 35 11.5 43.5 16 28.5 4 19.5 19 19z"/></symbol><symbol id="d-hart" viewBox="0 0 48 44"><path pathLength="1" d="M24 40C9 29 4 20 8 12c4-7 13-7 16 1 3-8 12-8 16-1 4 8-1 17-16 28z"/></symbol><symbol id="d-kroon" viewBox="0 0 60 48"><path pathLength="1" d="M8 40L5 13l14 12 11-19 11 19 14-12-3 27z"/><path pathLength="1" d="M10 44c13-3 27-3 40 0"/></symbol><symbol id="d-straal" viewBox="0 0 48 48"><path pathLength="1" d="M6 34l14-9M10 44l18-4M8 18l9-2"/></symbol><symbol id="d-krul" viewBox="0 0 120 20"><path pathLength="1" d="M4 14C30 4 62 3 116 9"/></symbol><symbol id="d-zigzag" viewBox="0 0 80 20"><path pathLength="1" d="M4 14l10-9 10 9 10-9 10 9 10-9 10 9 10-9"/></symbol><symbol id="i-idee" viewBox="0 0 24 24"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.7 10.7c.8.7 1.2 1.4 1.2 2.3h5c0-.9.4-1.6 1.2-2.3A6 6 0 0 0 12 3z"/></symbol><symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7.5" width="18" height="12.5" rx="2.5"/><path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5M3 13h18"/></symbol><symbol id="i-highfive" viewBox="0 0 24 24"><path d="M8.5 21.5 5 15.2V8.3a1.3 1.3 0 0 1 2.6 0v4M7.6 12V5.6a1.3 1.3 0 0 1 2.6 0V11M10.2 11V4.8a1.3 1.3 0 0 1 2.6 0V11M12.8 11.2V6.5a1.3 1.3 0 0 1 2.6 0v8.2l-2 6.8"/><path d="M17.5 4.5 19 3M19 7h2M16 2.5V1"/></symbol><symbol id="i-groei" viewBox="0 0 24 24"><path d="M3 20h18"/><path d="M5.5 16.5 10 12l3 3 6-6.5"/><path d="M15 8.5h4v4"/></symbol><symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M4 20.5 5.3 16.6A8.5 8.5 0 1 1 8.4 19.5z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.6-2-1-1 .8c-1-.4-2.3-1.7-2.7-2.7l.8-1-1-2z"/></symbol><symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol><symbol id="i-quote" viewBox="0 0 24 24"><path d="M10 7H6.5A2.5 2.5 0 0 0 4 9.5V13h5v5c-2 0-4-1-4.6-3M20 7h-3.5A2.5 2.5 0 0 0 14 9.5V13h5v5c-2 0-4-1-4.6-3"/></symbol><symbol id="i-school" viewBox="0 0 24 24"><path d="M3 10 12 5l9 5-9 5z"/><path d="M7 12.5V17c3 2 7 2 10 0v-4.5M21 10v5"/></symbol><symbol id="i-gift" viewBox="0 0 24 24"><rect x="3.5" y="9" width="17" height="11.5" rx="2"/><path d="M2.5 9h19v-1a1 1 0 0 0-1-1h-17a1 1 0 0 0-1 1zM12 7v13.5M12 7c-1.5-3.5-5.5-3.5-5.5-1S10 7 12 7c1.5-3.5 5.5-3.5 5.5-1S14 7 12 7"/></symbol><symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></symbol><symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol><symbol id="d-lach" viewBox="0 0 64 64"><path pathLength="1" d="M33 6c-15-1-27 10-27 26s12 27 27 26c14-1 25-12 25-27C58 16 47 5 31 7"/><path pathLength="1" d="M23 24v4M41 23v4"/><path pathLength="1" d="M18 36c4 9 22 11 28 0"/></symbol><symbol id="d-highfive" viewBox="0 0 64 64"><path pathLength="1" d="M10 58 4 40V22c0-3 5-3 5 0v10M9 32V14c0-3 5-3 5 0v16M14 30V12c0-3 5-3 5 0v18M19 31V18c0-3 5-3 5 0v20l-6 20"/><path pathLength="1" d="M54 58l6-18V22c0-3-5-3-5 0v10M55 32V14c0-3-5-3-5 0v16M50 30V12c0-3-5-3-5 0v18M45 31V18c0-3-5-3-5 0v20l6 20"/><path pathLength="1" d="M32 4v6M26 7l2 4M38 7l-2 4"/></symbol><symbol id="d-groei" viewBox="0 0 64 64"><path pathLength="1" d="M6 58c10-2 14-12 22-16s12 2 18-8 8-18 10-24"/><path pathLength="1" d="M44 10c5-1 9-2 12-4 1 5 1 9 2 13"/><path pathLength="1" d="M8 61h50"/></symbol></svg>
 <a class="skip-link" href="#inhoud">Naar de inhoud</a>
 <header class="site-header">
   <div class="container site-header__inner">
@@ -87,218 +88,186 @@
     <nav class="site-nav" id="site-nav" aria-label="Hoofdmenu">
       <ul class="site-nav__list">
         <li class="site-nav__home"><a href="index.html" aria-current="page">Home</a></li>
-        <li><a href="over-ons.html">Over ons</a></li>
-        <li><a href="diensten.html">Programma</a></li>
-        <li><a href="prijzen.html">Prijzen</a></li>
+        <li><a href="alles-over-sporty.html">Alles over Sporty</a></li>
+        <li><a href="een-middag-bij-sporty.html">Een middag bij Sporty</a></li>
+        <li><a href="locaties/sportpark-middenmeer.html">Locaties</a></li>
         <li><a href="team.html">Team</a></li>
-        <li><a href="veelgestelde-vragen.html">Vragen</a></li>
+        <li><a href="word-sporty-coach.html">Word Sporty coach</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li class="site-nav__login"><a href="beheer/inloggen.php">Inloggen</a></li>
+        <li class="site-nav__login"><a href="beheer/inloggen.php" title="Inloggen bij Mijn BSO"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-inloggen"></use></svg><span class="site-nav__login-tekst">Inloggen</span></a></li>
       </ul>
       <ul class="lang" aria-label="Kies je taal">
         <li><a href="index.html" lang="nl" hreflang="nl" aria-current="true"><span aria-hidden="true">NL</span><span class="visually-hidden">Nederlands</span></a></li>
         <li><a href="en/index.html" lang="en" hreflang="en"><span aria-hidden="true">EN</span><span class="visually-hidden">English</span></a></li>
       </ul>
     </nav>
-    <a class="btn btn--small site-header__cta" href="aanmelden.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-userplus"></use></svg>Aanmelden</a>
+    <a class="btn btn--small site-header__cta" href="aanmelden.html">Kom bij de club<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="nav-toggle__bars" aria-hidden="true"></span><span class="visually-hidden">Menu openen</span></button>
   </div>
 </header>
 <main id="inhoud">
-<section class="hero op-oranje">
-  <div class="container hero__grid">
-    <div class="hero__content">
-      <p class="slogan hero__slogan" lang="en">Let's Play</p>
-      <h1 class="hero__title">Sport, plezier en ontwikkeling <span class="hl">na schooltijd.</span></h1>
-      <p class="lead">Stuitert jouw kind na school door het huis? Dan zit-ie bij ons helemaal goed. Sporty haalt je kind op van school en daarna gaan we sporten, spelen en lekker uitrazen.</p>
-      <div class="btn-group">
-        <a class="btn" href="over-ons.html">Ontdek BSO Sporty<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
-        <a class="btn btn--secondary" href="diensten.html">Bekijk ons programma</a>
-      </div>
-      <p class="hero__quiz"><a class="link-arrow" href="#quiz"><span class="hero__quiz-vraag">Past jouw kind bij Sporty?</span> Doe de quiz<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a></p>
+<section class="held" aria-labelledby="held-titel">
+  <div class="held__foto" data-foto="held">
+    <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen brede foto van de Sporty-kids in actie -->
+    <picture>
+      <source type="image/avif" srcset="assets/fotos/held-480.avif 480w, assets/fotos/held-800.avif 800w, assets/fotos/held-1200.avif 1200w, assets/fotos/held-1600.avif 1600w" sizes="100vw">
+      <img src="assets/fotos/held-1200.webp" srcset="assets/fotos/held-480.webp 480w, assets/fotos/held-800.webp 800w, assets/fotos/held-1200.webp 1200w, assets/fotos/held-1600.webp 1600w" sizes="100vw" width="1600" height="1068" alt="Vier kinderen voetballen samen op een grasveld in het park" fetchpriority="high" decoding="async">
+    </picture>
+  </div>
+  <div class="container held__inhoud">
+    <h1 class="held__titel" id="held-titel"><span lang="en">Let’s play</span><span class="visually-hidden">: Sporty, de sportieve BSO op Sportpark Middenmeer</span><svg class="doodle held__straal" aria-hidden="true" focusable="false"><use href="#d-straal"></use></svg></h1>
+    <p class="held__sub">Sporty is meer dan een sport BSO, we zijn een club!<svg class="held__krul" viewBox="0 0 220 24" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 15c40-7 90-10 150-7M18 21c45-6 100-8 160-6"/></svg></p>
+    <div class="btn-group">
+      <a class="btn" href="aanmelden.html">Kom bij de club<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+      <a class="btn btn--op-donker" href="proefdag.html">Boek een proefdag</a>
     </div>
-    <div class="hero__beeld">
-      <div class="frame hero__foto">
-        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen grote foto van kinderen die samen sporten of met de armen om elkaar heen staan -->
-        <div class="frame__img" data-foto="hero">
-          <picture>
-            <source type="image/avif" srcset="assets/fotos/kring-480.avif 480w, assets/fotos/kring-800.avif 800w, assets/fotos/kring-1200.avif 1200w, assets/fotos/kring-1600.avif 1600w" sizes="(min-width: 64em) 34rem, 92vw">
-            <img src="assets/fotos/kring-800.webp" srcset="assets/fotos/kring-480.webp 480w, assets/fotos/kring-800.webp 800w, assets/fotos/kring-1200.webp 1200w, assets/fotos/kring-1600.webp 1600w" sizes="(min-width: 64em) 34rem, 92vw" width="1600" height="1068" alt="Een groep lachende kinderen staat met de armen om elkaar heen op een zonnig grasveld" fetchpriority="high" decoding="async">
-          </picture>
-        </div>
-      </div>
-      <svg class="doodle doodle--vierkant hero__ster" aria-hidden="true" focusable="false"><use href="#d-ster"></use></svg>
-      <svg class="doodle doodle--vierkant hero__straal" aria-hidden="true" focusable="false"><use href="#d-straal"></use></svg>
-      <p class="notitie hero__notitie" aria-hidden="true">Goal!</p>
-      <figure class="henny hero__henny"><img src="assets/img/henny/henny-bal-214.webp" srcset="assets/img/henny/henny-bal-180.webp 180w, assets/img/henny/henny-bal-214.webp 214w" sizes="12.5rem" width="214" height="214" alt="Henny, de hond van Sporty, rent achter een voetbal aan" decoding="async"><figcaption class="tekstwolk">Woef! Wie doet er mee?</figcaption></figure>
-    </div>
+    <p class="held__quiz"><a class="link-arrow" href="#quiz">Past jouw kind bij Sporty? Doe de quiz<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a></p>
+  </div>
+  <div class="held__krabbels" aria-hidden="true">
+    <svg class="doodle doodle--vierkant held__kroon" focusable="false"><use href="#d-kroon"></use></svg>
+    <p class="notitie held__waarden">Plezier, vriendschap &amp; groei<svg class="doodle doodle--vierkant held__hart" focusable="false"><use href="#d-hart"></use></svg></p>
   </div>
 </section>
 
-<div class="band" aria-hidden="true">
-  <div class="band__spoor">
-    <ul class="band__lijst"><li>Sport</li><li>Plezier</li><li>Ontwikkeling</li><li class="band__slogan">Let's Play</li><li>Sport</li><li>Plezier</li><li>Ontwikkeling</li><li class="band__slogan">Let's Play</li></ul>
-    <ul class="band__lijst"><li>Sport</li><li>Plezier</li><li>Ontwikkeling</li><li class="band__slogan">Let's Play</li><li>Sport</li><li>Plezier</li><li>Ontwikkeling</li><li class="band__slogan">Let's Play</li></ul>
+<section class="iedereen-band" aria-labelledby="iedereen-titel">
+  <div class="container">
+    <h2 class="iedereen-band__titel" id="iedereen-titel">Sporty is voor <span class="hl">iedereen</span></h2>
+    <ul class="iedereen">
+      <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg><span><strong>Je hoeft niet goed te kunnen sporten.</strong> Iedereen is welkom, ongeacht niveau.</span></li>
+      <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-ball"></use></svg><span><strong>Veel meer dan alleen voetbal.</strong> Tikspellen, balspellen en nog veel meer.</span></li>
+      <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-smile"></use></svg><span><strong>Ook knutselen, Lego en tekenen.</strong> Er is ruimte voor alles wat je leuk vindt.</span></li>
+    </ul>
   </div>
-</div>
-
-<section class="section" aria-labelledby="wat-titel">
+</section>
+<section class="section" aria-labelledby="waarden-titel">
   <div class="container">
     <div class="section-head center reveal">
-      <p class="eyebrow">Dit is Sporty</p>
-      <h2 id="wat-titel">Een BSO die voelt als <span class="hl">je eigen club</span></h2>
-      <p class="lead">Bij BSO Sporty geloven we in de kracht van sport, samen spelen en groeien. Een plek waar kinderen van 5 t/m 13 jaar iedere dag met plezier in beweging komen, en waar ze er gewoon bij horen.</p>
+      <p class="eyebrow">Onze kernwaarden</p>
+      <h2 id="waarden-titel">Drie dingen die altijd <span class="hl">meedoen</span></h2>
+      <!-- Introtekst iets aangepast op verzoek van Sporty (meedenken: duidelijk maken dat álle kinderen welkom zijn). Origineel: "Bij Sporty gebruiken we sport als middel om onze drie kernwaarden tot leven te brengen. Sporty is een club voor kinderen van 4 tot en met 12 jaar die houden van bewegen en plezier maken. Iedereen is welkom en iedereen hoort erbij!" -->
+      <p class="lead">Bij Sporty is sport geen doel, maar een middel om onze drie kernwaarden tot leven te brengen. Sporty is een club voor álle kinderen van 4 tot en met 12 jaar. Of je kind nu de snelste van de klas is of liever knutselt: iedereen is welkom en iedereen hoort erbij!</p>
     </div>
-    <ul class="kernwaarden">
-      <li class="reveal">
-        <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-ball"></use></svg></div>
-        <h3>Sport</h3>
-        <p>Elke middag in beweging: balspellen, tikkertje en lekker buiten ravotten. Ieder kind doet mee op z'n eigen niveau.</p>
-      </li>
-      <li class="reveal" style="--delay: 120ms;">
-        <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-smile"></use></svg></div>
+    <ul class="waarden-kaarten">
+      <li class="card waarde-kaart reveal" style="--delay: 0ms;">
+        <svg class="doodle waarde-kaart__doodle" aria-hidden="true" focusable="false"><use href="#d-lach"></use></svg>
         <h3>Plezier</h3>
-        <p>Lachen, gek doen en samen winnen (of verliezen, ook prima). Je kind gaat er graag naartoe en komt blij weer thuis.</p>
+        <p>Lachen, gieren, brullen. Dat is ons favoriete geluid! Bij Sporty maken we van iedere middag een feestje, vol beweging, plezier en mooie momenten.</p>
       </li>
-      <li class="reveal" style="--delay: 240ms;">
-        <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-users"></use></svg></div>
-        <h3>Ontwikkeling</h3>
-        <p>We zien ieder kind, moedigen aan om nieuwe dingen te proberen en vieren elke overwinning. Ook de kleine.</p>
+      <li class="card waarde-kaart reveal" style="--delay: 120ms;">
+        <svg class="doodle waarde-kaart__doodle" aria-hidden="true" focusable="false"><use href="#d-highfive"></use></svg>
+        <h3>Vriendschap</h3>
+        <p>Door samen te spelen, avonturen te beleven en uitdagingen aan te gaan, ontstaan de mooiste vriendschappen. En die vriendschappen maken Sporty tot een echte club.</p>
+      </li>
+      <li class="card waarde-kaart reveal" style="--delay: 240ms;">
+        <svg class="doodle waarde-kaart__doodle" aria-hidden="true" focusable="false"><use href="#d-groei"></use></svg>
+        <h3>Groei</h3>
+        <p>De Sporty-kids zijn de toekomst! Bij Sporty helpen we kinderen zich te ontwikkelen door middel van bewegen. Ze ontdekken waar ze goed in zijn, leren samenwerken, verleggen hun grenzen en groeien stap voor stap.</p>
+      </li>
+    </ul>
+    <div class="btn-group center-knoppen reveal"><a class="btn" href="alles-over-sporty.html">Lees meer over Sporty<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a></div>
+  </div>
+</section>
+<section class="section section--zwart" aria-labelledby="middag-titel">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Een middag bij Sporty</p>
+      <h2 id="middag-titel">Zo ziet een middag bij Sporty <span class="hl">eruit!</span></h2>
+    </div>
+    <ol class="tijdlijn">
+      <li class="tijdlijn__stap reveal" style="--delay: 0ms;">
+        <span class="tijdlijn__nr" aria-hidden="true">1</span>
+        <!-- TODO: tijd van deze stap (bijvoorbeeld ± 14.30 uur) invullen zodra de tijden van het middagprogramma bekend zijn: <p class="tijdlijn__tijd">± 00.00 uur</p> -->
+        <h3>Ophalen van school</h3>
+        <p>Een Sporty-coach haalt je kind op bij een vaste plek op school. Daarna gaan we samen naar de Sporty-locatie. De middag kan beginnen!</p>
+      </li>
+      <li class="tijdlijn__stap reveal" style="--delay: 100ms;">
+        <span class="tijdlijn__nr" aria-hidden="true">2</span>
+        <!-- TODO: tijd van deze stap (bijvoorbeeld ± 14.30 uur) invullen zodra de tijden van het middagprogramma bekend zijn: <p class="tijdlijn__tijd">± 00.00 uur</p> -->
+        <h3>Even lekker eten en bijkomen</h3>
+        <p>We komen even tot rust, kletsen bij over de dag en bespreken wat we gaan doen. Ondertussen eten we samen een broodje met iets te drinken. De lunch verzorgen wij.</p>
+      </li>
+      <li class="tijdlijn__stap reveal" style="--delay: 200ms;">
+        <span class="tijdlijn__nr" aria-hidden="true">3</span>
+        <!-- TODO: tijd van deze stap (bijvoorbeeld ± 14.30 uur) invullen zodra de tijden van het middagprogramma bekend zijn: <p class="tijdlijn__tijd">± 00.00 uur</p> -->
+        <h3>Samen in actie!</h3>
+        <p>Tijd voor een leuke teamactiviteit. Denk aan tikkertje, verstoppertje of een spannend potje Jachtseizoen. Rennen, springen, vliegen, duiken. Oké, dat laatste misschien niet. Iedereen doet mee en plezier staat voorop.</p>
+      </li>
+      <li class="tijdlijn__stap reveal" style="--delay: 300ms;">
+        <span class="tijdlijn__nr" aria-hidden="true">4</span>
+        <!-- TODO: tijd van deze stap (bijvoorbeeld ± 14.30 uur) invullen zodra de tijden van het middagprogramma bekend zijn: <p class="tijdlijn__tijd">± 00.00 uur</p> -->
+        <h3>Tijd voor een eigen avontuur</h3>
+        <p>Even chillen, knutselen, tekenen of lekker buiten spelen? Je kind kiest zelf wat het wil doen, zodat iedereen een leuke middag heeft.</p>
+      </li>
+      <li class="tijdlijn__stap reveal" style="--delay: 400ms;">
+        <span class="tijdlijn__nr" aria-hidden="true">5</span>
+        <!-- TODO: tijd van deze stap (bijvoorbeeld ± 14.30 uur) invullen zodra de tijden van het middagprogramma bekend zijn: <p class="tijdlijn__tijd">± 00.00 uur</p> -->
+        <h3>Tot morgen!</h3>
+        <p>Je haalt je kind op bij de Sporty-locatie. Moe, voldaan en met een hoop verhalen.</p>
+      </li>
+    </ol>
+    <div class="btn-group reveal"><a class="btn" href="een-middag-bij-sporty.html">Bekijk de hele middag<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a></div>
+  </div>
+</section>
+<section class="section" aria-labelledby="weetjes-titel">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Sport als middel</p>
+      <h2 id="weetjes-titel">Weetjes over <span class="hl">bewegen!</span></h2>
+      <p class="lead">Pas op, papa en mama willen straks zelf meedoen!</p>
+    </div>
+    <ul class="weetjes">
+      <li class="weetje reveal" style="--delay: 0ms;">
+        <span class="weetje__nr" aria-hidden="true">1</span>
+        <h3>Sport verbetert sociale vaardigheden!</h3>
+        <p class="weetje__vraag">Wist je dat sporten kinderen helpt sociale vaardigheden te ontwikkelen?</p>
+        <p>Bij Sporty leren kinderen samenwerken, rekening houden met anderen en omgaan met verschillen. Hier maken ze vrienden voor het leven!</p>
+        <p class="weetje__bron">Bron: Eime e.a. (2013), International Journal of Behavioral Nutrition and Physical Activity</p>
+      </li>
+      <li class="weetje reveal" style="--delay: 100ms;">
+        <span class="weetje__nr" aria-hidden="true">2</span>
+        <h3>Kinderen bewegen te weinig!</h3>
+        <p class="weetje__vraag">Wist je dat bijna de helft van de kinderen te weinig beweegt?</p>
+        <p>Bij Sporty maken we bewegen leuk! Met sport, spel en uitdagende activiteiten stimuleren we kinderen om lekker actief te zijn.</p>
+        <p class="weetje__bron">Bron: CBS, Gezondheidsenquête 2025</p>
+      </li>
+      <li class="weetje reveal" style="--delay: 200ms;">
+        <span class="weetje__nr" aria-hidden="true">3</span>
+        <h3>Een actieve jeugd = een gezonde toekomst!</h3>
+        <p class="weetje__vraag">Wist je dat een actieve jeugd de basis kan leggen voor een actieve leefstijl op latere leeftijd?</p>
+        <p>Door kinderen op jonge leeftijd plezier in bewegen te laten ervaren, helpen we ze een positieve relatie met sport en beweging op te bouwen. Bij Sporty rennen, springen, gooien en balanceren kinderen erop los. Zo ontdekken ze wat hun lichaam kan en leggen ze een basis voor een actieve leefstijl, nu én later.</p>
+        <p class="weetje__bron">Bron: Telama e.a. (2014), Medicine &amp; Science in Sports &amp; Exercise</p>
+      </li>
+      <li class="weetje reveal" style="--delay: 0ms;">
+        <span class="weetje__nr" aria-hidden="true">4</span>
+        <h3>Sport maakt kinderen mentaal sterker!</h3>
+        <p class="weetje__vraag">Wist je dat sporten kan bijdragen aan meer zelfvertrouwen en veerkracht?</p>
+        <p>Bij Sporty moedigen we kinderen aan om uitdagingen aan te gaan, nieuwe dingen te proberen en door te zetten als iets niet meteen lukt. Zo leren ze omgaan met tegenslagen en trots te zijn op hun vooruitgang.</p>
+        <p class="weetje__bron">Bron: Eime e.a. (2013), International Journal of Behavioral Nutrition and Physical Activity</p>
+      </li>
+      <li class="weetje reveal" style="--delay: 100ms;">
+        <span class="weetje__nr" aria-hidden="true">5</span>
+        <h3>Bewegen zet je brein aan het werk!</h3>
+        <p class="weetje__vraag">Wist je dat bewegen kinderen kan helpen informatie te verwerken en hun aandacht vast te houden?</p>
+        <p>Tijdens sport en spel moeten kinderen opletten, reageren en beslissingen nemen. Zo dagen ze niet alleen hun lichaam, maar ook hun hersenen uit. Bewegen is daarmee een waardevolle aanvulling op leren en ontwikkelen.</p>
+        <p class="weetje__bron">Bron: Biddle e.a. (2019), Psychology of Sport and Exercise</p>
+      </li>
+      <li class="weetje reveal" style="--delay: 200ms;">
+        <span class="weetje__nr" aria-hidden="true">6</span>
+        <h3>Buitenspelen is goed voor je ogen!</h3>
+        <p class="weetje__vraag">Wist je dat kinderen die veel buiten spelen, minder vaak een bril nodig hebben?</p>
+        <p>Daglicht is goed voor de ogen. In een groot onderzoek werden kinderen die extra buiten speelden, bijna een kwart minder vaak bijziend. Oogartsen raden daarom twee uur buitenspelen per dag aan. Bij Sporty zijn we veel buiten, dus dat zit wel goed!</p>
+        <p class="weetje__bron">Bron: He e.a. (2015), JAMA; advies oogarts prof. C. Klaver, Erasmus MC</p>
       </li>
     </ul>
   </div>
 </section>
-
-<section class="section section--zwart energie" aria-labelledby="energie-titel">
-  <div class="container split">
-    <div class="split__media reveal">
-      <div class="frame energie__beeld">
-        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van kinderen die rennen of springen -->
-        <div class="frame__img" data-foto="rennen" style="--ratio: 4 / 5;">
-          <picture>
-            <source type="image/avif" srcset="assets/fotos/samen-480.avif 480w, assets/fotos/samen-800.avif 800w, assets/fotos/samen-1200.avif 1200w, assets/fotos/samen-1600.avif 1600w" sizes="(min-width: 64em) 30rem, 92vw">
-            <img src="assets/fotos/samen-800.webp" srcset="assets/fotos/samen-480.webp 480w, assets/fotos/samen-800.webp 800w, assets/fotos/samen-1200.webp 1200w, assets/fotos/samen-1600.webp 1600w" sizes="(min-width: 64em) 30rem, 92vw" width="1600" height="1067" alt="Een groep kinderen rent juichend met de armen omhoog over een grasveld" loading="lazy" decoding="async">
-          </picture>
-        </div>
-        <svg class="doodle energie__pijl" aria-hidden="true" focusable="false"><use href="#d-pijl-lus"></use></svg>
-        <p class="notitie energie__notitie" aria-hidden="true">Uitrazen mag!</p>
-      </div>
-    </div>
-    <div class="split__text reveal" style="--delay: 120ms;">
-      <p class="eyebrow">Waarom sport centraal staat</p>
-      <h2 id="energie-titel">Na school nog energie voor <span class="hl">tien?</span></h2>
-      <p class="lead">Die raken we samen wel kwijt. Na een dag stilzitten in de klas wil je kind vooral één ding: bewegen. Bij Sporty mag je lekker uitrazen, en dat is precies de bedoeling.</p>
-      <ul class="punten">
-        <li>
-          <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-ball"></use></svg></div>
-          <h3>Rennen, springen, vliegen, duiken</h3>
-          <p>Oké, dat laatste misschien niet. Maar verder stimuleren we bewegen op alle manieren, op ieders eigen niveau.</p>
-        </li>
-        <li>
-          <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-heart"></use></svg></div>
-          <h3>Oprechte aandacht voor ieder kind</h3>
-          <p>Spits of liever keeper, snelste van de groep of nog aan het oefenen: we kijken echt naar wat jouw kind nodig heeft.</p>
-        </li>
-        <li>
-          <div class="icon-badge" aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-shield"></use></svg></div>
-          <h3>Veilig en vertrouwd</h3>
-          <p>Vaste gezichten en korte lijntjes. In Mijn BSO zie je foto's van de middag en stuur je ons zo een berichtje.</p>
-        </li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="section section--white" aria-labelledby="programma-titel">
-  <div class="container">
-    <div class="section-head section-head--met-knop reveal">
-      <div>
-        <p class="eyebrow">Ons programma</p>
-        <h2 id="programma-titel">Zo ziet een middag bij <span class="hl">Sporty</span> eruit</h2>
-        <p class="lead">Na de schoolbel begint het leukste deel van de dag.</p>
-      </div>
-      <a class="btn btn--secondary" href="diensten.html">Bekijk ons programma<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
-    </div>
-    <!-- TODO: welke sporten en activiteiten doen jullie precies, en van welke scholen halen jullie op? Dan de kaarten daarop aanpassen. -->
-    <ol class="grid grid--3 middag">
-      <li class="card foto-card reveal">
-        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van het ophalen bij school -->
-        <div class="foto-card__img" data-foto="ophalen">
-          <picture>
-            <source type="image/avif" srcset="assets/fotos/ophalen-480.avif 480w, assets/fotos/ophalen-800.avif 800w, assets/fotos/ophalen-1200.avif 1200w, assets/fotos/ophalen-1600.avif 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw">
-            <img src="assets/fotos/ophalen-800.webp" srcset="assets/fotos/ophalen-480.webp 480w, assets/fotos/ophalen-800.webp 800w, assets/fotos/ophalen-1200.webp 1200w, assets/fotos/ophalen-1600.webp 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw" width="1600" height="1067" alt="Een begeleider loopt met een groepje schoolkinderen over het plein bij een school" loading="lazy" decoding="async">
-          </picture>
-        </div>
-        <div class="foto-card__body">
-          <p class="middag__stap">Eerst</p>
-          <h3>We halen je kind op</h3>
-          <p>De bel gaat en wij staan klaar. We halen je kind op van school en samen gaan we naar Sporty.</p>
-        </div>
-      </li>
-      <li class="card foto-card reveal" style="--delay: 120ms;">
-        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van een balspel -->
-        <div class="foto-card__img" data-foto="sporten">
-          <picture>
-            <source type="image/avif" srcset="assets/fotos/sport-480.avif 480w, assets/fotos/sport-800.avif 800w, assets/fotos/sport-1200.avif 1200w, assets/fotos/sport-1600.avif 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw">
-            <img src="assets/fotos/sport-800.webp" srcset="assets/fotos/sport-480.webp 480w, assets/fotos/sport-800.webp 800w, assets/fotos/sport-1200.webp 1200w, assets/fotos/sport-1600.webp 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw" width="1600" height="1067" alt="Kinderen voetballen samen op een grasveld" loading="lazy" decoding="async">
-          </picture>
-        </div>
-        <div class="foto-card__body">
-          <p class="middag__stap">Dan</p>
-          <h3>Sporten en spelen</h3>
-          <p>Balspellen, tikkertje, estafettes: iedereen doet mee. Wie er na afloop nog energie over heeft, krijgt een herkansing.</p>
-        </div>
-      </li>
-      <li class="card foto-card reveal" style="--delay: 240ms;">
-        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen foto van kinderen die samen even bijkomen -->
-        <div class="foto-card__img" data-foto="samen">
-          <picture>
-            <source type="image/avif" srcset="assets/fotos/spelletje-480.avif 480w, assets/fotos/spelletje-800.avif 800w, assets/fotos/spelletje-1200.avif 1200w, assets/fotos/spelletje-1600.avif 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw">
-            <img src="assets/fotos/spelletje-800.webp" srcset="assets/fotos/spelletje-480.webp 480w, assets/fotos/spelletje-800.webp 800w, assets/fotos/spelletje-1200.webp 1200w, assets/fotos/spelletje-1600.webp 1600w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw" width="1600" height="1068" alt="Drie kinderen zitten op een kleed in een speelruimte en doen samen een spelletje" loading="lazy" decoding="async">
-          </picture>
-        </div>
-        <div class="foto-card__body">
-          <p class="middag__stap">En tussendoor</p>
-          <h3>Even bijkomen, samen</h3>
-          <p>Verhalen van de dag delen, iets nieuws proberen en elke overwinning vieren. Daarna haal jij een blij (en moe) kind op.</p>
-        </div>
-      </li>
-    </ol>
-  </div>
-</section>
-
-<section class="section section--alt team-teaser" aria-labelledby="team-titel">
-  <div class="container split split--reverse">
-    <div class="split__media reveal">
-      <div class="frame team-teaser__beeld">
-        <!-- Stockfoto (Pexels), zie assets/fotos/BRONNEN.md. TODO: vervangen door een eigen teamfoto of GIF van het team dat een doelpunt viert -->
-        <div class="frame__img" data-foto="team" style="--ratio: 5 / 4;">
-          <picture>
-            <source type="image/avif" srcset="assets/fotos/team-handen-480.avif 480w, assets/fotos/team-handen-800.avif 800w, assets/fotos/team-handen-1200.avif 1200w, assets/fotos/team-handen-1600.avif 1600w" sizes="(min-width: 64em) 32rem, 92vw">
-            <img src="assets/fotos/team-handen-800.webp" srcset="assets/fotos/team-handen-480.webp 480w, assets/fotos/team-handen-800.webp 800w, assets/fotos/team-handen-1200.webp 1200w, assets/fotos/team-handen-1600.webp 1600w" sizes="(min-width: 64em) 32rem, 92vw" width="1600" height="1067" alt="Een team legt de handen op elkaar voor de start, met een oranje mouw vooraan" loading="lazy" decoding="async">
-          </picture>
-        </div>
-        <svg class="doodle team-teaser__kroon" aria-hidden="true" focusable="false"><use href="#d-kroon"></use></svg>
-        <svg class="doodle doodle--vierkant team-teaser__hart" aria-hidden="true" focusable="false"><use href="#d-hart"></use></svg>
-        <p class="notitie team-teaser__notitie" aria-hidden="true">Team Sporty!</p>
-      </div>
-    </div>
-    <div class="split__text reveal" style="--delay: 120ms;">
-      <p class="eyebrow">Team Sporty</p>
-      <h2 id="team-titel">Coaches die net zo hard <span class="hl">juichen</span> als je kind</h2>
-      <p>Ons team juicht voor een doelpunt net zo hard als voor een zelf gestrikte veter. Sportief, vrolijk en betrouwbaar: mensen bij wie je je kind met een gerust hart achterlaat.</p>
-      <a class="link-arrow" href="team.html">Maak kennis met het team<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
-    </div>
-  </div>
-</section>
-
 <section class="section section--zwart quiz-sectie" id="quiz" aria-labelledby="quiz-titel">
   <div class="container quiz-sectie__grid">
     <div class="quiz-sectie__intro reveal">
-      <p class="eyebrow">De Sporty-quiz</p>
-      <h2 id="quiz-titel">Past jouw kind bij <span class="hl">Sporty?</span></h2>
-      <p class="lead">Zes vragen, één minuut en nul huiswerk. Ontdek wat voor sporter jouw kind is, en of het bij Sporty past. (Spoiler: grote kans van wel.)</p>
-      <p class="quiz-sectie__klein">Er zijn geen goede of foute antwoorden. En je antwoorden slaan we nergens op, beloofd.</p>
+      <p class="eyebrow">Doe de Sporty-quiz!</p>
+      <h2 id="quiz-titel">Hoe leuk gaat jouw kind Sporty <span class="hl">vinden?</span></h2>
+      <p class="lead">Zes vragen, één minuut. Roep je kleine topper erbij! Ontdek wat voor Sporty-kid jouw kind is en of het bij Sporty past. (Spoiler: grote kans van wel!)</p>
+      <p class="quiz-sectie__klein">Er zijn geen goede of foute antwoorden. Je ziet de uitslag meteen, en je antwoorden slaan we nergens op.</p>
       <svg class="doodle quiz-sectie__pijl" aria-hidden="true" focusable="false"><use href="#d-pijl"></use></svg>
       <p class="notitie quiz-sectie__notitie" aria-hidden="true">1 minuutje!</p>
     </div>
@@ -320,42 +289,42 @@
       <!-- De quiz: elk antwoord hoort bij een type (data in value). Teksten aanpassen mag; houd per vraag vier antwoorden, één per type. -->
       <form class="quiz" data-quiz novalidate>
         <fieldset class="quiz__vraag" data-vraag tabindex="-1" aria-describedby="quiz-fout">
-          <legend><span class="quiz__nr">Vraag 1 van 6</span> De schoolbel gaat. Wat doet jouw kind?</legend>
+          <legend><span class="quiz__nr">Vraag 1 van 6</span> Hoe komt jouw kind terug na het buitenspelen?</legend>
           <div class="quiz__antwoorden">
-            <label class="quiz__antwoord"><input type="radio" name="v1" value="stuiterbal" data-reactie="Zoef! Die is sneller dan ik."><span class="quiz__letter" aria-hidden="true">A</span><span>Sprint naar buiten alsof er gratis ijsjes worden uitgedeeld</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v1" value="teamcaptain" data-reactie="Ik! Ik! Ik doe mee!"><span class="quiz__letter" aria-hidden="true">B</span><span>Roept meteen: “Wie doet er mee met voetbal?”</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v1" value="spelbedenker" data-reactie="Vertel! Ik ben één en al oor. Twee eigenlijk."><span class="quiz__letter" aria-hidden="true">C</span><span>Vertelt het hele verhaal van de dag. Twee keer. Met geluidseffecten.</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v1" value="chillkampioen" data-reactie="Herkenbaar. Ik doe ook graag een dutje."><span class="quiz__letter" aria-hidden="true">D</span><span>Zucht diep: “Ik ben zóóó moe.”</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v1" value="stuiterbal" data-reactie="Modder? Dat is gewoon een medaille!"><span class="quiz__letter" aria-hidden="true">A</span><span>Met vieze knieën, modder op de schoenen en een grote glimlach.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v1" value="teamcaptain" data-reactie="Nóg een potje? Ik sta klaar!"><span class="quiz__letter" aria-hidden="true">B</span><span>Helemaal bezweet, buiten adem en klaar voor nóg een potje.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v1" value="spelbedenker" data-reactie="Netjes! Hoe doet-ie dat?"><span class="quiz__letter" aria-hidden="true">C</span><span>Nog precies zo netjes als toen het naar buiten ging.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v1" value="chillkampioen" data-reactie="Patat? Ik lust ook wel een frietje."><span class="quiz__letter" aria-hidden="true">D</span><span>Met honger, dorst en maar één wens: patat eten!</span></label>
           </div>
         </fieldset>
 
         <fieldset class="quiz__vraag" data-vraag tabindex="-1" aria-describedby="quiz-fout" hidden>
-          <legend><span class="quiz__nr">Vraag 2 van 6</span> Wat is het favoriete sporttoestel in jullie huis?</legend>
+          <legend><span class="quiz__nr">Vraag 2 van 6</span> Welke superkracht zou jouw kind kiezen?</legend>
           <div class="quiz__antwoorden">
-            <label class="quiz__antwoord"><input type="radio" name="v2" value="stuiterbal" data-reactie="Boing, boing! Niet tegen de bank zeggen, hè."><span class="quiz__letter" aria-hidden="true">A</span><span>De bank. Daar kun je zó lekker hoog op springen.</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v2" value="teamcaptain" data-reactie="GOAL! Oeps, de vaas…"><span class="quiz__letter" aria-hidden="true">B</span><span>De gang: een perfect voetbalveld, met de voordeur als doel</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v2" value="spelbedenker" data-reactie="Mag ik in het fort? Ik neem koekjes mee."><span class="quiz__letter" aria-hidden="true">C</span><span>Het kussenfort. Bouwen is ook topsport.</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v2" value="chillkampioen" data-reactie="Duimworstelen is een echte sport. Denk ik."><span class="quiz__letter" aria-hidden="true">D</span><span>De afstandsbediening. Duimsport telt ook, toch?</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v2" value="stuiterbal" data-reactie="Zoef! Die haal ik nooit meer in."><span class="quiz__letter" aria-hidden="true">A</span><span>Supersnel kunnen rennen, zodat niemand hem of haar ooit inhaalt.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v2" value="teamcaptain" data-reactie="Pas op, papa!"><span class="quiz__letter" aria-hidden="true">B</span><span>Zo sterk zijn dat hij of zij papa aankan met stoeien.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v2" value="spelbedenker" data-reactie="Ik zie niks… en ik zeg niks. Woef."><span class="quiz__letter" aria-hidden="true">C</span><span>Onzichtbaar worden om stiekem snoep uit de pot te pikken.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v2" value="chillkampioen" data-reactie="Handig! Mag ik er ook bij?"><span class="quiz__letter" aria-hidden="true">D</span><span>Met één druk op de knop op de bank kunnen verschijnen.</span></label>
           </div>
         </fieldset>
 
         <fieldset class="quiz__vraag" data-vraag tabindex="-1" aria-describedby="quiz-fout" hidden>
-          <legend><span class="quiz__nr">Vraag 3 van 6</span> Je kind verliest een potje. Wat gebeurt er?</legend>
+          <legend><span class="quiz__nr">Vraag 3 van 6</span> Wat doet jouw kind als het schermtijd heeft?</legend>
           <div class="quiz__antwoorden">
-            <label class="quiz__antwoord"><input type="radio" name="v3" value="stuiterbal" data-reactie="Ronde twee! Ik sta al klaar."><span class="quiz__letter" aria-hidden="true">A</span><span>“Revanche! Nu! Meteen!”</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v3" value="teamcaptain" data-reactie="Wat sportief! Hier, een pootje."><span class="quiz__letter" aria-hidden="true">B</span><span>Geeft de winnaar een high five en wil meteen nog een potje</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v3" value="spelbedenker" data-reactie="Hé, die regel kende ik niet… Slim hoor!"><span class="quiz__letter" aria-hidden="true">C</span><span>Ontdekt ineens een spelregel die niemand kende</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v3" value="chillkampioen" data-reactie="Meedoen is belangrijker dan winnen. Woef!"><span class="quiz__letter" aria-hidden="true">D</span><span>“Huh? Hielden we de score bij dan?”</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v3" value="spelbedenker" data-reactie="Wat een onderhandelaar!"><span class="quiz__letter" aria-hidden="true">A</span><span>Probeert er nog vijf minuutjes bij te onderhandelen. En nog vijf. En nog vijf.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v3" value="stuiterbal" data-reactie="Naar buiten! Ik kom eraan!"><span class="quiz__letter" aria-hidden="true">B</span><span>Legt de tablet meteen weg als er iets leuks buiten te doen is.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v3" value="chillkampioen" data-reactie="Hallo? Is daar iemand?"><span class="quiz__letter" aria-hidden="true">C</span><span>Is zo verdiept in het scherm dat de hele wereld even niet bestaat.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v3" value="teamcaptain" data-reactie="Slim bedacht! Het beste van twee werelden."><span class="quiz__letter" aria-hidden="true">D</span><span>Vraagt of het ook buiten op de tablet mag kijken.</span></label>
           </div>
         </fieldset>
 
         <fieldset class="quiz__vraag" data-vraag tabindex="-1" aria-describedby="quiz-fout" hidden>
-          <legend><span class="quiz__nr">Vraag 4 van 6</span> Welke zin hoor je thuis het vaakst?</legend>
+          <legend><span class="quiz__nr">Vraag 4 van 6</span> Je kind verliest een potje. Wat gebeurt er?</legend>
           <div class="quiz__antwoorden">
-            <label class="quiz__antwoord"><input type="radio" name="v4" value="stuiterbal" data-reactie="Buiten is het allerleukst. Kom maar!"><span class="quiz__letter" aria-hidden="true">A</span><span>“Mag ik nog even naar buiten?”</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v4" value="teamcaptain" data-reactie="Hoe meer zielen, hoe meer vreugd!"><span class="quiz__letter" aria-hidden="true">B</span><span>“Mag er nog iemand komen spelen?”</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v4" value="spelbedenker" data-reactie="Uh-oh. Of juist: hoera!"><span class="quiz__letter" aria-hidden="true">C</span><span>“Ik heb een idee!”</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v4" value="chillkampioen" data-reactie="Ssst, ik laat je nog even liggen."><span class="quiz__letter" aria-hidden="true">D</span><span>“Nog vijf minuutjes…”</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v4" value="stuiterbal" data-reactie="Ronde twee! Ik sta al klaar."><span class="quiz__letter" aria-hidden="true">A</span><span>“Revanche! Nu! Meteen!”</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v4" value="teamcaptain" data-reactie="Wat sportief! Hier, een pootje."><span class="quiz__letter" aria-hidden="true">B</span><span>Geeft de winnaar een high five en wil meteen nog een potje.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v4" value="spelbedenker" data-reactie="Hé, die regel kende ik niet… Slim hoor!"><span class="quiz__letter" aria-hidden="true">C</span><span>Ontdekt ineens een spelregel die niemand kende.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v4" value="chillkampioen" data-reactie="Meedoen is belangrijker dan winnen. Woef!"><span class="quiz__letter" aria-hidden="true">D</span><span>“Huh? Hielden we de score bij dan?”</span></label>
           </div>
         </fieldset>
 
@@ -363,19 +332,19 @@
           <legend><span class="quiz__nr">Vraag 5 van 6</span> Stel: je kind is één dag de baas van Sporty. Wat verandert er?</legend>
           <div class="quiz__antwoorden">
             <label class="quiz__antwoord"><input type="radio" name="v5" value="stuiterbal" data-reactie="Zeven? Dan ga ik eerst even wat drinken."><span class="quiz__letter" aria-hidden="true">A</span><span>Elke middag een estafette. Of twee. Of zeven.</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v5" value="teamcaptain" data-reactie="Een medaille? Mag ik er ook een?"><span class="quiz__letter" aria-hidden="true">B</span><span>Een groot toernooi, met een medaille voor iedereen</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v5" value="spelbedenker" data-reactie="Eindelijk iemand die het ziet! Woef!"><span class="quiz__letter" aria-hidden="true">C</span><span>Henny de hond wordt hoofdtrainer</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="v5" value="chillkampioen" data-reactie="Goed plan. Ik neem vanille."><span class="quiz__letter" aria-hidden="true">D</span><span>Er komt een verplichte ijsjespauze</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v5" value="teamcaptain" data-reactie="Een medaille? Mag ik er ook een?"><span class="quiz__letter" aria-hidden="true">B</span><span>Een groot toernooi, met een medaille voor iedereen.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v5" value="spelbedenker" data-reactie="Eindelijk iemand die het ziet! Woef!"><span class="quiz__letter" aria-hidden="true">C</span><span>Henny de hond wordt hoofdtrainer.</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="v5" value="chillkampioen" data-reactie="Goed plan. Ik neem vanille."><span class="quiz__letter" aria-hidden="true">D</span><span>Er komt een verplichte ijsjespauze.</span></label>
           </div>
         </fieldset>
 
         <fieldset class="quiz__vraag" data-vraag tabindex="-1" aria-describedby="quiz-fout" hidden>
           <legend><span class="quiz__nr">Vraag 6 van 6</span> Laatste vraag, en de enige serieuze: hoe oud is jouw kind?</legend>
           <div class="quiz__antwoorden">
-            <label class="quiz__antwoord"><input type="radio" name="leeftijd" value="jong" data-reactie="Nog even groeien, kleine topper!"><span class="quiz__letter" aria-hidden="true">A</span><span>4 jaar of jonger</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="leeftijd" value="ok" data-reactie="Precies goed!"><span class="quiz__letter" aria-hidden="true">B</span><span>5 t/m 8 jaar</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="leeftijd" value="ok" data-reactie="Precies goed!"><span class="quiz__letter" aria-hidden="true">C</span><span>9 t/m 13 jaar</span></label>
-            <label class="quiz__antwoord"><input type="radio" name="leeftijd" value="oud" data-reactie="Wauw, al zo groot!"><span class="quiz__letter" aria-hidden="true">D</span><span>14 jaar of ouder</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="leeftijd" value="jong" data-reactie="Nog even groeien, kleine topper!"><span class="quiz__letter" aria-hidden="true">A</span><span>3 jaar of jonger</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="leeftijd" value="ok" data-reactie="Precies goed!"><span class="quiz__letter" aria-hidden="true">B</span><span>4 t/m 7 jaar</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="leeftijd" value="ok" data-reactie="Precies goed!"><span class="quiz__letter" aria-hidden="true">C</span><span>8 t/m 12 jaar</span></label>
+            <label class="quiz__antwoord"><input type="radio" name="leeftijd" value="oud" data-reactie="Wauw, al zo groot!"><span class="quiz__letter" aria-hidden="true">D</span><span>13 jaar of ouder</span></label>
           </div>
         </fieldset>
 
@@ -410,21 +379,21 @@
         </div>
 
         <div class="quiz__conclusie" data-leeftijd="ok" hidden>
-          <p><strong>Conclusie: match!</strong> Jouw kind past helemaal bij Sporty. En eerlijk is eerlijk: dat geldt voor elk kind van 5 t/m 13 jaar. Juist al die verschillende types maken het zo leuk.</p>
+          <p><strong>Conclusie: match!</strong> Jouw kind past helemaal bij Sporty. En eerlijk is eerlijk: dat geldt voor elk kind van 4 t/m 12 jaar. Juist al die verschillende types maken het zo leuk.</p>
           <div class="btn-group">
             <a class="btn" href="aanmelden.html">Meld je kind aan<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
-            <a class="link-arrow" href="diensten.html">Bekijk ons programma<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+            <a class="link-arrow" href="een-middag-bij-sporty.html">Bekijk een middag bij Sporty<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
           </div>
         </div>
         <div class="quiz__conclusie" data-leeftijd="jong" hidden>
-          <p><strong>Nog even geduld, kleine topper!</strong> Sporty is er voor kinderen van 5 t/m 13 jaar. Nog even oefenen met veters strikken dus. Je kunt je kind wel alvast aanmelden, dan staan we te juichen langs de lijn zodra het 5 is!</p>
+          <p><strong>Nog even geduld, kleine topper!</strong> Sporty is er voor kinderen van 4 t/m 12 jaar. Nog even oefenen met veters strikken dus. Je kunt je kind wel alvast aanmelden, dan staan we te juichen langs de lijn zodra het 4 is!</p>
           <div class="btn-group">
             <a class="btn" href="aanmelden.html">Meld je kind alvast aan<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
             <a class="link-arrow" href="contact.html">Stel ons je vraag<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
           </div>
         </div>
         <div class="quiz__conclusie" data-leeftijd="oud" hidden>
-          <p><strong>Bijna te groot voor de BSO!</strong> Sporty is er voor kinderen van 5 t/m 13 jaar. Heeft je kind een jonger broertje of zusje met energie voor tien? Dan weet je ons te vinden.</p>
+          <p><strong>Bijna te groot voor de BSO!</strong> Sporty is er voor kinderen van 4 t/m 12 jaar. Heeft je kind een jonger broertje of zusje met energie voor tien? Dan weet je ons te vinden.</p>
           <div class="btn-group">
             <a class="btn" href="aanmelden.html">Meld een broertje of zusje aan<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
             <a class="link-arrow" href="contact.html">Neem contact op<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
@@ -437,41 +406,68 @@
   </div>
 </section>
 
-<section class="section" aria-labelledby="stappen-titel">
+<section class="section section--alt" aria-labelledby="reviews-titel">
   <div class="container">
     <div class="section-head reveal">
-      <p class="eyebrow">Aanmelden</p>
-      <h2 id="stappen-titel">In drie stappen <span class="hl">erbij</span></h2>
-      <p class="lead">Aanmelden is zo geregeld. Henny loopt alvast vooruit.</p>
+      <p class="eyebrow">Ervaringen van ouders</p>
+      <h2 id="reviews-titel">Dit zeggen <span class="hl">ouders</span></h2>
     </div>
-    <div class="stappen-baan">
-      <img class="stappen-baan__henny" src="assets/img/henny/henny-rent-180.webp" srcset="assets/img/henny/henny-rent-180.webp 180w, assets/img/henny/henny-rent-360.webp 360w" sizes="7rem" width="180" height="239" alt="" loading="lazy" decoding="async">
-      <ol class="steps steps--3">
-        <li class="card reveal"><h3>Meld je kind online aan</h3><p>Vul het aanmeldformulier in, in een paar minuten. Je regelt meteen de automatische incasso.</p></li>
-        <li class="card reveal" style="--delay: 120ms;"><h3>Maak kennis</h3><p>We nemen contact met je op voor een kennismaking. Neem je kind gerust mee!</p></li>
-        <li class="card reveal" style="--delay: 240ms;"><h3>Kies de dagen en start</h3><p>Je kiest zelf de dagen in de agenda van Mijn BSO. Sportschoenen aan en gaan!</p></li>
-      </ol>
-    </div>
-    <div class="btn-group stappen__knoppen reveal">
-      <a class="btn" href="aanmelden.html">Meld je kind aan<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
-      <a class="link-arrow" href="prijzen.html#rekentool">Bereken wat het jou kost<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
-    </div>
+    <!-- TODO: namen invullen zodra de ouders toestemming hebben gegeven, in de vorm "Voornaam, moeder/vader van Naam kind (leeftijd)" -->
+    <ul class="reviews">
+      <li class="review reveal" style="--delay: 0ms;">
+        <figure>
+          <svg class="icon review__quote" aria-hidden="true" focusable="false"><use href="#i-quote"></use></svg>
+          <h3>Ze rent gewoon mee</h3>
+          <blockquote><p>“Mijn dochter is niet de fanatiekste sporter, maar bij Sporty doet ze overal aan mee. Ze komt elke keer blij thuis.”</p></blockquote>
+          <figcaption>Ouder van een Sporty-kid</figcaption>
+        </figure>
+      </li>
+      <li class="review reveal" style="--delay: 100ms;">
+        <figure>
+          <svg class="icon review__quote" aria-hidden="true" focusable="false"><use href="#i-quote"></use></svg>
+          <h3>Klein, maar helemaal op z’n plek</h3>
+          <blockquote><p>“Ik twijfelde of hij met 5 niet te jong was tussen de grotere kinderen. Onnodig: hij heeft het enorm naar zijn zin.”</p></blockquote>
+          <figcaption>Ouder van een Sporty-kid (5)</figcaption>
+        </figure>
+      </li>
+      <li class="review reveal" style="--delay: 200ms;">
+        <figure>
+          <svg class="icon review__quote" aria-hidden="true" focusable="false"><use href="#i-quote"></use></svg>
+          <h3>Sporty én voetbal, zonder gedoe</h3>
+          <blockquote><p>“Hij heeft het ontzettend naar zijn zin. En heel fijn dat hij daarna naar zijn voetbalclub gebracht kan worden.”</p></blockquote>
+          <figcaption>Ouder van een Sporty-kid</figcaption>
+        </figure>
+      </li>
+      <li class="review reveal" style="--delay: 0ms;">
+        <figure>
+          <svg class="icon review__quote" aria-hidden="true" focusable="false"><use href="#i-quote"></use></svg>
+          <h3>Coaches waar je kind fan van is</h3>
+          <blockquote><p>“Ontzettend leuke coaches. Je merkt dat ze echt aandacht hebben voor de kinderen.”</p></blockquote>
+          <figcaption>Ouder van een Sporty-kid</figcaption>
+        </figure>
+      </li>
+      <li class="review reveal" style="--delay: 100ms;">
+        <figure>
+          <svg class="icon review__quote" aria-hidden="true" focusable="false"><use href="#i-quote"></use></svg>
+          <h3>Aanmoediging in plaats van druk</h3>
+          <blockquote><p>“De sfeer is super positief en aanmoedigend. Mijn kind voelt zich er echt thuis.”</p></blockquote>
+          <figcaption>Ouder van een Sporty-kid</figcaption>
+        </figure>
+      </li>
+    </ul>
   </div>
 </section>
-
-<!-- TODO: reviews van ouders toevoegen zodra die er zijn (alleen echte reviews, met toestemming) -->
 <section class="section section--flush-top cta-section">
   <div class="container">
     <div class="cta op-oranje reveal">
       <div class="cta__tekst">
         <p class="slogan cta__slogan" lang="en">Let's Play</p>
-        <h2>Zin om erbij te komen? Meld je kind aan!</h2>
-        <p>Aanmelden doe je online, in een paar minuten. Daarna nemen we contact met je op voor een kennismaking. Neem je kind gerust mee: samen ontdekken is het leukst!</p>
+        <h2>Zin om erbij te komen? Kom bij de club!</h2>
+        <p>Aanmelden is helemaal vrijblijvend: we bekijken de mogelijkheden en nemen contact met je op. Liever eerst kijken? Boek een gratis proefdag op Sportpark Middenmeer.</p>
         <div class="btn-group">
-          <a class="btn" href="aanmelden.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-userplus"></use></svg>Aanmelden</a>
-          <a class="btn btn--secondary" href="tel:+31612345678"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"></use></svg>Bel&nbsp;06&nbsp;12&nbsp;34&nbsp;56&nbsp;78</a>
+          <a class="btn" href="aanmelden.html">Kom bij de club<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+          <a class="btn btn--secondary" href="proefdag.html">Boek een gratis proefdag<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
         </div>
-        <p class="cta__extra">Eerst kennismaken? <a href="contact.html#kom-langs">Kom gezellig langs</a></p>
       </div>
       <div class="cta__media">
         <figure class="henny"><img src="assets/img/henny/henny-zit-320.webp" srcset="assets/img/henny/henny-zit-320.webp 320w, assets/img/henny/henny-zit-640.webp 640w" sizes="17rem" width="320" height="406" alt="Henny, de hond van Sporty" loading="lazy" decoding="async"><figcaption class="tekstwolk">Woef! Tot zo?</figcaption></figure>
@@ -484,12 +480,12 @@
   <div class="container site-footer__grid">
     <div>
       <a class="logo logo--embleem" href="index.html" aria-label="Sporty, naar de homepage"><img src="assets/img/sporty-logo-wit.svg" alt="" width="132" height="140" loading="lazy"></a>
-      <p>Sportieve buitenschoolse opvang (BSO) in Amsterdam, met oprechte aandacht voor ieder kind.</p>
+      <p>Sportieve buitenschoolse opvang (BSO) op Sportpark Middenmeer in Amsterdam-Oost, voor alle kinderen van 4 t/m 12 jaar.</p>
       <p class="slogan footer-slogan" lang="en">Let's Play</p>
-      <ul class="footer-waarden" aria-label="Waar Sporty voor staat">
-        <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-ball"></use></svg></span>Sport</li>
+      <ul class="footer-waarden" aria-label="Onze kernwaarden">
         <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-smile"></use></svg></span>Plezier</li>
-        <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-users"></use></svg></span>Ontwikkeling</li>
+        <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-highfive"></use></svg></span>Vriendschap</li>
+        <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-groei"></use></svg></span>Groei</li>
       </ul>
       <h2>Volg ons</h2>
       <!-- TODO: links naar de social media-kanalen toevoegen, bijvoorbeeld:
@@ -499,39 +495,43 @@
     <div>
       <h2>Contact</h2>
       <ul class="footer-contact">
-        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg><span><!-- TODO: straat, huisnummer en postcode -->Adres volgt<br>Amsterdam</span></li>
+        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg><span>Voorlandpad 17<br>1098 TZ Amsterdam</span></li>
+        <!-- TODO: telefoonnummer, WhatsApp-nummer en e-mailadres (op het nieuwe domein) volgen van de klant -->
         <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"></use></svg><a href="tel:+31612345678">06&nbsp;12&nbsp;34&nbsp;56&nbsp;78</a></li>
         <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg><a href="mailto:info@sporty.nl">info@sporty.nl</a></li>
-        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-route"></use></svg><a href="contact.html#kom-langs">Kom langs: route en adres</a></li>
+        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-route"></use></svg><a href="locaties/sportpark-middenmeer.html">Ons clubhuis op Sportpark Middenmeer</a></li>
       </ul>
     </div>
     <div>
       <h2>Openingstijden</h2>
-      <!-- TODO: controleren of dit de opvangtijden of de kantoortijden zijn -->
       <dl class="footer-hours">
-        <dt>Ma t/m vr</dt><dd>09:00–17:00</dd>
-        <dt>Za en zo</dt><dd>Gesloten</dd>
+        <dt>Schooldagen</dt><dd>Na school tot 18.30 uur</dd>
+        <dt>Vakantie- en studiedagen</dt><dd>08.00–18.30 uur</dd>
+        <dt>Telefonisch</dt><dd>Ma t/m vr 9.00–13.30 uur</dd>
+        <dt>Feestdagen</dt><dd>Gesloten</dd>
       </dl>
     </div>
     <div>
       <h2>Pagina's</h2>
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="over-ons.html">Over ons</a></li>
-        <li><a href="diensten.html">Programma</a></li>
-        <li><a href="prijzen.html">Prijzen</a></li>
+        <li><a href="alles-over-sporty.html">Alles over Sporty</a></li>
+        <li><a href="abonnementen.html">Abonnement en kosten</a></li>
+        <li><a href="een-middag-bij-sporty.html">Een middag bij Sporty</a></li>
+        <li><a href="locaties/sportpark-middenmeer.html">Locaties</a></li>
         <li><a href="team.html">Team</a></li>
-        <li><a href="werken-bij.html">Werken bij</a></li>
-        <li><a href="veelgestelde-vragen.html">Veelgestelde vragen</a></li>
-        <li><a href="contact.html">Contact</a></li>
-        <li><a href="aanmelden.html">Aanmelden</a></li>
+        <li><a href="word-sporty-coach.html">Word Sporty coach</a></li>
+        <li><a href="contact.html">Contact en veelgestelde vragen</a></li>
+        <li><a href="proefdag.html">Boek een gratis proefdag</a></li>
+        <li><a href="aanmelden.html">Kom bij de club</a></li>
         <li><a href="beheer/inloggen.php">Inloggen (Mijn BSO)</a></li>
       </ul>
     </div>
   </div>
   <div class="container site-footer__bottom">
-    <p>© 2026 Sporty · Statutaire naam: Sporty · KvK-nummer: <!-- TODO: KvK-nummer -->volgt</p>
+    <!-- TODO: KvK-nummer en LRK-nummer invullen; het GGD-inspectierapport (pdf) als download toevoegen zodra het er is -->
+    <p>© 2026 Sporty · KvK-nummer: volgt · LRK-nummer: volgt · Aangesloten bij de <a href="https://www.degeschillencommissie.nl/" rel="noopener">Geschillencommissie Kinderopvang</a></p>
     <ul>
+      <li><a href="klachtenregeling.html">Klachtenregeling</a></li>
       <li><a href="privacy.html">Privacyverklaring</a></li>
       <li><a href="voorwaarden.html">Algemene voorwaarden</a></li>
     </ul>

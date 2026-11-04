@@ -1,8 +1,8 @@
 <?php
 /*
- * Open sollicitaties via de website (werken-bij.html, verstuurd naar solliciteren.php).
- * Het cv staat versleuteld in de datamap (sollicitaties/), de motivatie, de link en de
- * notities van het team versleuteld in de database. Alleen teamleden met het recht
+ * Sollicitaties via de website (word-sporty-coach.html, verstuurd naar solliciteren.php).
+ * Het cv en de motivatie (pdf of Word) staan versleuteld in de datamap (sollicitaties/); een
+ * eventuele motivatie als tekst, de link en de notities van het team versleuteld in de database. Alleen teamleden met het recht
  * "Sollicitaties" zien ze (sollicitaties.php).
  *
  * Bewaren (zoals in de privacyverklaring):
@@ -21,7 +21,7 @@ const SOLLICITATIE_STATUSSEN = [
     'aangenomen' => 'Aangenomen',
 ];
 
-/** De keuzes op de website (werken-bij.html); iets anders wordt "Iets anders". */
+/** Keuzes uit de eerste versie van het formulier (Werken bij); het huidige formulier stuurt ze niet meer mee. */
 const SOLLICITATIE_FUNCTIES = [
     'Begeleider op de groep',
     'Sport en spel begeleiden',
@@ -34,7 +34,7 @@ const SOLLICITATIE_DAGEN = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrij
 
 const CV_MAX_BYTES = 5 * 1024 * 1024;
 
-/** Toegestane soorten cv: type => extensie. */
+/** Toegestane soorten cv en motivatie: type => extensie. */
 const CV_TYPES = [
     'application/pdf' => 'pdf',
     'application/msword' => 'doc',
@@ -76,12 +76,15 @@ function cv_type(string $pad, string $naam): ?string
     return null;
 }
 
-/** Wat er mis is met een geüpload cv (melding voor de sollicitant), of null als het goed is. */
-function cv_fout(array $upload): ?string
+/**
+ * Wat er mis is met een geüpload cv of motivatie (melding voor de sollicitant), of null als het goed is.
+ * $wat is "cv" of "motivatie".
+ */
+function cv_fout(array $upload, string $wat = 'cv'): ?string
 {
     $teGroot = 'Dit bestand is groter dan 5 MB. Maak het wat kleiner, of stuur het later per mail.';
     if (($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-        return in_array($upload['error'] ?? 0, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) ? $teGroot : 'Je cv kon niet worden geüpload. Probeer het nog eens.';
+        return in_array($upload['error'] ?? 0, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) ? $teGroot : 'Je ' . $wat . ' kon niet worden geüpload. Probeer het nog eens.';
     }
     if ($upload['size'] > CV_MAX_BYTES) {
         return $teGroot;
@@ -93,19 +96,19 @@ function cv_fout(array $upload): ?string
 }
 
 /**
- * Slaat een geüpload cv versleuteld op. Geeft [bestandsnaam, originele naam, type, grootte]
+ * Slaat een geüpload cv of motivatie versleuteld op. Geeft [bestandsnaam, originele naam, type, grootte]
  * terug, of gooit een RuntimeException met een melding voor de sollicitant.
  */
-function bewaar_cv(array $upload): array
+function bewaar_cv(array $upload, string $wat = 'cv'): array
 {
-    if (($fout = cv_fout($upload)) !== null) {
+    if (($fout = cv_fout($upload, $wat)) !== null) {
         throw new RuntimeException($fout);
     }
     $type = (string) cv_type($upload['tmp_name'], (string) ($upload['name'] ?? ''));
     $inhoud = (string) file_get_contents($upload['tmp_name']);
     $bestand = bin2hex(random_bytes(16));
     versleutel_bestand(cv_map() . '/' . $bestand . '.bin', $inhoud);
-    $origineel = preg_replace('/[^\p{L}\p{N} ._-]/u', '', basename((string) ($upload['name'] ?? ''))) ?: 'cv';
+    $origineel = preg_replace('/[^\p{L}\p{N} ._-]/u', '', basename((string) ($upload['name'] ?? ''))) ?: $wat;
     $origineel = mb_substr(pathinfo($origineel, PATHINFO_FILENAME), 0, 80) . '.' . CV_TYPES[$type];
     return [$bestand, $origineel, $type, strlen($inhoud)];
 }
@@ -136,10 +139,11 @@ function sollicitatie_badge(string $status): string
     return '<span class="badge badge--' . $klasse . '">' . e(SOLLICITATIE_STATUSSEN[$status] ?? $status) . '</span>';
 }
 
-/** Verwijdert een sollicitatie met het cv. $registreer = true bij handmatig verwijderen (komt dan niet terug via een back-up). */
+/** Verwijdert een sollicitatie met het cv en de motivatie. $registreer = true bij handmatig verwijderen (komt dan niet terug via een back-up). */
 function verwijder_sollicitatie(array $sollicitatie, string $reden, bool $registreer = true): void
 {
     verwijder_cv($sollicitatie['cv_bestand'] ?? null);
+    verwijder_cv($sollicitatie['motivatie_bestand'] ?? null);
     q('DELETE FROM sollicitaties WHERE id = ?', [$sollicitatie['id']]);
     if ($registreer) {
         registreer_verwijdering('sollicitatie', (int) $sollicitatie['id'], $reden);

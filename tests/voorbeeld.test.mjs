@@ -42,10 +42,24 @@ test("het voorbeeld is gemaakt met de huidige naam en het huidige e-mailadres", 
   }
 });
 
+test("vercel.json stuurt oude adressen door naar de nieuwe pagina's", () => {
+  const oud = vercel.redirects.filter((r) => !r.source.startsWith("/beheer"));
+  for (const { source, destination, permanent } of oud) {
+    assert.match(source, /^\/[a-z-]+\.html$/, `onverwachte redirect ${source}`);
+    assert.equal(permanent, true, `${source}: een oud adres stuur je blijvend door`);
+    assert.ok(!existsSync(join(ROOT, source)), `${source} bestaat nog, dan is een redirect niet nodig`);
+    assert.ok(existsSync(join(ROOT, destination.replace(/#.*$/, ""))), `${source} → ${destination}: bestemming bestaat niet`);
+  }
+  const htaccess = readFileSync(join(ROOT, ".htaccess"), "utf8");
+  for (const { source, destination } of oud) {
+    assert.ok(htaccess.includes(`Redirect 301 ${source} ${destination}`), `.htaccess mist de doorverwijzing van ${source}`);
+  }
+});
+
 test("vercel.json stuurt de beheeromgeving door naar bestaande pagina's van het voorbeeld", () => {
-  assert.ok(vercel.redirects.length > 0);
-  for (const { source, destination, permanent } of vercel.redirects) {
-    assert.ok(source.startsWith("/beheer"), `onverwachte redirect ${source}`);
+  const beheer = vercel.redirects.filter((r) => r.source.startsWith("/beheer"));
+  assert.ok(beheer.length > 0);
+  for (const { source, destination, permanent } of beheer) {
     assert.equal(permanent, false, `${source}: gebruik een tijdelijke redirect, de echte beheeromgeving kan later wel draaien`);
     assert.ok(existsSync(naarBestand(destination)), `${source} → ${destination}: bestemming bestaat niet`);
   }
@@ -58,7 +72,7 @@ test("vercel.json stuurt de beheeromgeving door naar bestaande pagina's van het 
 
 test("links van de website naar de beheeromgeving hebben een doel in het voorbeeld", () => {
   const specifiek = new Map(vercel.redirects.filter((r) => !r.source.includes(":")).map((r) => [r.source, r.destination]));
-  const websitePaginas = readdirSync(ROOT).filter((p) => p.endsWith(".html")).concat(["en/index.html"]);
+  const websitePaginas = readdirSync(ROOT).filter((p) => p.endsWith(".html")).concat(["en/index.html", "locaties/sportpark-middenmeer.html"]);
   for (const p of websitePaginas) {
     for (const [, naam] of readFileSync(join(ROOT, p), "utf8").matchAll(/href="(?:\.\.\/|\/)?beheer\/([a-z-]+\.php)"/g)) {
       assert.ok(specifiek.has(`/beheer/${naam}`), `${p}: link naar beheer/${naam} heeft geen eigen redirect in vercel.json`);

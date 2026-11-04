@@ -208,6 +208,15 @@ test("uren per maand: 52 weken met vakantieopvang", () => {
   assert.deepEqual([...R.dagenVan(vorm)], ["ma", "di", "wo", "do", "vr"]);
 });
 
+test("uren per maand: vast gemiddelde per dag (Sporty Abonnement)", () => {
+  const vorm = { naam: "Abonnement", soort: "bso", uurtarief: 10.31, urenPerMaandPerDag: 27.5 };
+  assert.deepEqual([...R.controleerOpvangvorm(vorm)], []);
+  assert.equal(R.urenPerMaand(vorm, ["ma"]), 2750);
+  assert.equal(R.urenPerMaand(vorm, ["ma", "wo", "vr"]), 8250);
+  assert.deepEqual([...R.dagenVan(vorm)], ["ma", "di", "wo", "do", "vr"]);
+  assert.ok(R.controleerOpvangvorm({ ...vorm, urenPerMaandPerDag: 0 }).length > 0);
+});
+
 test("een onvolledige opvangvorm wordt herkend", () => {
   assert.ok(R.controleerOpvangvorm({ naam: "x", soort: "bso", uurtarief: 0, schoolweken: 40, urenSchooldag: { ma: 3 } }).length > 0);
   assert.ok(R.controleerOpvangvorm({ naam: "x", soort: "bso", uurtarief: 10, schoolweken: 40, urenSchooldag: {} }).length > 0);

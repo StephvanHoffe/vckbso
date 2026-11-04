@@ -1,10 +1,10 @@
 # Beeld: bronnen en fotolijst
 
-## Huidige stand (22 oktober 2026)
+## Huidige stand (4 november 2026)
 
 Alle foto's op de site zijn **tijdelijke stockfoto's van [Pexels](https://www.pexels.com/)**, gekozen bij de beschrijving van elke plek. Het zijn geen foto's van Sporty zelf. De klant levert de eigen fotografie later aan; vervang de stockfoto's dan stap voor stap (zie onderaan).
 
-Bij de plekken voor het team (Team, "Team Sporty" op Home en de teamfoto op Over ons) staan bewust foto's waarop niemand herkenbaar is: handen, een bal in het doel, een groep van achteren. Een herkenbaar gezicht onder de naam van een teamlid zou ouders misleiden, en dat mag ook niet volgens de Pexels-licentie.
+Bij de plekken voor het team (Team, en de foto bij "Onze droom" op Alles over Sporty) staan bewust foto's waarop niemand herkenbaar is: handen, een bal in het doel, een groep van achteren. Een herkenbaar gezicht onder de naam van een teamlid zou ouders misleiden, en dat mag ook niet volgens de Pexels-licentie.
 
 Wel van de klant zelf: de officiële logo's (`assets/img/sporty-*.svg`) en Henny de hond (`assets/img/henny/`).
 
@@ -21,27 +21,28 @@ In de HTML staat bij elke foto `data-foto="…"` (de plek) en een opmerking "Sto
 
 | Bestand in `bron/` | Foto (Pexels) | Fotograaf | Waar op de site (`data-foto`) |
 |---|---|---|---|
-| `kring.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813511/) | Kampus Production | Home en Engelse startpagina, hero (`hero`) |
-| `samen.jpg` | [Group of Children Running in Garden](https://www.pexels.com/photo/group-of-children-running-in-garden-16724787/) | Yakup Polat | Home en Engelse startpagina, "Na school nog energie voor tien?" (`rennen`) |
-| `ophalen.jpg` | [Teacher and Students Walking Around the School Campus](https://www.pexels.com/photo/teacher-and-students-walking-around-the-school-campus-8926835/) | Thirdman | Home, kaart "We halen je kind op" (`ophalen`) |
-| `sport.jpg` | [Kids Playing Soccer](https://www.pexels.com/photo/kids-playing-soccer-8035099/) | RDNE Stock project | Home, kaart "Sporten en spelen" (`sporten`) |
-| `spelletje.jpg` | [Kids Sitting on the Floor and Playing Game with Fingers on Eyes](https://www.pexels.com/photo/kids-sitting-on-the-floor-and-playing-game-with-fingers-on-eyes-8535602/) | Ksenia Chernaya | Home, kaart "Even bijkomen, samen" (`samen`) |
-| `team-handen.jpg` | [Group of People Huddling Up](https://www.pexels.com/photo/group-of-people-huddling-up-1198171/) | Mica Asato | Home, "Team Sporty" (`team`) |
-| `plezier.jpg` | [Kids Having Fun at the Park](https://www.pexels.com/photo/kids-having-fun-at-the-park-8033873/) | RDNE Stock project | Programma (diensten), bovenaan (`plezier`) |
-| `voetbal.jpg` | [Young Soccer Player Kicking Ball on Green Field](https://www.pexels.com/photo/person-field-playing-school-972513/) | Markus Spiske | Programma, "Sporten en bewegen" (`voetbal`) |
-| `aandacht.jpg` | [Kids Playing with Teacher in the Classroom](https://www.pexels.com/photo/kids-playing-with-teacher-in-the-classroom-8363102/) | RDNE Stock project | Programma, "Aandacht en ontwikkeling" (`schilderen`) |
-| `gezellig.jpg` | [Students Eating Their Snacks at the School Canteen](https://www.pexels.com/photo/students-eating-their-snacks-at-the-school-canteen-8617514/) | Yan Krukau | Programma, "Samen en gezellig" (`gezellig`) |
-| `binnen.jpg` | [Women Kneeling on the Floor with Children in a Room](https://www.pexels.com/photo/women-kneeling-on-the-floor-with-children-in-a-room-8441839/) | Pavel Danilyuk | Over ons, bovenaan (`binnen`) |
-| `luisteren.jpg` | [A Woman Talking to her Child at a Park](https://www.pexels.com/photo/a-woman-talking-to-her-child-at-a-park-7880785/) (liggend uitgesneden) | Barbara Olsen | Over ons, "Waarom Sporty?" (`luisteren`) |
-| `team-eigenaar.jpg` | [Group of Friends Embracing on Scenic Cliffside](https://www.pexels.com/photo/people-friends-hiking-cliff-7625042/) | PNW Production | Over ons, "Vertrouwde gezichten voor je kind" (`team-eigenaar`) |
-| `basketbal.jpg` | [Kids Playing Basketball with Their Coach](https://www.pexels.com/photo/kids-playing-basketball-with-their-coach-8336951/) | RDNE Stock project | Over ons, "Wat ons anders maakt" (`basketbal`) |
-| `handen.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813502/) | Kampus Production | Prijzen, bovenaan (`knutselen`) |
-| `team.jpg` | [A Group of People Standing Outdoors](https://www.pexels.com/photo/a-group-of-people-standing-outdoors-9353488/) | PNW Production | Team, bovenaan (`team`) |
-| `team-1.jpg` | [Close-up of a Soccer Ball in the Goal](https://www.pexels.com/photo/close-up-of-a-soccer-ball-in-the-goal-19436350/) | Florian Thomschke | Team, eerste teamlid (`team-1`) |
-| `team-2.jpg` | [Basketball team stacking hands together](https://www.pexels.com/photo/basketball-team-stacking-hands-together-3755440/) | Andrea Piacquadio | Team, tweede teamlid (`team-2`) |
-| `team-3.jpg` | [A Team Raising Their Hands and Doing a High Five](https://www.pexels.com/photo/a-team-raising-their-hands-and-doing-a-high-five-9480122/) | Monstera Production | Team, derde teamlid (`team-3`) |
-| `vragen.jpg` | [Children Raising Their Hands in a Classroom](https://www.pexels.com/photo/children-raising-their-hands-in-a-classroom-8613117/) | Yan Krukau | Veelgestelde vragen, bovenaan (`vragen`) |
-| `welkom.jpg` | [Father and Children Running in a Park](https://www.pexels.com/photo/father-and-children-running-in-a-park-4543646/) | Elina Fairytale | Contact, bovenaan (`welkom`) |
+| `held.jpg` | [Kinderen voetballen samen op een grasveld in het park](https://www.pexels.com/photo/8813564/) | TODO: controleren op de Pexels-pagina (die was bij het downloaden niet bereikbaar) | Home (`held`); Een middag bij Sporty (`middag-3`) |
+| `kring.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813511/) | Kampus Production | Welkom bij de club (`club`); Proefdag (`proefdag`); Engelse startpagina (`hero`) |
+| `samen.jpg` | [Group of Children Running in Garden](https://www.pexels.com/photo/group-of-children-running-in-garden-16724787/) | Yakup Polat | Vakantie- en studiedagen (`vakantie`); Engelse startpagina (`rennen`) |
+| `ophalen.jpg` | [Teacher and Students Walking Around the School Campus](https://www.pexels.com/photo/teacher-and-students-walking-around-the-school-campus-8926835/) | Thirdman | Een middag bij Sporty (`middag-1`) |
+| `sport.jpg` | [Kids Playing Soccer](https://www.pexels.com/photo/kids-playing-soccer-8035099/) | RDNE Stock project | Een middag bij Sporty (`middag`) |
+| `spelletje.jpg` | [Kids Sitting on the Floor and Playing Game with Fingers on Eyes](https://www.pexels.com/photo/kids-sitting-on-the-floor-and-playing-game-with-fingers-on-eyes-8535602/) | Ksenia Chernaya | Een middag bij Sporty (`middag-4`) |
+| `team-handen.jpg` | [Group of People Huddling Up](https://www.pexels.com/photo/group-of-people-huddling-up-1198171/) | Mica Asato | Welkom bij de club (`community-2`); Word Sporty coach (`coach`) |
+| `plezier.jpg` | [Kids Having Fun at the Park](https://www.pexels.com/photo/kids-having-fun-at-the-park-8033873/) | RDNE Stock project | Abonnement en kosten (`abonnement`); Welkom bij de club (`community-3`) |
+| `voetbal.jpg` | [Young Soccer Player Kicking Ball on Green Field](https://www.pexels.com/photo/person-field-playing-school-972513/) | Markus Spiske | Locaties (`locatie`) |
+| `aandacht.jpg` | [Kids Playing with Teacher in the Classroom](https://www.pexels.com/photo/kids-playing-with-teacher-in-the-classroom-8363102/) | RDNE Stock project | Nu niet gebruikt (bewaard voor later) |
+| `gezellig.jpg` | [Students Eating Their Snacks at the School Canteen](https://www.pexels.com/photo/students-eating-their-snacks-at-the-school-canteen-8617514/) | Yan Krukau | Een middag bij Sporty (`middag-2`); Locaties (`ruimte-3`) |
+| `binnen.jpg` | [Women Kneeling on the Floor with Children in a Room](https://www.pexels.com/photo/women-kneeling-on-the-floor-with-children-in-a-room-8441839/) | Pavel Danilyuk | Locaties (`ruimte-2`) |
+| `luisteren.jpg` | [A Woman Talking to her Child at a Park](https://www.pexels.com/photo/a-woman-talking-to-her-child-at-a-park-7880785/) (liggend uitgesneden) | Barbara Olsen | Welkom bij de club (`community-4`); Locaties (`ruimte-1`) |
+| `team-eigenaar.jpg` | [Group of Friends Embracing on Scenic Cliffside](https://www.pexels.com/photo/people-friends-hiking-cliff-7625042/) | PNW Production | Alles over Sporty (`tim-en-sureyo`) |
+| `basketbal.jpg` | [Kids Playing Basketball with Their Coach](https://www.pexels.com/photo/kids-playing-basketball-with-their-coach-8336951/) | RDNE Stock project | Pauzebegeleiding (`pauze`) |
+| `handen.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813502/) | Kampus Production | Alles over Sporty (`visie`) |
+| `team.jpg` | [A Group of People Standing Outdoors](https://www.pexels.com/photo/a-group-of-people-standing-outdoors-9353488/) | PNW Production | Nu niet gebruikt (bewaard voor later) |
+| `team-1.jpg` | [Close-up of a Soccer Ball in the Goal](https://www.pexels.com/photo/close-up-of-a-soccer-ball-in-the-goal-19436350/) | Florian Thomschke | Team (`team-tim`) |
+| `team-2.jpg` | [Basketball team stacking hands together](https://www.pexels.com/photo/basketball-team-stacking-hands-together-3755440/) | Andrea Piacquadio | Nu niet gebruikt (bewaard voor later) |
+| `team-3.jpg` | [A Team Raising Their Hands and Doing a High Five](https://www.pexels.com/photo/a-team-raising-their-hands-and-doing-a-high-five-9480122/) | Monstera Production | Team (`team-sureyo`) |
+| `vragen.jpg` | [Children Raising Their Hands in a Classroom](https://www.pexels.com/photo/children-raising-their-hands-in-a-classroom-8613117/) | Yan Krukau | Nu niet gebruikt (bewaard voor later) |
+| `welkom.jpg` | [Father and Children Running in a Park](https://www.pexels.com/photo/father-and-children-running-in-a-park-4543646/) | Elina Fairytale | Welkom bij de club (`community-1`); Een middag bij Sporty (`middag-5`); Contact (`welkom`) |
 
 De bestanden in `bron/` zijn 1600 px breed. De website gebruikt de AVIF- en WebP-versies in `assets/fotos/` (480, 800, 1200 en 1600 px) die `npm run fotos` daarvan maakt.
 
@@ -51,16 +52,17 @@ Lever foto's liefst **minimaal 1600 px breed** aan. De website snijdt ze zelf bi
 
 | Plek (`data-foto`) | Wat moet erop staan |
 |---|---|
-| `hero` | Een brede foto van kinderen die samen sporten of met de armen om elkaar heen staan, liefst in oranje Sporty-kleding. Vierkant of staand werkt het best. |
-| `rennen` | Kinderen die rennen, springen of juichen. Staand (4:5). |
-| `ophalen` | Een coach van Sporty die kinderen ophaalt bij school. |
-| `sporten`, `voetbal`, `basketbal`, `plezier` | Sporten en bewegen, liefst met een begeleider die meedoet. |
-| `samen`, `gezellig`, `knutselen` | Kinderen die samen spelen, kletsen of even bijkomen. |
-| `schilderen`, `luisteren`, `binnen` | Een begeleider die op ooghoogte met een kind praat of met de kinderen speelt. |
-| `team` (Home en Team), `team-eigenaar` | Het team, of de eigenaar met het team. |
-| `team-1`, `team-2`, … | Per teamlid een GIF of kort filmpje van een voetbaljuichmoment (zie hieronder). |
-| `vragen` | Kinderen die enthousiast hun vinger opsteken, of een begeleider die iets uitlegt. |
-| `welkom` | Een warm welkom: kinderen en een coach bij de ingang of op het veld. |
+| `held` (Home) | Een brede, liggende foto van de Sporty-kids in actie, buiten. De tekst staat linksonder, dus daar liefst wat rustige ruimte (gras, lucht). |
+| `visie`, `club`, `proefdag` | Kinderen die samen iets doen: een kring, handen op elkaar, samen lachen. |
+| `tim-en-sureyo` (Alles over Sporty, Onze droom) | Tim en Sureyo samen. |
+| `abonnement`, `vakantie`, `pauze` | Sporten en spelen: buiten, op het schoolplein, in de vakantie. |
+| `community-1` t/m `community-4` (Welkom bij de club) | De erepoort, kinderen die samen de Sporty-regels maken, een Sporty-special en ouders bij een Sporty-evenement. |
+| `middag`, `middag-1` t/m `middag-5` (Een middag bij Sporty) | Per stap van de middag een foto (later een kort filmpje): ophalen (met hesjes), samen eten, de groepsactiviteit, vrij spelen en het ophalen aan het eind. |
+| `locatie`, `ruimte-1` t/m `ruimte-3` (Locaties) | Het clubhuis op Sportpark Middenmeer, de chillruimte, de speelkamer en de kantine. |
+| `team-sureyo`, `team-tim` (Team) | Per teamlid een GIF of kort filmpje van een voetbaljuichmoment (zie hieronder). |
+| `coach` (Word Sporty coach) | Het team in actie, of een coach met kinderen. |
+| `welkom` (Contact) | Een warm welkom: kinderen en een coach bij de ingang of op het veld. |
+| `hero`, `rennen` (Engelse startpagina) | Zoals `held` en `club` hierboven. |
 
 Getekende elementen (sterren, pijlen, kroontjes, hartjes) en handgeschreven krabbels staan óp de beelden. Die blijven staan als de eigen foto's komen, net als in het voorbeeld "Team Sporty" van de klant.
 

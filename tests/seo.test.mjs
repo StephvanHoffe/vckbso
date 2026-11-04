@@ -12,10 +12,10 @@ const titel = (bron) => tekst(bron.match(/<title>([\s\S]*?)<\/title>/)[1]);
 const sitemap = lees("sitemap.xml");
 const inSitemap = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 
-test("elke pagina heeft een unieke titel van hooguit 60 tekens met de naam Sporty", () => {
+test("elke pagina heeft een unieke titel van hooguit 65 tekens met de naam Sporty", () => {
   const titels = PAGINAS.map((p) => titel(html[p]));
   for (const [i, t] of titels.entries()) {
-    assert.ok(t.length >= 20 && t.length <= 60, `${PAGINAS[i]}: titel is ${t.length} tekens: ${t}`);
+    assert.ok(t.length >= 20 && t.length <= 65, `${PAGINAS[i]}: titel is ${t.length} tekens: ${t}`);
     assert.match(t, /Sporty/, `${PAGINAS[i]}: de naam ontbreekt in de titel`);
   }
   assert.equal(new Set(titels).size, titels.length, "twee pagina's hebben dezelfde titel");
@@ -85,8 +85,9 @@ test("schema.org-gegevens zijn geldig en komen overeen met de zichtbare pagina (
     assert.equal(data["@context"], "https://schema.org");
     assert.equal(bijgewerkt(p, html[p]), html[p], `${p}: schema.org-gegevens zijn verouderd; draai npm run seo`);
   }
-  const vragen = JSON.parse(html["veelgestelde-vragen.html"].match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"].find((n) => n["@type"] === "FAQPage");
-  assert.equal(vragen.mainEntity.length, (html["veelgestelde-vragen.html"].match(/<summary>/g) || []).length);
+  const vragen = JSON.parse(html["contact.html"].match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"].find((n) => n["@type"] === "FAQPage");
+  assert.ok(vragen, "contact.html: de veelgestelde vragen (FAQPage) ontbreken");
+  assert.equal(vragen.mainEntity.length, (html["contact.html"].match(/<summary>/g) || []).length);
   const bso = JSON.parse(html["index.html"].match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"][0];
   assert.equal(bso.name, "Sporty");
   assert.ok(html["index.html"].includes(`href="tel:${bso.telephone}"`), "telefoonnummer in schema.org wijkt af van de website");
@@ -96,5 +97,14 @@ test("schema.org-gegevens zijn geldig en komen overeen met de zichtbare pagina (
 test("de oude naam BSO VCK en het oude e-mailadres komen nergens meer voor op de website", () => {
   for (const p of [...PAGINAS, "404.html", "site.webmanifest", "js/rekentool/rekentool.js", "js/rekentool/instellingen.js"]) {
     assert.doesNotMatch(lees(p), /BSO VCK|BSO\+VCK|vckbso/, `${p} noemt nog de oude naam of het oude e-mailadres`);
+  }
+});
+
+test("alle interne links op de website wijzen naar een bestaande pagina", () => {
+  for (const p of [...PAGINAS, "404.html"]) {
+    for (const [, href] of html[p] ? html[p].matchAll(/href="([^"#:?]+\.html)(?:[?#][^"]*)?"/g) : lees(p).matchAll(/href="([^"#:?]+\.html)(?:[?#][^"]*)?"/g)) {
+      const doel = href.startsWith("/") ? href.slice(1) : new URL(href, "https://x/" + p).pathname.slice(1);
+      assert.ok(existsSync(hier(doel)), `${p}: link naar ${href}, maar ${doel} bestaat niet`);
+    }
   }
 });

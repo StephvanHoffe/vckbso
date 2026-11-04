@@ -1,0 +1,11 @@
+# Website Sporty (Apache). Oude adressen uit de eerste versie van de site sturen we door naar de nieuwe pagina's,
+# zodat links en zoekresultaten blijven werken. Op Vercel staat hetzelfde in vercel.json.
+<IfModule mod_alias.c>
+  Redirect 301 /over-ons.html /alles-over-sporty.html
+  Redirect 301 /diensten.html /een-middag-bij-sporty.html
+  Redirect 301 /prijzen.html /abonnementen.html
+  Redirect 301 /veelgestelde-vragen.html /contact.html#veelgestelde-vragen
+  Redirect 301 /werken-bij.html /word-sporty-coach.html
+</IfModule>
+
+ErrorDocument 404 /404.html

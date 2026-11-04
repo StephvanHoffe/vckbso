@@ -74,11 +74,15 @@ function laatste_id(): int
  */
 function transactie(callable $werk): mixed
 {
+    // Zelf bijhouden of we al in een transactie zitten: PDO::inTransaction() ziet een BEGIN via exec()
+    // niet op elke PHP-versie, en een tweede BEGIN geeft dan een fout.
+    static $diepte = 0;
     $pdo = db();
-    if ($pdo->inTransaction()) {
+    if ($diepte > 0 || $pdo->inTransaction()) {
         return $werk();
     }
     $pdo->exec('BEGIN IMMEDIATE');
+    $diepte++;
     try {
         $resultaat = $werk();
         $pdo->exec('COMMIT');
@@ -86,6 +90,8 @@ function transactie(callable $werk): mixed
     } catch (Throwable $fout) {
         $pdo->exec('ROLLBACK');
         throw $fout;
+    } finally {
+        $diepte--;
     }
 }
 
@@ -467,6 +473,14 @@ function migreer(PDO $pdo): void
             );
             CREATE INDEX sollicitaties_verwijderen ON sollicitaties(verwijderen_op);
             INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) SELECT id, 'sollicitaties' FROM gebruikers WHERE rol = 'beheerder';
+            SQL,
+
+        // Word Sporty coach (november 2026): de motivatie komt als bestand (pdf of Word), net als het cv
+        9 => <<<'SQL'
+            ALTER TABLE sollicitaties ADD COLUMN motivatie_bestand TEXT;
+            ALTER TABLE sollicitaties ADD COLUMN motivatie_naam TEXT;
+            ALTER TABLE sollicitaties ADD COLUMN motivatie_type TEXT;
+            ALTER TABLE sollicitaties ADD COLUMN motivatie_grootte INTEGER;
             SQL,
     ];
 

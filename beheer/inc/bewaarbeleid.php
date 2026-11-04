@@ -96,7 +96,7 @@ function voer_bewaarbeleid_uit(): array
 
     // 8. Open sollicitaties (termijnen: zie sollicitaties.php in inc/)
     $telling['sollicitaties'] = 0;
-    foreach (rijen('SELECT id, cv_bestand FROM sollicitaties WHERE verwijderen_op < ?', [nu()]) as $sollicitatie) {
+    foreach (rijen('SELECT id, cv_bestand, motivatie_bestand FROM sollicitaties WHERE verwijderen_op < ?', [nu()]) as $sollicitatie) {
         verwijder_sollicitatie($sollicitatie, 'bewaartermijn', false);
         $telling['sollicitaties']++;
     }
@@ -262,7 +262,7 @@ function herhaal_verwijderingen(): int
         } elseif ($item['soort'] === 'foto' && ($foto = rij('SELECT * FROM fotos WHERE id = ?', [$id]))) {
             verwijder_foto($foto);
             $aantal++;
-        } elseif ($item['soort'] === 'sollicitatie' && ($sollicitatie = rij('SELECT id, cv_bestand FROM sollicitaties WHERE id = ?', [$id]))) {
+        } elseif ($item['soort'] === 'sollicitatie' && ($sollicitatie = rij('SELECT id, cv_bestand, motivatie_bestand FROM sollicitaties WHERE id = ?', [$id]))) {
             verwijder_sollicitatie($sollicitatie, 'opnieuw na herstel back-up', false);
             $aantal++;
         }

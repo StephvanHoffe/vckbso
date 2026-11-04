@@ -51,7 +51,7 @@ Onder **Team** zet je per collega elk menuonderdeel aan of uit. Een onderdeel da
 | Facturen | Facturen maken en incasso starten |
 | Financiën | Inkomsten, uitgaven en bonnetjes |
 | Team | Collega's uitnodigen en rechten geven |
-| Sollicitaties | Open sollicitaties en cv's van de website (Werken bij) |
+| Sollicitaties | Sollicitaties (cv en motivatie) van de website (Word Sporty coach) |
 | Privacyverzoeken | Privacyverzoeken van ouders afhandelen |
 | Instellingen | Instellingen, logboek en beveiligingsstatus |
 
@@ -68,16 +68,16 @@ Zo raak je nooit buitengesloten: je kunt je eigen toegang tot Team niet uitzette
 
 ## Sollicitaties
 
-Het formulier op **Werken bij** (`werken-bij.html`) verstuurt open sollicitaties naar de eigen beheeromgeving (`beheer/solliciteren.php`): gratis en zonder externe formulierendienst.
+Het formulier op **Word Sporty coach** (`word-sporty-coach.html`) verstuurt sollicitaties naar de eigen beheeromgeving (`beheer/solliciteren.php`): gratis en zonder externe formulierendienst.
 
-- **Wat er binnenkomt:** naam, e-mail, telefoon, woonplaats, gewenste functie en dagen, motivatie, een link en het cv (pdf of Word, hooguit 5 MB). Het soort bestand wordt aan de inhoud gecontroleerd, niet alleen aan de naam.
-- **Veilig bewaard:** het cv staat versleuteld in de datamap (`sollicitaties/`, gaat mee in de back-up), de motivatie, de link en de notities van het team versleuteld in de database.
+- **Wat er binnenkomt:** naam, e-mail, telefoon, het cv en de motivatie (allebei pdf of Word, elk hooguit 5 MB). Het soort bestand wordt aan de inhoud gecontroleerd, niet alleen aan de naam. Sollicitaties uit de eerste versie van het formulier (Werken bij, tot november 2026) hebben ook een woonplaats, functie, dagen, link en een motivatie als tekst; die blijven gewoon zichtbaar.
+- **Veilig bewaard:** het cv en de motivatie staan versleuteld in de datamap (`sollicitaties/`, gaat mee in de back-up), een motivatie als tekst, de link en de notities van het team versleuteld in de database.
 - **Melding:** het team krijgt een e-mail op het adres `team_email` uit `config.php`, zonder persoonsgegevens, met een link naar de sollicitatie. De sollicitant krijgt een ontvangstbevestiging.
-- **Afhandelen:** onder **Sollicitaties** (eigen recht, standaard alleen voor beheerders) zie je alle sollicitaties, open je het cv (staat in het logboek als inzage), zet je de status (Nieuw, Uitgenodigd, Geen plek, Aangenomen), schrijf je een notitie en kun je een sollicitatie meteen verwijderen. Het menu toont hoeveel nieuwe er zijn.
+- **Afhandelen:** onder **Sollicitaties** (eigen recht, standaard alleen voor beheerders) zie je alle sollicitaties, open je het cv en de motivatie (staat in het logboek als inzage), zet je de status (Nieuw, Uitgenodigd, Geen plek, Aangenomen), schrijf je een notitie en kun je een sollicitatie meteen verwijderen. Het menu toont hoeveel nieuwe er zijn.
 - **Bewaren:** elke sollicitatie toont de datum waarop hij vanzelf wordt verwijderd (zie de tabel bij Bewaarbeleid).
 - **Tegen spam:** een verborgen veld, alleen vanaf de eigen website, en hooguit 5 verstuurde sollicitaties per kwartier vanaf hetzelfde adres.
 - **Uploadgrootte:** de server moet bestanden van 5 MB accepteren (`upload_max_filesize`; zie de instellingen voor foto's bij de installatie).
-- **Zonder beheeromgeving** (zoals op de statische voorbeeldsite op Vercel) opent het formulier het e-mailprogramma van de bezoeker, met de sollicitatie erin; het cv voegt die dan zelf als bijlage toe.
+- **Zonder beheeromgeving** (zoals op de statische voorbeeldsite op Vercel) opent het formulier het e-mailprogramma van de bezoeker, met de sollicitatie erin; het cv en de motivatie voegt die dan zelf als bijlage toe.
 
 ## Financiën
 
@@ -115,7 +115,7 @@ De beheerder stelt de termijnen in onder **Instellingen → Bewaartermijnen**. D
 | Account en contactgegevens van gestopte klanten | 3 maanden na vertrek | Gewist; naam en adres blijven bij de facturen |
 | Financiële administratie (facturen, betalingen, opvangdagen, boekingen en bonnetjes onder Financiën) | 7 jaar | Verwijderd. Korter dan 7 jaar kan niet (fiscale bewaarplicht) |
 | Logboek | 24 maanden | Verwijderd |
-| Open sollicitaties (gegevens, motivatie en cv) | 4 weken na afronden (geen plek of aangenomen); met toestemming van de sollicitant een jaar na binnenkomst; nog niet afgerond: na 3 maanden (met toestemming na een jaar) | Verwijderd, ook het cv. Vaste termijnen, zoals in de privacyverklaring |
+| Sollicitaties (gegevens, cv en motivatie) | 4 weken na afronden (geen plek of aangenomen); met toestemming van de sollicitant een jaar na binnenkomst; nog niet afgerond: na 3 maanden (met toestemming na een jaar) | Verwijderd, ook het cv. Vaste termijnen, zoals in de privacyverklaring |
 | Exports voor een inzageverzoek | 30 dagen | Verwijderd |
 | Back-ups | 30 dagen | Verwijderd |
 

@@ -77,6 +77,7 @@
   function dagKeuzes(kindEl, vorm) {
     const houder = kindEl.querySelector("[data-rt-dagen]");
     houder.textContent = "";
+    const vast = vorm.urenPerMaandPerDag !== undefined;
     const vakantie = (vorm.vakantieweken || 0) > 0 ? R.leesUren(vorm.urenVakantiedag) : 0;
     R.dagenVan(vorm).forEach((dag) => {
       const school = (vorm.schoolweken || 0) > 0 ? R.leesUren((vorm.urenSchooldag || {})[dag] || 0) : 0;
@@ -86,10 +87,15 @@
       input.type = "checkbox";
       input.value = dag;
       const uren = school > 0 ? R.honderdsten(school) + " uur" : R.honderdsten(vakantie) + " uur in de vakantie";
-      label.append(input, document.createTextNode(DAGNAMEN[dag] + " "), Object.assign(document.createElement("span"), { className: "choice__extra", textContent: "(" + uren + ")" }));
+      label.append(input, document.createTextNode(DAGNAMEN[dag]));
+      if (!vast) label.append(" ", Object.assign(document.createElement("span"), { className: "choice__extra", textContent: "(" + uren + ")" }));
       houder.append(label);
     });
     const uitleg = kindEl.querySelector("[data-rt-dagen-uitleg]");
+    if (vast) {
+      uitleg.textContent = "Per vaste dag per week gemiddeld " + R.honderdsten(R.leesUren(vorm.urenPerMaandPerDag)) + " uur per maand, het hele jaar door. Uurtarief " + R.euro(R.leesCenten(vorm.uurtarief)) + ".";
+      return;
+    }
     const delen = [];
     if (vorm.schoolweken) delen.push(vorm.schoolweken + " schoolweken");
     if (vorm.vakantieweken) delen.push(vorm.vakantieweken + " vakantieweken van " + R.honderdsten(vakantie) + " uur per dag");

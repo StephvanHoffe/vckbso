@@ -114,6 +114,15 @@
   /* ---------- Formulieren (contact, aanmelden en solliciteren) ---------- */
   var todayIso = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 
+  // Onderwerp vooraf kiezen via de link, bijvoorbeeld contact.html?onderwerp=pauzebegeleiding#formulier
+  var gekozenOnderwerp = new URLSearchParams(window.location.search).get("onderwerp");
+  var onderwerpVeld = document.getElementById("onderwerp");
+  if (gekozenOnderwerp && onderwerpVeld && onderwerpVeld.tagName === "SELECT") {
+    [].forEach.call(onderwerpVeld.options, function (optie) {
+      if (optie.value === gekozenOnderwerp) onderwerpVeld.value = gekozenOnderwerp;
+    });
+  }
+
   document.querySelectorAll("form[data-form]").forEach(function (form) {
     form.setAttribute("novalidate", "");
     var status = form.querySelector("[data-form-status]");

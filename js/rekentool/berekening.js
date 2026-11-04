@@ -132,6 +132,12 @@
     if (!SOORTEN.includes(vorm.soort)) fouten.push("soort moet bso, dagopvang of gastouder zijn");
     const tarief = leesCenten(vorm.uurtarief);
     if (!(tarief > 0 && tarief <= MAX_TARIEF_INVOER)) fouten.push("uurtarief ontbreekt of is ongeldig");
+    // Vast gemiddelde per maand per gekozen dag (zoals bij een jaarabonnement): dan zijn weken en uren per dag niet nodig
+    if (vorm.urenPerMaandPerDag !== undefined) {
+      const perDag = leesUren(vorm.urenPerMaandPerDag);
+      if (!(perDag > 0 && perDag <= 23000)) fouten.push("uren per maand per dag zijn ongeldig");
+      return fouten;
+    }
     const weken = (vorm.schoolweken || 0) + (vorm.vakantieweken || 0);
     for (const w of ["schoolweken", "vakantieweken"]) {
       const waarde = vorm[w] || 0;
@@ -154,6 +160,7 @@
 
   /** Dagen waarop een opvangvorm open is (schooldag of vakantiedag met uren). */
   function dagenVan(vorm) {
+    if (vorm.urenPerMaandPerDag !== undefined) return DAGEN.slice();
     const vakantie = (vorm.vakantieweken || 0) > 0 ? leesUren(vorm.urenVakantiedag ?? 0) : 0;
     return DAGEN.filter((dag) => {
       const school = (vorm.schoolweken || 0) > 0 ? leesUren((vorm.urenSchooldag || {})[dag] ?? 0) : 0;
@@ -164,9 +171,12 @@
   /**
    * Uren per maand voor een opvangvorm en gekozen dagen, in honderdsten van een uur:
    * (per gekozen dag: schoolweken x uren per schooldag + vakantieweken x uren per vakantiedag) / 12,
-   * afgerond op twee decimalen.
+   * afgerond op twee decimalen. Heeft de opvangvorm een vast gemiddelde (urenPerMaandPerDag), dan
+   * is het dat gemiddelde x het aantal gekozen dagen.
    */
   function urenPerMaand(vorm, dagen) {
+    for (const dag of dagen) if (!DAGEN.includes(dag)) throw new RangeError("Onbekende dag: " + dag);
+    if (vorm.urenPerMaandPerDag !== undefined) return leesUren(vorm.urenPerMaandPerDag) * dagen.length;
     let perJaar = 0; // honderdsten van een uur
     for (const dag of dagen) {
       if (!DAGEN.includes(dag)) throw new RangeError("Onbekende dag: " + dag);
