@@ -16,6 +16,7 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | Overzicht welke kinderen wanneer komen, met maximale groepsgrootte | `agenda.php`, `index.php`, `groepen.php` | Per groep een maximum. Weekoverzicht met bezetting per dag (kleur bij bijna vol en vol) en een dagoverzicht met namen, allergieën en knoppen voor binnen, opgehaald, ziek en afmelden. |
 | Digitale agenda die twee kanten op werkt | `agenda.php` | Ouders kiezen zelf dagen (los of vaste weekdagen voor een periode) en melden af tot een ingestelde tijd op de dag zelf. Vol? Dan op de wachtlijst; bij een afmelding schuift de volgende automatisch door en krijgt een bericht. Het team kan ook zelf kinderen toevoegen, afmelden, boven het maximum plaatsen, een dag sluiten of de groepsgrootte voor één dag aanpassen. Ouders krijgen daar automatisch bericht van. |
 | Financiële inkomsten en uitgaven inzien | `financien.php` | Per jaar of maand: inkomsten, uitgaven, resultaat en wat nog te ontvangen is, een grafiek per maand en een verdeling per categorie. Betaalde facturen tellen automatisch mee als inkomsten; overige inkomsten en alle uitgaven voer je in, met een bonnetje (pdf of foto). Export als CSV voor de boekhouder. Zie [Financiën](#financiën). |
+| Ouders kiezen zelf een moment voor een gratis proefdag (november 2026) | `proefdagen.php`, `proefdag.php` (formulier op `proefdag.html`) | Het team zet momenten met een aantal plekken klaar; ouders kiezen er een op de website en krijgen een bevestiging. Zie [Proefdagen](#proefdagen). |
 | Collega's aanmaken en per persoon rechten geven | `medewerkers.php` (Team) | Per collega staat elk menuonderdeel aan of uit, plus de groepen en twee extra rechten. Zie [Rechten per persoon](#rechten-per-persoon). |
 
 ## De verplichte eisen en hoe ze zijn ingevuld
@@ -51,6 +52,7 @@ Onder **Team** zet je per collega elk menuonderdeel aan of uit. Een onderdeel da
 | Facturen | Facturen maken en incasso starten |
 | Financiën | Inkomsten, uitgaven en bonnetjes |
 | Team | Collega's uitnodigen en rechten geven |
+| Proefdagen | Momenten klaarzetten voor een gratis proefdag en de boekingen van ouders |
 | Sollicitaties | Sollicitaties (cv en motivatie) van de website (Word Sporty coach) |
 | Privacyverzoeken | Privacyverzoeken van ouders afhandelen |
 | Instellingen | Instellingen, logboek en beveiligingsstatus |
@@ -78,6 +80,17 @@ Het formulier op **Word Sporty coach** (`word-sporty-coach.html`) verstuurt soll
 - **Tegen spam:** een verborgen veld, alleen vanaf de eigen website, en hooguit 5 verstuurde sollicitaties per kwartier vanaf hetzelfde adres.
 - **Uploadgrootte:** de server moet bestanden van 5 MB accepteren (`upload_max_filesize`; zie de instellingen voor foto's bij de installatie).
 - **Zonder beheeromgeving** (zoals op de statische voorbeeldsite op Vercel) opent het formulier het e-mailprogramma van de bezoeker, met de sollicitatie erin; het cv en de motivatie voegt die dan zelf als bijlage toe.
+
+## Proefdagen
+
+Op de pagina **Proefdag** (`proefdag.html`) kiezen ouders zelf een moment voor een gratis proefdag. De momenten zet het team klaar onder **Proefdagen** (eigen recht, standaard voor beheerders).
+
+- **Momenten klaarzetten:** datum, begin- en eindtijd en het aantal plekken. Met "Herhalen" zet je in één keer hetzelfde moment voor een aantal weken achter elkaar klaar. Ouders zien momenten vanaf morgen en tot 12 weken vooruit, zolang er een plek vrij is. Het aantal plekken pas je later nog aan; een moment zonder boekingen kun je verwijderen.
+- **Boeken:** ouders vullen hun naam, e-mail en telefoon in, de naam en leeftijd van hun kind (4 t/m 12 jaar) en eventueel een opmerking. De controle op een vrije plek en de boeking gebeuren in één transactie, dus twee ouders kunnen nooit samen de laatste plek boeken. De ouder krijgt een bevestiging per e-mail, het team een melding zonder persoonsgegevens (`team_email` uit `config.php`). De tekst van de bevestigingsmail staat in `beheer/proefdag.php` (TODO: laten controleren door Sporty).
+- **Afhandelen:** per moment zie je de boekingen met contactgegevens en de opmerking (versleuteld opgeslagen; bekijken komt in het logboek als inzage). Zet de status op Geweest, Niet gekomen of Geannuleerd. Het menu toont hoeveel proefdagen er gepland staan.
+- **Bewaren:** een boeking wordt 4 weken na de proefdag vanzelf verwijderd, en een oud moment zonder boekingen ook.
+- **Tegen spam:** een verborgen veld, alleen vanaf de eigen website, en hooguit 5 boekingen per kwartier vanaf hetzelfde adres.
+- **Zonder beheeromgeving, of zonder momenten:** dan ziet de bezoeker een knop naar het contactformulier (met het onderwerp proefdag al gekozen) en het telefoonnummer. Op de voorbeeldsite op Vercel staan verzonnen momenten (`voorbeeld/beheer/proefdag-momenten.json`); boeken slaat daar niets op.
 
 ## Financiën
 
@@ -116,6 +129,7 @@ De beheerder stelt de termijnen in onder **Instellingen → Bewaartermijnen**. D
 | Financiële administratie (facturen, betalingen, opvangdagen, boekingen en bonnetjes onder Financiën) | 7 jaar | Verwijderd. Korter dan 7 jaar kan niet (fiscale bewaarplicht) |
 | Logboek | 24 maanden | Verwijderd |
 | Sollicitaties (gegevens, cv en motivatie) | 4 weken na afronden (geen plek of aangenomen); met toestemming van de sollicitant een jaar na binnenkomst; nog niet afgerond: na 3 maanden (met toestemming na een jaar) | Verwijderd, ook het cv. Vaste termijnen, zoals in de privacyverklaring |
+| Proefdagen (boekingen) | 4 weken na de proefdag | Verwijderd. Vaste termijn, zoals in de privacyverklaring |
 | Exports voor een inzageverzoek | 30 dagen | Verwijderd |
 | Back-ups | 30 dagen | Verwijderd |
 

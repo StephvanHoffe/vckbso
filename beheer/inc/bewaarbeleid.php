@@ -101,6 +101,14 @@ function voer_bewaarbeleid_uit(): array
         $telling['sollicitaties']++;
     }
 
+    // 8b. Proefdagen: boekingen 4 weken na de proefdag, en oude momenten zonder boekingen
+    $telling['proefdagen'] = 0;
+    foreach (rijen('SELECT id FROM proefdag_boekingen WHERE verwijderen_op < ?', [nu()]) as $boeking) {
+        verwijder_proefdagboeking($boeking, 'bewaartermijn', false);
+        $telling['proefdagen']++;
+    }
+    q('DELETE FROM proefdag_momenten WHERE datum < ? AND NOT EXISTS (SELECT 1 FROM proefdag_boekingen b WHERE b.moment_id = proefdag_momenten.id)', [date('Y-m-d', strtotime('-' . PROEFDAG_BEWAAR_DAGEN . ' days'))]);
+
     // 9. Logboek
     $telling['logboek'] = q('DELETE FROM logboek WHERE aangemaakt_op < ?', [grens(bewaartermijn('bewaar_logboek_maanden'))])->rowCount();
 
@@ -264,6 +272,9 @@ function herhaal_verwijderingen(): int
             $aantal++;
         } elseif ($item['soort'] === 'sollicitatie' && ($sollicitatie = rij('SELECT id, cv_bestand, motivatie_bestand FROM sollicitaties WHERE id = ?', [$id]))) {
             verwijder_sollicitatie($sollicitatie, 'opnieuw na herstel back-up', false);
+            $aantal++;
+        } elseif ($item['soort'] === 'proefdag' && ($boeking = rij('SELECT id FROM proefdag_boekingen WHERE id = ?', [$id]))) {
+            verwijder_proefdagboeking($boeking, 'opnieuw na herstel back-up', false);
             $aantal++;
         }
     }

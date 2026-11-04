@@ -482,6 +482,35 @@ function migreer(PDO $pdo): void
             ALTER TABLE sollicitaties ADD COLUMN motivatie_type TEXT;
             ALTER TABLE sollicitaties ADD COLUMN motivatie_grootte INTEGER;
             SQL,
+
+        // Proefdagen boeken via de website (november 2026). Beheerders krijgen het nieuwe menuonderdeel meteen.
+        10 => <<<'SQL'
+            CREATE TABLE proefdag_momenten (
+                id INTEGER PRIMARY KEY,
+                datum TEXT NOT NULL,
+                begin TEXT NOT NULL,
+                eind TEXT NOT NULL,
+                plekken INTEGER NOT NULL DEFAULT 3 CHECK (plekken BETWEEN 1 AND 50),
+                aangemaakt_op TEXT NOT NULL
+            );
+            CREATE INDEX proefdag_momenten_datum ON proefdag_momenten(datum);
+            CREATE TABLE proefdag_boekingen (
+                id INTEGER PRIMARY KEY,
+                moment_id INTEGER NOT NULL REFERENCES proefdag_momenten(id) ON DELETE CASCADE,
+                status TEXT NOT NULL DEFAULT 'geboekt' CHECK (status IN ('geboekt', 'geweest', 'niet_gekomen', 'geannuleerd')),
+                naam TEXT NOT NULL,
+                email TEXT NOT NULL,
+                telefoon TEXT NOT NULL,
+                kind_naam TEXT NOT NULL,
+                kind_leeftijd TEXT NOT NULL DEFAULT '',
+                opmerking TEXT NOT NULL DEFAULT '',
+                aangemaakt_op TEXT NOT NULL,
+                verwijderen_op TEXT NOT NULL
+            );
+            CREATE INDEX proefdag_boekingen_moment ON proefdag_boekingen(moment_id);
+            CREATE INDEX proefdag_boekingen_verwijderen ON proefdag_boekingen(verwijderen_op);
+            INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) SELECT id, 'proefdagen' FROM gebruikers WHERE rol = 'beheerder';
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

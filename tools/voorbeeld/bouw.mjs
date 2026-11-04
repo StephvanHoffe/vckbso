@@ -57,7 +57,7 @@ for (let poging = 0; ; poging++) {
 
 // ---------- Rollen en sessies ----------
 const ROLLEN = {
-  beheerder: { id: 1, seeds: ["index.php", "agenda.php", `agenda.php?dag=${VANDAAG}`, "kinderen.php", "ouders.php", "berichten.php", "fotos.php", "groepen.php", "facturen.php", "financien.php", "medewerkers.php", "sollicitaties.php", "verzoeken.php", "instellingen.php", "beveiliging.php", "logboek.php", "profiel.php", "tweestaps.php"] },
+  beheerder: { id: 1, seeds: ["index.php", "agenda.php", `agenda.php?dag=${VANDAAG}`, "kinderen.php", "ouders.php", "berichten.php", "fotos.php", "groepen.php", "facturen.php", "financien.php", "medewerkers.php", "sollicitaties.php", "proefdagen.php", "verzoeken.php", "instellingen.php", "beveiliging.php", "logboek.php", "profiel.php", "tweestaps.php"] },
   begeleider: { id: 2, seeds: ["index.php", "agenda.php", `agenda.php?dag=${VANDAAG}`, "kinderen.php", "ouders.php", "berichten.php", "fotos.php", "profiel.php"] },
   ouder: { id: 3, seeds: ["index.php", "agenda.php", "berichten.php", "fotos.php", "kinderen.php", "facturen.php", "privacy.php", "profiel.php", "tweestaps.php"] },
 };
@@ -70,7 +70,7 @@ for (const [rol, r] of Object.entries(ROLLEN)) {
 }
 
 // Niet in de momentopname: acties, downloads, exports
-const OVERSLAAN = /^(uitloggen|export|agenda-actie|mollie-webhook|machtiging|installeren|inloggen-code|wachtwoord-instellen|foto|solliciteren)\.php|csv=|export=|download=|bijlage=|bewerk=|cv=/;
+const OVERSLAAN = /^(uitloggen|export|agenda-actie|mollie-webhook|machtiging|installeren|inloggen-code|wachtwoord-instellen|foto|solliciteren|proefdag)\.php|csv=|export=|download=|bijlage=|bewerk=|cv=/;
 // Detailpagina's die ook twee klikken diep worden meegenomen
 const DETAIL = /^((kind|ouder|factuur|verzoeken|sollicitaties)\.php\?id=\d+|berichten\.php\?ouder=\d+|logboek\.php\?onderwerp=[a-z]+%3A\d+)$/;
 // Deze week en deze maand zijn gelijk aan de standaardweergave van de agenda
@@ -125,6 +125,14 @@ for (const map of Object.values(paginas)) for (const html of map.values()) for (
 }
 console.log(`foto's: ${fotos.size}`);
 
+// De proefdagmomenten uit de demo, zodat ouders op de voorbeeldsite kunnen zien hoe kiezen werkt (boeken slaat niets op)
+// Met "ok": false: komt dit bestand ooit terug op een boeking (POST), dan ziet de bezoeker deze melding in plaats van een bevestiging
+const proefdagMomenten = JSON.stringify({
+  ...JSON.parse((await haal("proefdag.php?momenten=1", null)) || '{"momenten":[]}'),
+  ok: false,
+  melding: "Dit is een voorbeeld: boeken slaat hier niets op. Plan je proefdag via ons contactformulier of bel ons.",
+});
+
 // ---------- Voorbeeldbalk ----------
 // vb: pad naar de map van het voorbeeld, site: pad naar de hoofdmap van de website, overzicht: bestandsnaam van de overzichtspagina
 const balk = (rol, { vb, site, overzicht }) => {
@@ -178,6 +186,7 @@ function schrijfMomentopname(vbMap, paden) {
     for (const [url, html] of map) schrijf(vbMap + "beheer/" + bestandsnaam(rol, url), herschrijfBeheer(rol, html, paden));
   }
   for (const [naam, data] of fotos) schrijf(vbMap + "beheer/fotos/" + naam, data);
+  schrijf(vbMap + "beheer/proefdag-momenten.json", proefdagMomenten);
   for (const bestand of ["assets/beheer.css", "assets/beheer.js", "assets/vendor/qrcode.js"]) kopieer(REPO + "beheer/" + bestand, vbMap + "beheer/" + bestand);
   kopieer(HIER + "voorbeeld.css", vbMap + "beheer/voorbeeld.css");
   kopieer(HIER + "voorbeeld.js", vbMap + "beheer/voorbeeld.js");
@@ -206,7 +215,8 @@ if (BUNDEL) {
   for (const p of siteBestanden) {
     if (!p.endsWith(".html")) { kopieer(REPO + p, W + p); continue; }
     const prefix = p.includes("/") ? "../" : "";
-    const html = readFileSync(REPO + p, "utf8").replace(/href="((?:\.\.\/)?)beheer\/([a-z-]+)\.php"/g, (_, terug, naam) => `href="${terug}beheer/${naam === "privacy" ? "ouder-privacy" : naam}.html"`);
+    const html = readFileSync(REPO + p, "utf8").replace(/href="((?:\.\.\/)?)beheer\/([a-z-]+)\.php"/g, (_, terug, naam) => `href="${terug}beheer/${naam === "privacy" ? "ouder-privacy" : naam}.html"`)
+      .replace('data-proefdag="beheer/proefdag.php"', 'data-proefdag="beheer/proefdag-momenten.json"');
     schrijf(W + p, injecteer(html, "website", { vb: prefix, site: prefix, overzicht: "voorbeeld.html" }));
   }
   schrijf(W + "voorbeeld.html", overzichtspagina("", ""));

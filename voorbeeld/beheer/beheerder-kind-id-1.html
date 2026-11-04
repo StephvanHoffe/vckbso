@@ -47,6 +47,7 @@
       <li><a href="beheerder-facturen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-euro"></use></svg>Facturen</a></li>
       <li><a href="beheerder-financien.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chart"></use></svg>Financiën</a></li>
       <li><a href="beheerder-medewerkers.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-key"></use></svg>Team</a></li>
+      <li><a href="beheerder-proefdagen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg>Proefdagen <span class="teller">2<span class="visually-hidden"> gepland</span></span></a></li>
       <li><a href="beheerder-sollicitaties.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"></use></svg>Sollicitaties <span class="teller">1<span class="visually-hidden"> nieuw</span></span></a></li>
       <li><a href="beheerder-verzoeken.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken <span class="teller">1<span class="visually-hidden"> open</span></span></a></li>
       <li><a href="beheerder-instellingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
@@ -233,10 +234,23 @@
             <form class="inline-form" method="post" action="#" data-bevestig="Deze observatie verwijderen?"><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="observatie_verwijderen"><input type="hidden" name="observatie" value="1"><button class="link-button" type="submit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>Verwijderen</button></form>
           </div>
         </li>
+        <li class="gebied-zelfstandigheid">
+          <div class="tijdlijn__meta">
+            <strong>Zelfstandigheid</strong>
+            <span>1 november 2026</span>
+            <span>Demo Begeleider</span>
+            <span class="badge badge--afgemeld" style="text-decoration: none">Alleen team</span>
+          </div>
+          <p>Ruimde vandaag zonder vragen zelf de knutseltafel op en hielp daarna mee met de bekers. Was na het ophalen van de broer even verdrietig, na een knuffel weer vrolijk mee met spelen.</p>
+          <div class="btn-group" style="margin-top: var(--space-2xs)">
+            <form class="inline-form" method="post" action="#"><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="observatie_delen"><input type="hidden" name="observatie" value="4"><button class="link-button" type="submit">Delen met ouders</button></form>
+            <form class="inline-form" method="post" action="#" data-bevestig="Deze observatie verwijderen?"><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="observatie_verwijderen"><input type="hidden" name="observatie" value="4"><button class="link-button" type="submit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>Verwijderen</button></form>
+          </div>
+        </li>
         <li class="gebied-sociaal">
           <div class="tijdlijn__meta">
             <strong>Sociaal-emotioneel</strong>
-            <span>1 november 2026</span>
+            <span>31 oktober 2026</span>
             <span>Demo Begeleider</span>
             <span class="badge badge--bevestigd" style="text-decoration: none">Gedeeld met ouders</span>
           </div>
@@ -249,7 +263,7 @@
         <li class="gebied-taal">
           <div class="tijdlijn__meta">
             <strong>Taal en communicatie</strong>
-            <span>19 oktober 2026</span>
+            <span>20 oktober 2026</span>
             <span>Demo Begeleider</span>
             <span class="badge badge--bevestigd" style="text-decoration: none">Gedeeld met ouders</span>
           </div>
@@ -257,19 +271,6 @@
           <div class="btn-group" style="margin-top: var(--space-2xs)">
             <form class="inline-form" method="post" action="#"><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="observatie_delen"><input type="hidden" name="observatie" value="3"><button class="link-button" type="submit">Niet meer delen</button></form>
             <form class="inline-form" method="post" action="#" data-bevestig="Deze observatie verwijderen?"><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="observatie_verwijderen"><input type="hidden" name="observatie" value="3"><button class="link-button" type="submit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>Verwijderen</button></form>
-          </div>
-        </li>
-        <li class="gebied-zelfstandigheid">
-          <div class="tijdlijn__meta">
-            <strong>Zelfstandigheid</strong>
-            <span>17 oktober 2026</span>
-            <span>Demo Begeleider</span>
-            <span class="badge badge--afgemeld" style="text-decoration: none">Alleen team</span>
-          </div>
-          <p>Ruimde vandaag zonder vragen zelf de knutseltafel op en hielp daarna mee met de bekers. Was na het ophalen van de broer even verdrietig, na een knuffel weer vrolijk mee met spelen.</p>
-          <div class="btn-group" style="margin-top: var(--space-2xs)">
-            <form class="inline-form" method="post" action="#"><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="observatie_delen"><input type="hidden" name="observatie" value="4"><button class="link-button" type="submit">Delen met ouders</button></form>
-            <form class="inline-form" method="post" action="#" data-bevestig="Deze observatie verwijderen?"><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="observatie_verwijderen"><input type="hidden" name="observatie" value="4"><button class="link-button" type="submit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>Verwijderen</button></form>
           </div>
         </li>
       </ol>
@@ -309,7 +310,7 @@
     </section>
     <section class="panel" aria-labelledby="fotos-titel">
       <div class="panel__kop"><h2 id="fotos-titel">Foto's</h2><a href="beheerder-fotos.html">Foto's delen</a></div>
-      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=2&amp;weergave=1"><img src="fotos/foto-2-klein.jpg" alt="Knutselmiddag" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Knutselmiddag</p><p class="muted">vandaag 21:07 · Noor</p></div></li><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=1&amp;weergave=1"><img src="fotos/foto-1-klein.jpg" alt="Voetballen op het veldje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Voetballen op het veldje</p><p class="muted">vandaag 21:07 · Noor</p></div></li></ul>
+      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=2&amp;weergave=1"><img src="fotos/foto-2-klein.jpg" alt="Knutselmiddag" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Knutselmiddag</p><p class="muted">vandaag 21:19 · Noor</p></div></li><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=1&amp;weergave=1"><img src="fotos/foto-1-klein.jpg" alt="Voetballen op het veldje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Voetballen op het veldje</p><p class="muted">vandaag 21:19 · Noor</p></div></li></ul>
     </section>
   </div>
 </div>

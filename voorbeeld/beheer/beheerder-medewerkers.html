@@ -47,6 +47,7 @@
       <li><a href="beheerder-facturen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-euro"></use></svg>Facturen</a></li>
       <li><a href="beheerder-financien.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chart"></use></svg>Financiën</a></li>
       <li><a href="beheerder-medewerkers.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-key"></use></svg>Team</a></li>
+      <li><a href="beheerder-proefdagen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg>Proefdagen <span class="teller">2<span class="visually-hidden"> gepland</span></span></a></li>
       <li><a href="beheerder-sollicitaties.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"></use></svg>Sollicitaties <span class="teller">1<span class="visually-hidden"> nieuw</span></span></a></li>
       <li><a href="beheerder-verzoeken.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken <span class="teller">1<span class="visually-hidden"> open</span></span></a></li>
       <li><a href="beheerder-instellingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
@@ -134,6 +135,11 @@
             <span class="schakel__uitleg" id="p2-team-uitleg">Collega&#039;s uitnodigen en rechten geven</span>
           </li>
           <li class="schakel">
+            <input type="checkbox" id="p2-proefdagen" name="rechten[]" value="proefdagen" data-begeleider="0" aria-describedby="p2-proefdagen-uitleg">
+            <label for="p2-proefdagen"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg>Proefdagen</label>
+            <span class="schakel__uitleg" id="p2-proefdagen-uitleg">Momenten voor een gratis proefdag klaarzetten en de boekingen van ouders</span>
+          </li>
+          <li class="schakel">
             <input type="checkbox" id="p2-sollicitaties" name="rechten[]" value="sollicitaties" data-begeleider="0" aria-describedby="p2-sollicitaties-uitleg">
             <label for="p2-sollicitaties"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"></use></svg>Sollicitaties</label>
             <span class="schakel__uitleg" id="p2-sollicitaties-uitleg">Sollicitaties (cv en motivatie) van de website</span>
@@ -193,7 +199,7 @@
           <span class="badge">Beheerder: alles</span>
         </div>
       </div>
-      <p class="collega__onderdelen">Vandaag · Agenda · Kinderen · Ouders · Berichten · Foto&#039;s · Groepen · Facturen · Financiën · Team · Sollicitaties · Privacyverzoeken · Instellingen · alle groepen</p>
+      <p class="collega__onderdelen">Vandaag · Agenda · Kinderen · Ouders · Berichten · Foto&#039;s · Groepen · Facturen · Financiën · Team · Proefdagen · Sollicitaties · Privacyverzoeken · Instellingen · alle groepen</p>
       <details class="uitklap">
         <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-key"></use></svg>Rechten en groepen<span class="visually-hidden"> van Demo Beheerder</span></summary>
         <form class="form" method="post" action="#" data-rechten-form>
@@ -256,6 +262,11 @@
             <input type="checkbox" id="p1-team" name="rechten[]" value="team" checked data-begeleider="0" aria-describedby="p1-team-uitleg">
             <label for="p1-team"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-key"></use></svg>Team</label>
             <span class="schakel__uitleg" id="p1-team-uitleg">Collega&#039;s uitnodigen en rechten geven</span>
+          </li>
+          <li class="schakel">
+            <input type="checkbox" id="p1-proefdagen" name="rechten[]" value="proefdagen" checked data-begeleider="0" aria-describedby="p1-proefdagen-uitleg">
+            <label for="p1-proefdagen"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg>Proefdagen</label>
+            <span class="schakel__uitleg" id="p1-proefdagen-uitleg">Momenten voor een gratis proefdag klaarzetten en de boekingen van ouders</span>
           </li>
           <li class="schakel">
             <input type="checkbox" id="p1-sollicitaties" name="rechten[]" value="sollicitaties" checked data-begeleider="0" aria-describedby="p1-sollicitaties-uitleg">
@@ -367,6 +378,11 @@
             <input type="checkbox" id="nieuw-team" name="rechten[]" value="team" data-begeleider="0" aria-describedby="nieuw-team-uitleg">
             <label for="nieuw-team"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-key"></use></svg>Team</label>
             <span class="schakel__uitleg" id="nieuw-team-uitleg">Collega&#039;s uitnodigen en rechten geven</span>
+          </li>
+          <li class="schakel">
+            <input type="checkbox" id="nieuw-proefdagen" name="rechten[]" value="proefdagen" data-begeleider="0" aria-describedby="nieuw-proefdagen-uitleg">
+            <label for="nieuw-proefdagen"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-heart"></use></svg>Proefdagen</label>
+            <span class="schakel__uitleg" id="nieuw-proefdagen-uitleg">Momenten voor een gratis proefdag klaarzetten en de boekingen van ouders</span>
           </li>
           <li class="schakel">
             <input type="checkbox" id="nieuw-sollicitaties" name="rechten[]" value="sollicitaties" data-begeleider="0" aria-describedby="nieuw-sollicitaties-uitleg">

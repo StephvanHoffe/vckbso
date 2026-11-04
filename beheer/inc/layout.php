@@ -74,7 +74,7 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
   <nav class="app-nav" aria-label="Menu">
     <ul>
 <?php foreach (menu_items($gebruiker) as [$bestand, $label, $ico]): ?>
-      <li><a href="<?= e($bestand) ?>"<?= $actief === $bestand ? ' aria-current="page"' : '' ?>><?= icoon($ico) ?><?= e($label) ?><?php if ($bestand === 'berichten.php' && $ongelezen > 0): ?> <span class="teller"><?= $ongelezen ?><span class="visually-hidden"> ongelezen</span></span><?php endif; ?><?php if ($bestand === 'verzoeken.php' && ($open = open_verzoeken()) > 0): ?> <span class="teller"><?= $open ?><span class="visually-hidden"> open</span></span><?php endif; ?><?php if ($bestand === 'sollicitaties.php' && ($nieuw = open_sollicitaties()) > 0): ?> <span class="teller"><?= $nieuw ?><span class="visually-hidden"> nieuw</span></span><?php endif; ?></a></li>
+      <li><a href="<?= e($bestand) ?>"<?= $actief === $bestand ? ' aria-current="page"' : '' ?>><?= icoon($ico) ?><?= e($label) ?><?php if ($bestand === 'berichten.php' && $ongelezen > 0): ?> <span class="teller"><?= $ongelezen ?><span class="visually-hidden"> ongelezen</span></span><?php endif; ?><?php if ($bestand === 'verzoeken.php' && ($open = open_verzoeken()) > 0): ?> <span class="teller"><?= $open ?><span class="visually-hidden"> open</span></span><?php endif; ?><?php if ($bestand === 'sollicitaties.php' && ($nieuw = open_sollicitaties()) > 0): ?> <span class="teller"><?= $nieuw ?><span class="visually-hidden"> nieuw</span></span><?php endif; ?><?php if ($bestand === 'proefdagen.php' && ($komend = komende_proefdagen()) > 0): ?> <span class="teller"><?= $komend ?><span class="visually-hidden"> gepland</span></span><?php endif; ?></a></li>
 <?php endforeach; ?>
     </ul>
   </nav>

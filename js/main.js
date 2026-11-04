@@ -136,8 +136,16 @@
     var isField = function (el) {
       return el && el.name && el.type !== "hidden" && el.type !== "submit" && el.type !== "button" && !el.closest(".hp");
     };
+    // Van een groep keuzerondjes telt alleen het eerste rondje als veld (de melding hoort bij de groep)
     var getFields = function () {
-      return Array.prototype.filter.call(form.elements, isField);
+      var gezien = {};
+      return Array.prototype.filter.call(form.elements, function (el) {
+        if (!isField(el)) return false;
+        if (el.type !== "radio") return true;
+        if (gezien[el.name]) return false;
+        gezien[el.name] = true;
+        return true;
+      });
     };
 
     var showStatus = function (type, text) {
@@ -170,7 +178,7 @@
 
     // Melding onder een veld tonen of weghalen (ook voor meldingen van de server)
     var setError = function (field, text) {
-      var error = document.getElementById(field.id + "-fout");
+      var error = document.getElementById(field.getAttribute("data-fout") || field.id + "-fout");
       field.setAttribute("aria-invalid", text ? "true" : "false");
       if (error) {
         error.querySelector("[data-error-text]").textContent = text;
@@ -181,12 +189,15 @@
     form.addEventListener("focusout", function (event) {
       var field = event.target;
       if (!isField(field)) return;
-      var filled = field.type !== "checkbox" && field.value.trim() !== "";
+      var filled = field.type !== "checkbox" && field.type !== "radio" && field.value.trim() !== "";
       if (filled || field.getAttribute("aria-invalid") === "true") validate(field);
     });
     ["input", "change"].forEach(function (type) {
       form.addEventListener(type, function (event) {
-        if (isField(event.target) && (event.target.getAttribute("aria-invalid") === "true" || event.target.type === "file")) validate(event.target);
+        var field = event.target;
+        // Bij keuzerondjes hoort de melding bij het eerste rondje van de groep
+        if (field.type === "radio") field = form.querySelector('input[type="radio"][name="' + field.name + '"]');
+        if (isField(field) && (field.getAttribute("aria-invalid") === "true" || field.type === "file")) validate(field);
       });
     });
 
@@ -324,6 +335,7 @@
         })
         .then(function (result) {
           if (result.ok) {
+            form.dispatchEvent(new CustomEvent("formulier-verstuurd", { detail: result.body }));
             form.reset();
             getFields().forEach(function (field) { field.removeAttribute("aria-invalid"); });
             showStatus("success", form.getAttribute("data-success") || "Joepie, je bericht is verstuurd! We reageren zo snel mogelijk.");
@@ -346,6 +358,10 @@
         .catch(function (error) {
           if (error && error.geenServer && form.hasAttribute("data-mailto-fallback")) {
             openMail();
+            return;
+          }
+          if (error && error.geenServer && form.hasAttribute("data-geen-server")) {
+            showStatus("error", form.getAttribute("data-geen-server"));
             return;
           }
           showStatus("error", "Oeps, het versturen is niet gelukt. Probeer het nog eens of mail ons direct via " + mailto + ".");

@@ -29,6 +29,7 @@
 <link rel="stylesheet" href="css/style.css">
 <script>document.documentElement.classList.add("js","reveal-on");setTimeout(function(){if(!window.vckReady)document.documentElement.classList.remove("reveal-on")},3000);</script>
 <script src="js/main.js" defer></script>
+<script src="js/proefdag.js" defer></script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://bsovck.nl/"},{"@type":"ListItem","position":2,"name":"Proefdag","item":"https://bsovck.nl/proefdag.html"}]}]}</script>
 </head>
 <body>
@@ -93,9 +94,92 @@
     <div class="reveal">
       <p class="eyebrow">Gratis proefdag</p>
       <h2 id="boeken-titel">Kies hieronder een moment dat jou <span class="hl">uitkomt</span></h2>
-      <!--PROEFDAG-BOEKEN-->
+      <!--
+        Boeken: de momenten zet het team klaar in de beheeromgeving (Proefdagen). js/proefdag.js haalt ze op bij
+        beheer/proefdag.php en laat dit formulier pas zien als er momenten zijn. Draait de beheeromgeving niet
+        (zoals op de statische voorbeeldsite), of staat er niets klaar, dan blijft de terugval eronder staan.
+      -->
+      <div class="boeken" data-proefdag="beheer/proefdag.php" hidden>
+        <form class="form boeken__form" action="beheer/proefdag.php" method="post" data-form data-geen-server="Online boeken lukt hier nu even niet. Plan je proefdag via ons contactformulier of bel ons op 06 12 34 56 78." novalidate>
+          <fieldset class="boeken__stap">
+            <legend class="boeken__legend"><span class="boeken__nr" aria-hidden="true">1</span>Kies een moment</legend>
+            <div class="momenten" data-proefdag-momenten></div>
+            <p class="field__error" id="moment-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+          </fieldset>
+          <fieldset class="boeken__stap">
+            <legend class="boeken__legend"><span class="boeken__nr" aria-hidden="true">2</span>Wie komen er?</legend>
+            <p class="muted">Velden met een * zijn verplicht.</p>
+            <div class="form__row">
+              <div class="field">
+                <label for="naam">Jouw naam *</label>
+                <input id="naam" name="naam" type="text" autocomplete="name" required aria-describedby="naam-fout" data-msg-required="Vul je naam in.">
+                <p class="field__error" id="naam-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+              </div>
+              <div class="field">
+                <label for="telefoon">Telefoonnummer *</label>
+                <input id="telefoon" name="telefoon" type="tel" autocomplete="tel" inputmode="tel" required pattern="[0-9 +\(\)\-]{10,20}" aria-describedby="telefoon-fout" data-msg-required="Vul je telefoonnummer in, voor als er iets verandert." data-msg-pattern="Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78.">
+                <p class="field__error" id="telefoon-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="email">E-mailadres *</label>
+              <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="email-fout" data-msg-required="Vul je e-mailadres in, dan sturen we je een bevestiging." data-msg-type="Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.">
+              <p class="field__error" id="email-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+            </div>
+            <div class="form__row">
+              <div class="field">
+                <label for="kind-naam">Naam van je kind *</label>
+                <input id="kind-naam" name="kind_naam" type="text" required aria-describedby="kind-naam-fout" data-msg-required="Vul de naam van je kind in.">
+                <p class="field__error" id="kind-naam-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+              </div>
+              <div class="field">
+                <label for="kind-leeftijd">Leeftijd van je kind *</label>
+                <select id="kind-leeftijd" name="kind_leeftijd" required aria-describedby="kind-leeftijd-fout" data-msg-required="Kies de leeftijd van je kind.">
+                  <option value="">Kies een leeftijd</option>
+                  <option value="4">4 jaar</option>
+                  <option value="5">5 jaar</option>
+                  <option value="6">6 jaar</option>
+                  <option value="7">7 jaar</option>
+                  <option value="8">8 jaar</option>
+                  <option value="9">9 jaar</option>
+                  <option value="10">10 jaar</option>
+                  <option value="11">11 jaar</option>
+                  <option value="12">12 jaar</option>
+                </select>
+                <p class="field__error" id="kind-leeftijd-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+              </div>
+            </div>
+            <div class="field">
+              <label for="opmerking">Is er iets wat we moeten weten? <span class="field__hint">(niet verplicht)</span></label>
+              <textarea id="opmerking" name="opmerking" rows="3" maxlength="1000"></textarea>
+            </div>
+            <div class="field">
+              <div class="consent">
+                <input id="toestemming" name="toestemming" type="checkbox" value="ja" required aria-describedby="toestemming-fout" data-msg-required="Vink aan dat we je gegevens voor de proefdag mogen gebruiken.">
+                <label for="toestemming">Ik ga akkoord met de <a href="privacy.html#proefdag">privacyverklaring</a>. *</label>
+              </div>
+              <p class="field__error" id="toestemming-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+            </div>
+            <div class="hp" aria-hidden="true">
+              <label for="website">Laat dit veld leeg</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+          </fieldset>
+          <p class="form__privacy">We gebruiken je gegevens alleen voor je proefdag en verwijderen ze 4 weken daarna. Lees meer in onze <a href="privacy.html#proefdag">privacyverklaring</a>.</p>
+          <div class="btn-group">
+            <button class="btn" type="submit">Boek mijn proefdag<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></button>
+          </div>
+          <div class="form-status" data-form-status role="status" aria-live="polite"></div>
+        </form>
+        <div class="boeken__klaar" data-proefdag-klaar tabindex="-1" hidden>
+          <svg class="doodle doodle--vierkant boeken__kroon" aria-hidden="true" focusable="false"><use href="#d-kroon"></use></svg>
+          <h3>Joepie, je proefdag staat!</h3>
+          <p>We zien jullie graag op <strong data-proefdag-wanneer></strong> in ons clubhuis op Sportpark Middenmeer. Je krijgt zo een bevestiging per e-mail.</p>
+          <p>Kun je toch niet? Laat het ons even weten via <a href="mailto:info@sporty.nl">info@sporty.nl</a> of <a href="tel:+31612345678">06&nbsp;12&nbsp;34&nbsp;56&nbsp;78</a>.</p>
+        </div>
+      </div>
       <div class="boeken-terugval" data-boeken-terugval>
-        <p>Online een moment kiezen kan hier binnenkort. Tot die tijd plannen we je proefdag graag samen: stuur ons een berichtje met de dagen die jou uitkomen, of bel ons.</p>
+        <p data-terugval-tekst data-geen-momenten="Er staan op dit moment geen momenten open om online te kiezen. We plannen je proefdag graag samen: stuur ons een berichtje met de dagen die jou uitkomen, of bel ons.">Plan je proefdag samen met ons: stuur ons een berichtje met de dagen die jou uitkomen, of bel ons.</p>
         <div class="btn-group">
           <a class="btn" href="contact.html?onderwerp=proefdag#formulier">Plan je proefdag<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
           <a class="btn btn--secondary" href="tel:+31612345678"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"></use></svg>Bel 06&nbsp;12&nbsp;34&nbsp;56&nbsp;78</a>
@@ -103,7 +187,7 @@
       </div>
     </div>
     <div class="boeken-henny reveal" style="--delay: 150ms;">
-      <figure class="henny"><img src="assets/img/henny/henny-zit-320.webp" srcset="assets/img/henny/henny-zit-320.webp 320w, assets/img/henny/henny-zit-640.webp 640w" sizes="12rem" width="320" height="406" alt="Henny, de hond van Sporty" loading="lazy" decoding="async"><figcaption class="tekstwolk">Ik sta al te kwispelen!</figcaption></figure>
+      <figure class="henny"><img src="assets/img/henny/henny-zit-320.webp" srcset="assets/img/henny/henny-zit-320.webp 320w, assets/img/henny/henny-zit-640.webp 640w" sizes="12rem" width="320" height="406" alt="Henny, de hond van Sporty" loading="lazy" decoding="async"><figcaption class="tekstwolk" data-henny-wolk aria-live="polite">Ik sta al te kwispelen!</figcaption></figure>
       <div class="side-card side-card--licht">
         <h3>Hier vind je ons</h3>
         <address class="adres"><strong>Sporty</strong><br>Voorlandpad 17<br>1098 TZ Amsterdam</address>

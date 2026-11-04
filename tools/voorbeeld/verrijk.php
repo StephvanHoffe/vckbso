@@ -77,6 +77,24 @@ foreach ([
     ]);
 }
 
+// Proefdagen: een paar momenten in de komende weken, met twee (verzonnen) boekingen
+$werkdag = function (int $dagen): string {
+    $d = strtotime("+{$dagen} days");
+    while ((int) date('N', $d) > 5) {
+        $d = strtotime('+1 day', $d);
+    }
+    return date('Y-m-d', $d);
+};
+foreach ([[2, 3], [5, 3], [9, 3], [12, 4], [16, 3]] as [$over, $plekken]) {
+    q('INSERT INTO proefdag_momenten (datum, begin, eind, plekken, aangemaakt_op) VALUES (?, ?, ?, ?, ?)', [$werkdag($over), '15:00', '16:30', $plekken, nu()]);
+}
+$eerste = rij('SELECT * FROM proefdag_momenten ORDER BY datum LIMIT 1');
+foreach ([['Demo Ouder', 'proefdag@demo.bsovck.nl', 'Mila', '6', 'Mila is een beetje verlegen, maar dol op tikkertje.'], ['Demo Vader', 'proefdag2@demo.bsovck.nl', 'Daan', '9', '']] as [$naam, $email, $kind, $leeftijd, $opmerking]) {
+    q('INSERT INTO proefdag_boekingen (moment_id, naam, email, telefoon, kind_naam, kind_leeftijd, opmerking, aangemaakt_op, verwijderen_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        $eerste['id'], $naam, $email, '06 12 34 56 78', $kind, $leeftijd, $opmerking !== '' ? versleutel($opmerking) : '', nu(), proefdag_verwijderdatum($eerste['datum']),
+    ]);
+}
+
 // Facturen van vorige maand; de meeste betaald
 [$aantal] = maak_facturen(date('Y-m', strtotime('first day of last month')));
 q("UPDATE facturen SET status = 'betaald', betaald_op = ? WHERE id IN (SELECT id FROM facturen ORDER BY id LIMIT 3)", [nu()]);
