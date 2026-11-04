@@ -36,7 +36,13 @@ if (is_post()) {
     } elseif ($actie === 'activeren' && $ouder['status'] !== 'actief') {
         q("UPDATE gebruikers SET status = 'actief', gestopt_op = NULL WHERE id = ?", [$ouder['id']]);
         systeembericht((int) $ouder['id'], 'Welkom bij Sporty! Je account is actief. Zodra je kind in een groep zit, kies je in de agenda zelf de dagen. Heb je vragen? Stuur ons hier gerust een berichtje.');
-        stuur_mail($ouder['email'], 'Welkom bij Sporty', "Hoi {$ouder['naam']},\n\nWelkom bij Sporty! Je account is actief. Log in om de dagen voor je kind te kiezen:\n" . app_url('agenda.php') . "\n\nTot snel!");
+        if (empty($ouder['wachtwoord_hash'])) {
+            // Vrijblijvend aangemeld via de website: nog geen wachtwoord. Een link om er een te kiezen (een week geldig);
+            // na het inloggen vraagt Mijn BSO om de machtiging voor automatische incasso.
+            stuur_mail($ouder['email'], 'Welkom bij Sporty: je account staat klaar', "Hoi {$ouder['naam']},\n\nWelkom bij de club! Je aanmelding is rond en je account in Mijn BSO staat klaar. Kies via deze link een wachtwoord (de link is een week geldig):\n" . maak_wachtwoordlink((int) $ouder['id'], 24 * 7) . "\n\nDaarna regel je in een paar klikken de automatische incasso, en kies je zelf de dagen voor je kind.\n\nTot snel!");
+        } else {
+            stuur_mail($ouder['email'], 'Welkom bij Sporty', "Hoi {$ouder['naam']},\n\nWelkom bij Sporty! Je account is actief. Log in om de dagen voor je kind te kiezen:\n" . app_url('agenda.php') . "\n\nTot snel!");
+        }
         log_actie('Ouder geactiveerd', '', null, 'wijziging', $onderwerp);
         flash('succes', $ouder['naam'] . ' is actief. Zet de kinderen nu in een groep, als dat nog niet is gebeurd.');
     } elseif ($actie === 'stoppen' && $ouder['status'] !== 'gestopt') {
@@ -118,8 +124,33 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
 <?php endif; ?>
 <?php if ($beheerder): ?>
   <form method="post" action="<?= e($terug) ?>"><?= csrf_veld() ?><input type="hidden" name="actie" value="activeren"><button class="btn" type="submit"<?= $zonderGezag ? ' disabled' : '' ?>><?= icoon('check') ?>Account activeren</button></form>
+<?php if (empty($ouder['wachtwoord_hash'])): ?>
+  <p class="muted">Aangemeld via de website, nog zonder wachtwoord. Bij het activeren krijgt de ouder een link om een wachtwoord te kiezen; daarna vraagt Mijn BSO om de machtiging voor automatische incasso.</p>
+<?php endif; ?>
 <?php endif; ?>
 </section>
+<?php endif; ?>
+<?php $extra = aanvraag_gegevens((string) ($ouder['aanvraag'] ?? '')); ?>
+<?php if ($extra): ?>
+<details class="panel uitklap"<?= $ouder['status'] === 'nieuw' ? ' open' : '' ?>>
+  <summary>Gegevens uit het aanmeldformulier</summary>
+  <dl class="gegevens">
+    <dt>Ouder</dt><dd><?= e(aanvraag_naam($extra)) ?><?= ($extra['voorletters'] ?? '') !== '' ? ' (' . e($extra['voorletters']) . ')' : '' ?><?= ($extra['geslacht'] ?? '') !== '' ? ', ' . e(mb_strtolower(AANVRAAG_GESLACHT_OUDER[$extra['geslacht']] ?? '')) : '' ?></dd>
+    <dt>Partner</dt><dd><?php if (!empty($extra['partner'])): $p = $extra['partner']; ?><?= e(aanvraag_naam($p)) ?><?= ($p['email'] ?? '') !== '' ? '<br><a href="mailto:' . e($p['email']) . '">' . e($p['email']) . '</a>' : '' ?><?= ($p['telefoon'] ?? '') !== '' ? '<br><a href="tel:' . e(preg_replace('/[^0-9+]/', '', $p['telefoon'])) . '">' . e($p['telefoon']) . '</a>' : '' ?><br><span class="muted">Nodig de partner uit als verzorger in het dossier van het kind, als dat gewenst is.</span><?php else: ?>Niet opgegeven<?php endif; ?></dd>
+    <dt>Gevonden via</dt><dd><?= e(AANVRAAG_GEVONDEN[$extra['gevonden'] ?? ''] ?? '-') ?></dd>
+  </dl>
+<?php foreach ($kinderen as $kind): $k = aanvraag_gegevens((string) ($kind['aanvraag'] ?? '')); if (!$k) { continue; } ?>
+  <h3><?= e(kindnaam($kind)) ?></h3>
+  <dl class="gegevens">
+    <dt>Voorletters en geslacht</dt><dd><?= e(($k['voorletters'] ?? '') ?: '-') ?>, <?= e(mb_strtolower(AANVRAAG_GESLACHT_KIND[$k['geslacht'] ?? ''] ?? '-')) ?></dd>
+    <dt>School</dt><dd><?= e($kind['school']) ?><?= ($k['school_plaats'] ?? '') !== '' ? ' (' . e($k['school_plaats']) . ')' : '' ?><?= ($k['groep_klas'] ?? '') !== '' ? ', ' . e($k['groep_klas']) : '' ?></dd>
+    <dt>Abonnement</dt><dd><?= e(AANVRAAG_ABONNEMENTEN[$k['abonnement'] ?? ''] ?? '-') ?></dd>
+    <dt>Dagen</dt><dd><?= e(implode(', ', array_map(fn ($d) => WEEKDAGEN[(int) $d] ?? '', $k['dagen'] ?? [])) ?: '-') ?><?= ($k['toelichting'] ?? '') !== '' ? '<br><span class="muted">' . e($k['toelichting']) . '</span>' : '' ?></dd>
+    <dt>Gewenste start</dt><dd><?= e(($k['startdatum'] ?? '') !== '' ? datum_nl($k['startdatum']) : 'Zo snel mogelijk') ?></dd>
+    <dt>Sportclub</dt><dd><?= e(($k['sportclub'] ?? '') ?: '-') ?></dd>
+  </dl>
+<?php endforeach; ?>
+</details>
 <?php endif; ?>
 <div class="kolommen">
   <div class="stapel">

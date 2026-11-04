@@ -63,5 +63,21 @@ pagina_kop('Ouders', 'Alle klanten met hun kinderen, status en machtiging. Nieuw
   </div>
 <?php endif; ?>
 </section>
+<?php if ($status === 'nieuw' && team_mag('klanten_beheren', $gebruiker)): $trechter = aanvraag_trechter(30); $start = max(1, $trechter[1]); ?>
+<section class="panel" aria-labelledby="trechter-titel">
+  <h2 id="trechter-titel">Aanmeldformulier op de website</h2>
+  <p class="muted">Hoe vaak elke stap van het formulier "Kom bij de club" is bereikt in de afgelopen 30 dagen. Zo zie je waar ouders afhaken. Anoniem geteld, zonder cookies.</p>
+  <div class="tabel">
+    <table>
+      <thead><tr><th scope="col">Stap</th><th scope="col" class="rechts">Aantal keer</th><th scope="col" class="rechts">Van de starters</th></tr></thead>
+      <tbody>
+<?php foreach (AANVRAAG_STAPPEN as $stap => $naam): ?>
+        <tr><th scope="row"><?= $stap <= 7 ? $stap . '. ' : '' ?><?= e($naam) ?></th><td class="rechts"><?= (int) $trechter[$stap] ?></td><td class="rechts"><?= $trechter[1] ? round($trechter[$stap] / $start * 100) . '%' : '-' ?></td></tr>
+<?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+</section>
+<?php endif; ?>
 <?php
 pagina_einde();

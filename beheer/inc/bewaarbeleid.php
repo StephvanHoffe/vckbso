@@ -109,6 +109,9 @@ function voer_bewaarbeleid_uit(): array
     }
     q('DELETE FROM proefdag_momenten WHERE datum < ? AND NOT EXISTS (SELECT 1 FROM proefdag_boekingen b WHERE b.moment_id = proefdag_momenten.id)', [date('Y-m-d', strtotime('-' . PROEFDAG_BEWAAR_DAGEN . ' days'))]);
 
+    // 8c. Anonieme telling van het aanmeldformulier: een jaar
+    q('DELETE FROM aanvraag_stappen WHERE datum < ?', [date('Y-m-d', strtotime('-1 year'))]);
+
     // 9. Logboek
     $telling['logboek'] = q('DELETE FROM logboek WHERE aangemaakt_op < ?', [grens(bewaartermijn('bewaar_logboek_maanden'))])->rowCount();
 

@@ -95,6 +95,18 @@ foreach ([['Demo Ouder', 'proefdag@demo.bsovck.nl', 'Mila', '6', 'Mila is een be
     ]);
 }
 
+// De nieuwe aanmelding (Lisa Bos) kwam via het aanmeldformulier op de website: de extra gegevens, en een anonieme telling per stap
+$lisa = rij("SELECT * FROM gebruikers WHERE email = 'lisa.bos@demo.bsovck.nl'");
+if ($lisa) {
+    q('UPDATE gebruikers SET aanvraag = ? WHERE id = ?', [versleutel(json_encode(['voornaam' => 'Lisa', 'tussenvoegsel' => '', 'achternaam' => 'Bos', 'voorletters' => 'L.', 'geslacht' => 'vrouw', 'gevonden' => 'school', 'partner' => ['voornaam' => 'Demo', 'tussenvoegsel' => '', 'achternaam' => 'Partner', 'email' => 'partner@demo.bsovck.nl', 'telefoon' => ''], 'verstuurd_op' => nu()], JSON_UNESCAPED_UNICODE)), $lisa['id']]);
+    foreach (rijen('SELECT id FROM kinderen WHERE ouder_id = ?', [$lisa['id']]) as $kind) {
+        q('UPDATE kinderen SET aanvraag = ? WHERE id = ?', [versleutel(json_encode(['voorletters' => '', 'geslacht' => 'meisje', 'startdatum' => '', 'groep_klas' => 'groep 3', 'school_plaats' => 'Amsterdam', 'abonnement' => 'sporty-52', 'dagen' => [2, 4], 'toelichting' => '', 'sportclub' => 'Voetbal bij de club om de hoek'], JSON_UNESCAPED_UNICODE)), $kind['id']]);
+    }
+}
+foreach ([1 => 42, 2 => 31, 3 => 29, 4 => 27, 5 => 22, 6 => 19, 7 => 17, 8 => 14] as $stap => $aantal) {
+    q('INSERT INTO aanvraag_stappen (datum, stap, aantal) VALUES (?, ?, ?)', [date('Y-m-d', strtotime('-3 days')), $stap, $aantal]);
+}
+
 // Facturen van vorige maand; de meeste betaald
 [$aantal] = maak_facturen(date('Y-m', strtotime('first day of last month')));
 q("UPDATE facturen SET status = 'betaald', betaald_op = ? WHERE id IN (SELECT id FROM facturen ORDER BY id LIMIT 3)", [nu()]);

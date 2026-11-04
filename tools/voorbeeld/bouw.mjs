@@ -57,11 +57,11 @@ for (let poging = 0; ; poging++) {
 
 // ---------- Rollen en sessies ----------
 const ROLLEN = {
-  beheerder: { id: 1, seeds: ["index.php", "agenda.php", `agenda.php?dag=${VANDAAG}`, "kinderen.php", "ouders.php", "berichten.php", "fotos.php", "groepen.php", "facturen.php", "financien.php", "medewerkers.php", "sollicitaties.php", "proefdagen.php", "verzoeken.php", "instellingen.php", "beveiliging.php", "logboek.php", "profiel.php", "tweestaps.php"] },
+  beheerder: { id: 1, seeds: ["index.php", "agenda.php", `agenda.php?dag=${VANDAAG}`, "kinderen.php", "ouders.php", "ouders.php?status=nieuw", "berichten.php", "fotos.php", "groepen.php", "facturen.php", "financien.php", "medewerkers.php", "sollicitaties.php", "proefdagen.php", "verzoeken.php", "instellingen.php", "beveiliging.php", "logboek.php", "profiel.php", "tweestaps.php"] },
   begeleider: { id: 2, seeds: ["index.php", "agenda.php", `agenda.php?dag=${VANDAAG}`, "kinderen.php", "ouders.php", "berichten.php", "fotos.php", "profiel.php"] },
   ouder: { id: 3, seeds: ["index.php", "agenda.php", "berichten.php", "fotos.php", "kinderen.php", "facturen.php", "privacy.php", "profiel.php", "tweestaps.php"] },
 };
-const PUBLIEK = ["inloggen.php", "aanmelden.php", "wachtwoord-vergeten.php"];
+const PUBLIEK = ["inloggen.php", "wachtwoord-vergeten.php"];
 mkdirSync(join(DATA, "sessies"), { recursive: true });
 for (const [rol, r] of Object.entries(ROLLEN)) {
   const sid = ("voorbeeld" + rol).padEnd(32, "0");
@@ -70,7 +70,7 @@ for (const [rol, r] of Object.entries(ROLLEN)) {
 }
 
 // Niet in de momentopname: acties, downloads, exports
-const OVERSLAAN = /^(uitloggen|export|agenda-actie|mollie-webhook|machtiging|installeren|inloggen-code|wachtwoord-instellen|foto|solliciteren|proefdag)\.php|csv=|export=|download=|bijlage=|bewerk=|cv=/;
+const OVERSLAAN = /^(uitloggen|export|agenda-actie|mollie-webhook|machtiging|installeren|inloggen-code|wachtwoord-instellen|foto|solliciteren|proefdag|aanvraag|aanmelden)\.php|csv=|export=|download=|bijlage=|bewerk=|cv=/;
 // Detailpagina's die ook twee klikken diep worden meegenomen
 const DETAIL = /^((kind|ouder|factuur|verzoeken|sollicitaties)\.php\?id=\d+|berichten\.php\?ouder=\d+|logboek\.php\?onderwerp=[a-z]+%3A\d+)$/;
 // Deze week en deze maand zijn gelijk aan de standaardweergave van de agenda

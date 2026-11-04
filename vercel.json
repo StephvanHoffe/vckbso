@@ -7,7 +7,7 @@
     { "source": "/veelgestelde-vragen.html", "destination": "/contact.html#veelgestelde-vragen", "permanent": true },
     { "source": "/werken-bij.html", "destination": "/word-sporty-coach.html", "permanent": true },
     { "source": "/beheer/inloggen.php", "destination": "/voorbeeld/beheer/inloggen.html", "permanent": false },
-    { "source": "/beheer/aanmelden.php", "destination": "/voorbeeld/beheer/aanmelden.html", "permanent": false },
+    { "source": "/beheer/aanmelden.php", "destination": "/aanmelden.html", "permanent": false },
     { "source": "/beheer/wachtwoord-vergeten.php", "destination": "/voorbeeld/beheer/wachtwoord-vergeten.html", "permanent": false },
     { "source": "/beheer/privacy.php", "destination": "/voorbeeld/beheer/ouder-privacy.html", "permanent": false },
     { "source": "/beheer/proefdag.php", "destination": "/voorbeeld/beheer/proefdag-momenten.json", "permanent": false },

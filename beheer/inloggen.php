@@ -46,8 +46,8 @@ pagina_begin('Inloggen', '', ['publiek' => true]);
       </div>
     </form>
     <hr class="scheiding">
-    <p><strong>Nog geen account?</strong> Meld je kind aan, dan maak je meteen een account aan.</p>
-    <a class="btn btn--secondary" href="aanmelden.php"><?= icoon('plus') ?>Kind aanmelden</a>
+    <p><strong>Nog geen account?</strong> Meld je kind vrijblijvend aan. Na de kennismaking krijg je een link om je account te maken.</p>
+    <a class="btn btn--secondary" href="../aanmelden.html"><?= icoon('plus') ?>Kind aanmelden</a>
   </div>
 </div>
 <?php

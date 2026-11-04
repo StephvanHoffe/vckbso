@@ -6,8 +6,8 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 
 | Wens van de klant | Waar | Hoe het werkt |
 |---|---|---|
-| Aanmelden op de website en als klant in het systeem komen, met de kinderen eronder | `aanmelden.php` (knop op `aanmelden.html`) | Ouder maakt een account aan met eigen gegevens, een of meer kinderen, gewenste dagen en een wachtwoord. Het team krijgt een e-mail en ziet de aanmelding op het dashboard. |
-| Dagen die vol zitten, niet aan te vinken bij het aanmelden | `groepen.php` (blok "Dagen die vol zitten"), `aanmelden.php` | Het team vinkt bij Groepen aan welke weekdagen vol zitten. In het aanmeldformulier staan die dagen dan grijs met "(vol)" en zijn ze niet aan te vinken; ouders lezen dat ze in de opmerkingen om de wachtlijst kunnen vragen. Raakt een dag vol terwijl een ouder het formulier invult, dan weigert de server die dag met een duidelijke melding. Bestaande klanten merken er niets van: in de agenda geldt gewoon de maximale groepsgrootte. Elke wijziging staat in het logboek. |
+| Aanmelden op de website en als klant in het systeem komen, met de kinderen eronder | `aanvraag.php` (formulier "Kom bij de club" op `aanmelden.html`), `ouder.php` | Sinds november 2026 vrijblijvend, in 7 stappen: gegevens kind, school, abonnement, dagen, gegevens ouder, partner en controleren. Er ontstaat een ouder met status "nieuw" (nog zonder wachtwoord) met de kinderen eronder; het team krijgt een e-mail en ziet de aanmelding bij Ouders. Na de kennismaking activeert het team het account; de ouder krijgt dan een link om een wachtwoord te kiezen en geeft daarna de machtiging. Zie [Aanmelden via de website](#aanmelden-via-de-website). |
+| Dagen die vol zitten, niet aan te vinken bij het aanmelden | `groepen.php` (blok "Dagen die vol zitten"), `aanvraag.php` | Het team vinkt bij Groepen aan welke weekdagen vol zitten. In het aanmeldformulier staan die dagen dan grijs met "(vol)" en zijn ze niet aan te vinken; ouders lezen dat ze in de opmerkingen om de wachtlijst kunnen vragen. Raakt een dag vol terwijl een ouder het formulier invult, dan weigert de server die dag met een duidelijke melding. Bestaande klanten merken er niets van: in de agenda geldt gewoon de maximale groepsgrootte. Elke wijziging staat in het logboek. |
 | Automatische incasso bij de aanmelding | `machtiging.php` | Direct na het aanmelden geeft de ouder een SEPA-machtiging via Mollie: een eerste betaling van € 0,01 via de eigen bank. Daarna kan elke factuur automatisch worden afgeschreven. |
 | Facturen online terugvinden | `facturen.php`, `factuur.php` | Beheerder maakt per maand de facturen (op basis van de ingeschreven dagen) en start de incasso. Ouders zien, printen en (bij een mislukte incasso) betalen hun facturen online. |
 | Kindvolgsysteem | `kind.php` | Per kind een dossier: gegevens, allergieën, ophaalpersonen, aanwezigheid (binnen en opgehaald), foto's en observaties per ontwikkelgebied. Een observatie kan alleen voor het team zijn, of gedeeld worden met de ouders. |
@@ -80,6 +80,24 @@ Het formulier op **Word Sporty coach** (`word-sporty-coach.html`) verstuurt soll
 - **Tegen spam:** een verborgen veld, alleen vanaf de eigen website, en hooguit 5 verstuurde sollicitaties per kwartier vanaf hetzelfde adres.
 - **Uploadgrootte:** de server moet bestanden van 5 MB accepteren (`upload_max_filesize`; zie de instellingen voor foto's bij de installatie).
 - **Zonder beheeromgeving** (zoals op de statische voorbeeldsite op Vercel) opent het formulier het e-mailprogramma van de bezoeker, met de sollicitatie erin; het cv en de motivatie voegt die dan zelf als bijlage toe.
+
+## Aanmelden via de website
+
+Ouders melden hun kind vrijblijvend aan op de pagina **Kom bij de club** (`aanmelden.html`), in 7 stappen met één onderwerp per scherm. Henny rent over de voortgangsbalk mee.
+
+1. **Gegevens kind:** voornaam, tussenvoegsel, achternaam, voorletters, geslacht, geboortedatum, gewenste startdatum, groep of klas, allergieën of medicijnen en een sportclub. Meer kinderen kan (tot 6).
+2. **School** per kind (een lijst met scholen kan erbij zodra Sporty die aanlevert).
+3. **Abonnement** per kind. Nu is er één abonnement, het Sporty Abonnement (52 weken); de abonnementsstap is nog in overleg (`AANVRAAG_ABONNEMENTEN` in `inc/aanvraag.php`).
+4. **Dagen** per kind, met een toelichting. Dagen die vol zitten (Groepen) zijn niet aan te vinken.
+5. **Gegevens ouder:** naam, voorletters, geslacht, adres, e-mail, telefoon, hoe je ons vond en opmerkingen.
+6. **Partner:** ja of nee, en zo ja naam en contactgegevens.
+7. **Controleren** met een overzicht en een potloodje per blok, drie vinkjes en de knop "Verstuur vrijblijvend".
+
+- **Wat er gebeurt:** `aanvraag.php` controleert alles opnieuw en maakt een ouder met status "nieuw" (zonder wachtwoord) met de kinderen eronder. Gegevens die alleen in het formulier staan (voorletters, geslacht, groep, startdatum en dagen per kind, partner, hoe gevonden) staan versleuteld in de kolom `aanvraag` en zijn te zien bij de ouder onder "Gegevens uit het aanmeldformulier". Allergieën komen in de bijzonderheden van het kind. De ouder krijgt een bevestiging per e-mail (voorlopige tekst, TODO), het team een melding zonder persoonsgegevens.
+- **Afronden:** na de kennismaking controleert het team het gezag, zet de kinderen in een groep en activeert het account. De ouder krijgt dan een link om een wachtwoord te kiezen (een week geldig); daarna vraagt Mijn BSO om de machtiging voor automatische incasso. De partner nodig je eventueel uit als verzorger in het dossier van het kind.
+- **Onthouden:** wat een ouder invult, bewaart de browser op dat apparaat (localStorage), zodat de ouder later verder kan. Na het versturen wordt het gewist.
+- **Meten:** per stap telt `aanvraag.php` anoniem hoe vaak die is bereikt (zonder cookies of persoonsgegevens). Bij Ouders → Nieuwe aanmeldingen staat het overzicht van de afgelopen 30 dagen. De tellingen blijven een jaar.
+- **Zonder JavaScript** is het één lang formulier dat gewoon verstuurd kan worden. `aanmelden.php` (de oude aanmeldpagina) stuurt door naar het nieuwe formulier.
 
 ## Proefdagen
 

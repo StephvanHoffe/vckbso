@@ -511,6 +511,19 @@ function migreer(PDO $pdo): void
             CREATE INDEX proefdag_boekingen_verwijderen ON proefdag_boekingen(verwijderen_op);
             INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) SELECT id, 'proefdagen' FROM gebruikers WHERE rol = 'beheerder';
             SQL,
+
+        // Vrijblijvend aanmelden in 7 stappen via de website (november 2026): extra gegevens uit het formulier
+        // (versleuteld, als JSON) en een anonieme telling per stap, om te zien waar ouders afhaken.
+        11 => <<<'SQL'
+            ALTER TABLE gebruikers ADD COLUMN aanvraag TEXT NOT NULL DEFAULT '';
+            ALTER TABLE kinderen ADD COLUMN aanvraag TEXT NOT NULL DEFAULT '';
+            CREATE TABLE aanvraag_stappen (
+                datum TEXT NOT NULL,
+                stap INTEGER NOT NULL,
+                aantal INTEGER NOT NULL DEFAULT 0,
+                PRIMARY KEY (datum, stap)
+            );
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();
