@@ -29,7 +29,8 @@ $standaardConfig = [
     'sleutel' => '',
     'ontwikkelmodus' => false,
     'installatiecode' => '',
-    'mollie' => ['api_key' => '', 'methode_machtiging' => 'ideal'],
+    // Betaalmethoden staan niet hier: lijsten worden bij het samenvoegen anders door elkaar gehaald (zie inc/stripe.php)
+    'stripe' => ['geheime_sleutel' => '', 'webhook_geheim' => ''],
     'mail' => ['methode' => 'log', 'van' => 'info@sporty.nl', 'van_naam' => 'Sporty'],
     'team_email' => 'info@sporty.nl',
     'backup' => ['map' => '', 'sleutel' => '', 'bewaardagen' => 30],
@@ -52,7 +53,7 @@ require __DIR__ . '/toegang.php';
 require __DIR__ . '/mfa.php';
 require __DIR__ . '/mail.php';
 require __DIR__ . '/mailteksten.php';
-require __DIR__ . '/mollie.php';
+require __DIR__ . '/stripe.php';
 require __DIR__ . '/agenda.php';
 require __DIR__ . '/berichten.php';
 require __DIR__ . '/facturen.php';
@@ -78,7 +79,7 @@ if (PHP_SAPI !== 'cli') {
         header('Strict-Transport-Security: max-age=31536000');
     }
     // Persoonsgegevens van kinderen: niet cachen, niet in frames, strikte bronnen
-    header("Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://www.mollie.com https://*.mollie.com");
+    header("Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://checkout.stripe.com");
     header_remove('X-Powered-By');
     header('X-Content-Type-Options: nosniff');
     header('X-Frame-Options: DENY');

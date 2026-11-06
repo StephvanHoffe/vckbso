@@ -16,6 +16,8 @@ if (is_ouder($gebruiker)) {
     $openFacturen = rijen("SELECT * FROM facturen WHERE ouder_id = ? AND status IN ('open', 'mislukt') ORDER BY datum DESC", [$gebruiker['id']]);
     $fotos = fotos_van($fotoKinderen, 4);
     $machtigingOk = in_array($gebruiker['mandaat_status'], ['geldig', 'demo'], true);
+    // Nog niet ingevuld of we foto's mogen delen (alleen te beantwoorden door wie gezag heeft)
+    $fotoVraag = array_filter($kinderen, fn ($k) => foto_keuze($k) === null && mag_namens_kind((int) $k['id'], (int) $gebruiker['id']));
 
     pagina_begin('Overzicht', 'index.php');
     pagina_kop("Hoi {$voornaam}!", 'Fijn dat je er bent. Hier zie je in één oogopslag hoe het ervoor staat.',
@@ -40,6 +42,9 @@ if (is_ouder($gebruiker)) {
   <li><a class="tegel" href="facturen.php" style="--tegel-bg: var(--color-mint-soft)"><span class="tegel__getal"><?= count($openFacturen) ?></span><span class="tegel__label">open <?= count($openFacturen) === 1 ? 'factuur' : 'facturen' ?></span></a></li>
   <li><a class="tegel" href="fotos.php" style="--tegel-bg: var(--color-coral-soft)"><span class="tegel__getal"><?= (int) ($fotoKinderen ? waarde('SELECT COUNT(DISTINCT foto_id) FROM foto_kinderen WHERE kind_id IN (' . implode(',', $fotoKinderen) . ')') : 0) ?></span><span class="tegel__label">foto's</span></a></li>
 </ul>
+<?php if ($fotoVraag): ?>
+<p class="melding"><?= icoon('camera') ?><span>Mogen we foto's delen van <?= implode(' en ', array_map(fn ($k) => '<a href="kind.php?id=' . (int) $k['id'] . '&amp;open=fotos#gegevens-wijzigen">' . e($k['voornaam']) . '</a>', $fotoVraag)) ?>? Laat het ons even weten. Tot die tijd delen we geen foto's van <?= count($fotoVraag) === 1 ? e(reset($fotoVraag)['voornaam']) : 'hen' ?>.</span></p>
+<?php endif; ?>
 <?php if ($zonderGecontroleerdGezag && $gebruiker['status'] === 'actief'): ?>
 <p class="melding"><?= icoon('info') ?><span>Voor <?= e(implode(' en ', array_map(fn ($k) => $k['voornaam'], $zonderGecontroleerdGezag))) ?> hebben we je gezag nog niet gecontroleerd. Tot die tijd kun je de gegevens en toestemmingen niet zelf wijzigen. Neem bij je volgende bezoek een uittreksel uit het gezagsregister mee.</span></p>
 <?php endif; ?>

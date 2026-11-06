@@ -564,6 +564,28 @@ function migreer(PDO $pdo): void
                 gewijzigd_door INTEGER
             );
             SQL,
+
+        // Fototoestemming per kind (november 2026): mogen er überhaupt foto's van het kind gedeeld worden?
+        // NULL = nog niet ingevuld (dan niet), 0 = nee, 1 = ja. foto_toestemming blijft: ook op groepsfoto's.
+        // Wie al toestemming gaf voor groepsfoto's, gaf daarmee ook toestemming voor foto's.
+        15 => <<<'SQL'
+            ALTER TABLE kinderen ADD COLUMN fotos_toegestaan INTEGER;
+            ALTER TABLE kinderen ADD COLUMN fotos_toegestaan_op TEXT;
+            UPDATE kinderen SET fotos_toegestaan = 1, fotos_toegestaan_op = aangemaakt_op WHERE foto_toestemming = 1;
+            SQL,
+
+        // Betalen via Stripe in plaats van Mollie (november 2026). extern_id is de Checkout-sessie (cs_...) of de
+        // betaling (pi_...) bij Stripe; payment_intent de betaling die bij een Checkout-sessie hoort.
+        // Een machtiging van Mollie werkt niet bij Stripe: die ouders geven de machtiging opnieuw af.
+        16 => <<<'SQL'
+            ALTER TABLE gebruikers RENAME COLUMN mollie_klant_id TO stripe_klant_id;
+            UPDATE gebruikers SET stripe_klant_id = NULL;
+            ALTER TABLE betalingen RENAME COLUMN mollie_id TO extern_id;
+            ALTER TABLE betalingen ADD COLUMN payment_intent TEXT;
+            CREATE INDEX betalingen_payment_intent ON betalingen(payment_intent);
+            UPDATE gebruikers SET mandaat_status = 'geen', mandaat_id = NULL
+                WHERE mandaat_status IN ('geldig', 'in_behandeling') AND (mandaat_id IS NULL OR mandaat_id NOT LIKE 'pm\_%' ESCAPE '\');
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

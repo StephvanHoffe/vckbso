@@ -98,8 +98,12 @@ if (is_post()) {
     if (!$uploads) {
         $fouten['fotos'] = 'Kies minstens één foto.';
     }
+    $geenToestemming = array_filter($kinderen, fn ($k) => !mag_op_foto($k));
     if (!$kinderen) {
         $fouten['kinderen'] = 'Kies de kinderen die op de foto staan. Alleen hun ouders krijgen de foto.';
+    } elseif ($geenToestemming) {
+        // Ook als het formulier is omzeild: zonder toestemming geen foto
+        $fouten['kinderen'] = 'Van deze kinderen mogen we geen foto\'s delen: ' . implode(', ', array_map('kindnaam', $geenToestemming)) . '. Haal ze uit de keuze, en deel geen foto waar ze op staan.';
     } elseif (count($kinderen) > 1) {
         $zonder = array_filter($kinderen, fn ($k) => !$k['foto_toestemming']);
         if ($zonder) {
@@ -187,13 +191,18 @@ pagina_kop("Foto's delen", 'Kies een of meer foto\'s en de kinderen die erop sta
         <fieldset>
           <legend class="legend-label" style="font-weight: 600"><?= e($groep['naam']) ?> <button class="link-button" type="button" data-alles-aan="<?= $lijstId ?>" hidden style="min-height: 0; font-size: var(--step--1)">alles aan/uit</button></legend>
           <div class="choices" id="<?= $lijstId ?>">
-<?php foreach ($perGroep[$groep['id']] as $kind): ?>
-            <label class="choice<?= $kind['foto_toestemming'] ? '' : ' choice--uit' ?>"><input type="checkbox" name="kinderen[]" value="<?= (int) $kind['id'] ?>"<?= in_array((int) $kind['id'], $gekozen, true) ? ' checked' : '' ?>><?= e(kindnaam($kind)) ?><?= $kind['foto_toestemming'] ? '' : '<span class="visually-hidden"> (alleen losse foto\'s)</span>' ?></label>
+<?php foreach ($perGroep[$groep['id']] as $kind):
+    $keuze = foto_keuze($kind); ?>
+<?php if ($keuze === 'groep' || $keuze === 'eigen'): ?>
+            <label class="choice<?= $keuze === 'groep' ? '' : ' choice--uit' ?>"><input type="checkbox" name="kinderen[]" value="<?= (int) $kind['id'] ?>"<?= in_array((int) $kind['id'], $gekozen, true) ? ' checked' : '' ?>><?= e(kindnaam($kind)) ?><?= $keuze === 'groep' ? '' : '<span class="visually-hidden"> (alleen losse foto\'s)</span>' ?></label>
+<?php else: ?>
+            <label class="choice choice--geenfoto"><input type="checkbox" name="kinderen[]" value="<?= (int) $kind['id'] ?>" disabled><?= e(kindnaam($kind)) ?> <span class="choice__label"><?= $keuze === 'geen' ? 'geen foto\'s' : 'nog geen toestemming' ?></span></label>
+<?php endif; ?>
 <?php endforeach; ?>
           </div>
         </fieldset>
 <?php endforeach; ?>
-        <p class="field__hint" style="margin: 0">Een gestippelde rand betekent: geen toestemming voor groepsfoto's. Van die kinderen deel je alleen foto's waar ze alleen op staan.</p>
+        <p class="field__hint" style="margin: 0">Een gestippelde rand betekent: geen toestemming voor groepsfoto's. Van die kinderen deel je alleen foto's waar ze alleen op staan. Kinderen met "geen foto's" of "nog geen toestemming" kun je niet kiezen: deel geen foto waar zij op staan.</p>
       </fieldset>
       <div class="field">
         <label for="bijschrift">Bijschrift <span class="field__hint">(optioneel)</span></label>

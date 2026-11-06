@@ -63,20 +63,22 @@ foreach (RECHTEN_BEGELEIDER as $recht) {
 
 // Gezinnen met kinderen (verzonnen namen)
 $gezinnen = [
-    ['Sam de Jong', [['Noor', 'de Jong', '-6 years', 1], ['Finn', 'de Jong', '-9 years', 1]]],
-    ['Aylin Kaya', [['Elif', 'Kaya', '-7 years', 1]]],
-    ['Mark Visser', [['Daan', 'Visser', '-10 years', 0]]],
-    ['Priya Sharma', [['Anika', 'Sharma', '-5 years', 1]]],
-    ['Kees Mulder', [['Lieke', 'Mulder', '-8 years', 1], ['Bram', 'Mulder', '-11 years', 1]]],
+    // Foto's: 'groep' (ook groepsfoto's), 'eigen' (alleen eigen foto's), 'geen', of null (nog niet ingevuld)
+    ['Sam de Jong', [['Noor', 'de Jong', '-6 years', 'groep'], ['Finn', 'de Jong', '-9 years', 'groep']]],
+    ['Aylin Kaya', [['Elif', 'Kaya', '-7 years', 'groep']]],
+    ['Mark Visser', [['Daan', 'Visser', '-10 years', 'eigen']]],
+    ['Priya Sharma', [['Anika', 'Sharma', '-5 years', null]]],
+    ['Kees Mulder', [['Lieke', 'Mulder', '-8 years', 'groep'], ['Bram', 'Mulder', '-11 years', 'geen']]],
 ];
 $kinderen = [];
 foreach ($gezinnen as $i => [$ouderNaam, $kids]) {
     $email = strtolower(str_replace(' ', '.', $ouderNaam)) . '@demo.bsovck.nl';
     $ouderId = demo_gebruiker('ouder', $ouderNaam, $email, $hash, ['mandaat' => $i === 3 ? 'geen' : 'demo']);
-    foreach ($kids as [$voornaam, $achternaam, $leeftijd, $toestemming]) {
+    foreach ($kids as [$voornaam, $achternaam, $leeftijd, $fotos]) {
         $groep = $groepen[strtotime($leeftijd) < strtotime('-8 years') ? min(1, count($groepen) - 1) : 0];
-        q('INSERT INTO kinderen (ouder_id, groep_id, voornaam, achternaam, geboortedatum, foto_toestemming, bijzonderheden, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
-            $ouderId, $groep['id'], $voornaam, $achternaam, date('Y-m-d', strtotime($leeftijd . ' -40 days')), $toestemming, versleutel($voornaam === 'Elif' ? 'Allergisch voor noten' : ''), nu(),
+        $foto = $fotos === null ? ['foto_toestemming' => 0, 'fotos_toegestaan' => null, 'fotos_toegestaan_op' => null] : foto_keuze_velden($fotos);
+        q('INSERT INTO kinderen (ouder_id, groep_id, voornaam, achternaam, geboortedatum, foto_toestemming, fotos_toegestaan, fotos_toegestaan_op, bijzonderheden, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+            $ouderId, $groep['id'], $voornaam, $achternaam, date('Y-m-d', strtotime($leeftijd . ' -40 days')), $foto['foto_toestemming'], $foto['fotos_toegestaan'], $foto['fotos_toegestaan_op'], versleutel($voornaam === 'Elif' ? 'Allergisch voor noten' : ''), nu(),
         ]);
         $kindId = laatste_id();
         // Ouder met gezag, gecontroleerd door de beheerder
@@ -87,7 +89,7 @@ foreach ($gezinnen as $i => [$ouderNaam, $kids]) {
 }
 // Eén nieuwe aanmelding die nog goedgekeurd moet worden
 $nieuw = demo_gebruiker('ouder', 'Lisa Bos', 'lisa.bos@demo.bsovck.nl', $hash, ['status' => 'nieuw', 'mandaat' => 'demo']);
-q("INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, foto_toestemming, aangemaakt_op) VALUES (?, 'Mees', 'Bos', ?, 1, ?)", [$nieuw, date('Y-m-d', strtotime('-6 years')), nu()]);
+q("INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, foto_toestemming, aangemaakt_op) VALUES (?, 'Mees', 'Bos', ?, 0, ?)", [$nieuw, date('Y-m-d', strtotime('-6 years')), nu()]);
 koppel_verzorger(laatste_id(), $nieuw, 'ouder', true); // gezag opgegeven, nog te controleren
 
 // Inschrijvingen: vorige maand (voor facturen) tot drie weken vooruit

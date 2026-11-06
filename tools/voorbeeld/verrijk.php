@@ -18,7 +18,7 @@ $noor = $kinderen[0];
 $sam = (int) $noor['ouder_id'];
 
 // Foto's (stockfoto's van Pexels, zie assets/fotos/BRONNEN.md) gedeeld met ouders
-$fotos = [['voetbal', 'Voetballen op het veldje', [0, 1]], ['knutselen', 'Knutselmiddag', [0]], ['schilderen', 'Schilderen in de zon', [2]], ['bal', 'Balspelletje', [1, 3]]];
+$fotos = [['voetbal', 'Voetballen op het veldje', [0, 1]], ['knutselen', 'Knutselmiddag', [0]], ['schilderen', 'Schilderen in de zon', [2]], ['bal', 'Balspelletje', [1, 5]]];
 foreach ($fotos as [$bestand, $bijschrift, $welke]) {
     $pad = __DIR__ . "/demofotos/{$bestand}.jpg";
     [$rel, $b, $h] = bewaar_foto(['error' => UPLOAD_ERR_OK, 'size' => filesize($pad), 'tmp_name' => $pad]);

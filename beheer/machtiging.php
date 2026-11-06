@@ -1,18 +1,21 @@
 <?php
 /*
  * Machtiging voor automatische incasso afgeven (ouder).
- * Met Mollie: eerste betaling van € 0,01 via de eigen bank. Zonder Mollie: demo.
+ * Met Stripe: op een betaalpagina van Stripe, via de eigen bank (iDEAL | Wero, € 0,01 die meteen
+ * wordt terugbetaald) of met het IBAN. Zonder Stripe: demo.
  */
 require __DIR__ . '/inc/bootstrap.php';
 
 $ouder = vereis_login(['ouder']);
 
-// Terug van de betaalpagina van Mollie: status direct ophalen (de webhook kan later komen)
-if (get_str('terug') === '1' && mollie_actief()) {
-    $laatste = rij("SELECT mollie_id FROM betalingen WHERE gebruiker_id = ? AND soort = 'machtiging' ORDER BY id DESC LIMIT 1", [$ouder['id']]);
+// Terug van de pagina van Stripe: status direct ophalen (de webhook kan later komen).
+// Alleen een sessie van deze ouder zelf; een andere sessie in de URL wordt genegeerd.
+if (get_str('terug') === '1' && stripe_actief()) {
+    $sessie = get_str('sessie');
+    $laatste = rij("SELECT extern_id FROM betalingen WHERE gebruiker_id = ? AND soort = 'machtiging'" . ($sessie !== '' ? ' AND extern_id = ?' : '') . ' ORDER BY id DESC LIMIT 1', $sessie !== '' ? [$ouder['id'], $sessie] : [$ouder['id']]);
     if ($laatste) {
         try {
-            verwerk_betaling($laatste['mollie_id']);
+            verwerk_checkout_sessie($laatste['extern_id']);
         } catch (RuntimeException $fout) {
             error_log('Machtiging controleren: ' . $fout->getMessage());
         }
@@ -27,13 +30,18 @@ if (get_str('terug') === '1' && mollie_actief()) {
         redirect('machtiging.php');
     }
 }
+if (get_str('afgebroken') === '1') {
+    q("UPDATE gebruikers SET mandaat_status = 'geen' WHERE id = ? AND mandaat_status = 'in_behandeling'", [$ouder['id']]);
+    flash('info', 'Je hebt de machtiging afgebroken. Geen probleem: je kunt het altijd nog een keer proberen.');
+    redirect('machtiging.php');
+}
 
 if (is_post()) {
     csrf_controleer();
     if (in_array($ouder['mandaat_status'], ['geldig', 'demo'], true)) {
         redirect('machtiging.php');
     }
-    if (mollie_actief()) {
+    if (stripe_actief()) {
         try {
             redirect(start_machtiging($ouder));
         } catch (RuntimeException $fout) {
@@ -76,7 +84,7 @@ pagina_kop('Automatische incasso', 'Zo hoef jij nergens meer aan te denken: je f
 <?php else: ?>
     <!-- Henny rent mee door het aanmelden: na het formulier is dit de laatste stap -->
     <div class="henny-baan henny-baan--vast" style="--voortgang: 0.86;">
-      <p class="tekstwolk henny-baan__wolk">Bijna bij het doel! Nog één stap: de machtiging via je eigen bank.</p>
+      <p class="tekstwolk henny-baan__wolk">Bijna bij het doel! Nog één stap: de machtiging voor de automatische incasso.</p>
       <div class="henny-baan__spoor" aria-hidden="true">
         <img class="henny-baan__henny" src="../assets/img/henny/henny-rent-180.webp" srcset="../assets/img/henny/henny-rent-180.webp 180w, ../assets/img/henny/henny-rent-360.webp 360w" sizes="3rem" width="180" height="239" alt="">
         <svg class="henny-baan__doel" viewBox="0 0 44 30" focusable="false"><path d="M3 29V3h38v26"/><path d="M3 3l6 6h26l6-6M9 9v20M35 9v20M15.5 9v20M22 9v20M28.5 9v20M9 15.5h26M9 22h26"/></svg>
@@ -86,16 +94,24 @@ pagina_kop('Automatische incasso', 'Zo hoef jij nergens meer aan te denken: je f
 <?php if ($ouder['mandaat_status'] === 'in_behandeling'): ?>
     <p><?= status_badge('in_behandeling') ?> We wachten nog op de bevestiging van je bank. Dat duurt meestal maar even. Ging er iets mis? Probeer het dan hieronder opnieuw.</p>
 <?php endif; ?>
-<?php if (mollie_actief()): ?>
-    <p>Je betaalt eenmalig <strong>€ 0,01</strong> via je eigen bank (iDEAL). Daarmee bevestig je je rekeningnummer en geef je <?= e(incassant()) ?> toestemming om de facturen voor de opvang automatisch af te schrijven.</p>
+<?php if (stripe_actief()): ?>
+    <p>Je geeft <?= e(incassant()) ?> toestemming om de facturen voor de opvang automatisch af te schrijven. Dat doe je op een beveiligde pagina van onze betaalprovider Stripe:</p>
+    <ul class="checklist">
+<?php if (in_array('ideal', stripe_methoden('machtiging'), true)): ?>
+      <li><strong>Via je eigen bank (iDEAL | Wero):</strong> je betaalt eenmalig € 0,01 en krijgt die meteen terug. Daarmee bevestig je je rekeningnummer.</li>
+<?php endif; ?>
+<?php if (in_array('sepa_debit', stripe_methoden('machtiging'), true)): ?>
+      <li><strong>Of met je IBAN:</strong> je vult je rekeningnummer en naam in en gaat akkoord met de machtiging.</li>
+<?php endif; ?>
+    </ul>
     <form method="post">
       <?= csrf_veld() ?>
-      <button class="btn" type="submit"><?= icoon('bank') ?>Machtiging afgeven via mijn bank</button>
+      <button class="btn" type="submit"><?= icoon('bank') ?>Machtiging afgeven</button>
     </form>
-    <p class="muted">De betaling loopt via Mollie, een Nederlandse betaalprovider. Je komt daarna vanzelf hier terug.</p>
+    <p class="muted">Je komt daarna vanzelf hier terug.</p>
 <?php else: ?>
     <p class="demo-balk"><?= icoon('info') ?>Demo-modus: er is nog geen betaalprovider gekoppeld.</p>
-    <p>In de echte omgeving betaal je hier eenmalig € 0,01 via je eigen bank. Nu kun je de machtiging alleen simuleren.</p>
+    <p>In de echte omgeving geef je hier de machtiging af via je eigen bank (iDEAL | Wero) of met je IBAN, op een beveiligde pagina van Stripe. Nu kun je de machtiging alleen simuleren.</p>
     <form class="form" method="post">
       <?= csrf_veld() ?>
       <div class="field">

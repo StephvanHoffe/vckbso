@@ -57,16 +57,17 @@
         <dt>School</dt><dd>-</dd>
         <dt>Bijzonderheden</dt><dd>Geen</dd>
         <dt>Mag opgehaald worden door</dt><dd>Alleen de ouders</dd>
-        <dt>Groepsfoto's</dt><dd>Mag op groepsfoto's</dd>
+        <dt>Foto's</dt><dd>Ja, ook op groepsfoto&#039;s</dd>
       </dl>
-      <details class="uitklap">
+      <details class="uitklap" id="gegevens-wijzigen">
         <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Gegevens wijzigen</summary>
         <form class="form" method="post" action="#">
           <input type="hidden" name="csrf" value="voorbeeld">          <input type="hidden" name="actie" value="gegevens">
           <div class="field"><label for="school">Basisschool</label><input id="school" name="school" value=""></div>
           <div class="field"><label for="bijzonderheden">Allergieën, medicijnen of bijzonderheden</label><textarea id="bijzonderheden" name="bijzonderheden" rows="3"></textarea></div>
           <div class="field"><label for="ophaalpersonen">Wie mag Noor ophalen, behalve de ouders?</label><input id="ophaalpersonen" name="ophaalpersonen" value="" placeholder="Bijvoorbeeld: oma Els, buurvrouw Fatima"></div>
-          <div class="field"><div class="consent"><input id="foto_toestemming" name="foto_toestemming" type="checkbox" value="1" checked><label for="foto_toestemming">Mag op groepsfoto's die ook naar andere ouders gaan</label></div></div>
+          <fieldset class="field fotokeuze"><legend class="legend-label">Mogen we foto's van Noor delen?</legend><div class="choices choices--stapel"><label class="choice choice--uitleg" for="fotos-groep"><input type="radio" id="fotos-groep" name="fotos" value="groep" checked aria-describedby="fotos-groep-uitleg"><span><strong>Ja, ook op groepsfoto&#039;s</strong><span class="choice__uitleg" id="fotos-groep-uitleg">Staat Noor samen met andere kinderen op een foto? Dan krijgen hun ouders die foto ook.</span></span></label><label class="choice choice--uitleg" for="fotos-eigen"><input type="radio" id="fotos-eigen" name="fotos" value="eigen" aria-describedby="fotos-eigen-uitleg"><span><strong>Ja, maar alleen foto&#039;s waar Noor alleen op staat</strong><span class="choice__uitleg" id="fotos-eigen-uitleg">Die foto&#039;s krijg alleen jij (en wie je toegang geeft tot de foto&#039;s van Noor).</span></span></label><label class="choice choice--uitleg" for="fotos-geen"><input type="radio" id="fotos-geen" name="fotos" value="geen" aria-describedby="fotos-geen-uitleg"><span><strong>Nee, liever geen foto&#039;s</strong><span class="choice__uitleg" id="fotos-geen-uitleg">De begeleiders delen geen foto&#039;s van Noor in Mijn BSO.</span></span></label></div></fieldset>          <div class="field"><div class="consent"><input id="fotos_weghalen" name="fotos_weghalen" type="checkbox" value="1" aria-describedby="fotos-weghalen-uitleg"><label for="fotos_weghalen">Haal ook de foto's weg die al gedeeld zijn en niet bij je keuze passen</label></div>
+            <p class="field__hint" id="fotos-weghalen-uitleg">Bij "Nee" verdwijnen alle 2 foto's van Noor, bij "alleen foto's waar Noor alleen op staat" de groepsfoto. Ook bij andere ouders, en dat kan niet ongedaan worden gemaakt.</p></div>
           <div class="form__acties"><button class="btn" type="submit">Opslaan</button></div>
         </form>
       </details>
@@ -86,7 +87,7 @@
         <li class="gebied-taal">
           <div class="tijdlijn__meta">
             <strong>Taal en communicatie</strong>
-            <span>1 november 2026</span>
+            <span>31 oktober 2026</span>
             <span>Demo Begeleider</span>
           </div>
           <p>Vertelde aan tafel een lang verhaal over het schoolreisje, met veel details.</p>
@@ -94,7 +95,7 @@
         <li class="gebied-sociaal">
           <div class="tijdlijn__meta">
             <strong>Sociaal-emotioneel</strong>
-            <span>29 oktober 2026</span>
+            <span>28 oktober 2026</span>
             <span>Demo Begeleider</span>
           </div>
           <p>Hielp vandaag uit zichzelf een nieuw kindje met de weg vinden. Heel lief om te zien!</p>
@@ -137,7 +138,7 @@
     </section>
     <section class="panel" aria-labelledby="fotos-titel">
       <div class="panel__kop"><h2 id="fotos-titel">Foto's</h2><a href="ouder-fotos-kind-1.html">Alle foto's</a></div>
-      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=2&amp;weergave=1"><img src="fotos/foto-2-klein.jpg" alt="Knutselmiddag" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Knutselmiddag</p><p class="muted">vandaag 21:00 · Noor</p></div></li><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=1&amp;weergave=1"><img src="fotos/foto-1-klein.jpg" alt="Voetballen op het veldje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Voetballen op het veldje</p><p class="muted">vandaag 21:00 · Noor</p></div></li></ul>
+      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=2&amp;weergave=1"><img src="fotos/foto-2-klein.jpg" alt="Knutselmiddag" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Knutselmiddag</p><p class="muted">vandaag 21:25 · Noor</p></div></li><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=1&amp;weergave=1"><img src="fotos/foto-1-klein.jpg" alt="Voetballen op het veldje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Voetballen op het veldje</p><p class="muted">vandaag 21:25 · Noor</p></div></li></ul>
     </section>
   </div>
 </div>

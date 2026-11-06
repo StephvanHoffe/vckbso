@@ -56,10 +56,10 @@
         <dt>School</dt><dd>-</dd>
         <dt>Bijzonderheden</dt><dd>Geen</dd>
         <dt>Mag opgehaald worden door</dt><dd>Alleen de ouders</dd>
-        <dt>Groepsfoto's</dt><dd>Mag op groepsfoto's</dd>
+        <dt>Foto's</dt><dd>Ja, ook op groepsfoto&#039;s</dd>
         <dt>Ouder</dt><dd><a href="begeleider-ouder-id-7.html">Kees Mulder</a><br><a href="tel:0600000000">06 00 00 00 00</a> · <a href="mailto:kees.mulder@demo.bsovck.nl">kees.mulder@demo.bsovck.nl</a></dd>
       </dl>
-      <details class="uitklap">
+      <details class="uitklap" id="gegevens-wijzigen">
         <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Gegevens wijzigen</summary>
         <form class="form" method="post" action="#">
           <input type="hidden" name="csrf" value="voorbeeld">          <input type="hidden" name="actie" value="gegevens">
@@ -78,7 +78,7 @@
         <div class="field">
           <label for="team_notities">Notities over Lieke</label>
           <textarea id="team_notities" name="team_notities" rows="5" maxlength="4000" placeholder="Bijvoorbeeld: speelt liever niet samen met ..., heeft extra begeleiding nodig bij ...">Vindt drukte aan het begin van de middag lastig. Even samen een rustige plek zoeken helpt. Botst soms met een ander kind bij tikspellen: in een ander team zetten.</textarea>
-          <p class="field__hint">Laatst aangepast 6 november 2026 om 21:00 door Demo Begeleider.</p>
+          <p class="field__hint">Laatst aangepast 6 november 2026 om 21:25 door Demo Begeleider.</p>
         </div>
         <div class="form__acties"><button class="btn" type="submit">Notities opslaan</button></div>
       </form>
@@ -166,7 +166,7 @@
     </section>
     <section class="panel" aria-labelledby="fotos-titel">
       <div class="panel__kop"><h2 id="fotos-titel">Foto's</h2><a href="begeleider-fotos.html">Foto's delen</a></div>
-      <p class="leeg">Nog geen foto's.</p>
+      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=4&amp;weergave=1"><img src="fotos/foto-4-klein.jpg" alt="Balspelletje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Balspelletje</p><p class="muted">vandaag 21:25 · Lieke</p></div></li></ul>
     </section>
   </div>
 </div>

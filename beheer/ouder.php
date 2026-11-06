@@ -89,9 +89,13 @@ if (is_post()) {
         wis_oudergegevens($ouder, 'handmatig door beheerder');
         flash('succes', 'De gegevens van ' . $ouder['naam'] . ' en de kinderen zijn gewist. Naam, adres en facturen blijven bewaard vanwege de fiscale bewaarplicht.');
     } elseif ($actie === 'mandaat_intrekken') {
-        q("UPDATE gebruikers SET mandaat_status = 'ingetrokken' WHERE id = ?", [$ouder['id']]);
-        log_actie('Machtiging ingetrokken', '', null, 'wijziging', $onderwerp);
-        flash('succes', 'De machtiging staat op ingetrokken. Er worden geen incasso\'s meer gestart voor deze ouder. Trek hem ook in bij Mollie als dat nodig is.');
+        try {
+            trek_machtiging_in($ouder);
+            log_actie('Machtiging ingetrokken', '', null, 'wijziging', $onderwerp);
+            flash('succes', 'De machtiging is ingetrokken' . (stripe_actief() && str_starts_with((string) $ouder['mandaat_id'], 'pm_') ? ', ook bij Stripe' : '') . '. Er worden geen incasso\'s meer gestart voor deze ouder.');
+        } catch (RuntimeException $fout) {
+            flash('fout', 'Het intrekken bij Stripe lukte niet: ' . $fout->getMessage() . ' Er is niets veranderd; probeer het later opnieuw of trek de machtiging in via het dashboard van Stripe.');
+        }
     }
     if (!$fouten) {
         redirect($terug);
@@ -164,7 +168,7 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
           <div>
             <div class="kindrij__naam"><a href="kind.php?id=<?= (int) $kind['id'] ?>"><?= e(kindnaam($kind)) ?></a><?= $kind['actief'] ? '' : ' ' . status_badge('gestopt') ?></div>
             <div class="kindrij__info"><span><?= leeftijd($kind['geboortedatum']) ?> jaar</span><span><?= e($kind['school'] ?: 'School onbekend') ?></span>
-              <span><?= (int) $kind['ouder_id'] === (int) $ouder['id'] ? 'Contracthouder' : 'Verzorger' ?><?= $kind['v_relatie'] ? ' (' . e(mb_strtolower(RELATIES[$kind['v_relatie']] ?? '')) . ')' : '' ?>, <?= (int) $kind['v_gezag'] ? ($kind['v_gezag_gecontroleerd_op'] ? 'gezag gecontroleerd' : 'gezag nog controleren') : 'geen gezag' ?></span></div>
+              <span><?= (int) $kind['ouder_id'] === (int) $ouder['id'] ? 'Contracthouder' : 'Verzorger' ?><?= $kind['v_relatie'] ? ' (' . e(mb_strtolower(RELATIES[$kind['v_relatie']] ?? '')) . ')' : '' ?>, <?= (int) $kind['v_gezag'] ? ($kind['v_gezag_gecontroleerd_op'] ? 'gezag gecontroleerd' : 'gezag nog controleren') : 'geen gezag' ?></span><span><?= e(foto_keuze_kort(foto_keuze($kind))) ?></span></div>
 <?php if ($kind['bijzonderheden'] !== ''): ?><p class="let-op"><?= icoon('alert') ?><span><?= e($kind['bijzonderheden']) ?></span></p><?php endif; ?>
           </div>
 <?php if ($beheerder && (int) $kind['ouder_id'] === (int) $ouder['id']): ?>

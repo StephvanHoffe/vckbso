@@ -56,7 +56,7 @@
   </nav>
 </header>
 <main id="inhoud" class="app-main">
-  <p class="demo-balk"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>Demo-modus: Mollie is nog niet gekoppeld, er wordt niets echt afgeschreven.</p>
+  <p class="demo-balk"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>Demo-modus: Stripe is nog niet gekoppeld, er wordt niets echt afgeschreven.</p>
 <div class="pagina-kop"><div><h1>Instellingen</h1><p class="lead">Gegevens voor de facturen, het tarief, afmelden, beveiliging en bewaartermijnen.</p></div><div class="btn-group"><a class="btn btn--secondary btn--small" href="beheerder-mailteksten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>E-mails aanpassen</a><a class="btn btn--secondary btn--small" href="beheerder-beveiliging.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Beveiligingsstatus</a><a class="btn btn--secondary btn--small" href="beheerder-logboek.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-book"></use></svg>Logboek</a></div></div><form class="form" method="post">
   <input type="hidden" name="csrf" value="voorbeeld">  <div class="kolommen kolommen--gelijk">
     <section class="panel" aria-labelledby="bedrijf-titel">
@@ -121,8 +121,8 @@
           <input id="betaaltermijn_dagen" name="betaaltermijn_dagen" type="number" min="0" max="60" value="14">
                   </div>
       </div>
-      <h3 style="margin-top: var(--space-l)">Betalen via Mollie</h3>
-      <p><span class="badge badge--demo">Machtiging (demo)</span> Nog niet gekoppeld. Zet de API-sleutel van Mollie in <code>beheer/config.php</code>.</p>
+      <h3 style="margin-top: var(--space-l)">Betalen via Stripe</h3>
+      <p><span class="badge badge--demo">Machtiging (demo)</span> Nog niet gekoppeld. Zet de geheime sleutel en het webhookgeheim van Stripe in <code>beheer/config.php</code>.</p>
     </section>
   </div>
   <div class="kolommen kolommen--gelijk">
@@ -167,7 +167,7 @@
           <input id="bewaar_logboek_maanden" name="bewaar_logboek_maanden" type="number" min="0" max="240" style="max-width: 8rem" value="24">
                   </div>
       </div>
-      <p class="muted">Laatst uitgevoerd: vandaag 21:00.</p>
+      <p class="muted">Laatst uitgevoerd: vandaag 21:25.</p>
     </section>
     <section class="panel" aria-labelledby="mfa-titel">
       <h2 id="mfa-titel">Tweestapsverificatie</h2>

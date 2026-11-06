@@ -33,9 +33,11 @@ if (is_post()) {
             'bijzonderheden' => versleutel(mb_substr(invoer('bijzonderheden'), 0, 2000)),
             'ophaalpersonen' => versleutel(mb_substr(invoer('ophaalpersonen'), 0, 500)),
         ];
-        // Toestemming voor groepsfoto's is een beslissing van wie gezag heeft (of wordt door de beheerder vastgelegd)
-        if ($magBeslissen || $beheerder) {
-            $velden['foto_toestemming'] = invoer('foto_toestemming') === '1' ? 1 : 0;
+        // Toestemming voor foto's is een beslissing van wie gezag heeft (of wordt door de beheerder vastgelegd)
+        $oudeKeuze = foto_keuze($kind);
+        $nieuweKeuze = ($magBeslissen || $beheerder) ? foto_keuze_invoer() : null;
+        if ($nieuweKeuze !== null && $nieuweKeuze !== $oudeKeuze) {
+            $velden += foto_keuze_velden($nieuweKeuze);
         }
         if ($beheerder) {
             $velden['voornaam'] = invoer('voornaam');
@@ -57,8 +59,22 @@ if (is_post()) {
         if (!$fouten) {
             $sets = implode(', ', array_map(fn ($v) => "$v = ?", array_keys($velden)));
             q("UPDATE kinderen SET $sets WHERE id = ?", [...array_values($velden), $kind['id']]);
+            if (isset($velden['fotos_toegestaan'])) {
+                log_actie('Fototoestemming gewijzigd', foto_keuze_kort($oudeKeuze) . ' → ' . foto_keuze_kort($nieuweKeuze), null, 'wijziging', $onderwerp);
+            }
+            // Gedeelde foto's weghalen die niet (meer) bij de keuze passen
+            $weg = 0;
+            $keuzeNu = $nieuweKeuze ?? $oudeKeuze;
+            if (($magBeslissen || $beheerder) && in_array($keuzeNu, ['geen', 'eigen'], true) && invoer('fotos_weghalen') === '1') {
+                $weg = verwijder_fotos_na_intrekken((int) $kind['id'], $keuzeNu, 'toestemming ingetrokken');
+                if ($weg) {
+                    log_actie("Foto's verwijderd na intrekken toestemming", $weg . " foto('s)", null, 'wijziging', $onderwerp);
+                }
+            }
             if (!$team) {
-                melding_voor_team((int) $gebruiker['id'], 'De gegevens van ' . $kind['voornaam'] . ' zijn aangepast (school, bijzonderheden, ophalen of foto-toestemming).', (int) $kind['id']);
+                melding_voor_team((int) $gebruiker['id'], 'De gegevens van ' . $kind['voornaam'] . ' zijn aangepast (school, bijzonderheden of ophalen).'
+                    . (isset($velden['fotos_toegestaan']) ? ' Foto\'s: ' . str_replace('{naam}', $kind['voornaam'], FOTO_KEUZES[$nieuweKeuze][0]) . '.' : '')
+                    . ($weg ? ' ' . ($weg === 1 ? 'Eén al gedeelde foto is' : "{$weg} al gedeelde foto's zijn") . ' weggehaald.' : ''), (int) $kind['id']);
             }
             if ($beheerder && !$velden['actief']) {
                 // Gestopt: toekomstige dagen vrijgeven
@@ -67,7 +83,7 @@ if (is_post()) {
                 }
             }
             log_actie('Kindgegevens gewijzigd', implode(', ', array_keys($velden)), null, 'wijziging', $onderwerp);
-            flash('succes', 'De gegevens zijn opgeslagen.');
+            flash('succes', 'De gegevens zijn opgeslagen.' . ($weg ? ' ' . ($weg === 1 ? 'Eén foto is' : $weg . " foto's zijn") . ' weggehaald.' : ''));
             redirect($terug);
         }
     }
@@ -235,7 +251,7 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
         <dt>School</dt><dd><?= e($kind['school'] ?: '-') ?></dd>
         <dt>Bijzonderheden</dt><dd><?= $kind['bijzonderheden'] !== '' ? '<span class="let-op">' . icoon('alert') . '<span>' . e($kind['bijzonderheden']) . '</span></span>' : 'Geen' ?></dd>
         <dt>Mag opgehaald worden door</dt><dd><?= e($kind['ophaalpersonen'] ?: 'Alleen de ouders') ?></dd>
-        <dt>Groepsfoto's</dt><dd><?= $kind['foto_toestemming'] ? 'Mag op groepsfoto\'s' : 'Niet op groepsfoto\'s (alleen eigen foto\'s naar eigen ouders)' ?></dd>
+        <dt>Foto's</dt><dd><?= ($fk = foto_keuze($kind)) !== null ? e(str_replace('{naam}', $kind['voornaam'], FOTO_KEUZES[$fk][0])) : '<span class="fotostatus fotostatus--open">' . icoon('camera') . 'Nog niet ingevuld</span><br><small class="muted">Tot die tijd delen we geen foto\'s van ' . e($kind['voornaam']) . '.</small>' ?></dd>
 <?php if ($team): ?>
         <dt>Ouder</dt><dd><a href="ouder.php?id=<?= (int) $ouder['id'] ?>"><?= e($ouder['naam']) ?></a><br><?php if (trim((string) $ouder['telefoon']) !== ''): ?><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $ouder['telefoon'])) ?>"><?= e($ouder['telefoon']) ?></a> · <?php endif; ?><a href="mailto:<?= e($ouder['email']) ?>"><?= e($ouder['email']) ?></a></dd>
 <?php endif; ?>
@@ -245,7 +261,10 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
           ? 'Gegevens wijzigen en toestemming geven kan alleen wie het gezag over ' . e($kind['voornaam']) . ' heeft.'
           : 'We hebben je gezag nog niet gecontroleerd. Daarna kun je de gegevens en toestemmingen zelf wijzigen. Neem bij je volgende bezoek een uittreksel uit het gezagsregister mee.' ?> Klopt er iets niet? Stuur ons een <a href="berichten.php">bericht</a> of dien een <a href="privacy.php">correctieverzoek</a> in.</span></p>
 <?php else: ?>
-      <details class="uitklap"<?= isset($fouten['voornaam']) || isset($fouten['geboortedatum']) ? ' open' : '' ?>>
+<?php if ($magBeslissen && foto_keuze($kind) === null): ?>
+      <p class="melding"><?= icoon('camera') ?><span>Mogen we foto's van <?= e($kind['voornaam']) ?> delen? Geef het aan bij <strong>Gegevens wijzigen</strong> hieronder. Tot die tijd delen we geen foto's van <?= e($kind['voornaam']) ?>.</span></p>
+<?php endif; ?>
+      <details class="uitklap" id="gegevens-wijzigen"<?= isset($fouten['voornaam']) || isset($fouten['geboortedatum']) || ($magBeslissen && foto_keuze($kind) === null) || get_str('open') === 'fotos' ? ' open' : '' ?>>
         <summary><?= icoon('gear') ?>Gegevens wijzigen</summary>
         <form class="form" method="post" action="<?= e($terug) ?>">
           <?= csrf_veld() ?>
@@ -263,8 +282,13 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
           <div class="field"><label for="school">Basisschool</label><input id="school" name="school" value="<?= e($kind['school']) ?>"></div>
           <div class="field"><label for="bijzonderheden">Allergieën, medicijnen of bijzonderheden</label><textarea id="bijzonderheden" name="bijzonderheden" rows="3"><?= e($kind['bijzonderheden']) ?></textarea></div>
           <div class="field"><label for="ophaalpersonen">Wie mag <?= e($kind['voornaam']) ?> ophalen, behalve de ouders?</label><input id="ophaalpersonen" name="ophaalpersonen" value="<?= e($kind['ophaalpersonen']) ?>" placeholder="Bijvoorbeeld: oma Els, buurvrouw Fatima"></div>
-<?php if ($magBeslissen || $beheerder): ?>
-          <div class="field"><div class="consent"><input id="foto_toestemming" name="foto_toestemming" type="checkbox" value="1"<?= $kind['foto_toestemming'] ? ' checked' : '' ?>><label for="foto_toestemming">Mag op groepsfoto's die ook naar andere ouders gaan<?= $beheerder ? ' <span class="field__hint">(alleen aanpassen op verzoek van wie gezag heeft)</span>' : '' ?></label></div></div>
+<?php if ($magBeslissen || $beheerder):
+    $intrekken = fotos_bij_intrekken((int) $kind['id']); ?>
+          <?= foto_keuze_veld($kind['voornaam'], foto_keuze($kind), $fouten, $beheerder ? ' <span class="field__hint">(alleen aanpassen op verzoek van wie gezag heeft)</span>' : '') ?>
+<?php if ($intrekken['geen'] > 0): ?>
+          <div class="field"><div class="consent"><input id="fotos_weghalen" name="fotos_weghalen" type="checkbox" value="1" aria-describedby="fotos-weghalen-uitleg"><label for="fotos_weghalen">Haal ook de foto's weg die al gedeeld zijn en niet bij je keuze passen</label></div>
+            <p class="field__hint" id="fotos-weghalen-uitleg">Bij "Nee" <?= $intrekken['geen'] === 1 ? 'verdwijnt de foto' : 'verdwijnen alle ' . $intrekken['geen'] . " foto's" ?> van <?= e($kind['voornaam']) ?><?= $intrekken['eigen'] > 0 ? ', bij "alleen foto\'s waar ' . e($kind['voornaam']) . ' alleen op staat" ' . ($intrekken['eigen'] === 1 ? 'de groepsfoto' : 'de ' . $intrekken['eigen'] . " groepsfoto's") : '' ?>. Ook bij andere ouders, en dat kan niet ongedaan worden gemaakt.</p></div>
+<?php endif; ?>
 <?php endif; ?>
 <?php if ($beheerder): ?>
           <div class="field"><div class="consent"><input id="actief" name="actief" type="checkbox" value="1"<?= $kind['actief'] ? ' checked' : '' ?>><label for="actief">Komt naar de BSO (uitvinken als het kind stopt; toekomstige dagen worden dan afgemeld)</label></div></div>

@@ -10,13 +10,13 @@ if (is_team($gebruiker)) {
 /* ---------- Ouder ---------- */
 if (is_ouder($gebruiker)) {
     $fouten = [];
-    $nieuw = ['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'foto_toestemming' => '', 'relatie' => 'ouder', 'gezag' => '1'];
+    $nieuw = ['voornaam' => '', 'achternaam' => '', 'geboortedatum' => '', 'school' => '', 'bijzonderheden' => '', 'fotos' => null, 'relatie' => 'ouder', 'gezag' => '1'];
     if (is_post()) {
         csrf_controleer();
         foreach (['voornaam', 'achternaam', 'geboortedatum', 'school', 'bijzonderheden'] as $veld) {
             $nieuw[$veld] = invoer($veld);
         }
-        $nieuw['foto_toestemming'] = invoer('foto_toestemming') === '1' ? '1' : '';
+        $nieuw['fotos'] = foto_keuze_invoer();
         $nieuw['relatie'] = array_key_exists(invoer('relatie'), RELATIES) ? invoer('relatie') : 'ouder';
         $nieuw['gezag'] = invoer('gezag') === '1' ? '1' : '';
         if ($nieuw['voornaam'] === '') {
@@ -28,9 +28,13 @@ if (is_ouder($gebruiker)) {
         if (!geldige_datum($nieuw['geboortedatum']) || $nieuw['geboortedatum'] > vandaag() || $nieuw['geboortedatum'] < date('Y-m-d', strtotime('-16 years'))) {
             $fouten['geboortedatum'] = 'Vul een geldige geboortedatum in.';
         }
+        if ($nieuw['fotos'] === null) {
+            $fouten['fotos'] = 'Kies of we foto\'s van je kind mogen delen.';
+        }
         if (!$fouten) {
-            q('INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, school, bijzonderheden, foto_toestemming, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
-                $gebruiker['id'], $nieuw['voornaam'], $nieuw['achternaam'], $nieuw['geboortedatum'], $nieuw['school'], versleutel($nieuw['bijzonderheden']), $nieuw['foto_toestemming'] ? 1 : 0, nu(),
+            $foto = foto_keuze_velden($nieuw['fotos']);
+            q('INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, school, bijzonderheden, foto_toestemming, fotos_toegestaan, fotos_toegestaan_op, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+                $gebruiker['id'], $nieuw['voornaam'], $nieuw['achternaam'], $nieuw['geboortedatum'], $nieuw['school'], versleutel($nieuw['bijzonderheden']), $foto['foto_toestemming'], $foto['fotos_toegestaan'], $foto['fotos_toegestaan_op'], nu(),
             ]);
             $kindId = laatste_id();
             koppel_verzorger($kindId, (int) $gebruiker['id'], $nieuw['relatie'], (bool) $nieuw['gezag']);
@@ -59,6 +63,7 @@ if (is_ouder($gebruiker)) {
           <div class="kindrij__info">
             <span><?= leeftijd($kind['geboortedatum']) ?> jaar</span>
             <span><?= $kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam']) : 'Nog geen groep' ?></span>
+            <span><?= e(foto_keuze_kort(foto_keuze($kind))) ?></span>
             <span><?= e(RELATIES[$kind['v_relatie']] ?? '') ?><?= (int) $kind['v_gezag'] === 1 ? (empty($kind['v_gezag_gecontroleerd_op']) ? ', gezag nog niet gecontroleerd' : ', gezag gecontroleerd') : ', zonder gezag' ?></span>
           </div>
         </div>
@@ -83,7 +88,7 @@ if (is_ouder($gebruiker)) {
       <div class="field"><label for="bijzonderheden">Allergieën, medicijnen of bijzonderheden <span class="field__hint">(optioneel)</span></label><textarea id="bijzonderheden" name="bijzonderheden" rows="3"><?= e($nieuw['bijzonderheden']) ?></textarea></div>
       <div class="field"><label for="relatie">Jij bent</label><select id="relatie" name="relatie"><?php foreach (RELATIES as $sleutel => $label): ?><option value="<?= e($sleutel) ?>"<?= $nieuw['relatie'] === $sleutel ? ' selected' : '' ?>><?= e($label) ?></option><?php endforeach; ?></select></div>
       <div class="field"><div class="consent"><input id="gezag" name="gezag" type="checkbox" value="1"<?= $nieuw['gezag'] ? ' checked' : '' ?>><label for="gezag">Ik heb het (ouderlijk) gezag over dit kind <span class="field__hint">(we controleren dit bij het volgende bezoek)</span></label></div></div>
-      <div class="field"><div class="consent"><input id="foto_toestemming" name="foto_toestemming" type="checkbox" value="1"<?= $nieuw['foto_toestemming'] ? ' checked' : '' ?>><label for="foto_toestemming">Mag op groepsfoto's die ook naar andere ouders gaan</label></div></div>
+      <?= foto_keuze_veld($nieuw['voornaam'], $nieuw['fotos'], $fouten, ' <span class="field__hint">(je kunt dit altijd aanpassen)</span>') ?>
       <div class="form__acties"><button class="btn" type="submit"><?= icoon('plus') ?>Toevoegen</button></div>
     </form>
   </section>
@@ -193,7 +198,7 @@ pagina_kop('Kinderen', 'Alle kinderen met hun groep. Klik op een naam voor het d
             </form>
 <?php endif; ?>
           </td>
-          <td><?= $kind['bijzonderheden'] !== '' ? '<span class="let-op">' . icoon('alert') . '<span>' . e(mb_strimwidth($kind['bijzonderheden'], 0, 60, '…')) . '</span></span>' : '' ?><?= $kind['foto_toestemming'] ? '' : '<br><small class="muted">Niet op groepsfoto\'s</small>' ?></td>
+          <td><?= $kind['bijzonderheden'] !== '' ? '<span class="let-op">' . icoon('alert') . '<span>' . e(mb_strimwidth($kind['bijzonderheden'], 0, 60, '…')) . '</span></span>' : '' ?><?= foto_keuze($kind) === 'groep' ? '' : '<span class="fotostatus fotostatus--' . e(foto_keuze($kind) ?? 'open') . '">' . icoon('camera') . e(foto_keuze_kort(foto_keuze($kind))) . '</span>' ?></td>
           <td><?= $kind['team_notities'] !== '' ? '<a class="team-notitie" href="kind.php?id=' . (int) $kind['id'] . '#notities">' . icoon('lock') . '<span>' . e(mb_strimwidth($kind['team_notities'], 0, 60, '…')) . '</span></a>' : '' ?></td>
         </tr>
 <?php endforeach; ?>

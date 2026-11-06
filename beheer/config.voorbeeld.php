@@ -31,11 +31,15 @@ return [
     // Kies iets lang en willekeurigs. Na de installatie weer leegmaken.
     'installatiecode' => '',
 
-    // Mollie (automatische incasso en betalen). Leeg = demo-modus: er wordt
-    // dan niets echt afgeschreven. Begin met een test-sleutel (test_...).
-    'mollie' => [
-        'api_key' => '',
-        'methode_machtiging' => 'ideal',
+    // Stripe (automatische incasso en betalen). Leeg = demo-modus: er wordt
+    // dan niets echt afgeschreven. Begin met de testsleutel (sk_test_...).
+    // Zie docs/beheeromgeving.md, "Stripe koppelen".
+    'stripe' => [
+        'geheime_sleutel' => '',   // Ontwikkelaars → API-sleutels: de geheime sleutel (sk_...) of een beperkte sleutel (rk_...)
+        'webhook_geheim' => '',    // Ontwikkelaars → Webhooks: het ondertekeningsgeheim (whsec_...)
+        // Optioneel, dit zijn de standaardwaarden. Een lege lijst: wat in het dashboard van Stripe aan staat.
+        // 'methoden_machtiging' => ['ideal', 'sepa_debit'],   // machtiging via de eigen bank (iDEAL | Wero) of met het IBAN
+        // 'methoden_betalen' => ['ideal'],                    // een losse factuur online betalen
     ],
 
     // E-mail. 'log' schrijft berichten naar data/mail.log (om te testen),
@@ -57,7 +61,7 @@ return [
     ],
 
     // Meerdere opvangorganisaties op één installatie? Geef elke organisatie
-    // een eigen domein, datamap, sleutel en eventueel Mollie-account. De
+    // een eigen domein, datamap, sleutel en eventueel Stripe-account. De
     // gegevens staan dan in aparte databases en lopen nooit door elkaar.
     // Een onbekend domein krijgt geen toegang.
     //
@@ -74,7 +78,7 @@ return [
     //         'app_url' => 'https://mijn.anderebso.nl/beheer',
     //         'data_dir' => '/home/account/data-andere',
     //         'sleutel' => '...',
-    //         'mollie' => ['api_key' => '...'],
+    //         'stripe' => ['geheime_sleutel' => '...', 'webhook_geheim' => '...'],
     //         'backup' => ['map' => '/home/account/backups-andere', 'sleutel' => '...'],
     //     ],
     // ],

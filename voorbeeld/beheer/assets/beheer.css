@@ -1068,6 +1068,82 @@ a.bezetting:hover {
   color: var(--color-text-muted);
 }
 
+/* Geen toestemming voor foto's (of nog niet ingevuld): niet aan te vinken */
+.choice--geenfoto,
+.choice--geenfoto:hover {
+  border-style: dashed;
+  border-color: var(--color-border);
+  background: var(--color-surface-alt);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
+
+.choice__label {
+  padding: 0.1em 0.6em;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  font-size: var(--step--1);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* Fototoestemming: drie keuzes met uitleg, onder elkaar */
+.choices--stapel {
+  flex-direction: column;
+}
+
+.choice--uitleg {
+  align-items: flex-start;
+  border-radius: var(--radius-m);
+  padding-block: 0.7em;
+}
+
+.choice--uitleg input {
+  margin-top: 0.15em;
+}
+
+.choice__uitleg {
+  display: block;
+  margin-top: 0.2em;
+  color: var(--color-text-muted);
+  font-size: var(--step--1);
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.fotokeuze .legend-label {
+  margin-bottom: var(--space-2xs);
+}
+
+/* Fototoestemming in lijsten (Let op) */
+.fotostatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin-top: 0.25em;
+  color: var(--color-text-muted);
+  font-size: var(--step--1);
+}
+
+.let-op + .fotostatus {
+  display: flex;
+}
+
+.fotostatus .icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+}
+
+.fotostatus--geen,
+.fotostatus--open {
+  padding: 0.1em 0.65em;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  font-weight: var(--font-weight-strong);
+}
+
 /* ---------- Kinddossier ---------- */
 
 /* E-mails aanpassen */

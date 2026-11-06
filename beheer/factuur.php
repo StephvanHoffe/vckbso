@@ -9,11 +9,12 @@ if (is_team($gebruiker)) {
 $factuur = factuur_met_toegang(get_int('id'));
 
 // Terug van een losse betaling: status meteen ophalen
-if (get_str('betaald') === '1' && mollie_actief()) {
-    $laatste = rij("SELECT mollie_id FROM betalingen WHERE factuur_id = ? AND soort = 'eenmalig' ORDER BY id DESC LIMIT 1", [$factuur['id']]);
+if (get_str('betaald') === '1' && stripe_actief()) {
+    $sessie = get_str('sessie');
+    $laatste = rij("SELECT extern_id FROM betalingen WHERE factuur_id = ? AND soort = 'eenmalig'" . ($sessie !== '' ? ' AND extern_id = ?' : '') . ' ORDER BY id DESC LIMIT 1', $sessie !== '' ? [$factuur['id'], $sessie] : [$factuur['id']]);
     if ($laatste) {
         try {
-            verwerk_betaling($laatste['mollie_id']);
+            verwerk_checkout_sessie($laatste['extern_id']);
         } catch (RuntimeException $fout) {
             error_log('Betaling controleren: ' . $fout->getMessage());
         }
@@ -25,7 +26,7 @@ if (get_str('betaald') === '1' && mollie_actief()) {
 
 if (is_post() && is_ouder($gebruiker)) {
     csrf_controleer();
-    if (in_array($factuur['status'], ['open', 'mislukt'], true) && mollie_actief()) {
+    if (in_array($factuur['status'], ['open', 'mislukt'], true) && stripe_actief()) {
         try {
             redirect(start_eenmalige_betaling($factuur));
         } catch (RuntimeException $fout) {
@@ -98,8 +99,8 @@ echo '<a class="terug-link niet-printen" href="facturen.php' . (is_team($gebruik
 <?php endif; ?>
   <div class="btn-group niet-printen" style="margin-top: var(--space-l)">
     <button class="btn btn--secondary btn--small" type="button" hidden data-print><?= icoon('print') ?>Printen of opslaan als pdf</button>
-<?php if (is_ouder($gebruiker) && in_array($factuur['status'], ['open', 'mislukt'], true) && mollie_actief()): ?>
-    <form method="post"><?= csrf_veld() ?><button class="btn btn--small" type="submit"><?= icoon('bank') ?>Nu betalen via iDEAL</button></form>
+<?php if (is_ouder($gebruiker) && in_array($factuur['status'], ['open', 'mislukt'], true) && stripe_actief()): ?>
+    <form method="post"><?= csrf_veld() ?><button class="btn btn--small" type="submit"><?= icoon('bank') ?><?= stripe_methoden('betalen') === ['ideal'] ? 'Nu betalen via iDEAL | Wero' : 'Nu online betalen' ?></button></form>
 <?php endif; ?>
   </div>
 </article>

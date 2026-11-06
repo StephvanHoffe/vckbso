@@ -120,6 +120,8 @@ Twee documenten met feedback (website en aanmeldformulier). Wat daaruit volgt:
 - **Verborgen notities (nieuw, Mijn BSO):** per kind notities die alleen het team ziet, met een kolom naast "Let op" bij Kinderen. Niet zichtbaar voor ouders; wel onderdeel van een formeel inzageverzoek (AVG).
 - **WhatsApp:** knop op Contact en een link in het aanmeldformulier (nu met het tijdelijke nummer).
 - **E-mails aanpassen (nieuw, Mijn BSO):** alle e-mails die het platform verstuurt, zijn aan te passen onder Instellingen → E-mails aanpassen, met invulvelden, een voorbeeld, een testmail en terug naar de standaardtekst. Nieuwe e-mails altijd via `stuur_mailtekst()` of `mail_team_tekst()` en `beheer/inc/mailteksten.php`.
+- **Fototoestemming per kind (nieuw, Mijn BSO):** wie gezag heeft kiest per kind: ook groepsfoto's, alleen foto's waar het kind alleen op staat, of geen foto's. Zonder toestemming (of nog niet ingevuld) is het kind bij Foto's niet aan te vinken en weigert de server het. Controleer altijd met `mag_op_foto()`.
+- **Betalen via Stripe (nieuw):** de klant wil Stripe in plaats van Mollie, voor de machtiging (iDEAL | Wero of IBAN), de incasso's en los betalen. Code in `beheer/inc/stripe.php`, webhook `beheer/stripe-webhook.php`; zie "Stripe koppelen" in `docs/beheeromgeving.md`.
 
 ### Kleuren
 

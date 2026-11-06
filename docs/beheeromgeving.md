@@ -8,11 +8,11 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 |---|---|---|
 | Aanmelden op de website en als klant in het systeem komen, met de kinderen eronder | `aanvraag.php` (formulier "Kom bij de club" op `aanmelden.html`), `ouder.php` | Sinds november 2026 vrijblijvend, in 7 stappen: gegevens kind, school, abonnement, dagen, gegevens ouder, partner en controleren. Er ontstaat een ouder met status "nieuw" (nog zonder wachtwoord) met de kinderen eronder; het team krijgt een e-mail en ziet de aanmelding bij Ouders. Na de kennismaking activeert het team het account; de ouder krijgt dan een link om een wachtwoord te kiezen en geeft daarna de machtiging. Zie [Aanmelden via de website](#aanmelden-via-de-website). |
 | Dagen die vol zitten, niet aan te vinken bij het aanmelden | `groepen.php` (blok "Dagen die vol zitten"), `aanvraag.php` | Het team vinkt bij Groepen aan welke weekdagen vol zitten. In het aanmeldformulier staan die dagen dan grijs met "(vol)" en zijn ze niet aan te vinken; ouders lezen dat ze in de opmerkingen om de wachtlijst kunnen vragen. Raakt een dag vol terwijl een ouder het formulier invult, dan weigert de server die dag met een duidelijke melding. Bestaande klanten merken er niets van: in de agenda geldt gewoon de maximale groepsgrootte. Elke wijziging staat in het logboek. |
-| Automatische incasso bij de aanmelding | `machtiging.php` | Direct na het aanmelden geeft de ouder een SEPA-machtiging via Mollie: een eerste betaling van € 0,01 via de eigen bank. Daarna kan elke factuur automatisch worden afgeschreven. |
+| Automatische incasso bij de aanmelding | `machtiging.php` | Direct na het aanmelden geeft de ouder een SEPA-machtiging op een beveiligde pagina van Stripe: via de eigen bank met iDEAL | Wero (€ 0,01 die Stripe meteen terugbetaalt) of met het IBAN. Daarna kan elke factuur automatisch worden afgeschreven. Zie [Stripe koppelen](#stripe-koppelen). |
 | Facturen online terugvinden | `facturen.php`, `factuur.php` | Beheerder maakt per maand de facturen (op basis van de ingeschreven dagen) en start de incasso. Ouders zien, printen en (bij een mislukte incasso) betalen hun facturen online. |
 | Kindvolgsysteem | `kind.php` | Per kind een dossier: gegevens, allergieën, ophaalpersonen, aanwezigheid (binnen en opgehaald), foto's en observaties per ontwikkelgebied. Een observatie kan alleen voor het team zijn, of gedeeld worden met de ouders. |
 | Verborgen notities per kind, alleen voor het team (november 2026) | `kind.php` (blok "Verborgen notities"), `kinderen.php` (kolom naast "Let op") | Voor opmerkingen die niet per se voor ouders zijn, zoals een kind dat niet goed met een ander kind kan. Iedereen van het team met toegang tot het kind leest en schrijft ze; ouders zien ze nergens in Mijn BSO en ook niet in de download van hun eigen gegevens. Versleuteld opgeslagen, met wie ze het laatst aanpaste; elke wijziging staat in het logboek (zonder de tekst). Let op: bij een formeel inzageverzoek (AVG) heeft een ouder wel recht op deze notities. Daarom staan ze in de export die het team bij Privacyverzoeken eerst controleert. Schrijf ze dus feitelijk en respectvol. Ze worden gewist met het dossier. |
-| Foto's sturen naar de ouders van een kind | `fotos.php` | Begeleider kiest foto's en de kinderen die erop staan. Alleen hun verzorgers (met het recht "foto's") zien de foto. Groepsfoto's kan alleen met toestemming van alle ouders; kinderen zonder toestemming staan gemarkeerd. Locatiegegevens (EXIF) worden uit de foto gehaald. |
+| Foto's sturen naar de ouders van een kind | `fotos.php` | Begeleider kiest foto's en de kinderen die erop staan. Alleen hun verzorgers (met het recht "foto's") zien de foto. Per kind kiest wie gezag heeft: ook groepsfoto's, alleen foto's waar het kind alleen op staat, of geen foto's (zie [Fototoestemming](#fototoestemming)). Kinderen met "geen foto's" of zonder ingevulde keuze zijn niet aan te vinken (en de server weigert ze); groepsfoto's kunnen alleen met toestemming van alle ouders. Locatiegegevens (EXIF) worden uit de foto gehaald. |
 | Berichten heen en weer, bijvoorbeeld bij ziekte | `berichten.php` | Per gezin één gesprek met het team. Ouders kunnen hun kind ook ziek melden voor een of meer dagen; die dagen worden dan automatisch afgemeld. |
 | Overzicht welke kinderen wanneer komen, met maximale groepsgrootte | `agenda.php`, `index.php`, `groepen.php` | Per groep een maximum. Weekoverzicht met bezetting per dag (kleur bij bijna vol en vol) en een dagoverzicht met namen, allergieën en knoppen voor binnen, opgehaald, ziek en afmelden. |
 | Digitale agenda die twee kanten op werkt | `agenda.php` | Ouders kiezen zelf dagen (los of vaste weekdagen voor een periode) en melden af tot een ingestelde tijd op de dag zelf. Vol? Dan op de wachtlijst; bij een afmelding schuift de volgende automatisch door en krijgt een bericht. Het team kan ook zelf kinderen toevoegen, afmelden, boven het maximum plaatsen, een dag sluiten of de groepsgrootte voor één dag aanpassen. Ouders krijgen daar automatisch bericht van. |
@@ -27,7 +27,7 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | Eis | Invulling |
 |---|---|
 | **Toegang per rol**: medewerkers zien alleen de kinderen waarvoor zij toegang nodig hebben | Per collega staat elk onderdeel van de beheeromgeving aan of uit (zie [Rechten per persoon](#rechten-per-persoon)); wat uit staat, is ook niet te openen. Daarnaast is elke collega gekoppeld aan een of meer groepen, eventueel tijdelijk tot een einddatum (bijvoorbeeld voor een invaller). Kinderen, dossiers, ouders, berichten, foto's, de agenda en het dagoverzicht tonen alleen de eigen groepen; een kind uit een andere groep geeft "niet gevonden". Alleen wie het extra recht "Alle groepen" heeft, ziet alle kinderen, ook nieuwe aanmeldingen zonder groep. |
-| **Toegang per organisatie**: gegevens van meerdere opvangorganisaties strikt gescheiden | Elke organisatie krijgt een eigen domein, database, fotomap, sessiemap, encryptiesleutel, back-upsleutel en eventueel Mollie-account (zie [Meerdere organisaties](#meerdere-organisaties)). Er is geen gedeelde database waarin een fout filter gegevens kan laten doorlekken. Een onbekend domein krijgt geen toegang; twee organisaties met dezelfde map of sleutel weigert het systeem. |
+| **Toegang per organisatie**: gegevens van meerdere opvangorganisaties strikt gescheiden | Elke organisatie krijgt een eigen domein, database, fotomap, sessiemap, encryptiesleutel, back-upsleutel en eventueel Stripe-account (zie [Meerdere organisaties](#meerdere-organisaties)). Er is geen gedeelde database waarin een fout filter gegevens kan laten doorlekken. Een onbekend domein krijgt geen toegang; twee organisaties met dezelfde map of sleutel weigert het systeem. |
 | **Persoonlijke accounts** | Iedereen logt in met een eigen e-mailadres. Team en tweede verzorgers worden per persoon uitgenodigd met een eenmalige link. Er zijn geen gedeelde accounts. |
 | **Meervoudige authenticatie** | Tweestapsverificatie met een authenticator-app (TOTP) en 10 eenmalige herstelcodes. Verplicht voor het hele team (kan niet worden overgeslagen); voor ouders aanbevolen of verplicht, naar keuze van de beheerder. Een code werkt maar één keer. |
 | **Versleuteling** | Https met HSTS. Gevoelige velden (bijzonderheden en allergieën, ophaalpersonen, observaties, berichten, privacyverzoeken, motivaties van sollicitanten, het MFA-geheim) en alle foto's, cv's en exports worden versleuteld opgeslagen (libsodium, XSalsa20-Poly1305) met een sleutel die niet in de database staat. Wachtwoorden en herstelcodes alleen als hash. |
@@ -123,6 +123,22 @@ Onder **Instellingen → E-mails aanpassen** (recht Instellingen) staan alle 23 
 - **Terug naar de standaard:** met één klik, en het overzicht laat zien welke e-mails zijn aangepast (met datum). Elke wijziging staat in het logboek.
 - **Techniek:** de standaardteksten staan in `beheer/inc/mailteksten.php` (`MAILTEKSTEN`), een aangepaste tekst in de tabel `mail_teksten` (migratie 14). Verstuur een e-mail altijd met `stuur_mailtekst()` of `mail_team_tekst()`; `npm test` controleert dat er geen e-mail buiten deze lijst om gaat en dat de standaardteksten kloppen.
 
+## Fototoestemming
+
+Per kind geeft wie gezag heeft aan of de begeleiders foto's van het kind mogen delen:
+
+| Keuze | Wat er gebeurt |
+|---|---|
+| Ja, ook op groepsfoto's | Het kind kan op elke foto. Een groepsfoto gaat naar de ouders van alle kinderen erop. |
+| Ja, maar alleen foto's waar het kind alleen op staat | Alleen losse foto's, die alleen naar de eigen verzorgers gaan. In de keuzelijst heeft het kind een gestippelde rand. |
+| Nee, liever geen foto's | Het kind is bij Foto's niet aan te vinken ("geen foto's"). |
+| Nog niet ingevuld | Net als "nee": niet aan te vinken ("nog geen toestemming"). De ouder ziet een herinnering op het overzicht en bij het kind. |
+
+- **Waar:** ouders kiezen bij het toevoegen van een kind (verplicht) en bij het kind onder Gegevens wijzigen. Een beheerder kan het vastleggen op verzoek van wie gezag heeft, bijvoorbeeld na de kennismaking bij een aanmelding via de website. De keuze staat bij het kind, bij Kinderen (kolom Let op) en bij de ouder.
+- **Afdwingen:** ook de server weigert een foto met een kind zonder toestemming, of een groepsfoto met een kind dat alleen eigen foto's mag.
+- **Intrekken:** wie minder toestaat dan eerst, kan meteen de foto's laten weghalen die al gedeeld zijn: bij "nee" alle foto's van het kind, bij "alleen eigen foto's" de groepsfoto's. Die verdwijnen ook bij andere ouders. De wijziging staat in het logboek en het team krijgt een melding.
+- **Techniek:** `kinderen.fotos_toegestaan` (NULL = nog niet ingevuld, 0 = nee, 1 = ja) met `fotos_toegestaan_op`, naast `foto_toestemming` voor groepsfoto's (migratie 15). Wie al toestemming had gegeven voor groepsfoto's, heeft bij de overstap "ja, ook op groepsfoto's"; de andere kinderen staan op "nog niet ingevuld". Functies in `beheer/inc/fotos.php` (`foto_keuze()`, `mag_op_foto()`).
+
 ## Financiën
 
 Onder **Financiën** zie je per jaar of per maand wat er binnenkwam en wat eruit ging (kasbasis):
@@ -194,13 +210,13 @@ Eén installatie kan meerdere opvangorganisaties bedienen. Zet ze in `config.php
 
 - eigen domein(en) in `hosts`: het domein bepaalt de organisatie, een onbekend domein krijgt "niet gevonden";
 - eigen `data_dir` (database, foto's, bonnetjes, exports, sessies, verwijderregister) en eigen `sleutel`;
-- eigen back-upmap en back-upsleutel, eventueel een eigen Mollie-account en e-mailafzender.
+- eigen back-upmap en back-upsleutel, eventueel een eigen Stripe-account en e-mailafzender.
 
 Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php beheer/cli/backup.php --organisatie=vck`.
 
 ## Techniek
 
-- PHP 8.2 of hoger, zonder framework, zonder Composer en zonder build-stap. Extensies: `pdo_sqlite`, `sodium`, `gd`, `intl`, `mbstring`, `curl` (voor Mollie) en liefst `exif`. Die zitten bij vrijwel elke Nederlandse webhosting standaard aan; ontbreekt er een, dan meldt de beheeromgeving dat.
+- PHP 8.2 of hoger, zonder framework, zonder Composer en zonder build-stap. Extensies: `pdo_sqlite`, `sodium`, `gd`, `intl`, `mbstring`, `curl` (voor Stripe) en liefst `exif`. Die zitten bij vrijwel elke Nederlandse webhosting standaard aan; ontbreekt er een, dan meldt de beheeromgeving dat.
 - Database: SQLite, één bestand in de datamap. Het schema wordt automatisch aangemaakt en bijgewerkt (`beheer/inc/database.php`). Een bestaande database van een eerdere versie wordt bij de update vanzelf omgezet, inclusief het versleutelen van bestaande gegevens en foto's.
 - Opmaak: dezelfde design tokens en formulierstijlen als de website (`design/tokens.css`, `css/style.css`) plus `beheer/assets/beheer.css`.
 - Alles werkt zonder JavaScript; `beheer/assets/beheer.js` maakt het alleen prettiger (en tekent de QR-code voor tweestapsverificatie).
@@ -208,7 +224,7 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
 | Map of bestand | Inhoud |
 |---|---|
 | `beheer/*.php` | De pagina's |
-| `beheer/inc/` | Gedeelde code: configuratie, organisaties, versleuteling, database, inloggen, tweestapsverificatie, toegang, agenda, berichten, facturen, Mollie, e-mail, foto's, exports, bewaarbeleid, opmaak. Niet rechtstreeks bereikbaar. |
+| `beheer/inc/` | Gedeelde code: configuratie, organisaties, versleuteling, database, inloggen, tweestapsverificatie, toegang, agenda, berichten, facturen, Stripe, e-mail, foto's, exports, bewaarbeleid, opmaak. Niet rechtstreeks bereikbaar. |
 | `beheer/cli/` | Opdrachtregel: back-up, herstel en dagelijks onderhoud. Niet via de website bereikbaar. |
 | `beheer/data/` | Standaard-datamap: database, foto's, bonnetjes, exports, sessies en `mail.log`. Niet rechtstreeks bereikbaar. Staat niet in git. Liefst buiten de webroot zetten. |
 | `beheer/assets/vendor/` | Meegeleverde QR-code-bibliotheek (MIT-licentie) |
@@ -248,7 +264,7 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
 5. Ga naar `https://bsovck.nl/beheer/`. Je komt op de installatiepagina: vul de installatiecode in, maak het eerste beheerdersaccount aan en stel tweestapsverificatie in. Maak daarna de `installatiecode` weer leeg.
 6. Vul de **Instellingen** in (KvK, LRK, IBAN, uurtarief, uren per middag, afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders) en maak de **groepen** aan.
 7. Nodig de begeleiders uit onder **Team** en koppel ze aan hun groep(en).
-8. Koppel **Mollie** (zie hieronder). Zonder Mollie draait alles in demo-modus: er wordt niets echt afgeschreven.
+8. Koppel **Stripe** (zie hieronder). Zonder Stripe draait alles in demo-modus: er wordt niets echt afgeschreven.
 9. Controleer **Instellingen → Beveiligingsstatus**: alles moet op "In orde" staan.
 
 ### Apache en nginx
@@ -264,13 +280,24 @@ client_max_body_size 64m;
 
 Zet voor foto's van telefoons in PHP: `upload_max_filesize = 16M`, `post_max_size = 64M`.
 
-### Mollie koppelen
+### Stripe koppelen
 
-1. Maak een account aan op [mollie.com](https://www.mollie.com/) en activeer **iDEAL** en **SEPA-incasso** (SEPA Direct Debit). Mollie controleert daarvoor eerst het bedrijf.
-2. Zet de **test**-API-sleutel (`test_...`) in `config.php` bij `mollie.api_key` en probeer het hele proces: aanmelden, machtiging, facturen maken, incasso starten.
-3. Werkt alles? Vervang de test-sleutel door de **live**-sleutel.
+Mijn BSO gebruikt Stripe voor de machtiging (SEPA-incasso), de maandelijkse incasso's en het los betalen van een factuur. Er is geen extra software nodig: Mijn BSO praat rechtstreeks met de API van Stripe.
 
-Mollie meldt de uitkomst van betalingen via `https://bsovck.nl/beheer/mollie-webhook.php`. Dat gaat vanzelf; de webhook moet wel via internet bereikbaar zijn. Een mislukte incasso of terugboeking zet de factuur op "mislukt" en de ouder krijgt een bericht met de mogelijkheid om los te betalen.
+1. Maak een account aan op [stripe.com](https://stripe.com/nl) en rond de bedrijfscontrole af. Zet onder **Instellingen → Betaalmethoden** **iDEAL | Wero** en **SEPA-incasso** (SEPA Direct Debit) aan. Stel bij **Instellingen → Openbare gegevens** de naam in die ouders op hun afschrift en op de betaalpagina zien.
+2. Zet in `config.php` bij `stripe.geheime_sleutel` de **test**-sleutel (`sk_test_...`, onder Ontwikkelaars → API-sleutels). Een beperkte sleutel (`rk_test_...`) kan ook, met schrijfrechten op Customers, Checkout Sessions, PaymentIntents en PaymentMethods en leesrechten op SetupIntents, Charges en Mandates.
+3. Maak onder **Ontwikkelaars → Webhooks** een webhook aan naar `https://bsovck.nl/beheer/stripe-webhook.php` (het echte domein) met deze gebeurtenissen: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `payment_intent.processing`, `payment_intent.succeeded`, `payment_intent.payment_failed`, `payment_intent.canceled`, `charge.refunded`, `charge.dispute.created` en `mandate.updated`. Zet het ondertekeningsgeheim (`whsec_...`) in `config.php` bij `stripe.webhook_geheim`.
+4. Probeer het hele proces in testmodus: aanmelden, machtiging (kies op de testpagina van de bank "Authorize", of gebruik het test-IBAN `NL39 RABO 0300 0652 64`), facturen maken en de incasso starten. Een SEPA-incasso staat in testmodus na een paar minuten op betaald. Met het test-IBAN `NL91 ABNA 0417 1643 00` mislukt de incasso; dan moet de factuur op "mislukt" komen en de ouder een bericht krijgen.
+5. Werkt alles? Zet de **live**-sleutel en het geheim van een live-webhook in `config.php`. Onder **Beveiliging** in Mijn BSO zie je of Stripe live gekoppeld is.
+
+Zo werkt het:
+
+- **Machtiging:** de ouder komt op een pagina van Stripe (Checkout) en kiest de eigen bank (iDEAL | Wero: Stripe schrijft € 0,01 af en betaalt die meteen terug) of vult het IBAN in. Stripe maakt daarvan een SEPA-machtiging. Mijn BSO bewaart alleen het land, de laatste vier cijfers van het IBAN en de naam van de rekeninghouder.
+- **Incasso:** "Incasso starten" bij Facturen maakt een betaling op die machtiging. Een SEPA-incasso duurt een paar werkdagen; de factuur staat zolang op "incasso" en gaat daarna vanzelf op "betaald". Een dubbele klik geeft geen dubbele afschrijving.
+- **Mislukt of teruggeboekt:** de factuur gaat op "mislukt" en de ouder krijgt een bericht met de mogelijkheid om de factuur los te betalen (iDEAL | Wero). Een terugbetaling die jullie zelf doen in Stripe, komt alleen in het logboek; pas de factuur dan zelf aan.
+- **Intrekken:** trekt de beheerder de machtiging in (bij de ouder), dan gebeurt dat ook bij Stripe. Trekt de ouder hem in bij de bank, dan meldt Stripe dat en krijgt het team een melding.
+- **Veiligheid:** de webhook controleert de handtekening van Stripe en haalt de status daarna altijd zelf op. Na terugkomst van de betaalpagina haalt Mijn BSO de status ook meteen op, dus lokaal testen werkt zonder webhook.
+- **Overstap van Mollie (november 2026):** machtigingen die nog via Mollie waren afgegeven, werken niet bij Stripe. Die ouders zien weer "Geef nu je machtiging af" (migratie 16). Zolang Mijn BSO nog niet live staat, merkt niemand daar iets van. Functies in `beheer/inc/stripe.php`.
 
 ### Lokaal uitproberen
 
@@ -297,14 +324,14 @@ Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met b
 **Privacy (AVG)**
 - [ ] DPIA uitvoeren: het systeem verwerkt gegevens van kinderen, waaronder gezondheidsgegevens (allergieën, ziekte) en foto's.
 - [ ] Bewaartermijnen laten bevestigen door de klant en een privacyjurist. De standaardwaarden hierboven zijn een voorstel, geen juridisch advies.
-- [ ] Verwerkersovereenkomsten met de hostingpartij, de back-upopslag en Mollie.
+- [ ] Verwerkersovereenkomsten met de hostingpartij, de back-upopslag en Stripe (Stripe heeft een standaard verwerkersovereenkomst in het dashboard).
 - [ ] Toestemmingsformulier voor foto's op website en social media (los van de toestemming voor groepsfoto's in Mijn BSO).
 - [ ] Procedure voor een datalek vastleggen (melden bij de Autoriteit Persoonsgegevens binnen 72 uur).
 
 **Techniek**
 - [ ] Hosting met PHP 8.2+ en https, datamap buiten de webroot, twee sleutels (ook in een wachtwoordkluis), cron voor onderhoud en back-up, back-ups naar een tweede locatie.
 - [ ] Terugzetten van een back-up één keer testen op een testomgeving.
-- [ ] Mollie-account, eerst testen met de test-sleutel.
+- [ ] Stripe-account met iDEAL | Wero en SEPA-incasso, eerst testen met de testsleutel en een testwebhook (zie [Stripe koppelen](#stripe-koppelen)).
 - [ ] E-mail via een betrouwbare SMTP-dienst als de `mail()`-functie van de hosting in de spam belandt (nu: `mail.methode = mail`).
 - [ ] PHP 8.2 krijgt beveiligingsupdates tot eind 2026: kies bij de hosting liefst PHP 8.3 of nieuwer.
 - [ ] Jaaropgave voor de kinderopvangtoeslag per ouder (overzicht van uren en bedragen per kind per jaar).

@@ -117,8 +117,8 @@ pagina_kop('Instellingen', 'Gegevens voor de facturen, het tarief, afmelden, bev
           <?= veldfout($fouten, 'betaaltermijn_dagen') ?>
         </div>
       </div>
-      <h3 style="margin-top: var(--space-l)">Betalen via Mollie</h3>
-      <p><?= mollie_actief() ? status_badge('geldig') . ' Gekoppeld' . (mollie_testmodus() ? ' (testmodus: er wordt nog niets echt afgeschreven)' : '') . '.' : status_badge('demo') . ' Nog niet gekoppeld. Zet de API-sleutel van Mollie in <code>beheer/config.php</code>.' ?></p>
+      <h3 style="margin-top: var(--space-l)">Betalen via Stripe</h3>
+      <p><?= stripe_actief() ? status_badge('geldig') . ' Gekoppeld' . (stripe_testmodus() ? ' (testmodus: er wordt nog niets echt afgeschreven)' : '') . '.' . (cfg('stripe.webhook_geheim', '') === '' ? ' <strong>Let op:</strong> het webhookgeheim ontbreekt nog in <code>beheer/config.php</code>.' : '') : status_badge('demo') . ' Nog niet gekoppeld. Zet de geheime sleutel en het webhookgeheim van Stripe in <code>beheer/config.php</code>.' ?></p>
     </section>
   </div>
   <div class="kolommen kolommen--gelijk">

@@ -140,6 +140,24 @@
     grafiek.addEventListener("focusout", function () { tip.hidden = true; });
   });
 
+  /* Een tabel die breder is dan het scherm: ook met het toetsenbord te scrollen */
+  function scrolbareTabellen() {
+    document.querySelectorAll(".tabel").forEach(function (vak) {
+      var past = vak.scrollWidth <= vak.clientWidth + 1;
+      if (past && vak.hasAttribute("data-scrol")) {
+        vak.removeAttribute("tabindex"); vak.removeAttribute("role"); vak.removeAttribute("aria-label"); vak.removeAttribute("data-scrol");
+      } else if (!past && !vak.hasAttribute("tabindex")) {
+        var bijschrift = vak.querySelector("caption");
+        vak.setAttribute("tabindex", "0");
+        vak.setAttribute("role", "region");
+        vak.setAttribute("aria-label", (bijschrift ? bijschrift.textContent.trim() + ", " : "") + "tabel, scroll opzij voor meer");
+        vak.setAttribute("data-scrol", "");
+      }
+    });
+  }
+  scrolbareTabellen();
+  window.addEventListener("resize", scrolbareTabellen);
+
   /* Alle kinderen van een groep in één keer aanvinken */
   document.querySelectorAll("[data-alles-aan]").forEach(function (knop) {
     knop.hidden = false;

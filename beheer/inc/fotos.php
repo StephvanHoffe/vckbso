@@ -144,3 +144,104 @@ function foto_met_toegang(int $fotoId): array
     return $foto;
 }
 
+/* ---------- Toestemming per kind ---------- */
+
+/** De drie keuzes voor foto's van een kind, met de uitleg. {naam} wordt de voornaam. */
+const FOTO_KEUZES = [
+    'groep' => ["Ja, ook op groepsfoto's", "Staat {naam} samen met andere kinderen op een foto? Dan krijgen hun ouders die foto ook."],
+    'eigen' => ["Ja, maar alleen foto's waar {naam} alleen op staat", "Die foto's krijg alleen jij (en wie je toegang geeft tot de foto's van {naam})."],
+    'geen' => ["Nee, liever geen foto's", "De begeleiders delen geen foto's van {naam} in Mijn BSO."],
+];
+
+/** Wat is er voor dit kind gekozen: 'groep', 'eigen', 'geen', of null als het nog niet is ingevuld. */
+function foto_keuze(array $kind): ?string
+{
+    if (!array_key_exists('fotos_toegestaan', $kind) || $kind['fotos_toegestaan'] === null) {
+        return null;
+    }
+    if (!(int) $kind['fotos_toegestaan']) {
+        return 'geen';
+    }
+    return (int) $kind['foto_toestemming'] ? 'groep' : 'eigen';
+}
+
+/** Mogen de begeleiders een foto van dit kind delen? */
+function mag_op_foto(array $kind): bool
+{
+    return in_array(foto_keuze($kind), ['groep', 'eigen'], true);
+}
+
+/** Korte tekst voor overzichten, bijvoorbeeld "Geen foto's". */
+function foto_keuze_kort(?string $keuze): string
+{
+    return match ($keuze) {
+        'groep' => "Foto's: ook groepsfoto's",
+        'eigen' => "Alleen eigen foto's",
+        'geen' => "Geen foto's",
+        default => "Foto's: nog niet ingevuld",
+    };
+}
+
+/** De kolommen die bij een keuze horen. */
+function foto_keuze_velden(string $keuze): array
+{
+    return [
+        'fotos_toegestaan' => $keuze === 'geen' ? 0 : 1,
+        'foto_toestemming' => $keuze === 'groep' ? 1 : 0,
+        'fotos_toegestaan_op' => nu(),
+    ];
+}
+
+/** Keuze uit het formulier: een geldige keuze, of null als er niets (geldigs) is gekozen. */
+function foto_keuze_invoer(): ?string
+{
+    $keuze = invoer('fotos');
+    return isset(FOTO_KEUZES[$keuze]) ? $keuze : null;
+}
+
+/** De vraag als keuzerondjes. */
+function foto_keuze_veld(string $voornaam, ?string $huidig, array $fouten = [], string $extraHint = ''): string
+{
+    $naam = $voornaam !== '' ? $voornaam : 'je kind';
+    $html = '<fieldset class="field fotokeuze"' . (isset($fouten['fotos']) ? ' aria-describedby="fotos-fout"' : '') . '>'
+        . '<legend class="legend-label">Mogen we foto\'s van ' . e($naam) . ' delen?' . $extraHint . '</legend>'
+        . veldfout($fouten, 'fotos')
+        . '<div class="choices choices--stapel">';
+    foreach (FOTO_KEUZES as $waarde => [$label, $uitleg]) {
+        $id = 'fotos-' . $waarde;
+        $html .= '<label class="choice choice--uitleg" for="' . $id . '"><input type="radio" id="' . $id . '" name="fotos" value="' . $waarde . '"'
+            . ($huidig === $waarde ? ' checked' : '') . ' aria-describedby="' . $id . '-uitleg"><span><strong>' . e(str_replace('{naam}', $naam, $label)) . '</strong>'
+            . '<span class="choice__uitleg" id="' . $id . '-uitleg">' . e(str_replace('{naam}', $naam, $uitleg)) . '</span></span></label>';
+    }
+    return $html . '</div></fieldset>';
+}
+
+/**
+ * Minder toestemming dan eerst? Dan de foto's weghalen die daar niet meer bij passen, als de ouder dat wil:
+ * bij 'geen' alle foto's van het kind, bij 'eigen' de foto's waar ook andere kinderen op staan.
+ * Geeft het aantal verwijderde foto's terug.
+ */
+function verwijder_fotos_na_intrekken(int $kindId, string $keuze, string $reden): int
+{
+    $sql = 'SELECT f.* FROM fotos f JOIN foto_kinderen fk ON fk.foto_id = f.id WHERE fk.kind_id = ?';
+    if ($keuze === 'eigen') {
+        $sql .= ' AND EXISTS (SELECT 1 FROM foto_kinderen ander WHERE ander.foto_id = f.id AND ander.kind_id != fk.kind_id)';
+    } elseif ($keuze !== 'geen') {
+        return 0;
+    }
+    $fotos = rijen($sql, [$kindId]);
+    foreach ($fotos as $foto) {
+        verwijder_foto($foto);
+        registreer_verwijdering('foto', (int) $foto['id'], $reden);
+    }
+    return count($fotos);
+}
+
+/** Hoeveel foto's van dit kind zouden verdwijnen bij deze keuze? */
+function fotos_bij_intrekken(int $kindId): array
+{
+    return [
+        'geen' => (int) waarde('SELECT COUNT(*) FROM foto_kinderen WHERE kind_id = ?', [$kindId]),
+        'eigen' => (int) waarde('SELECT COUNT(*) FROM foto_kinderen fk WHERE fk.kind_id = ? AND EXISTS (SELECT 1 FROM foto_kinderen ander WHERE ander.foto_id = fk.foto_id AND ander.kind_id != fk.kind_id)', [$kindId]),
+    ];
+}

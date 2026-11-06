@@ -194,7 +194,7 @@ function wis_kinddossier(int $kindId, string $reden, bool $registreer = true): v
         q('UPDATE berichten SET kind_id = NULL WHERE kind_id = ?', [$kindId]);
         q("UPDATE inschrijvingen SET status = 'afgemeld', gewijzigd_op = ? WHERE kind_id = ? AND datum > ? AND status IN ('bevestigd', 'wachtlijst')", [nu(), $kindId, vandaag()]);
         q("UPDATE kinderen SET voornaam = 'Verwijderd', achternaam = '', geboortedatum = NULL, school = '', bijzonderheden = '', ophaalpersonen = '', team_notities = '', team_notities_op = NULL, team_notities_door = NULL,
-           foto_toestemming = 0, actief = 0, groep_id = NULL, gestopt_op = COALESCE(gestopt_op, ?), geanonimiseerd_op = ? WHERE id = ?", [nu(), nu(), $kindId]);
+           foto_toestemming = 0, fotos_toegestaan = 0, actief = 0, groep_id = NULL, gestopt_op = COALESCE(gestopt_op, ?), geanonimiseerd_op = ? WHERE id = ?", [nu(), nu(), $kindId]);
     });
     if ($registreer) {
         registreer_verwijdering('kinddossier', $kindId, $reden);

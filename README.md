@@ -8,7 +8,7 @@ Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutair
 - Henny de hond, de mascotte, met tekstwolkjes op de site en als hardloper tijdens het aanmelden: in het formulier rent hij naar het doel naarmate je verder invult, bij de machtiging staat hij vlak voor het doel en daarna juicht hij erbij. Getekende elementen (sterren, pijlen, kroontjes) over de beelden, zoals in het voorbeeld "Team Sporty" van de klant.
 - Foto's: tijdelijke stockfoto's van Pexels, gekozen bij elke plek, tot de klant de eigen fotografie aanlevert. Bij de teamplekken staan bewust beelden waarop niemand herkenbaar is. Bronnen en fotografen staan in [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
 - Intro op de homepage, gemaakt van de vormen van het officiële ronde logo: de drie kinderen rennen vanaf de rand van het scherm naar het midden, de ring sluit zich om ze heen, "BSO" ploft op het shirt, het woordmerk zwaait omhoog en het lachje verschijnt; het eindbeeld is precies het logo. Eén keer per bezoek (en bij opnieuw laden), over te slaan met een toets, klik, tik of scroll, en niet bij de instelling "minder beweging" of zonder JavaScript.
-- Met een beheeromgeving en ouderportaal in `beheer/` (PHP + SQLite): aanmelden als klant met kinderen, automatische incasso via Mollie, facturen online, groepsagenda met maximale groepsgrootte die twee kanten op werkt, kindvolgsysteem, foto's en berichten, en een overzicht van inkomsten en uitgaven. Met rechten per collega per menuonderdeel, toegang per groep en per verzorger (gecontroleerd gezag), tweestapsverificatie, versleutelde opslag en back-ups, een controleerbaar logboek, privacyverzoeken voor ouders, bewaartermijnen per soort gegevens en strikt gescheiden organisaties. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
+- Met een beheeromgeving en ouderportaal in `beheer/` (PHP + SQLite): aanmelden als klant met kinderen, automatische incasso via Stripe, facturen online, groepsagenda met maximale groepsgrootte die twee kanten op werkt, kindvolgsysteem, foto's en berichten, en een overzicht van inkomsten en uitgaven. Met rechten per collega per menuonderdeel, toegang per groep en per verzorger (gecontroleerd gezag), tweestapsverificatie, versleutelde opslag en back-ups, een controleerbaar logboek, privacyverzoeken voor ouders, bewaartermijnen per soort gegevens en strikt gescheiden organisaties. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
 - Mobile-first en getest op 360, 768 en 1280 px breed, zonder horizontaal scrollen.
 - Lighthouse (mobiel, 22 oktober 2026, met stockfoto's): prestaties 92–93 op de homepage (met de intro), 94 op team en 96 op programma; toegankelijkheid, best practices en SEO 100.
 - Automatische toegankelijkheidstest (axe, WCAG 2.1 AA): geen overtredingen op alle pagina's.
@@ -79,7 +79,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `tools/voorbeeld/` | Bouwscript (`bouw.mjs`), extra demogegevens, de overzichtspagina en de voorbeeldbalk |
 | `vercel.json` | Alleen voor Vercel: stuurt `/beheer/` door naar het voorbeeld, stuurt de oude adressen door naar de nieuwe pagina's en zet `noindex` op het voorbeeld |
 | `docs/seo.md` | Wat er voor de vindbaarheid is gedaan, wat Sporty nog zelf moet regelen (domein, adres, Google Bedrijfsprofiel) en onderhoud |
-| `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, de verplichte eisen (toegang, beveiliging, logboek, ouderrechten, bewaarbeleid), installatie, back-ups, Mollie en TODO's |
+| `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, de verplichte eisen (toegang, beveiliging, logboek, ouderrechten, bewaarbeleid), installatie, back-ups, Stripe en TODO's |
 
 Header, footer en de iconenset staan in elke pagina, zodat elke pagina gewone HTML blijft. Pas ze aan in `tools/site/` en draai `npm run kop-en-voet`; het script zet ze in alle Nederlandse pagina's. De Engelse pagina heeft een eigen header en footer.
 
@@ -125,11 +125,11 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 **Techniek**
 - [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@sporty.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
-- [ ] Privacyverklaring laten controleren: bewaartermijnen, verwerkers (formulierendienst, hosting, Mollie) en de verwerking van gegevens van kinderen in Mijn BSO.
+- [ ] Privacyverklaring laten controleren: bewaartermijnen, verwerkers (formulierendienst, hosting, Stripe) en de verwerking van gegevens van kinderen in Mijn BSO.
 - [ ] Domein kiezen bij de nieuwe naam Sporty (nu staat overal nog het eerder gewenste `bsovck.nl`). Vervang daarna `https://bsovck.nl` in de `<head>` van elke pagina, in `sitemap.xml`, `robots.txt` en `tools/structured-data.mjs`, en draai `npm run seo` en `npm test`.
 - [ ] SEO-stappen die alleen Sporty zelf kan zetten: Google Bedrijfsprofiel, Search Console, LRK-nummer, vermeldingen bij scholen en verenigingen. Zie [`docs/seo.md`](docs/seo.md#nog-te-doen-door-sporty).
 - [ ] Engelse teksten na akkoord van de klant op de Nederlandse teksten van november 2026. Nu staat er alleen een Engelse startpagina, met de eerste indeling (de quiz en de gegevens zijn bijgewerkt).
-- [ ] Beheeromgeving live zetten: hosting met PHP 8.2+ en https, `beheer/config.php` met twee sleutels, cron voor onderhoud en back-ups, Mollie koppelen, uurtarief en groepen instellen. Bewaartermijnen laten bevestigen. De volledige lijst staat in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#nog-te-doen-todo).
+- [ ] Beheeromgeving live zetten: hosting met PHP 8.2+ en https, `beheer/config.php` met twee sleutels, cron voor onderhoud en back-ups, Stripe koppelen, uurtarief en groepen instellen. Bewaartermijnen laten bevestigen. De volledige lijst staat in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#nog-te-doen-todo).
 
 ## Live zetten
 

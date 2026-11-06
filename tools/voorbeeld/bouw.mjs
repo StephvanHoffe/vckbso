@@ -70,7 +70,7 @@ for (const [rol, r] of Object.entries(ROLLEN)) {
 }
 
 // Niet in de momentopname: acties, downloads, exports
-const OVERSLAAN = /^(uitloggen|export|agenda-actie|mollie-webhook|machtiging|installeren|inloggen-code|wachtwoord-instellen|foto|solliciteren|proefdag|aanvraag|aanmelden)\.php|csv=|export=|download=|bijlage=|bewerk=|cv=/;
+const OVERSLAAN = /^(uitloggen|export|agenda-actie|stripe-webhook|machtiging|installeren|inloggen-code|wachtwoord-instellen|foto|solliciteren|proefdag|aanvraag|aanmelden)\.php|csv=|export=|download=|bijlage=|bewerk=|cv=/;
 // Detailpagina's die ook twee klikken diep worden meegenomen
 const DETAIL = /^((kind|ouder|factuur|verzoeken|sollicitaties)\.php\?id=\d+|berichten\.php\?ouder=\d+|logboek\.php\?onderwerp=[a-z]+%3A\d+|mailteksten\.php\?sleutel=[a-z_]+)$/;
 // Deze week en deze maand zijn gelijk aan de standaardweergave van de agenda

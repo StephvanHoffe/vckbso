@@ -9,7 +9,7 @@ function e(null|string|int|float $tekst): string
     return htmlspecialchars((string) $tekst, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
-/** Configuratiewaarde ophalen, bijvoorbeeld cfg('mollie.api_key'). */
+/** Configuratiewaarde ophalen, bijvoorbeeld cfg('stripe.geheime_sleutel'). */
 function cfg(string $sleutel, mixed $standaard = null): mixed
 {
     $waarde = $GLOBALS['config'];

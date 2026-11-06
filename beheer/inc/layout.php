@@ -87,8 +87,8 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 <?php foreach (haal_flashes() as $melding): ?>
   <div class="melding melding--<?= e($melding['soort']) ?>" role="<?= $melding['soort'] === 'fout' ? 'alert' : 'status' ?>"><?= icoon($melding['soort'] === 'fout' ? 'alert' : ($melding['soort'] === 'succes' ? 'check' : 'info')) ?><p><?= e($melding['tekst']) ?></p></div>
 <?php endforeach; ?>
-<?php if (!mollie_actief() && $gebruiker && (team_mag('facturen', $gebruiker) || team_mag('instellingen', $gebruiker)) && empty($opties['geen_demo_melding'])): ?>
-  <p class="demo-balk"><?= icoon('info') ?>Demo-modus: Mollie is nog niet gekoppeld, er wordt niets echt afgeschreven.</p>
+<?php if (!stripe_actief() && $gebruiker && (team_mag('facturen', $gebruiker) || team_mag('instellingen', $gebruiker)) && empty($opties['geen_demo_melding'])): ?>
+  <p class="demo-balk"><?= icoon('info') ?>Demo-modus: Stripe is nog niet gekoppeld, er wordt niets echt afgeschreven.</p>
 <?php endif; ?>
 <?php
 }

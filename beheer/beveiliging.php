@@ -56,7 +56,9 @@ $voeg($bewaar !== '' && strtotime($bewaar) > time() - 2 * 86400 ? 'ok' : 'let op
 $teLaat = (int) waarde("SELECT COUNT(*) FROM avg_verzoeken WHERE status IN ('ontvangen', 'in_behandeling') AND deadline < ?", [vandaag()]);
 $voeg($teLaat ? 'probleem' : 'ok', 'Privacyverzoeken op tijd', $teLaat ? "{$teLaat} verzoek(en) over de wettelijke termijn van een maand." : 'Geen verzoeken over de termijn.');
 
-$voeg(mollie_actief() ? (mollie_testmodus() ? 'let op' : 'ok') : 'let op', 'Betalingen', mollie_actief() ? (mollie_testmodus() ? 'Mollie in testmodus.' : 'Mollie live gekoppeld.') : 'Demo-modus: Mollie is niet gekoppeld.');
+$voeg(stripe_actief() && !stripe_testmodus() && cfg('stripe.webhook_geheim', '') !== '' ? 'ok' : 'let op', 'Betalingen', stripe_actief()
+    ? (stripe_testmodus() ? 'Stripe in testmodus.' : 'Stripe live gekoppeld.') . (cfg('stripe.webhook_geheim', '') === '' ? ' Het webhookgeheim ontbreekt: Stripe kan de uitkomst van incasso\'s niet doorgeven.' : '')
+    : 'Demo-modus: Stripe is niet gekoppeld.');
 
 $voeg('ok', 'Organisatie', 'Deze omgeving hoort bij organisatie "' . cfg('organisatie') . '" met een eigen database, fotomap en sleutel.');
 
