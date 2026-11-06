@@ -143,14 +143,10 @@ log_actie('Proefdag geboekt via de website', 'proefdag ' . $id . ' op ' . $momen
 $wanneer = proefdag_omschrijving($moment);
 $adres = 'Sporty, Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer)';
 // Melding voor het team (zonder persoonsgegevens) en een bevestiging voor de ouder
-mail_team('Nieuwe proefdag geboekt', "Er is een proefdag geboekt via de website, op {$wanneer}.\n\nBekijk de boeking in de beheeromgeving bij Proefdagen:\n" . app_url('proefdagen.php'));
-$voornaam = explode(' ', $waarden['naam'])[0];
-$kind = explode(' ', $waarden['kind_naam'])[0];
-// TODO: tekst van de bevestigingsmail laten controleren door Sporty
-stuur_mail($waarden['email'], 'Je proefdag bij Sporty staat gepland!', "Hoi {$voornaam},\n\nWat leuk dat jullie komen kennismaken! Je gratis proefdag staat gepland op {$wanneer}.\n\n"
-    . "Waar: {$adres}\n\n"
-    . "We laten je het clubhuis zien, je maakt kennis met de coaches en je kunt al je vragen stellen. Neem {$kind} vooral mee: zin om mee te doen? Dan kan dat meteen, met een spelletje.\n\n"
-    . "Kun je toch niet? Laat het ons dan even weten door op deze mail te reageren of ons te bellen.\n\n"
-    . "Tot dan!\nTeam Sporty (en Henny, die al staat te kwispelen)");
+mail_team_tekst('team_proefdag', ['wanneer' => $wanneer, 'link' => app_url('proefdagen.php')]);
+// TODO: tekst van de bevestigingsmail laten controleren door Sporty (aan te passen onder Instellingen → E-mails)
+stuur_mailtekst($waarden['email'], 'proefdag_bevestiging', [
+    'voornaam' => explode(' ', $waarden['naam'])[0], 'kind' => explode(' ', $waarden['kind_naam'])[0], 'wanneer' => $wanneer, 'adres' => $adres,
+]);
 
 proefdag_antwoord($alsJson, 200, ['moment' => $wanneer]);

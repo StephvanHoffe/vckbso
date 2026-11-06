@@ -56,8 +56,9 @@ if (is_post()) {
         if (!$fouten) {
             $gelukt = 0;
             foreach ($ontvangers as $r) {
-                $voornaam = explode(' ', trim($r['naam']))[0];
-                $gelukt += stuur_mail($r['email'], $update['onderwerp'], "Hoi {$voornaam},\n\n" . $update['tekst'] . interesse_voet($r)) ? 1 : 0;
+                $gelukt += stuur_mailtekst($r['email'], 'op_de_hoogte_update', [
+                    'voornaam' => explode(' ', trim($r['naam']))[0], 'onderwerp' => $update['onderwerp'], 'bericht' => $update['tekst'], 'afmeldlink' => interesse_afmeldlink($r),
+                ]) ? 1 : 0;
             }
             log_actie('Update verstuurd aan Blijf op de hoogte', $update['onderwerp'] . " ({$gelukt} van " . count($ontvangers) . ')');
             $totaal = count($ontvangers);
@@ -117,7 +118,7 @@ pagina_kop('Op de hoogte', 'Ouders die via de website op de hoogte willen blijve
 
 <section class="panel" aria-labelledby="update-titel" style="margin-top: var(--space-l)">
   <h2 id="update-titel">Update sturen</h2>
-  <p class="muted">Gaat naar iedereen die bevestigd op de lijst staat (<?= count($bevestigd) ?>), elk in een eigen e-mail die begint met "Hoi" en de voornaam. Onder elke e-mail staat een persoonlijke afmeldlink.</p>
+  <p class="muted">Gaat naar iedereen die bevestigd op de lijst staat (<?= count($bevestigd) ?>), elk in een eigen e-mail die begint met "Hoi" en de voornaam. Onder elke e-mail staat een persoonlijke afmeldlink.<?php if (team_mag('instellingen')): ?> Wat er rond je bericht staat, pas je aan bij <a href="mailteksten.php?sleutel=op_de_hoogte_update">E-mails</a>.<?php endif; ?></p>
   <form class="form" method="post" data-bevestig="Deze update naar <?= count($bevestigd) ?> <?= count($bevestigd) === 1 ? 'persoon' : 'mensen' ?> sturen?">
     <?= csrf_veld() ?>
     <input type="hidden" name="actie" value="update">

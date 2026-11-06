@@ -51,6 +51,7 @@ require __DIR__ . '/rechten.php';
 require __DIR__ . '/toegang.php';
 require __DIR__ . '/mfa.php';
 require __DIR__ . '/mail.php';
+require __DIR__ . '/mailteksten.php';
 require __DIR__ . '/mollie.php';
 require __DIR__ . '/agenda.php';
 require __DIR__ . '/berichten.php';

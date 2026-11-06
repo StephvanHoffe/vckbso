@@ -72,7 +72,7 @@ foreach (['bevestig', 'afmelden'] as $soort) {
         q('UPDATE interesse SET bevestigd_op = ? WHERE id = ?', [nu(), $rij['id']]);
         log_actie('Blijf op de hoogte: aanmelding bevestigd', '', null, 'wijziging', 'interesse:' . $rij['id']);
         // Melding voor het team, zonder persoonsgegevens
-        mail_team('Nieuwe aanmelding: Blijf op de hoogte', "Er heeft zich iemand aangemeld om op de hoogte te blijven. Vergeet het kennismakingspakket niet!\n\nBekijk de lijst in de beheeromgeving:\n" . app_url('interesse.php'));
+        mail_team_tekst('team_op_de_hoogte', ['link' => app_url('interesse.php')]);
     }
     op_de_hoogte_pagina('Gelukt, je blijft op de hoogte!', 'Bedankt! Je staat op onze lijst en we laten je weten hoe je je Sporty-kennismakingspakket krijgt. Afmelden kan altijd, met de link onder elke e-mail.', true);
 }

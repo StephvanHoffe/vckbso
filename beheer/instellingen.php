@@ -74,7 +74,7 @@ if (is_post()) {
 }
 
 pagina_begin('Instellingen', 'instellingen.php');
-pagina_kop('Instellingen', 'Gegevens voor de facturen, het tarief, afmelden, beveiliging en bewaartermijnen.', '<a class="btn btn--secondary btn--small" href="beveiliging.php">' . icoon('shield') . 'Beveiligingsstatus</a><a class="btn btn--secondary btn--small" href="logboek.php">' . icoon('book') . 'Logboek</a>');
+pagina_kop('Instellingen', 'Gegevens voor de facturen, het tarief, afmelden, beveiliging en bewaartermijnen.', '<a class="btn btn--secondary btn--small" href="mailteksten.php">' . icoon('mail') . 'E-mails aanpassen</a><a class="btn btn--secondary btn--small" href="beveiliging.php">' . icoon('shield') . 'Beveiligingsstatus</a><a class="btn btn--secondary btn--small" href="logboek.php">' . icoon('book') . 'Logboek</a>');
 ?>
 <?= foutensamenvatting($fouten) ?>
 <form class="form" method="post">

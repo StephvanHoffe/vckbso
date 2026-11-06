@@ -39,9 +39,9 @@ if (is_post()) {
         if (empty($ouder['wachtwoord_hash'])) {
             // Vrijblijvend aangemeld via de website: nog geen wachtwoord. Een link om er een te kiezen (een week geldig);
             // na het inloggen vraagt Mijn BSO om de machtiging voor automatische incasso.
-            stuur_mail($ouder['email'], 'Welkom bij Sporty: je account staat klaar', "Hoi {$ouder['naam']},\n\nWelkom bij de club! Je aanmelding is rond en je account in Mijn BSO staat klaar. Kies via deze link een wachtwoord (de link is een week geldig):\n" . maak_wachtwoordlink((int) $ouder['id'], 24 * 7) . "\n\nDaarna regel je in een paar klikken de automatische incasso, en kies je zelf de dagen voor je kind.\n\nTot snel!");
+            stuur_mailtekst($ouder['email'], 'account_klaar', ['naam' => $ouder['naam'], 'link' => maak_wachtwoordlink((int) $ouder['id'], 24 * 7)]);
         } else {
-            stuur_mail($ouder['email'], 'Welkom bij Sporty', "Hoi {$ouder['naam']},\n\nWelkom bij Sporty! Je account is actief. Log in om de dagen voor je kind te kiezen:\n" . app_url('agenda.php') . "\n\nTot snel!");
+            stuur_mailtekst($ouder['email'], 'account_actief', ['naam' => $ouder['naam'], 'link' => app_url('agenda.php')]);
         }
         log_actie('Ouder geactiveerd', '', null, 'wijziging', $onderwerp);
         flash('succes', $ouder['naam'] . ' is actief. Zet de kinderen nu in een groep, als dat nog niet is gebeurd.');

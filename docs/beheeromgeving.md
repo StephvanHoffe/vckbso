@@ -19,6 +19,7 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | Financiële inkomsten en uitgaven inzien | `financien.php` | Per jaar of maand: inkomsten, uitgaven, resultaat en wat nog te ontvangen is, een grafiek per maand en een verdeling per categorie. Betaalde facturen tellen automatisch mee als inkomsten; overige inkomsten en alle uitgaven voer je in, met een bonnetje (pdf of foto). Export als CSV voor de boekhouder. Zie [Financiën](#financiën). |
 | Ouders kiezen zelf een moment voor een gratis proefdag (november 2026) | `proefdagen.php`, `proefdag.php` (formulier op `proefdag.html`) | Het team zet momenten met een aantal plekken klaar; ouders kiezen er een op de website en krijgen een bevestiging. Zie [Proefdagen](#proefdagen). |
 | Blijf op de hoogte, met een kennismakingspakket (november 2026) | `op-de-hoogte.php` (formulier op `blijf-op-de-hoogte.html`), `interesse.php` (menu "Op de hoogte") | Ouders laten hun naam, e-mail en eventueel telefoonnummer achter en bevestigen dat met de link in een e-mail (dubbele bevestiging: zo kan niemand een ander aanmelden). Pas dan staan ze op de lijst en krijgt het team een e-mail. Het team vinkt aan wie het kennismakingspakket heeft gekregen (het tellertje in het menu laat zien hoeveel er nog wachten), stuurt iedereen een update (elk een eigen e-mail met een persoonlijke afmeldlink) en kan de lijst als CSV downloaden. Afmelden wist de gegevens meteen; niet bevestigd na 14 dagen weg, verder na de bewaartermijn (standaard 24 maanden). Links in e-mails openen eerst een pagina met een knop, zodat een virusscanner die links vooraf opent niets bevestigt of afmeldt. |
+| Alle e-mails zelf aanpassen (november 2026) | `mailteksten.php` (Instellingen → E-mails aanpassen), standaardteksten in `inc/mailteksten.php` | Zie [E-mails aanpassen](#e-mails-aanpassen). |
 | Collega's aanmaken en per persoon rechten geven | `medewerkers.php` (Team) | Per collega staat elk menuonderdeel aan of uit, plus de groepen en twee extra rechten. Zie [Rechten per persoon](#rechten-per-persoon). |
 
 ## De verplichte eisen en hoe ze zijn ingevuld
@@ -111,6 +112,16 @@ Op de pagina **Proefdag** (`proefdag.html`) kiezen ouders zelf een moment voor e
 - **Bewaren:** een boeking wordt 4 weken na de proefdag vanzelf verwijderd, en een oud moment zonder boekingen ook.
 - **Tegen spam:** een verborgen veld, alleen vanaf de eigen website, en hooguit 5 boekingen per kwartier vanaf hetzelfde adres.
 - **Zonder beheeromgeving, of zonder momenten:** dan ziet de bezoeker een knop naar het contactformulier (met het onderwerp proefdag al gekozen) en het telefoonnummer. Op de voorbeeldsite op Vercel staan verzonnen momenten (`voorbeeld/beheer/proefdag-momenten.json`); boeken slaat daar niets op.
+
+## E-mails aanpassen
+
+Onder **Instellingen → E-mails aanpassen** (recht Instellingen) staan alle 23 e-mails die Mijn BSO verstuurt: 12 aan ouders, sollicitanten en andere bezoekers, 10 aan het team (meldingen en uitnodigingen voor collega's) en de ondertekening onder elke e-mail. Per e-mail zie je wanneer hij gaat.
+
+- **Aanpassen:** onderwerp en tekst, als gewone tekst zonder opmaak. Invulvelden tussen accolades, zoals `{voornaam}` of `{link}`, vult Mijn BSO bij het versturen in. Per e-mail staat welke velden er zijn, met een voorbeeld.
+- **Controle bij opslaan:** een invulveld dat niet bestaat (een tikfout als `{vornaam}`) wordt geweigerd, en verplichte velden, zoals de link om een wachtwoord te kiezen of de afmeldlink, moeten blijven staan.
+- **Voorbeeld en testmail:** "Voorbeeld bekijken" toont de e-mail met voorbeeldgegevens; "Testmail naar mij" stuurt hem naar je eigen adres. Beide zonder op te slaan.
+- **Terug naar de standaard:** met één klik, en het overzicht laat zien welke e-mails zijn aangepast (met datum). Elke wijziging staat in het logboek.
+- **Techniek:** de standaardteksten staan in `beheer/inc/mailteksten.php` (`MAILTEKSTEN`), een aangepaste tekst in de tabel `mail_teksten` (migratie 14). Verstuur een e-mail altijd met `stuur_mailtekst()` of `mail_team_tekst()`; `npm test` controleert dat er geen e-mail buiten deze lijst om gaat en dat de standaardteksten kloppen.
 
 ## Financiën
 

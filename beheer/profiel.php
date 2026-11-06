@@ -54,7 +54,7 @@ if (is_post()) {
 
     if ($actie === 'opzeggen' && $ouder) {
         nieuw_bericht((int) $gebruiker['id'], (int) $gebruiker['id'], null, 'bericht', 'Ik wil de opvang opzeggen. Willen jullie contact met me opnemen om de einddatum en de laatste factuur af te spreken?' . (invoer('toelichting') !== '' ? "\n\n" . mb_substr(invoer('toelichting'), 0, 1000) : ''), true, false);
-        mail_team('Opzegging van ' . $gebruiker['naam'], $gebruiker['naam'] . ' wil de opvang opzeggen. Zie de berichten:' . "\n" . app_url('berichten.php?ouder=' . $gebruiker['id']));
+        mail_team_tekst('team_opzegging', ['ouder' => $gebruiker['naam'], 'link' => app_url('berichten.php?ouder=' . $gebruiker['id'])]);
         flash('succes', 'We hebben je opzegging ontvangen en nemen contact met je op om alles af te ronden.');
         redirect('berichten.php');
     }

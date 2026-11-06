@@ -135,12 +135,13 @@ registreer_poging('sollicitatie:' . ip_adres());
 log_actie('Sollicitatie ontvangen via de website', 'sollicitatie ' . $id . ', met cv' . ($motivatie[0] ? ' en motivatie' : ''), null, 'wijziging', 'sollicitatie:' . $id);
 
 // Melding voor het team (zonder persoonsgegevens) en een bevestiging voor de sollicitant
-mail_team('Nieuwe sollicitatie via de website', "Er is een nieuwe sollicitatie als Sporty coach binnengekomen" . ($waarden['functie'] !== '' ? " ({$waarden['functie']})" : '') . ".\n\nBekijk hem in de beheeromgeving bij Sollicitaties:\n" . app_url('sollicitaties.php?id=' . $id));
-$voornaam = explode(' ', $waarden['naam'])[0];
-stuur_mail($waarden['email'], 'We hebben je sollicitatie ontvangen', "Hoi {$voornaam},\n\nWat leuk dat je Sporty coach wilt worden! We hebben je sollicitatie goed ontvangen, met je cv" . ($motivatie[0] ? ' en motivatie' : '') . ". We lezen alles en nemen zo snel mogelijk contact met je op.\n\n"
-    . ($bewaren
+mail_team_tekst('team_sollicitatie', ['functie' => $waarden['functie'] !== '' ? $waarden['functie'] : 'niet ingevuld', 'link' => app_url('sollicitaties.php?id=' . $id)]);
+stuur_mailtekst($waarden['email'], 'sollicitatie_ontvangen', [
+    'voornaam' => explode(' ', $waarden['naam'])[0],
+    'bijlagen' => $motivatie[0] ? 'je cv en motivatie' : 'je cv',
+    'bewaren' => $bewaren
         ? 'Je gaf ons toestemming om je sollicitatie een jaar te bewaren, voor als er later een plek vrijkomt. Wil je dat niet meer? Stuur ons dan even een mailtje.'
-        : 'Is er geen plek voor je, dan verwijderen we je gegevens uiterlijk 4 weken nadat we je dat hebben laten weten.')
-    . "\n\nGroetjes,\nTeam Sporty");
+        : 'Is er geen plek voor je, dan verwijderen we je gegevens uiterlijk 4 weken nadat we je dat hebben laten weten.',
+]);
 
 sollicitatie_antwoord($alsJson, 200);

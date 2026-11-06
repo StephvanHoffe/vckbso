@@ -55,7 +55,7 @@ if (is_post() && $verzoek) {
         if ($verzoek['gebruiker_id']) {
             systeembericht((int) $verzoek['gebruiker_id'], 'Je privacyverzoek is ' . ($status === 'afgerond' ? 'afgehandeld' : 'beoordeeld') . '. Je leest onze reactie bij "Privacy".');
             if ($verzoek['aanvrager_email']) {
-                stuur_mail($verzoek['aanvrager_email'], 'Reactie op je privacyverzoek', "Hoi {$verzoek['aanvrager']},\n\nWe hebben je privacyverzoek behandeld. Je leest onze reactie in Mijn BSO bij Privacy:\n" . app_url('privacy.php'));
+                stuur_mailtekst($verzoek['aanvrager_email'], 'privacyverzoek_reactie', ['naam' => $verzoek['aanvrager'], 'link' => app_url('privacy.php')]);
             }
         }
         log_actie('Privacyverzoek ' . $status, 'verzoek ' . $verzoek['id'], null, 'avg', $onderwerp);

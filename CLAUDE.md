@@ -119,6 +119,7 @@ Twee documenten met feedback (website en aanmeldformulier). Wat daaruit volgt:
 - **Blijf op de hoogte (nieuw):** geen pop-up (advies), maar een blok op de homepage en een link in de footer naar `blijf-op-de-hoogte.html`. Naam, e-mail en (niet verplicht) telefoon, met toestemming, dubbele bevestiging per e-mail en een afmeldlink. In Mijn BSO onder "Op de hoogte".
 - **Verborgen notities (nieuw, Mijn BSO):** per kind notities die alleen het team ziet, met een kolom naast "Let op" bij Kinderen. Niet zichtbaar voor ouders; wel onderdeel van een formeel inzageverzoek (AVG).
 - **WhatsApp:** knop op Contact en een link in het aanmeldformulier (nu met het tijdelijke nummer).
+- **E-mails aanpassen (nieuw, Mijn BSO):** alle e-mails die het platform verstuurt, zijn aan te passen onder Instellingen → E-mails aanpassen, met invulvelden, een voorbeeld, een testmail en terug naar de standaardtekst. Nieuwe e-mails altijd via `stuur_mailtekst()` of `mail_team_tekst()` en `beheer/inc/mailteksten.php`.
 
 ### Kleuren
 

@@ -41,9 +41,9 @@ if (is_post() && $ouder) {
             log_actie('Bericht gestuurd', '', null, 'wijziging', 'gebruiker:' . $ouder['id']);
         }
         if ($team) {
-            stuur_mail($ouder['email'], 'Nieuw bericht van Sporty', "Hoi {$ouder['naam']},\n\nJe hebt een nieuw bericht van Sporty. Lees het hier:\n" . app_url('berichten.php'));
+            stuur_mailtekst($ouder['email'], 'nieuw_bericht', ['naam' => $ouder['naam'], 'link' => app_url('berichten.php')]);
         } else {
-            mail_team('Nieuw bericht van ' . $ouder['naam'], 'Er is een nieuw bericht van ' . $ouder['naam'] . ":\n" . app_url('berichten.php?ouder=' . $ouder['id']));
+            mail_team_tekst('team_bericht', ['ouder' => $ouder['naam'], 'link' => app_url('berichten.php?ouder=' . $ouder['id'])]);
         }
         flash('succes', 'Je bericht is verstuurd.');
         redirect($terug . '#gesprek');
@@ -66,7 +66,7 @@ if (is_post() && $ouder) {
         $periode = $van === $tot ? datum_nl($van, 'EEEE d MMMM') : datum_nl($van, 'd MMMM') . ' t/m ' . datum_nl($tot, 'd MMMM');
         $toelichting = mb_substr(invoer('toelichting'), 0, 1000);
         nieuw_bericht((int) $ouder['id'], (int) $gebruiker['id'], (int) $kind['id'], 'ziekmelding', $kind['voornaam'] . ' is ziek (' . $periode . ').' . ($toelichting !== '' ? "\n" . $toelichting : ''), true, false);
-        mail_team('Ziekmelding: ' . $kind['voornaam'], $ouder['naam'] . ' heeft ' . $kind['voornaam'] . ' ziek gemeld (' . $periode . ').' . "\n" . app_url('berichten.php?ouder=' . $ouder['id']));
+        mail_team_tekst('team_ziekmelding', ['ouder' => $ouder['naam'], 'kind' => $kind['voornaam'], 'periode' => $periode, 'link' => app_url('berichten.php?ouder=' . $ouder['id'])]);
         log_actie('Ziekmelding', $van . ' t/m ' . $tot, null, 'wijziging', 'kind:' . $kind['id']);
         flash('succes', $kind['voornaam'] . ' is ziek gemeld' . ($aantal ? ' en afgemeld voor ' . $aantal . ' ' . ($aantal === 1 ? 'dag' : 'dagen') : '') . '. Beterschap!');
         redirect('berichten.php#gesprek');

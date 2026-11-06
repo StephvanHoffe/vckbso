@@ -2,6 +2,7 @@
 /*
  * E-mail versturen. Zet in e-mails nooit gevoelige details over kinderen:
  * alleen dat er iets nieuws is, met een link naar de beheeromgeving.
+ * De teksten van alle e-mails staan in mailteksten.php en zijn aan te passen onder Instellingen → E-mails.
  */
 
 declare(strict_types=1);
@@ -9,7 +10,8 @@ declare(strict_types=1);
 function stuur_mail(string $aan, string $onderwerp, string $tekst): bool
 {
     $onderwerp = trim((string) preg_replace('/[\r\n\t]+/', ' ', $onderwerp));
-    $tekst .= "\n\n--\n" . instelling('bedrijfsnaam', 'Sporty') . "\n" . basis_url() . "/\n";
+    [, $ondertekening] = mailtekst('ondertekening', ['bedrijfsnaam' => instelling('bedrijfsnaam', 'Sporty'), 'website' => basis_url() . '/']);
+    $tekst .= "\n\n" . $ondertekening . "\n";
 
     if (cfg('mail.methode') !== 'mail') {
         $regel = '[' . nu() . "] Aan: {$aan}\nOnderwerp: {$onderwerp}\n\n{$tekst}\n" . str_repeat('-', 60) . "\n";

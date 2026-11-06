@@ -552,6 +552,18 @@ function migreer(PDO $pdo): void
             INSERT OR IGNORE INTO instellingen (sleutel, waarde) VALUES ('bewaar_interesse_maanden', '24');
             INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) SELECT id, 'interesse' FROM gebruikers WHERE rol = 'beheerder';
             SQL,
+
+        // E-mails aanpassen (november 2026): de eigen tekst van een e-mail; zonder regel geldt de standaardtekst
+        // uit inc/mailteksten.php.
+        14 => <<<'SQL'
+            CREATE TABLE mail_teksten (
+                sleutel TEXT PRIMARY KEY,
+                onderwerp TEXT,
+                tekst TEXT NOT NULL,
+                gewijzigd_op TEXT NOT NULL,
+                gewijzigd_door INTEGER
+            );
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

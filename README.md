@@ -100,7 +100,8 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 **Gegevens van de klant**
 - [x] Adres: Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer), uit de teksten van november 2026.
 - [ ] Telefoonnummer, WhatsApp-nummer en e-mailadressen op het nieuwe domein (nu staan het oude nummer en info@sporty.nl er als tijdelijke gegevens; de WhatsApp-knoppen op Contact en in het aanmeldformulier gebruiken ook het tijdelijke nummer).
-- [ ] Wat er in het Sporty-kennismakingspakket zit en hoe ouders het krijgen (Blijf op de hoogte), en de tekst van de bevestigingsmail daarvan (`beheer/inc/interesse.php`).
+- [ ] Wat er in het Sporty-kennismakingspakket zit en hoe ouders het krijgen (Blijf op de hoogte).
+- [ ] De teksten van de e-mails (bevestiging van een aanmelding, een proefdag en Blijf op de hoogte zijn nu voorlopige teksten). Sporty past alle e-mails zelf aan in Mijn BSO onder Instellingen → E-mails aanpassen.
 - [ ] Nieuwe hero-foto voor de homepage (Sporty stuurt die mee), en de foto's voor de nieuwe plekken `bewegen` (homepage) en `locatie-overzicht` (Locaties); zie `assets/fotos/BRONNEN.md`.
 - [ ] LRK-nummer (footer, Abonnement en kosten, veelgestelde vragen) en het GGD-inspectierapport (footer).
 - [ ] De tijden van het middagprogramma (homepage en Een middag bij Sporty; ook voor de openingstijden in de schema.org-gegevens).

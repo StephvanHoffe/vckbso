@@ -1070,6 +1070,36 @@ a.bezetting:hover {
 
 /* ---------- Kinddossier ---------- */
 
+/* E-mails aanpassen */
+.mailtekst__invoer {
+  min-height: 18rem;
+  line-height: 1.55;
+}
+
+.mailtekst__voorbeeld {
+  margin: 0;
+  padding: var(--space-m);
+  overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+  background: var(--color-surface-alt);
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.mailtekst__velden {
+  grid-template-columns: minmax(7rem, max-content) minmax(0, 1fr);
+}
+
+.mailtekst__velden code {
+  color: var(--color-text);
+  font-size: var(--step--1);
+  white-space: nowrap;
+}
+
 .gegevens {
   display: grid;
   grid-template-columns: minmax(8rem, max-content) minmax(0, 1fr);

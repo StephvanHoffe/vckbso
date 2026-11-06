@@ -39,11 +39,10 @@ function interesse_via_token(string $token): ?array
     return rij('SELECT * FROM interesse WHERE token_hash = ?', [interesse_hash($token)]) ?: null;
 }
 
-/** De afmeldregel onder elke e-mail aan iemand op de lijst. */
-function interesse_voet(array $rij): string
+/** De persoonlijke afmeldlink van iemand op de lijst (voor onder elke e-mail). */
+function interesse_afmeldlink(array $rij): string
 {
-    $token = ontsleutel((string) $rij['token']);
-    return "\n\n--\nJe krijgt deze e-mail omdat je je bij Sporty hebt aangemeld om op de hoogte te blijven.\nGeen e-mails meer? Meld je hier af: " . interesse_link('afmelden', $token);
+    return interesse_link('afmelden', ontsleutel((string) $rij['token']));
 }
 
 /**
@@ -55,7 +54,7 @@ function interesse_aanmelden(string $naam, string $email, string $telefoon, stri
     $voornaam = explode(' ', trim($naam))[0];
     $bestaand = rij('SELECT * FROM interesse WHERE lower(email) = lower(?)', [$email]);
     if ($bestaand && $bestaand['bevestigd_op']) {
-        stuur_mail($email, 'Je staat al op de lijst van Sporty', "Hoi {$voornaam},\n\nJe hebt je net opnieuw aangemeld om op de hoogte te blijven van Sporty, maar je stond al op de lijst. Je hoeft dus niets te doen!" . interesse_voet($bestaand));
+        stuur_mailtekst($email, 'op_de_hoogte_al_op_lijst', ['voornaam' => $voornaam, 'afmeldlink' => interesse_afmeldlink($bestaand)]);
         return;
     }
     $token = interesse_token();
@@ -64,12 +63,8 @@ function interesse_aanmelden(string $naam, string $email, string $telefoon, stri
     } else {
         q('INSERT INTO interesse (naam, email, telefoon, token_hash, token, bron, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?)', [$naam, $email, $telefoon, interesse_hash($token), versleutel($token), $bron, nu()]);
     }
-    // TODO: tekst van de bevestigingsmail laten controleren door Sporty, en laten weten wat er in het kennismakingspakket zit en hoe ouders het krijgen
-    stuur_mail($email, 'Bevestig je aanmelding bij Sporty', "Hoi {$voornaam},\n\n"
-        . "Leuk dat je op de hoogte wilt blijven van Sporty! Bevestig je aanmelding met deze link:\n" . interesse_link('bevestig', $token) . "\n\n"
-        . "Daarna houden we je op de hoogte van het laatste nieuws, en krijg je een Sporty-kennismakingspakket. We laten je weten hoe je het pakket krijgt.\n\n"
-        . "Heb je je niet zelf aangemeld? Dan hoef je niets te doen. Zonder bevestiging wissen we je gegevens binnen " . INTERESSE_ONBEVESTIGD_DAGEN . " dagen.\n\n"
-        . "Tot snel!\nTeam Sporty (en Henny: woef!)");
+    // TODO: tekst van de bevestigingsmail laten controleren door Sporty (aan te passen onder Instellingen → E-mails), en laten weten wat er in het kennismakingspakket zit en hoe ouders het krijgen
+    stuur_mailtekst($email, 'op_de_hoogte_bevestigen', ['voornaam' => $voornaam, 'link' => interesse_link('bevestig', $token), 'dagen' => INTERESSE_ONBEVESTIGD_DAGEN]);
 }
 
 /** Wist een aanmelding helemaal (afmelden, of door het team). */

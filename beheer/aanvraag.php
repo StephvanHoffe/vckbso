@@ -94,13 +94,12 @@ $aantal = count($aanvraag['kinderen']);
 log_actie('Aangemeld via de website', $aantal . ' kind(eren)', $ouderId, 'wijziging', 'gebruiker:' . $ouderId);
 
 // Melding voor het team (zonder persoonsgegevens) en een bevestiging voor de ouder
-mail_team('Nieuwe aanmelding via de website', "Er is een nieuwe aanmelding binnen met {$aantal} " . ($aantal === 1 ? 'kind' : 'kinderen') . ".\n\nBekijk de aanmelding in de beheeromgeving:\n" . app_url('ouder.php?id=' . $ouderId));
+mail_team_tekst('team_aanmelding', ['aantal' => $aantal . ' ' . ($aantal === 1 ? 'kind' : 'kinderen'), 'link' => app_url('ouder.php?id=' . $ouderId)]);
 $namen = array_map(fn ($k) => $k['voornaam'], $aanvraag['kinderen']);
-$kinderen = count($namen) > 1 ? implode(', ', array_slice($namen, 0, -1)) . ' en ' . end($namen) : $namen[0];
-// TODO: tekst van de bevestigingsmail volgt van Sporty; dit is een voorlopige tekst
-stuur_mail($aanvraag['ouder']['email'], 'Je aanmelding bij Sporty is binnen!', "Hoi {$aanvraag['ouder']['voornaam']},\n\nWat leuk dat je {$kinderen} hebt aangemeld bij Sporty! We hebben je aanmelding goed ontvangen. Aanmelden is vrijblijvend: je zit nog nergens aan vast.\n\n"
-    . "We bekijken de mogelijkheden en nemen snel contact met je op om kennis te maken en je aanmelding af te ronden. Daarna krijg je een link om in te loggen in Mijn BSO.\n\n"
-    . "Alvast zin in? Kom gerust een keer langs op Sportpark Middenmeer, of boek een gratis proefdag.\n\n"
-    . "Tot snel!\nTeam Sporty (en Henny: woef!)");
+// TODO: tekst van de bevestigingsmail volgt van Sporty (nu een voorlopige tekst). Sporty past hem zelf aan onder Instellingen → E-mails.
+stuur_mailtekst($aanvraag['ouder']['email'], 'aanmelding_ontvangen', [
+    'voornaam' => $aanvraag['ouder']['voornaam'],
+    'kinderen' => count($namen) > 1 ? implode(', ', array_slice($namen, 0, -1)) . ' en ' . end($namen) : $namen[0],
+]);
 
 aanvraag_antwoord($alsJson, 200);

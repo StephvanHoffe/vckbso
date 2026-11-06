@@ -53,7 +53,7 @@ if (is_post()) {
             ]);
             $id = laatste_id();
             log_actie('Privacyverzoek ingediend', $soort . ' (verzoek ' . $id . ')', null, 'avg', $kindId ? 'kind:' . $kindId : 'gebruiker:' . $gebruiker['id']);
-            mail_team('Nieuw privacyverzoek', "Er is een nieuw privacyverzoek ({$soort}). Reageer binnen een maand:\n" . app_url('verzoeken.php?id=' . $id));
+            mail_team_tekst('team_privacyverzoek', ['soort' => $soort, 'link' => app_url('verzoeken.php?id=' . $id)]);
             flash('succes', 'Je verzoek is ontvangen. We reageren binnen een maand, meestal veel sneller.');
             redirect('privacy.php');
         }
