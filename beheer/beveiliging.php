@@ -56,9 +56,14 @@ $voeg($bewaar !== '' && strtotime($bewaar) > time() - 2 * 86400 ? 'ok' : 'let op
 $teLaat = (int) waarde("SELECT COUNT(*) FROM avg_verzoeken WHERE status IN ('ontvangen', 'in_behandeling') AND deadline < ?", [vandaag()]);
 $voeg($teLaat ? 'probleem' : 'ok', 'Privacyverzoeken op tijd', $teLaat ? "{$teLaat} verzoek(en) over de wettelijke termijn van een maand." : 'Geen verzoeken over de termijn.');
 
-$voeg(stripe_actief() && !stripe_testmodus() && cfg('stripe.webhook_geheim', '') !== '' ? 'ok' : 'let op', 'Betalingen', stripe_actief()
-    ? (stripe_testmodus() ? 'Stripe in testmodus.' : 'Stripe live gekoppeld.') . (cfg('stripe.webhook_geheim', '') === '' ? ' Het webhookgeheim ontbreekt: Stripe kan de uitkomst van incasso\'s niet doorgeven.' : '')
-    : 'Demo-modus: Stripe is niet gekoppeld.');
+$voeg(stripe_actief() && !stripe_testmodus() && koppeling('stripe.webhook_geheim') !== '' ? 'ok' : 'let op', 'Betalingen', (stripe_actief()
+    ? (stripe_testmodus() ? 'Stripe in testmodus.' : 'Stripe live gekoppeld.') . (koppeling('stripe.webhook_geheim') === '' ? ' Het webhookgeheim ontbreekt: Stripe kan de uitkomst van incasso\'s niet doorgeven.' : '')
+    : 'Demo-modus: Stripe is niet gekoppeld.') . ' Zie Koppelingen.');
+$voeg(mail_methode() === 'log' ? 'let op' : 'ok', 'E-mail', [
+    'log' => 'Testmodus: e-mails worden niet verstuurd, alleen bewaard in data/mail.log. Kies onder Koppelingen hoe Mijn BSO e-mail verstuurt.',
+    'mail' => 'E-mail gaat via de mailfunctie van de webserver.',
+    'smtp' => 'E-mail gaat via de eigen mailserver (' . koppeling('smtp.host') . ').',
+][mail_methode()]);
 
 $voeg('ok', 'Organisatie', 'Deze omgeving hoort bij organisatie "' . cfg('organisatie') . '" met een eigen database, fotomap en sleutel.');
 

@@ -1931,3 +1931,76 @@ code {
     transform-origin: 50% 90%;
   }
 }
+
+/* ---------- Koppelingen ---------- */
+.panel__kop h2:has(> .icon) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
+.panel__kop h2 > .icon {
+  width: 1em;
+  height: 1em;
+  color: var(--color-primary-strong);
+}
+
+.koppeling__waarde {
+  margin: 0;
+}
+
+.koppeling__kopieer {
+  width: 100%;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--step--1);
+}
+
+.koppeling__events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2xs);
+  margin: 0 0 var(--space-s);
+  padding: 0;
+  list-style: none;
+}
+
+.koppeling__events code {
+  display: inline-block;
+  padding: 0.15em 0.55em;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  font-size: var(--step--1);
+  overflow-wrap: anywhere;
+}
+
+.koppeling__webhook,
+#stripe > .gegevens,
+#email > .gegevens {
+  margin-top: var(--space-l);
+}
+
+.form .koppeling__smtp {
+  padding: var(--space-m);
+  border-radius: var(--radius-m);
+  background: var(--color-surface-alt);
+}
+
+/* Het kopje binnen het grijze vlak (een legend staat anders op de rand) */
+.koppeling__smtp > legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--space-s);
+}
+
+.koppeling__smtp > legend + * {
+  clear: both;
+}
+
+/* De mailserver is alleen nodig als je "Eigen mailserver" kiest */
+.koppeling__mail:has(input[name="methode"]:checked:not([value="smtp"])) .koppeling__smtp {
+  display: none;
+}
+
+.field code {
+  overflow-wrap: anywhere;
+}

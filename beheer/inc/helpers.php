@@ -9,7 +9,7 @@ function e(null|string|int|float $tekst): string
     return htmlspecialchars((string) $tekst, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
-/** Configuratiewaarde ophalen, bijvoorbeeld cfg('stripe.geheime_sleutel'). */
+/** Configuratiewaarde uit config.php ophalen, bijvoorbeeld cfg('backup.map'). Koppelingen (Stripe, e-mail) lees je met koppeling(). */
 function cfg(string $sleutel, mixed $standaard = null): mixed
 {
     $waarde = $GLOBALS['config'];

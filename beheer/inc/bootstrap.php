@@ -29,10 +29,8 @@ $standaardConfig = [
     'sleutel' => '',
     'ontwikkelmodus' => false,
     'installatiecode' => '',
-    // Betaalmethoden staan niet hier: lijsten worden bij het samenvoegen anders door elkaar gehaald (zie inc/stripe.php)
-    'stripe' => ['geheime_sleutel' => '', 'webhook_geheim' => ''],
-    'mail' => ['methode' => 'log', 'van' => 'info@sporty.nl', 'van_naam' => 'Sporty'],
-    'team_email' => 'info@sporty.nl',
+    // Stripe, e-mail en het teamadres staan niet hier: die beheer je in Mijn BSO onder Koppelingen
+    // (inc/koppelingen.php). Wat in config.php staat, gaat daar voor.
     'backup' => ['map' => '', 'sleutel' => '', 'bewaardagen' => 30],
     'organisaties' => [],
 ];
@@ -51,6 +49,8 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/rechten.php';
 require __DIR__ . '/toegang.php';
 require __DIR__ . '/mfa.php';
+require __DIR__ . '/koppelingen.php';
+require __DIR__ . '/smtp.php';
 require __DIR__ . '/mail.php';
 require __DIR__ . '/mailteksten.php';
 require __DIR__ . '/stripe.php';

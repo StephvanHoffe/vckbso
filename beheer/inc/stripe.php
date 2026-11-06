@@ -27,9 +27,16 @@ if (!defined('STRIPE_API')) {
 }
 const STRIPE_WEBHOOK_MARGE = 300; // seconden verschil met de tijd in de handtekening
 
-/** Betaalmethoden op de pagina's van Stripe, tenzij config.php iets anders zegt. */
-const STRIPE_METHODEN_MACHTIGING = ['ideal', 'sepa_debit'];
-const STRIPE_METHODEN_BETALEN = ['ideal'];
+/** Betaalmethoden die je onder Koppelingen kunt kiezen (zet ze ook aan in het dashboard van Stripe). */
+const STRIPE_KEUZES_MACHTIGING = [
+    'ideal' => ['iDEAL | Wero', 'Via de eigen bank; Stripe schrijft € 0,01 af en betaalt die meteen terug.'],
+    'sepa_debit' => ['IBAN invullen', 'De ouder vult het rekeningnummer en de naam in.'],
+];
+const STRIPE_KEUZES_BETALEN = [
+    'ideal' => ['iDEAL | Wero', 'Via de eigen bank.'],
+    'bancontact' => ['Bancontact', 'Voor ouders met een Belgische bankrekening.'],
+    'card' => ['Creditcard', 'Visa, Mastercard en andere kaarten.'],
+];
 
 /** De gebeurtenissen die de webhook verwerkt. Zet precies deze aan bij de webhook in het dashboard van Stripe. */
 const STRIPE_EVENTS = [
@@ -46,22 +53,43 @@ const STRIPE_EVENTS = [
     'mandate.updated',
 ];
 
+/** De geheime sleutel en het webhookgeheim staan onder Koppelingen in Mijn BSO (of in config.php). */
+function stripe_geheim(): string
+{
+    return trim((string) koppeling('stripe.geheime_sleutel'));
+}
+
 function stripe_actief(): bool
 {
-    return trim((string) cfg('stripe.geheime_sleutel', '')) !== '';
+    return stripe_geheim() !== '';
 }
 
 function stripe_testmodus(): bool
 {
-    return (bool) preg_match('/^(sk|rk)_test_/', (string) cfg('stripe.geheime_sleutel', ''));
+    return (bool) preg_match('/^(sk|rk)_test_/', stripe_geheim());
 }
 
 /** Ingestelde betaalmethoden (een lege lijst betekent: wat in het dashboard van Stripe aan staat). */
 function stripe_methoden(string $soort): array
 {
-    $standaard = $soort === 'machtiging' ? STRIPE_METHODEN_MACHTIGING : STRIPE_METHODEN_BETALEN;
-    $methoden = cfg('stripe.methoden_' . $soort, $standaard);
-    return array_values(array_unique(array_filter(array_map('strval', is_array($methoden) ? $methoden : $standaard))));
+    $toegestaan = array_keys($soort === 'machtiging' ? STRIPE_KEUZES_MACHTIGING : STRIPE_KEUZES_BETALEN);
+    return array_values(array_intersect(koppeling_lijst('stripe.methoden_' . $soort), $toegestaan));
+}
+
+/**
+ * Controleert een geheime sleutel bij Stripe (een lijst met één klant opvragen).
+ * Geeft 'test' of 'live' terug, of gooit een RuntimeException met een uitleg.
+ */
+function stripe_test_sleutel(string $geheim): string
+{
+    if (preg_match('/^pk_/', $geheim)) {
+        throw new RuntimeException('Dit is de publieke sleutel (pk_...). Kies bij Stripe de geheime sleutel: die begint met sk_.');
+    }
+    if (!preg_match('/^(sk|rk)_(test|live)_[A-Za-z0-9]{8,}$/', $geheim, $m)) {
+        throw new RuntimeException('Dit lijkt geen geheime sleutel van Stripe. Die begint met sk_live_ of sk_test_ (of rk_ voor een beperkte sleutel).');
+    }
+    stripe('GET', 'customers', ['limit' => 1], null, $geheim);
+    return $m[2];
 }
 
 /**
@@ -97,14 +125,14 @@ function stripe_query(array $data): string
  * Met een $sleutel (idempotency key) voert Stripe dezelfde opdracht nooit twee keer uit,
  * ook niet bij een dubbele klik of een time-out.
  */
-function stripe(string $methode, string $pad, array $data = [], ?string $sleutel = null): array
+function stripe(string $methode, string $pad, array $data = [], ?string $sleutel = null, ?string $geheim = null): array
 {
     $url = STRIPE_API . ltrim($pad, '/');
     $velden = stripe_query($data);
     if ($methode === 'GET' && $velden !== '') {
         $url .= '?' . $velden;
     }
-    $koppen = ['Authorization: Bearer ' . cfg('stripe.geheime_sleutel'), 'Accept: application/json'];
+    $koppen = ['Authorization: Bearer ' . ($geheim ?? stripe_geheim()), 'Accept: application/json'];
     if ($versie = (string) cfg('stripe.api_versie', '')) {
         $koppen[] = 'Stripe-Version: ' . $versie;
     }

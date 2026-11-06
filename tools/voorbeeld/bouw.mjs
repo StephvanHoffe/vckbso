@@ -38,7 +38,7 @@ const BASIS = `http://127.0.0.1:${POORT}/beheer/`;
 const TMP = mkdtempSync(join(tmpdir(), "sporty-voorbeeld-"));
 const DATA = join(TMP, "data");
 const CONFIG = join(TMP, "config.php");
-writeFileSync(CONFIG, `<?php\nreturn ['data_dir' => ${JSON.stringify(DATA)}, 'ontwikkelmodus' => true, 'mail' => ['methode' => 'log'], 'app_url' => 'http://127.0.0.1:${POORT}/beheer'];\n`);
+writeFileSync(CONFIG, `<?php\nreturn ['data_dir' => ${JSON.stringify(DATA)}, 'ontwikkelmodus' => true, 'app_url' => 'http://127.0.0.1:${POORT}/beheer'];\n`);
 const env = { ...process.env, VCK_BEHEER_CONFIG: CONFIG };
 const php = (...args) => execFileSync("php", args, { cwd: REPO, env, stdio: ["ignore", "pipe", "inherit"] }).toString().trim();
 

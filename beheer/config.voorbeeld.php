@@ -31,27 +31,23 @@ return [
     // Kies iets lang en willekeurigs. Na de installatie weer leegmaken.
     'installatiecode' => '',
 
-    // Stripe (automatische incasso en betalen). Leeg = demo-modus: er wordt
-    // dan niets echt afgeschreven. Begin met de testsleutel (sk_test_...).
-    // Zie docs/beheeromgeving.md, "Stripe koppelen".
-    'stripe' => [
-        'geheime_sleutel' => '',   // Ontwikkelaars → API-sleutels: de geheime sleutel (sk_...) of een beperkte sleutel (rk_...)
-        'webhook_geheim' => '',    // Ontwikkelaars → Webhooks: het ondertekeningsgeheim (whsec_...)
-        // Optioneel, dit zijn de standaardwaarden. Een lege lijst: wat in het dashboard van Stripe aan staat.
-        // 'methoden_machtiging' => ['ideal', 'sepa_debit'],   // machtiging via de eigen bank (iDEAL | Wero) of met het IBAN
-        // 'methoden_betalen' => ['ideal'],                    // een losse factuur online betalen
-    ],
-
-    // E-mail. 'log' schrijft berichten naar data/mail.log (om te testen),
-    // 'mail' verstuurt ze met de mailfunctie van de server.
-    'mail' => [
-        'methode' => 'log',
-        'van' => 'info@sporty.nl',
-        'van_naam' => 'Sporty',
-    ],
-
-    // Hier komen meldingen binnen van nieuwe aanmeldingen, berichten en privacyverzoeken.
-    'team_email' => 'info@sporty.nl',
+    // Stripe en e-mail stel je in Mijn BSO in, onder Koppelingen (versleuteld opgeslagen).
+    // Wil je ze toch hier vastzetten? Wat hier staat, gaat voor en is in Mijn BSO dan
+    // niet meer te wijzigen. Zie docs/beheeromgeving.md, "Koppelingen".
+    //
+    // 'stripe' => [
+    //     'geheime_sleutel' => 'sk_test_...',   // Ontwikkelaars → API-sleutels
+    //     'webhook_geheim' => 'whsec_...',      // Ontwikkelaars → Webhooks: het ondertekeningsgeheim
+    //     'methoden_machtiging' => ['ideal', 'sepa_debit'],
+    //     'methoden_betalen' => ['ideal'],
+    // ],
+    // 'mail' => [
+    //     'methode' => 'smtp',                  // 'log' (alleen data/mail.log), 'mail' (mailfunctie server) of 'smtp'
+    //     'van' => 'info@sporty.nl',
+    //     'van_naam' => 'Sporty',
+    // ],
+    // 'smtp' => ['host' => 'smtp.example.nl', 'poort' => 587, 'beveiliging' => 'starttls', 'gebruiker' => 'info@sporty.nl', 'wachtwoord' => '...'],
+    // 'team_email' => 'info@sporty.nl',         // meldingen van aanmeldingen, berichten en privacyverzoeken
 
     // Back-ups (php beheer/cli/backup.php, dagelijks via cron).
     'backup' => [

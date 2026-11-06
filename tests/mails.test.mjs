@@ -17,8 +17,8 @@ test("alle e-mails gaan via een aanpasbare tekst", () => {
   for (const pad of phpBestanden) {
     if (pad === "beheer/inc/mail.php" || pad === "beheer/inc/mailteksten.php") continue;
     const code = lees(pad);
-    // De testmail op de pagina E-mails verstuurt de tekst uit het formulier zelf
-    const direct = [...code.matchAll(/\b(stuur_mail|mail_team)\(/g)].length - (pad === "beheer/mailteksten.php" ? 1 : 0);
+    // De testmail op de pagina E-mails verstuurt de tekst uit het formulier zelf; die op Koppelingen is een technische test
+    const direct = [...code.matchAll(/\b(stuur_mail|mail_team)\(/g)].length - (pad === "beheer/mailteksten.php" || pad === "beheer/koppelingen.php" ? 1 : 0);
     assert.equal(direct, 0, `${pad} verstuurt een e-mail zonder aanpasbare tekst; gebruik stuur_mailtekst() of mail_team_tekst()`);
     for (const [, sleutel] of code.matchAll(/(?:stuur_mailtekst\([^,]+|mail_team_tekst\()\s*,?\s*'([a-z_]+)'/g)) {
       assert.ok(sleutels.has(sleutel), `${pad}: de e-mail '${sleutel}' staat niet in beheer/inc/mailteksten.php`);

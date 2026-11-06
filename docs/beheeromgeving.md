@@ -8,7 +8,7 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 |---|---|---|
 | Aanmelden op de website en als klant in het systeem komen, met de kinderen eronder | `aanvraag.php` (formulier "Kom bij de club" op `aanmelden.html`), `ouder.php` | Sinds november 2026 vrijblijvend, in 7 stappen: gegevens kind, school, abonnement, dagen, gegevens ouder, partner en controleren. Er ontstaat een ouder met status "nieuw" (nog zonder wachtwoord) met de kinderen eronder; het team krijgt een e-mail en ziet de aanmelding bij Ouders. Na de kennismaking activeert het team het account; de ouder krijgt dan een link om een wachtwoord te kiezen en geeft daarna de machtiging. Zie [Aanmelden via de website](#aanmelden-via-de-website). |
 | Dagen die vol zitten, niet aan te vinken bij het aanmelden | `groepen.php` (blok "Dagen die vol zitten"), `aanvraag.php` | Het team vinkt bij Groepen aan welke weekdagen vol zitten. In het aanmeldformulier staan die dagen dan grijs met "(vol)" en zijn ze niet aan te vinken; ouders lezen dat ze in de opmerkingen om de wachtlijst kunnen vragen. Raakt een dag vol terwijl een ouder het formulier invult, dan weigert de server die dag met een duidelijke melding. Bestaande klanten merken er niets van: in de agenda geldt gewoon de maximale groepsgrootte. Elke wijziging staat in het logboek. |
-| Automatische incasso bij de aanmelding | `machtiging.php` | Direct na het aanmelden geeft de ouder een SEPA-machtiging op een beveiligde pagina van Stripe: via de eigen bank met iDEAL | Wero (€ 0,01 die Stripe meteen terugbetaalt) of met het IBAN. Daarna kan elke factuur automatisch worden afgeschreven. Zie [Stripe koppelen](#stripe-koppelen). |
+| Automatische incasso bij de aanmelding | `machtiging.php` | Direct na het aanmelden geeft de ouder een SEPA-machtiging op een beveiligde pagina van Stripe: via de eigen bank met iDEAL \| Wero (€ 0,01 die Stripe meteen terugbetaalt) of met het IBAN. Daarna kan elke factuur automatisch worden afgeschreven. Zie [Stripe koppelen](#stripe-koppelen). |
 | Facturen online terugvinden | `facturen.php`, `factuur.php` | Beheerder maakt per maand de facturen (op basis van de ingeschreven dagen) en start de incasso. Ouders zien, printen en (bij een mislukte incasso) betalen hun facturen online. |
 | Kindvolgsysteem | `kind.php` | Per kind een dossier: gegevens, allergieën, ophaalpersonen, aanwezigheid (binnen en opgehaald), foto's en observaties per ontwikkelgebied. Een observatie kan alleen voor het team zijn, of gedeeld worden met de ouders. |
 | Verborgen notities per kind, alleen voor het team (november 2026) | `kind.php` (blok "Verborgen notities"), `kinderen.php` (kolom naast "Let op") | Voor opmerkingen die niet per se voor ouders zijn, zoals een kind dat niet goed met een ander kind kan. Iedereen van het team met toegang tot het kind leest en schrijft ze; ouders zien ze nergens in Mijn BSO en ook niet in de download van hun eigen gegevens. Versleuteld opgeslagen, met wie ze het laatst aanpaste; elke wijziging staat in het logboek (zonder de tekst). Let op: bij een formeel inzageverzoek (AVG) heeft een ouder wel recht op deze notities. Daarom staan ze in de export die het team bij Privacyverzoeken eerst controleert. Schrijf ze dus feitelijk en respectvol. Ze worden gewist met het dossier. |
@@ -19,6 +19,7 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | Financiële inkomsten en uitgaven inzien | `financien.php` | Per jaar of maand: inkomsten, uitgaven, resultaat en wat nog te ontvangen is, een grafiek per maand en een verdeling per categorie. Betaalde facturen tellen automatisch mee als inkomsten; overige inkomsten en alle uitgaven voer je in, met een bonnetje (pdf of foto). Export als CSV voor de boekhouder. Zie [Financiën](#financiën). |
 | Ouders kiezen zelf een moment voor een gratis proefdag (november 2026) | `proefdagen.php`, `proefdag.php` (formulier op `proefdag.html`) | Het team zet momenten met een aantal plekken klaar; ouders kiezen er een op de website en krijgen een bevestiging. Zie [Proefdagen](#proefdagen). |
 | Blijf op de hoogte, met een kennismakingspakket (november 2026) | `op-de-hoogte.php` (formulier op `blijf-op-de-hoogte.html`), `interesse.php` (menu "Op de hoogte") | Ouders laten hun naam, e-mail en eventueel telefoonnummer achter en bevestigen dat met de link in een e-mail (dubbele bevestiging: zo kan niemand een ander aanmelden). Pas dan staan ze op de lijst en krijgt het team een e-mail. Het team vinkt aan wie het kennismakingspakket heeft gekregen (het tellertje in het menu laat zien hoeveel er nog wachten), stuurt iedereen een update (elk een eigen e-mail met een persoonlijke afmeldlink) en kan de lijst als CSV downloaden. Afmelden wist de gegevens meteen; niet bevestigd na 14 dagen weg, verder na de bewaartermijn (standaard 24 maanden). Links in e-mails openen eerst een pagina met een knop, zodat een virusscanner die links vooraf opent niets bevestigt of afmeldt. |
+| Koppelingen beheren (november 2026) | `koppelingen.php` (Koppelingen) | Stripe (sleutels, betaalmethoden, of de webhook binnenkomt) en het versturen van e-mail (eigen mailserver via SMTP, de mailfunctie van de server of testmodus) instellen in Mijn BSO, met een testknop. Sleutels en wachtwoorden worden versleuteld opgeslagen. Zie [Koppelingen](#koppelingen). |
 | Alle e-mails zelf aanpassen (november 2026) | `mailteksten.php` (Instellingen → E-mails aanpassen), standaardteksten in `inc/mailteksten.php` | Zie [E-mails aanpassen](#e-mails-aanpassen). |
 | Collega's aanmaken en per persoon rechten geven | `medewerkers.php` (Team) | Per collega staat elk menuonderdeel aan of uit, plus de groepen en twee extra rechten. Zie [Rechten per persoon](#rechten-per-persoon). |
 
@@ -58,6 +59,7 @@ Onder **Team** zet je per collega elk menuonderdeel aan of uit. Een onderdeel da
 | Proefdagen | Momenten klaarzetten voor een gratis proefdag en de boekingen van ouders |
 | Sollicitaties | Sollicitaties (cv en motivatie) van de website (Word Sporty coach) |
 | Privacyverzoeken | Privacyverzoeken van ouders afhandelen |
+| Koppelingen | Stripe en e-mail koppelen, met sleutels en wachtwoorden. Geef dit alleen aan wie het echt nodig heeft. |
 | Instellingen | Instellingen, logboek en beveiligingsstatus |
 
 Daarnaast twee extra rechten:
@@ -77,7 +79,7 @@ Het formulier op **Word Sporty coach** (`word-sporty-coach.html`) verstuurt soll
 
 - **Wat er binnenkomt:** naam, e-mail, telefoon, het cv en de motivatie (allebei pdf of Word, elk hooguit 5 MB). Het soort bestand wordt aan de inhoud gecontroleerd, niet alleen aan de naam. Sollicitaties uit de eerste versie van het formulier (Werken bij, tot november 2026) hebben ook een woonplaats, functie, dagen, link en een motivatie als tekst; die blijven gewoon zichtbaar.
 - **Veilig bewaard:** het cv en de motivatie staan versleuteld in de datamap (`sollicitaties/`, gaat mee in de back-up), een motivatie als tekst, de link en de notities van het team versleuteld in de database.
-- **Melding:** het team krijgt een e-mail op het adres `team_email` uit `config.php`, zonder persoonsgegevens, met een link naar de sollicitatie. De sollicitant krijgt een ontvangstbevestiging.
+- **Melding:** het team krijgt een e-mail op het teamadres (onder Koppelingen), zonder persoonsgegevens, met een link naar de sollicitatie. De sollicitant krijgt een ontvangstbevestiging.
 - **Afhandelen:** onder **Sollicitaties** (eigen recht, standaard alleen voor beheerders) zie je alle sollicitaties, open je het cv en de motivatie (staat in het logboek als inzage), zet je de status (Nieuw, Uitgenodigd, Geen plek, Aangenomen), schrijf je een notitie en kun je een sollicitatie meteen verwijderen. Het menu toont hoeveel nieuwe er zijn.
 - **Bewaren:** elke sollicitatie toont de datum waarop hij vanzelf wordt verwijderd (zie de tabel bij Bewaarbeleid).
 - **Tegen spam:** een verborgen veld, alleen vanaf de eigen website, en hooguit 5 verstuurde sollicitaties per kwartier vanaf hetzelfde adres.
@@ -122,6 +124,21 @@ Onder **Instellingen → E-mails aanpassen** (recht Instellingen) staan alle 23 
 - **Voorbeeld en testmail:** "Voorbeeld bekijken" toont de e-mail met voorbeeldgegevens; "Testmail naar mij" stuurt hem naar je eigen adres. Beide zonder op te slaan.
 - **Terug naar de standaard:** met één klik, en het overzicht laat zien welke e-mails zijn aangepast (met datum). Elke wijziging staat in het logboek.
 - **Techniek:** de standaardteksten staan in `beheer/inc/mailteksten.php` (`MAILTEKSTEN`), een aangepaste tekst in de tabel `mail_teksten` (migratie 14). Verstuur een e-mail altijd met `stuur_mailtekst()` of `mail_team_tekst()`; `npm test` controleert dat er geen e-mail buiten deze lijst om gaat en dat de standaardteksten kloppen.
+
+## Koppelingen
+
+Onder **Koppelingen** (eigen recht, standaard alleen beheerders) stel je in waarmee Mijn BSO verbonden is. Je hebt daarvoor geen toegang tot de server nodig.
+
+| Koppeling | Wat je instelt | Testen |
+|---|---|---|
+| **Stripe** | Geheime sleutel en webhookgeheim; de betaalmethoden voor de machtiging (iDEAL \| Wero, IBAN) en voor los betalen (iDEAL \| Wero, Bancontact, creditcard). Het adres van de webhook en de gebeurtenissen staan erbij om over te nemen. | Een nieuwe sleutel wordt eerst bij Stripe getest; een foute of publieke sleutel (pk_) wordt geweigerd. Daarnaast "Verbinding testen", en je ziet wanneer de laatste melding van Stripe binnenkwam, of geweigerd werd omdat het webhookgeheim niet klopt. |
+| **E-mail versturen** | Eigen mailserver (SMTP, aanbevolen), de mailfunctie van de webserver of testmodus (alleen `data/mail.log`); afzenderadres, afzendernaam en teamadres; bij SMTP de server, poort, beveiliging (STARTTLS of SSL/TLS), gebruikersnaam en wachtwoord. | "Opslaan en testmail naar mij", met een begrijpelijke foutmelding als het niet lukt (bijvoorbeeld een fout wachtwoord). Je ziet wanneer de laatste e-mail is verstuurd en de laatste fout. |
+
+- **Veilig opgeslagen:** sleutels en wachtwoorden staan versleuteld in de database (tabel `koppelingen`, migratie 17) en zijn na het opslaan niet meer te lezen: je ziet alleen het begin en de laatste vier tekens (`sk_live_…9a3f`), een wachtwoord helemaal niet. Ze komen niet in het logboek; daar staat alleen wát er is gewijzigd en door wie.
+- **Extra bevestiging:** een sleutel of wachtwoord wijzigen, of Stripe ontkoppelen, vraagt om je eigen wachtwoord. Wie de Stripe-sleutel kan veranderen, bepaalt waar het geld naartoe gaat.
+- **SMTP zonder extra software:** Mijn BSO verstuurt zelf via de mailserver, altijd versleuteld (STARTTLS op poort 587 of SSL/TLS op poort 465) en met controle van het certificaat. Vraag de gegevens op bij jullie e-mailprovider; met tweestapsverificatie bij de provider gebruik je een app-wachtwoord. Zorg dat SPF en DKIM van het domein deze mailserver toestaan (bij de mailbox van het eigen domein is dat meestal al zo).
+- **config.php gaat voor:** wat in `config.php` staat (bijvoorbeeld bij meerdere organisaties), geldt en is onder Koppelingen alleen te zien. Zo kan een systeembeheerder iets vastzetten.
+- **Techniek:** `beheer/inc/koppelingen.php` (`koppeling()`, `koppeling_zet()`), `beheer/inc/smtp.php` en `beheer/koppelingen.php`. Lees een koppeling altijd met `koppeling()`, niet met `cfg()`; `npm test` controleert dat.
 
 ## Fototoestemming
 
@@ -254,7 +271,8 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
    - `sleutel`: de eerste sleutel. Nooit meer wijzigen.
    - `backup.map` (buiten de webroot) en `backup.sleutel`: de tweede sleutel
    - `installatiecode`: een lange, willekeurige code
-   - `mail.methode`: `mail` (of laat op `log` zolang je test)
+
+   Stripe en e-mail stel je later in Mijn BSO in, onder Koppelingen (stap 8).
 4. Stel twee dagelijkse taken (cron) in, bijvoorbeeld:
    ```cron
    15 3 * * * php /pad/naar/site/beheer/cli/onderhoud.php
@@ -264,7 +282,7 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
 5. Ga naar `https://bsovck.nl/beheer/`. Je komt op de installatiepagina: vul de installatiecode in, maak het eerste beheerdersaccount aan en stel tweestapsverificatie in. Maak daarna de `installatiecode` weer leeg.
 6. Vul de **Instellingen** in (KvK, LRK, IBAN, uurtarief, uren per middag, afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders) en maak de **groepen** aan.
 7. Nodig de begeleiders uit onder **Team** en koppel ze aan hun groep(en).
-8. Koppel **Stripe** (zie hieronder). Zonder Stripe draait alles in demo-modus: er wordt niets echt afgeschreven.
+8. Stel onder **Koppelingen** het versturen van e-mail in (eigen mailserver, met een testmail) en koppel **Stripe** (zie hieronder). Zonder Stripe draait alles in demo-modus: er wordt niets echt afgeschreven; zonder e-mailinstelling worden e-mails niet verstuurd.
 9. Controleer **Instellingen → Beveiligingsstatus**: alles moet op "In orde" staan.
 
 ### Apache en nginx
@@ -285,10 +303,10 @@ Zet voor foto's van telefoons in PHP: `upload_max_filesize = 16M`, `post_max_siz
 Mijn BSO gebruikt Stripe voor de machtiging (SEPA-incasso), de maandelijkse incasso's en het los betalen van een factuur. Er is geen extra software nodig: Mijn BSO praat rechtstreeks met de API van Stripe.
 
 1. Maak een account aan op [stripe.com](https://stripe.com/nl) en rond de bedrijfscontrole af. Zet onder **Instellingen → Betaalmethoden** **iDEAL | Wero** en **SEPA-incasso** (SEPA Direct Debit) aan. Stel bij **Instellingen → Openbare gegevens** de naam in die ouders op hun afschrift en op de betaalpagina zien.
-2. Zet in `config.php` bij `stripe.geheime_sleutel` de **test**-sleutel (`sk_test_...`, onder Ontwikkelaars → API-sleutels). Een beperkte sleutel (`rk_test_...`) kan ook, met schrijfrechten op Customers, Checkout Sessions, PaymentIntents en PaymentMethods en leesrechten op SetupIntents, Charges en Mandates.
-3. Maak onder **Ontwikkelaars → Webhooks** een webhook aan naar `https://bsovck.nl/beheer/stripe-webhook.php` (het echte domein) met deze gebeurtenissen: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `payment_intent.processing`, `payment_intent.succeeded`, `payment_intent.payment_failed`, `payment_intent.canceled`, `charge.refunded`, `charge.dispute.created` en `mandate.updated`. Zet het ondertekeningsgeheim (`whsec_...`) in `config.php` bij `stripe.webhook_geheim`.
+2. Vul in Mijn BSO onder **Koppelingen** de **test**-sleutel in (`sk_test_...`, onder Ontwikkelaars → API-sleutels); Mijn BSO test hem meteen. Een beperkte sleutel (`rk_test_...`) kan ook, met schrijfrechten op Customers, Checkout Sessions, PaymentIntents en PaymentMethods en leesrechten op SetupIntents, Charges en Mandates.
+3. Maak onder **Ontwikkelaars → Webhooks** een webhook aan naar `https://bsovck.nl/beheer/stripe-webhook.php` (het echte domein) met deze gebeurtenissen: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `payment_intent.processing`, `payment_intent.succeeded`, `payment_intent.payment_failed`, `payment_intent.canceled`, `charge.refunded`, `charge.dispute.created` en `mandate.updated`. Zet het ondertekeningsgeheim (`whsec_...`) onder Koppelingen bij Webhookgeheim. Het adres en de lijst staan daar ook, om over te nemen.
 4. Probeer het hele proces in testmodus: aanmelden, machtiging (kies op de testpagina van de bank "Authorize", of gebruik het test-IBAN `NL39 RABO 0300 0652 64`), facturen maken en de incasso starten. Een SEPA-incasso staat in testmodus na een paar minuten op betaald. Met het test-IBAN `NL91 ABNA 0417 1643 00` mislukt de incasso; dan moet de factuur op "mislukt" komen en de ouder een bericht krijgen.
-5. Werkt alles? Zet de **live**-sleutel en het geheim van een live-webhook in `config.php`. Onder **Beveiliging** in Mijn BSO zie je of Stripe live gekoppeld is.
+5. Werkt alles? Vul onder Koppelingen de **live**-sleutel en het geheim van een live-webhook in. Bovenaan staat dan "Live", en na de eerste echte melding zie je wanneer die binnenkwam.
 
 Zo werkt het:
 

@@ -586,6 +586,18 @@ function migreer(PDO $pdo): void
             UPDATE gebruikers SET mandaat_status = 'geen', mandaat_id = NULL
                 WHERE mandaat_status IN ('geldig', 'in_behandeling') AND (mandaat_id IS NULL OR mandaat_id NOT LIKE 'pm\_%' ESCAPE '\');
             SQL,
+
+        // Koppelingen (november 2026): Stripe en e-mail instellen in Mijn BSO in plaats van in config.php.
+        // De waarden staan versleuteld; beheerders krijgen het nieuwe menuonderdeel meteen.
+        17 => <<<'SQL'
+            CREATE TABLE koppelingen (
+                sleutel TEXT PRIMARY KEY,
+                waarde TEXT NOT NULL,
+                gewijzigd_op TEXT NOT NULL,
+                gewijzigd_door INTEGER
+            );
+            INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) SELECT id, 'koppelingen' FROM gebruikers WHERE rol = 'beheerder';
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

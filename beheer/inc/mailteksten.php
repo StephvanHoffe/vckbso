@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 const MAILTEKST_GROEPEN = [
     'ouders' => ['Aan ouders, sollicitanten en andere bezoekers', 'Deze e-mails gaan naar ouders en andere mensen buiten het team.'],
-    'team' => ['Aan het team', 'Meldingen voor het team en uitnodigingen voor collega\'s. De meldingen gaan naar het teamadres uit de instellingen van de server (team_email).'],
+    'team' => ['Aan het team', 'Meldingen voor het team en uitnodigingen voor collega\'s. De meldingen gaan naar het teamadres onder Koppelingen.'],
     'algemeen' => ['Onder elke e-mail', 'Deze tekst staat onderaan elke e-mail die Mijn BSO verstuurt.'],
 ];
 
