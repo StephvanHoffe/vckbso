@@ -31,7 +31,7 @@ Bouw een statische website met semantische HTML, moderne CSS (custom properties,
 - Toegankelijk (WCAG 2.1 AA): voldoende contrast, alt-teksten in het Nederlands, zichtbare focus, alles bruikbaar met het toetsenbord, logische kopstructuur.
 - Nederlandstalig: `lang="nl"`, datums en telefoonnummers in Nederlandse notatie.
 - SEO-basis: unieke `<title>` en meta description per pagina, Open Graph-tags, `sitemap.xml`, `robots.txt` en schema.org `LocalBusiness`-gegevens (naam, adres, telefoon, openingstijden).
-- Privacy: geen tracking-cookies, lettertypen lokaal hosten (niet via de servers van Google laden), externe kaarten pas na een klik.
+- Privacy: geen tracking-cookies, lettertypen lokaal hosten (niet via de servers van Google laden), geen externe kaarten op de pagina (de kaart is een eigen plaatje dat naar Google Maps linkt, zie Functies).
 - Design tokens staan in `design/tokens.css`: gebruik die variabelen in plaats van losse kleurcodes of maten.
 
 ## Ontwerp
@@ -103,6 +103,22 @@ De klant heeft alle teksten aangeleverd als Word-documenten, met per pagina een 
 - **Kom bij de club (aanmeldformulier):** vrijblijvend, in 7 stappen met één onderwerp per scherm en Henny die over de voortgangsbalk meerent; voortgang onthouden en anoniem meten waar ouders afhaken. Na de kennismaking rondt het team de aanmelding af (account, wachtwoord, machtiging). De abonnementsstap is nog in overleg.
 - **Reviews:** aangeleverd door de klant; de namen volgen zodra de ouders toestemming hebben gegeven (tot die tijd "Ouder van een Sporty-kid").
 - **Nog aan te leveren door de klant** (staat als TODO in de code): telefoonnummer, WhatsApp-nummer en e-mailadressen, LRK-nummer, algemene en privacyvoorwaarden, de tekst van de bevestigingsmail, het GGD-inspectierapport, de tijden van het middagprogramma, de abonnementsstap in het aanmeldformulier, en foto's en video's (ook van het team).
+
+### Feedback van de klant (6 november 2026)
+
+Twee documenten met feedback (website en aanmeldformulier). Wat daaruit volgt:
+
+- **Opening en open dagen:** Sporty opent op maandag 4 januari 2027. Tot de zomervakantie open op dinsdag en donderdag; vanaf maandag 12 juli 2027 vijf dagen per week. Dit staat op één plek in de beheeromgeving (`beheer/inc/openingsdagen.php`) en als data-attributen in `aanmelden.html`.
+- **Header en menu:** logo altijd zichtbaar, menu en knop passen op elke laptopbreedte; uitklapmenu bij "Alles over Sporty" (Visie en droom, Abonnement en kosten, Vakantie- en studiedagen, Welkom bij de club, Pauzebegeleiding voor scholen). De losse balk met subpagina's is weg.
+- **Homepage:** geen kroontje in de hero (een getekende bal), de link onder de knoppen is "Bekijk hier wat we allemaal uitspoken" (naar Een middag bij Sporty), nieuwe introtekst bij de kernwaarden, alleen weetje 1 t/m 3 met een brede foto eronder, kortere quiz-intro, en een blok "Blijf op de hoogte" met het kennismakingspakket. De hero krijgt een nieuwe foto van de klant.
+- **Kaartjes:** alleen kaartjes waar je op kunt klikken, reageren op de muis.
+- **Proefdag:** een agenda waarin je alleen dagen met een moment kunt aanklikken (nu dinsdag en donderdag); momenten kunnen alleen op open dagen.
+- **Locaties:** plek voor een algemene foto van de locatie, en een kaart die meteen zichtbaar is (eigen plaatje, zie Functies).
+- **Abonnement en kosten:** de rekentool bovenaan, daarna het abonnement met Inclusief (nu met Uitjes), Wij bewegen met je mee, Wat kost het, de toeslag en het welkomstpakket vlak boven de afsluiter.
+- **Aanmeldformulier:** voorletters, groep of klas en startdatum (standaard vandaag, maar niet vóór 4 januari 2027) verplicht; sportclub en plaats weg; stap 2 "Op welke school zit ...? Noteer hier de school."; maandag, woensdag en vrijdag tot 12 juli 2027 niet aan te klikken, met de uitleg van de klant eronder.
+- **Blijf op de hoogte (nieuw):** geen pop-up (advies), maar een blok op de homepage en een link in de footer naar `blijf-op-de-hoogte.html`. Naam, e-mail en (niet verplicht) telefoon, met toestemming, dubbele bevestiging per e-mail en een afmeldlink. In Mijn BSO onder "Op de hoogte".
+- **Verborgen notities (nieuw, Mijn BSO):** per kind notities die alleen het team ziet, met een kolom naast "Let op" bij Kinderen. Niet zichtbaar voor ouders; wel onderdeel van een formeel inzageverzoek (AVG).
+- **WhatsApp:** knop op Contact en een link in het aanmeldformulier (nu met het tijdelijke nummer).
 
 ### Kleuren
 
@@ -176,7 +192,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 - Welke drie dingen wil je uitlichten?
 - Wat wil je dat de bezoeker daarna doet?
 
-**Quiz (23 oktober 2026):** de klant wil op een strategisch slimme plek op de homepage een quiz met grappige vragen: past jouw kind bij Sporty? De quiz staat tussen "Team Sporty" en "In drie stappen erbij": als ouders weten wat Sporty is, en vlak voordat ze lezen hoe aanmelden werkt. In de hero staat een link ernaartoe. Zes vragen (vijf grappige en de leeftijd), Henny reageert op elk antwoord, en de uitslag is een type (Stuiterbal, Teamcaptain, Spelbedenker of Chillkampioen) met de knop "Meld je kind aan". Eerlijk blijven: kinderen jonger dan 5 of ouder dan 13 krijgen een eerlijke uitslag. Een kind van 4 mag alvast worden aangemeld (bevestigd door de klant op 23 oktober 2026); bij 14 jaar of ouder staat er geen aanmeldknop voor het kind zelf. Na akkoord van de klant (23 oktober 2026) staat dezelfde quiz in het Engels op `en/index.html`, tussen "Still enough energy for ten?" en "Visit us".
+**Quiz (23 oktober 2026):** de klant wil op een strategisch slimme plek op de homepage een quiz met grappige vragen: past jouw kind bij Sporty? De quiz staat tussen "Team Sporty" en "In drie stappen erbij": als ouders weten wat Sporty is, en vlak voordat ze lezen hoe aanmelden werkt. In de hero stond een link ernaartoe; sinds de feedback van 6 november 2026 gaat die link naar Een middag bij Sporty. Zes vragen (vijf grappige en de leeftijd), Henny reageert op elk antwoord, en de uitslag is een type (Stuiterbal, Teamcaptain, Spelbedenker of Chillkampioen) met de knop "Meld je kind aan". Eerlijk blijven: kinderen jonger dan 5 of ouder dan 13 krijgen een eerlijke uitslag. Een kind van 4 mag alvast worden aangemeld (bevestigd door de klant op 23 oktober 2026); bij 14 jaar of ouder staat er geen aanmeldknop voor het kind zelf. Na akkoord van de klant (23 oktober 2026) staat dezelfde quiz in het Engels op `en/index.html`, tussen "Still enough energy for ten?" en "Visit us".
 
 ### Over ons (`over-ons`)
 
@@ -256,7 +272,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 ## Functies
 
 - **Contactformulier:** Contactformulier met naam, e-mail, telefoon (optioneel) en bericht, met duidelijke foutmeldingen en een bevestiging na versturen. Berichten gaan naar info@sporty.nl. Bij een statische site: gebruik een formulierendienst en zet de endpoint-URL als TODO in de code, met een `mailto:`-link als terugvaloptie.
-- **Google Maps-kaart:** Kaart met de locatie. Laad Google Maps pas na een klik (privacy en cookies); toon daarvoor een afbeelding of een link "Route plannen".
+- **Google Maps-kaart:** Kaart met de locatie, meteen zichtbaar (feedback 6 november 2026). Het is een eigen kaartbeeld uit OpenStreetMap (`npm run kaart`, met bronvermelding) dat bij een klik Google Maps opent, plus een link "Route plannen". Er laadt niets van Google op de pagina, dus geen cookies en geen toestemming nodig.
 - **Meertalig (bv. NL/EN):** Meertalig (Nederlands en Engels): taalkeuze in de header, teksten per taal gescheiden. De Engelse teksten volgen of worden vertaald na akkoord van de klant.
 - **Overige wensen:** In de backend van de website wil ik een compleet kindvolgsysteem om zo alle kinderen individueel bij te kunnen houden en eventueel hun ontwikkeling te monitoren.
 

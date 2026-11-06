@@ -147,7 +147,9 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
     <dt>Abonnement</dt><dd><?= e(AANVRAAG_ABONNEMENTEN[$k['abonnement'] ?? ''] ?? '-') ?></dd>
     <dt>Dagen</dt><dd><?= e(implode(', ', array_map(fn ($d) => WEEKDAGEN[(int) $d] ?? '', $k['dagen'] ?? [])) ?: '-') ?><?= ($k['toelichting'] ?? '') !== '' ? '<br><span class="muted">' . e($k['toelichting']) . '</span>' : '' ?></dd>
     <dt>Gewenste start</dt><dd><?= e(($k['startdatum'] ?? '') !== '' ? datum_nl($k['startdatum']) : 'Zo snel mogelijk') ?></dd>
-    <dt>Sportclub</dt><dd><?= e(($k['sportclub'] ?? '') ?: '-') ?></dd>
+<?php if (($k['sportclub'] ?? '') !== ''): // alleen bij aanmeldingen van vóór november 2026 ?>
+    <dt>Sportclub</dt><dd><?= e($k['sportclub']) ?></dd>
+<?php endif; ?>
   </dl>
 <?php endforeach; ?>
 </details>

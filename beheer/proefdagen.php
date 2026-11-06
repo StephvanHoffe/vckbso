@@ -21,6 +21,8 @@ if (is_post()) {
         $herhaal = max(1, min(12, (int) invoer('herhaal', '1')));
         if (!geldige_datum($datum) || $datum <= vandaag()) {
             flash('fout', 'Kies een datum vanaf morgen.');
+        } elseif (!in_array((int) date('N', strtotime($datum)), open_weekdagen($datum), true)) {
+            flash('fout', 'Op ' . WEEKDAGEN[(int) date('N', strtotime($datum))] . ' is Sporty niet open. Kies een ' . weekdagen_tekst(open_weekdagen($datum)) . '.');
         } elseif (!geldige_tijd($begin) || !geldige_tijd($eind) || $begin >= $eind) {
             flash('fout', 'Vul een begintijd en een eindtijd in; de eindtijd ligt na de begintijd.');
         } elseif ($plekken < 1 || $plekken > 50) {
@@ -156,7 +158,7 @@ $toonMoment = function (array $moment, array $lijst, bool $voorbij): void {
     <?= csrf_veld() ?>
     <input type="hidden" name="actie" value="moment_toevoegen">
     <div class="form__row">
-      <div class="field"><label for="datum">Datum</label><input id="datum" name="datum" type="date" required min="<?= e(date('Y-m-d', strtotime('+1 day'))) ?>"></div>
+      <div class="field"><label for="datum">Datum</label><input id="datum" name="datum" type="date" required min="<?= e(date('Y-m-d', strtotime('+1 day'))) ?>" aria-describedby="datum-uitleg"><p class="field__hint" id="datum-uitleg">Alleen op dagen dat Sporty open is: tot <?= e(datum_nl(SPORTY_ALLE_DAGEN_VANAF)) ?> op <?= e(weekdagen_tekst(SPORTY_EERSTE_DAGEN)) ?>, daarna maandag t/m vrijdag.</p></div>
       <div class="field"><label for="plekken">Plekken</label><input id="plekken" name="plekken" type="number" min="1" max="50" required value="3"></div>
     </div>
     <div class="form__row">

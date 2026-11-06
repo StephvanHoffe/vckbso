@@ -15,13 +15,14 @@ declare(strict_types=1);
 
 /** sleutel => [omschrijving, eenheid, uitleg] */
 const BEWAARTERMIJNEN = [
-    'bewaar_ontwikkeling_maanden' => ['Ontwikkelingsgegevens: observaties uit het kindvolgsysteem', 'maanden', 'na vertrek van het kind'],
+    'bewaar_ontwikkeling_maanden' => ['Ontwikkelingsgegevens: observaties uit het kindvolgsysteem en verborgen notities van het team', 'maanden', 'na vertrek van het kind'],
     'bewaar_kinddossier_maanden' => ['Kinddossier: gegevens, bijzonderheden, ophaalpersonen, toestemmingen en verzorgers', 'maanden', 'na vertrek van het kind; daarna blijft alleen een geanonimiseerde regel voor de financiële administratie'],
     'bewaar_fotos_maanden' => ["Foto's", 'maanden', 'na plaatsen, en uiterlijk bij het wissen van het kinddossier'],
     'bewaar_berichten_maanden' => ['Berichten en ziekmeldingen', 'maanden', 'na verzenden'],
     'bewaar_aanmeldingen_maanden' => ['Aanmeldingen die niet tot plaatsing leidden', 'maanden', 'na aanmelden'],
     'bewaar_account_maanden' => ['Account en contactgegevens van gestopte klanten', 'maanden', 'na vertrek; naam en adres blijven bij de facturen'],
     'bewaar_financieel_jaren' => ['Financiële administratie: facturen, betalingen, de opvangdagen waarop ze zijn gebaseerd, en de boekingen en bonnetjes onder Financiën', 'jaar', 'fiscale bewaarplicht'],
+    'bewaar_interesse_maanden' => ['Blijf op de hoogte: naam, e-mail en telefoon van ouders met interesse', 'maanden', 'na aanmelden (afmelden kan altijd eerder; wie de aanmelding niet bevestigt: na 14 dagen)'],
     'bewaar_logboek_maanden' => ['Logboek: inzage, wijzigingen, exports en inloggen', 'maanden', ''],
 ];
 
@@ -44,6 +45,8 @@ function voer_bewaarbeleid_uit(): array
     // 1. Ontwikkelingsgegevens na vertrek
     $grens = grens(bewaartermijn('bewaar_ontwikkeling_maanden'));
     $telling['observaties'] = q('DELETE FROM observaties WHERE kind_id IN (SELECT id FROM kinderen WHERE actief = 0 AND gestopt_op IS NOT NULL AND gestopt_op < ?)', [$grens])->rowCount();
+    // Verborgen notities van het team: dezelfde termijn als de observaties
+    q("UPDATE kinderen SET team_notities = '', team_notities_op = NULL, team_notities_door = NULL WHERE team_notities != '' AND actief = 0 AND gestopt_op IS NOT NULL AND gestopt_op < ?", [$grens]);
 
     // 2. Kinddossiers na vertrek anonimiseren
     $grens = grens(bewaartermijn('bewaar_kinddossier_maanden'));
@@ -108,6 +111,11 @@ function voer_bewaarbeleid_uit(): array
         $telling['proefdagen']++;
     }
     q('DELETE FROM proefdag_momenten WHERE datum < ? AND NOT EXISTS (SELECT 1 FROM proefdag_boekingen b WHERE b.moment_id = proefdag_momenten.id)', [date('Y-m-d', strtotime('-' . PROEFDAG_BEWAAR_DAGEN . ' days'))]);
+
+    // 8b2. Blijf op de hoogte: niet bevestigd na 14 dagen, bevestigd na de ingestelde termijn
+    $telling['op_de_hoogte'] = q('DELETE FROM interesse WHERE (bevestigd_op IS NULL AND aangemaakt_op < ?) OR aangemaakt_op < ?', [
+        date('Y-m-d H:i:s', strtotime('-' . INTERESSE_ONBEVESTIGD_DAGEN . ' days')), grens(max(1, bewaartermijn('bewaar_interesse_maanden'))),
+    ])->rowCount();
 
     // 8c. Anonieme telling van het aanmeldformulier: een jaar
     q('DELETE FROM aanvraag_stappen WHERE datum < ?', [date('Y-m-d', strtotime('-1 year'))]);
@@ -185,7 +193,7 @@ function wis_kinddossier(int $kindId, string $reden, bool $registreer = true): v
         q('DELETE FROM kind_verzorgers WHERE kind_id = ?', [$kindId]);
         q('UPDATE berichten SET kind_id = NULL WHERE kind_id = ?', [$kindId]);
         q("UPDATE inschrijvingen SET status = 'afgemeld', gewijzigd_op = ? WHERE kind_id = ? AND datum > ? AND status IN ('bevestigd', 'wachtlijst')", [nu(), $kindId, vandaag()]);
-        q("UPDATE kinderen SET voornaam = 'Verwijderd', achternaam = '', geboortedatum = NULL, school = '', bijzonderheden = '', ophaalpersonen = '',
+        q("UPDATE kinderen SET voornaam = 'Verwijderd', achternaam = '', geboortedatum = NULL, school = '', bijzonderheden = '', ophaalpersonen = '', team_notities = '', team_notities_op = NULL, team_notities_door = NULL,
            foto_toestemming = 0, actief = 0, groep_id = NULL, gestopt_op = COALESCE(gestopt_op, ?), geanonimiseerd_op = ? WHERE id = ?", [nu(), nu(), $kindId]);
     });
     if ($registreer) {

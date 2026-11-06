@@ -42,8 +42,44 @@
     });
 
     var wide = window.matchMedia("(min-width: 80em)");
+
+    /* Uitklapmenu (Alles over Sporty): op brede schermen ook met de muis, met het pijltje voor toetsenbord en touch */
+    var subs = [];
+    Array.prototype.forEach.call(nav.querySelectorAll(".site-nav__sub"), function (sub) {
+      var knop = sub.querySelector(".site-nav__open");
+      if (!knop) return;
+      var zet = function (open) {
+        sub.classList.toggle("is-open", open);
+        knop.setAttribute("aria-expanded", String(open));
+      };
+      subs.push({ sub: sub, zet: zet, huidig: !!sub.querySelector('.site-nav__submenu [aria-current="page"]') });
+      knop.addEventListener("click", function () {
+        zet(knop.getAttribute("aria-expanded") !== "true");
+      });
+      sub.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && sub.classList.contains("is-open")) {
+          event.stopPropagation();
+          zet(false);
+          knop.focus();
+        }
+      });
+      sub.addEventListener("focusout", function (event) {
+        if (wide.matches && !sub.contains(event.relatedTarget)) zet(false);
+      });
+      document.addEventListener("click", function (event) {
+        if (wide.matches && !sub.contains(event.target)) zet(false);
+      });
+    });
+
+    /* In het mobiele menu staat het onderdeel van de huidige pagina al open */
+    var beginStand = function () {
+      subs.forEach(function (s) { s.zet(!wide.matches && s.huidig); });
+    };
+    beginStand();
+
     var onWide = function () {
       if (wide.matches) setOpen(false);
+      beginStand();
     };
     if (wide.addEventListener) wide.addEventListener("change", onWide);
   }
@@ -91,24 +127,6 @@
       label.textContent = row.closest("[lang='en']") ? "today" : "vandaag";
       cell.append(" ", label); // spatie: op smalle schermen mag het label onder de dagnaam vallen
     }
-  });
-
-  /* ---------- Google Maps pas laden na een klik (privacy) ---------- */
-  document.querySelectorAll("[data-map]").forEach(function (map) {
-    var button = map.querySelector("[data-map-load]");
-    if (!button) return;
-    button.addEventListener("click", function () {
-      var iframe = document.createElement("iframe");
-      iframe.src = map.getAttribute("data-map");
-      iframe.title = map.getAttribute("data-map-title") || "Kaart";
-      iframe.loading = "lazy";
-      iframe.referrerPolicy = "no-referrer-when-downgrade";
-      iframe.allowFullscreen = true;
-      map.appendChild(iframe);
-      map.classList.add("is-loaded");
-      iframe.setAttribute("tabindex", "-1");
-      iframe.focus();
-    });
   });
 
   /* ---------- Formulieren (contact, aanmelden en solliciteren) ---------- */

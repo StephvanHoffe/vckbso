@@ -42,6 +42,15 @@ Op volgorde van effect. Deze punten staan ook als TODO in de code.
 9. **Meer inhoud** die ouders zoeken, zodra het aanbod vaststaat: vakantieopvang, studiedagen, ophalen van school, welke sporten jullie doen. Een eigen pagina per onderwerp scoort beter dan één lange pagina.
 10. **Engelse pagina's** uitbreiden: veel ouders in Amsterdam zoeken in het Engels ("after-school care Amsterdam").
 
+## Extra pagina's voor zoektermen (advies, november 2026)
+
+Sporty wil beter gevonden worden op "BSO Amsterdam-Oost", "BSO Watergraafsmeer" en "sportieve BSO". Wat al is gedaan: de titels van de homepage en de locatiepagina noemen de Watergraafsmeer en Amsterdam-Oost, en de schema.org-gegevens noemen die wijken als werkgebied.
+
+- **Eén pagina per school: alleen met echte, eigen inhoud.** Bijna dezelfde pagina's waarin alleen de schoolnaam verandert, ziet Google als "doorway pages" (spam). Dat kan de hele site lager laten scoren. Begin daarom met één pagina **"Ophalen van school"**: per school een blok met hoe het ophalen werkt (wie haalt op, hoe laat, lopend of met de bakfiets, hoe lang het lopen is), eventueel een foto en een ervaring van een ouder van die school. Groeit dat per school uit tot een flinke eigen tekst, dan kan een school een eigen pagina krijgen. Nodig van Sporty: de lijst met scholen en per school deze informatie.
+- **Google Bedrijfsprofiel** heeft het meeste effect op zoekopdrachten als "BSO Watergraafsmeer" en "BSO in de buurt": aanmaken, verifiëren, foto's erbij en tevreden ouders om een review vragen.
+- **"Sportieve BSO"** past bij de pagina Alles over Sporty (visie) en Een middag bij Sporty. Een eigen pagina "Wat is een sport-BSO?" met echte informatie (wat kinderen doen, wat het oplevert, voor wie het past, ook voor kinderen die niet sportief zijn) kan helpen, zodra de teksten er zijn.
+- **Vermeldingen van anderen**: scholen, sportverenigingen op Sportpark Middenmeer en wijkwebsites van de Watergraafsmeer die naar de site linken.
+
 ## Onderhoud
 
 | Wanneer | Wat |

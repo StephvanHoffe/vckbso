@@ -23,6 +23,7 @@ const ONDERDELEN = [
     'financien' => ['financien.php', 'Financiën', 'chart', 'Inkomsten, uitgaven en bonnetjes'],
     'team' => ['medewerkers.php', 'Team', 'key', "Collega's uitnodigen en rechten geven"],
     'proefdagen' => ['proefdagen.php', 'Proefdagen', 'heart', 'Momenten voor een gratis proefdag klaarzetten en de boekingen van ouders'],
+    'interesse' => ['interesse.php', 'Op de hoogte', 'mail', 'Ouders die op de hoogte willen blijven (met het kennismakingspakket), en hun een update sturen'],
     'sollicitaties' => ['sollicitaties.php', 'Sollicitaties', 'briefcase', "Sollicitaties (cv en motivatie) van de website"],
     'verzoeken' => ['verzoeken.php', 'Privacyverzoeken', 'shield', 'Privacyverzoeken van ouders afhandelen'],
     'instellingen' => ['instellingen.php', 'Instellingen', 'gear', 'Instellingen, logboek en beveiligingsstatus'],

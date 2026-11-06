@@ -6,6 +6,7 @@
 // naam in assets/fotos/bron/ te zetten (bijv. hero.jpg). Lever foto's bij
 // voorkeur minimaal 1600px breed aan.
 // De website zelf heeft geen build-stap nodig: de uitvoer wordt meegecommit.
+// Alleen bepaalde foto's opnieuw maken: npm run fotos -- held kring
 
 import { readdir, mkdir } from "node:fs/promises";
 import { extname, basename, join } from "node:path";
@@ -17,7 +18,8 @@ const BREEDTES = [480, 800, 1200, 1600];
 const TOEGESTAAN = new Set([".jpg", ".jpeg", ".png", ".webp", ".svg"]);
 
 await mkdir(DOEL, { recursive: true });
-const bestanden = (await readdir(BRON)).filter((f) => TOEGESTAAN.has(extname(f).toLowerCase()));
+const alleen = new Set(process.argv.slice(2));
+const bestanden = (await readdir(BRON)).filter((f) => TOEGESTAAN.has(extname(f).toLowerCase()) && (!alleen.size || alleen.has(basename(f, extname(f)))));
 
 for (const bestand of bestanden) {
   const naam = basename(bestand, extname(bestand));

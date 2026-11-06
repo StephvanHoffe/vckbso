@@ -60,8 +60,10 @@ require __DIR__ . '/fotos.php';
 require __DIR__ . '/export.php';
 require __DIR__ . '/bewaarbeleid.php';
 require __DIR__ . '/sollicitaties.php';
+require __DIR__ . '/openingsdagen.php';
 require __DIR__ . '/proefdagen.php';
 require __DIR__ . '/aanvraag.php';
+require __DIR__ . '/interesse.php';
 require __DIR__ . '/layout.php';
 require __DIR__ . '/weergave.php';
 

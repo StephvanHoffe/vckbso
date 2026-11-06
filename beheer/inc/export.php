@@ -37,7 +37,7 @@ function export_kind(int $kindId, bool $volledig, ?int $aanvragerId = null): arr
     if (!$kind) {
         return [];
     }
-    $kind = ontsleutel_kolommen($kind, ['bijzonderheden', 'ophaalpersonen'], true);
+    $kind = ontsleutel_kolommen($kind, ['bijzonderheden', 'ophaalpersonen', 'team_notities'], true);
     $observaties = ontsleutel_kolommen(rijen('SELECT datum, gebied, tekst, gedeeld FROM observaties WHERE kind_id = ?' . ($volledig ? '' : ' AND gedeeld = 1') . ' ORDER BY datum', [$kindId]), ['tekst']);
     $berichten = $aanvragerId ? ontsleutel_kolommen(rijen('SELECT aangemaakt_op, soort, tekst FROM berichten WHERE kind_id = ? AND ouder_id = ? ORDER BY aangemaakt_op', [$kindId, $aanvragerId]), ['tekst']) : [];
 
@@ -55,7 +55,7 @@ function export_kind(int $kindId, bool $volledig, ?int $aanvragerId = null): arr
             'komt_naar_de_bso' => (bool) $kind['actief'],
             'aangemeld_op' => $kind['aangemaakt_op'],
             'gestopt_op' => $kind['gestopt_op'],
-        ],
+        ] + ($volledig ? ['notities_van_het_team' => $kind['team_notities']] : []),
         'verzorgers' => array_map(fn ($v) => [
             'naam' => $v['naam'],
             'relatie' => RELATIES[$v['relatie']] ?? $v['relatie'],

@@ -12,7 +12,7 @@ Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutair
 - Mobile-first en getest op 360, 768 en 1280 px breed, zonder horizontaal scrollen.
 - Lighthouse (mobiel, 22 oktober 2026, met stockfoto's): prestaties 92–93 op de homepage (met de intro), 94 op team en 96 op programma; toegankelijkheid, best practices en SEO 100.
 - Automatische toegankelijkheidstest (axe, WCAG 2.1 AA): geen overtredingen op alle pagina's.
-- Privacy: geen tracking, lettertypen lokaal, Google Maps laadt pas na een klik.
+- Privacy: geen tracking, lettertypen lokaal, en de kaart is een eigen plaatje (OpenStreetMap, `npm run kaart`) dat naar Google Maps linkt: er laadt niets van Google.
 
 ## Bekijken
 
@@ -48,7 +48,8 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `alles-over-sporty.html` met `abonnementen.html`, `vakantie-en-studiedagen.html`, `community.html` en `pauzebegeleiding.html` | Alles over Sporty (visie en droom) en de onderdelen eronder, met een eigen submenu. Op `abonnementen.html#rekentool` staat de rekentool kinderopvangtoeslag. |
 | `een-middag-bij-sporty.html`, `locaties/sportpark-middenmeer.html`, `team.html`, `contact.html` | Een middag bij Sporty, het clubhuis op Sportpark Middenmeer (met kaart na een klik), Team Sporty, en contact met de veelgestelde vragen (`contact.html#veelgestelde-vragen`) |
 | `word-sporty-coach.html` | Solliciteren als Sporty coach met cv en motivatie (pdf of Word). Het formulier gaat naar de eigen beheeromgeving (`beheer/solliciteren.php`): gratis, de bestanden worden versleuteld bewaard en het team ziet alles in de beheeromgeving bij Sollicitaties. Zonder beheeromgeving (zoals op Vercel) opent het e-mailprogramma. |
-| `proefdag.html` | Boek een gratis proefdag (alle knoppen "Boek een proefdag" komen hier uit). Ouders kiezen zelf een moment dat het team in de beheeromgeving klaarzet (Proefdagen; `js/proefdag.js` en `beheer/proefdag.php`). Zonder beheeromgeving of zonder momenten staat er een knop naar het contactformulier en het telefoonnummer. |
+| `proefdag.html` | Boek een gratis proefdag (alle knoppen "Boek een proefdag" komen hier uit). Ouders kiezen in een agenda een dag en een tijd die het team in de beheeromgeving klaarzet (Proefdagen; `js/proefdag.js` en `beheer/proefdag.php`). Zonder beheeromgeving of zonder momenten staat er een knop naar het contactformulier en het telefoonnummer. |
+| `blijf-op-de-hoogte.html` | Blijf op de hoogte en krijg een Sporty-kennismakingspakket: naam, e-mail en (niet verplicht) telefoon, met dubbele bevestiging per e-mail. Komt binnen in Mijn BSO onder "Op de hoogte" (`beheer/op-de-hoogte.php`, `beheer/interesse.php`). Link op de homepage en in de footer. |
 | `aanmelden.html` | Kom bij de club: vrijblijvend aanmelden in 7 stappen, met Henny op de voortgangsbalk (`js/aanmelden.js`, verstuurd naar `beheer/aanvraag.php`). Bereikbaar via de knop "Kom bij de club" in de header. Wat ouders invullen, onthoudt de browser tot het verstuurd is. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md#aanmelden-via-de-website). |
 | `klachtenregeling.html` | Klachtenregeling (link in de footer) |
 | `.htaccess` | Stuurt de adressen van de eerste versie van de site (`over-ons.html`, `diensten.html`, `prijzen.html`, `veelgestelde-vragen.html`, `werken-bij.html`) blijvend door naar de nieuwe pagina's (Apache); op Vercel doet `vercel.json` dat |
@@ -98,7 +99,9 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 **Gegevens van de klant**
 - [x] Adres: Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer), uit de teksten van november 2026.
-- [ ] Telefoonnummer, WhatsApp-nummer en e-mailadressen op het nieuwe domein (nu staan het oude nummer en info@sporty.nl er als tijdelijke gegevens).
+- [ ] Telefoonnummer, WhatsApp-nummer en e-mailadressen op het nieuwe domein (nu staan het oude nummer en info@sporty.nl er als tijdelijke gegevens; de WhatsApp-knoppen op Contact en in het aanmeldformulier gebruiken ook het tijdelijke nummer).
+- [ ] Wat er in het Sporty-kennismakingspakket zit en hoe ouders het krijgen (Blijf op de hoogte), en de tekst van de bevestigingsmail daarvan (`beheer/inc/interesse.php`).
+- [ ] Nieuwe hero-foto voor de homepage (Sporty stuurt die mee), en de foto's voor de nieuwe plekken `bewegen` (homepage) en `locatie-overzicht` (Locaties); zie `assets/fotos/BRONNEN.md`.
 - [ ] LRK-nummer (footer, Abonnement en kosten, veelgestelde vragen) en het GGD-inspectierapport (footer).
 - [ ] De tijden van het middagprogramma (homepage en Een middag bij Sporty; ook voor de openingstijden in de schema.org-gegevens).
 - [ ] Antwoorden op de veelgestelde vragen die nog openstaan (staan als TODO in `contact.html`).

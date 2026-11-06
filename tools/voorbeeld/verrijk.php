@@ -77,16 +77,15 @@ foreach ([
     ]);
 }
 
-// Proefdagen: een paar momenten in de komende weken, met twee (verzonnen) boekingen
-$werkdag = function (int $dagen): string {
-    $d = strtotime("+{$dagen} days");
-    while ((int) date('N', $d) > 5) {
-        $d = strtotime('+1 day', $d);
+// Proefdagen: momenten op de komende dagen dat Sporty open is (nu dinsdag en donderdag), met twee (verzonnen) boekingen
+$opendagen = [];
+for ($d = strtotime('+1 day'); count($opendagen) < 6; $d = strtotime('+1 day', $d)) {
+    if (in_array((int) date('N', $d), open_weekdagen(date('Y-m-d', $d)), true)) {
+        $opendagen[] = date('Y-m-d', $d);
     }
-    return date('Y-m-d', $d);
-};
-foreach ([[2, 3], [5, 3], [9, 3], [12, 4], [16, 3]] as [$over, $plekken]) {
-    q('INSERT INTO proefdag_momenten (datum, begin, eind, plekken, aangemaakt_op) VALUES (?, ?, ?, ?, ?)', [$werkdag($over), '15:00', '16:30', $plekken, nu()]);
+}
+foreach ($opendagen as $i => $dag) {
+    q('INSERT INTO proefdag_momenten (datum, begin, eind, plekken, aangemaakt_op) VALUES (?, ?, ?, ?, ?)', [$dag, '15:00', '16:30', $i === 3 ? 4 : 3, nu()]);
 }
 $eerste = rij('SELECT * FROM proefdag_momenten ORDER BY datum LIMIT 1');
 foreach ([['Demo Ouder', 'proefdag@demo.bsovck.nl', 'Mila', '6', 'Mila is een beetje verlegen, maar dol op tikkertje.'], ['Demo Vader', 'proefdag2@demo.bsovck.nl', 'Daan', '9', '']] as [$naam, $email, $kind, $leeftijd, $opmerking]) {
@@ -100,9 +99,23 @@ $lisa = rij("SELECT * FROM gebruikers WHERE email = 'lisa.bos@demo.bsovck.nl'");
 if ($lisa) {
     q('UPDATE gebruikers SET aanvraag = ? WHERE id = ?', [versleutel(json_encode(['voornaam' => 'Lisa', 'tussenvoegsel' => '', 'achternaam' => 'Bos', 'voorletters' => 'L.', 'geslacht' => 'vrouw', 'gevonden' => 'school', 'partner' => ['voornaam' => 'Demo', 'tussenvoegsel' => '', 'achternaam' => 'Partner', 'email' => 'partner@demo.bsovck.nl', 'telefoon' => ''], 'verstuurd_op' => nu()], JSON_UNESCAPED_UNICODE)), $lisa['id']]);
     foreach (rijen('SELECT id FROM kinderen WHERE ouder_id = ?', [$lisa['id']]) as $kind) {
-        q('UPDATE kinderen SET aanvraag = ? WHERE id = ?', [versleutel(json_encode(['voorletters' => '', 'geslacht' => 'meisje', 'startdatum' => '', 'groep_klas' => 'groep 3', 'school_plaats' => 'Amsterdam', 'abonnement' => 'sporty-52', 'dagen' => [2, 4], 'toelichting' => '', 'sportclub' => 'Voetbal bij de club om de hoek'], JSON_UNESCAPED_UNICODE)), $kind['id']]);
+        q('UPDATE kinderen SET aanvraag = ? WHERE id = ?', [versleutel(json_encode(['voorletters' => 'L.', 'geslacht' => 'meisje', 'startdatum' => '2027-01-05', 'groep_klas' => 'groep 3', 'abonnement' => 'sporty-52', 'dagen' => [2, 4], 'toelichting' => ''], JSON_UNESCAPED_UNICODE)), $kind['id']]);
     }
 }
+// Blijf op de hoogte: twee bevestigde aanmeldingen (één heeft het kennismakingspakket al) en één die nog moet bevestigen
+foreach ([['Demo Moeder', 'interesse1@demo.bsovck.nl', '06 00 00 00 01', true, true], ['Demo Vader', 'interesse2@demo.bsovck.nl', '', true, false], ['Demo Ouder', 'interesse3@demo.bsovck.nl', '', false, false]] as [$naam, $email, $telefoon, $bevestigd, $pakket]) {
+    $token = interesse_token();
+    q('INSERT INTO interesse (naam, email, telefoon, token_hash, token, bron, aangemaakt_op, bevestigd_op, pakket_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        $naam, $email, $telefoon, interesse_hash($token), versleutel($token), 'website', date('Y-m-d H:i:s', strtotime('-5 days')), $bevestigd ? date('Y-m-d H:i:s', strtotime('-5 days')) : null, $pakket ? nu() : null,
+    ]);
+}
+
+// Een verborgen notitie van het team (alleen zichtbaar voor begeleiding en beheer, niet voor ouders)
+$begeleider = rij("SELECT id FROM gebruikers WHERE email = 'begeleider@demo.bsovck.nl'");
+foreach (rijen("SELECT id FROM kinderen WHERE voornaam = 'Lieke'") as $kind) {
+    q('UPDATE kinderen SET team_notities = ?, team_notities_op = ?, team_notities_door = ? WHERE id = ?', [versleutel('Vindt drukte aan het begin van de middag lastig. Even samen een rustige plek zoeken helpt. Botst soms met een ander kind bij tikspellen: in een ander team zetten.'), nu(), $begeleider['id'] ?? null, $kind['id']]);
+}
+
 foreach ([1 => 42, 2 => 31, 3 => 29, 4 => 27, 5 => 22, 6 => 19, 7 => 17, 8 => 14] as $stap => $aantal) {
     q('INSERT INTO aanvraag_stappen (datum, stap, aantal) VALUES (?, ?, ?)', [date('Y-m-d', strtotime('-3 days')), $stap, $aantal]);
 }

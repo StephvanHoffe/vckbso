@@ -49,13 +49,11 @@ function lees_aanvraag(array $post): array
             'geboortedatum' => $tekst($k['geboortedatum'] ?? '', 10),
             'startdatum' => $tekst($k['startdatum'] ?? '', 10),
             'groep_klas' => $tekst($k['groep_klas'] ?? '', 40),
-            'school_plaats' => $tekst($k['school_plaats'] ?? '', 80),
             'school' => $tekst($k['school'] ?? '', 120),
             'abonnement' => (string) ($k['abonnement'] ?? ''),
             'dagen' => array_values(array_intersect([1, 2, 3, 4, 5], array_map('intval', (array) ($k['dagen'] ?? [])))),
             'toelichting' => $tekst($k['toelichting'] ?? '', 500),
             'allergieen' => $tekst($k['allergieen'] ?? '', 500),
-            'sportclub' => $tekst($k['sportclub'] ?? '', 120),
         ];
         $wie = $kind['voornaam'] !== '' ? $kind['voornaam'] : 'kind ' . ($i + 1);
         if ($kind['voornaam'] === '') {
@@ -64,14 +62,22 @@ function lees_aanvraag(array $post): array
         if ($kind['achternaam'] === '') {
             $fouten[$veld('achternaam')] = "Vul de achternaam van {$wie} in.";
         }
+        if ($kind['voorletters'] === '') {
+            $fouten[$veld('voorletters')] = "Vul de voorletters van {$wie} in.";
+        }
         if (!array_key_exists($kind['geslacht'], AANVRAAG_GESLACHT_KIND)) {
             $fouten[$veld('geslacht')] = "Kies jongen, meisje of anders voor {$wie}.";
         }
         if (!geldige_datum($kind['geboortedatum']) || $kind['geboortedatum'] > vandaag() || $kind['geboortedatum'] < date('Y-m-d', strtotime('-16 years'))) {
             $fouten[$veld('geboortedatum')] = "Vul een geldige geboortedatum in voor {$wie}.";
         }
-        if ($kind['startdatum'] !== '' && (!geldige_datum($kind['startdatum']) || $kind['startdatum'] < vandaag())) {
+        if ($kind['startdatum'] === '') {
+            $fouten[$veld('startdatum')] = "Kies de gewenste startdatum voor {$wie}.";
+        } elseif (!geldige_datum($kind['startdatum']) || $kind['startdatum'] < vandaag()) {
             $fouten[$veld('startdatum')] = 'Kies een startdatum vanaf vandaag.';
+        }
+        if ($kind['groep_klas'] === '') {
+            $fouten[$veld('groep_klas')] = "Vul de groep of klas van {$wie} in.";
         }
         if ($kind['school'] === '') {
             $fouten[$veld('school')] = "Vul de school van {$wie} in.";
@@ -81,6 +87,8 @@ function lees_aanvraag(array $post): array
         }
         if (!$kind['dagen']) {
             $fouten[$veld('dagen') . '[]'] = "Kies minstens één dag voor {$wie}.";
+        } elseif (array_diff($kind['dagen'], open_weekdagen())) {
+            $fouten[$veld('dagen') . '[]'] = 'Tot de zomervakantie zijn we alleen open op ' . weekdagen_tekst(open_weekdagen()) . '. Wil je een andere dag? Zet het bij de toelichting.';
         }
         $kinderen[] = $kind;
     }
@@ -200,7 +208,7 @@ function bewaar_aanvraag(array $aanvraag): int
         ]);
         $ouderId = laatste_id();
         foreach ($aanvraag['kinderen'] as $kind) {
-            $extraKind = array_intersect_key($kind, array_flip(['voorletters', 'geslacht', 'startdatum', 'groep_klas', 'school_plaats', 'abonnement', 'dagen', 'toelichting', 'sportclub']));
+            $extraKind = array_intersect_key($kind, array_flip(['voorletters', 'geslacht', 'startdatum', 'groep_klas', 'abonnement', 'dagen', 'toelichting']));
             q('INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, school, bijzonderheden, foto_toestemming, aanvraag, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?)', [
                 $ouderId, $kind['voornaam'], trim($kind['tussenvoegsel'] . ' ' . $kind['achternaam']), $kind['geboortedatum'], $kind['school'],
                 versleutel($kind['allergieen']), versleutel(json_encode($extraKind, JSON_UNESCAPED_UNICODE)), nu(),

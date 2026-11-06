@@ -138,7 +138,7 @@ $kinderen = rijen(
      WHERE ' . implode(' AND ', $waar) . ' ORDER BY k.voornaam, k.achternaam',
     $params
 );
-$kinderen = ontsleutel_kolommen($kinderen, ['bijzonderheden']);
+$kinderen = ontsleutel_kolommen($kinderen, ['bijzonderheden', 'team_notities']);
 $terug = 'kinderen.php' . (($_SERVER['QUERY_STRING'] ?? '') !== '' ? '?' . $_SERVER['QUERY_STRING'] : '');
 
 pagina_begin('Kinderen', 'kinderen.php');
@@ -172,7 +172,7 @@ pagina_kop('Kinderen', 'Alle kinderen met hun groep. Klik op een naam voor het d
   <div class="tabel">
     <table>
       <caption><?= count($kinderen) ?> <?= count($kinderen) === 1 ? 'kind' : 'kinderen' ?></caption>
-      <thead><tr><th scope="col">Naam</th><th scope="col">Leeftijd</th><th scope="col">Ouder</th><th scope="col">Groep</th><th scope="col">Let op</th></tr></thead>
+      <thead><tr><th scope="col">Naam</th><th scope="col">Leeftijd</th><th scope="col">Ouder</th><th scope="col">Groep</th><th scope="col">Let op</th><th scope="col">Verborgen notities <span class="muted">(alleen team)</span></th></tr></thead>
       <tbody>
 <?php foreach ($kinderen as $kind): ?>
         <tr>
@@ -194,6 +194,7 @@ pagina_kop('Kinderen', 'Alle kinderen met hun groep. Klik op een naam voor het d
 <?php endif; ?>
           </td>
           <td><?= $kind['bijzonderheden'] !== '' ? '<span class="let-op">' . icoon('alert') . '<span>' . e(mb_strimwidth($kind['bijzonderheden'], 0, 60, '…')) . '</span></span>' : '' ?><?= $kind['foto_toestemming'] ? '' : '<br><small class="muted">Niet op groepsfoto\'s</small>' ?></td>
+          <td><?= $kind['team_notities'] !== '' ? '<a class="team-notitie" href="kind.php?id=' . (int) $kind['id'] . '#notities">' . icoon('lock') . '<span>' . e(mb_strimwidth($kind['team_notities'], 0, 60, '…')) . '</span></a>' : '' ?></td>
         </tr>
 <?php endforeach; ?>
       </tbody>

@@ -1,6 +1,6 @@
 # Beeld: bronnen en fotolijst
 
-## Huidige stand (4 november 2026)
+## Huidige stand (6 november 2026)
 
 Alle foto's op de site zijn **tijdelijke stockfoto's van [Pexels](https://www.pexels.com/)**, gekozen bij de beschrijving van elke plek. Het zijn geen foto's van Sporty zelf. De klant levert de eigen fotografie later aan; vervang de stockfoto's dan stap voor stap (zie onderaan).
 
@@ -42,6 +42,8 @@ In de HTML staat bij elke foto `data-foto="…"` (de plek) en een opmerking "Sto
 | `team-2.jpg` | [Basketball team stacking hands together](https://www.pexels.com/photo/basketball-team-stacking-hands-together-3755440/) | Andrea Piacquadio | Nu niet gebruikt (bewaard voor later) |
 | `team-3.jpg` | [A Team Raising Their Hands and Doing a High Five](https://www.pexels.com/photo/a-team-raising-their-hands-and-doing-a-high-five-9480122/) | Monstera Production | Team (`team-sureyo`) |
 | `vragen.jpg` | [Children Raising Their Hands in a Classroom](https://www.pexels.com/photo/children-raising-their-hands-in-a-classroom-8613117/) | Yan Krukau | Nu niet gebruikt (bewaard voor later) |
+| `bewegen.jpg` | [Children Playing Soccer on Grass Field Outdoors](https://www.pexels.com/photo/children-playing-soccer-on-grass-field-outdoors-33618632/) | Jeffry Surianto | Home, brede foto onder de weetjes (`bewegen`) |
+| `sportpark.jpg` | [Top View of Soccer Field](https://www.pexels.com/photo/top-view-of-soccer-field-20559783/) (Hoogeveen, niet Sportpark Middenmeer) | Matthias Groeneveld | Locaties, algemene foto van de locatie (`locatie-overzicht`) |
 | `welkom.jpg` | [Father and Children Running in a Park](https://www.pexels.com/photo/father-and-children-running-in-a-park-4543646/) | Elina Fairytale | Welkom bij de club (`community-1`); Een middag bij Sporty (`middag-5`); Contact (`welkom`) |
 
 De bestanden in `bron/` zijn 1600 px breed. De website gebruikt de AVIF- en WebP-versies in `assets/fotos/` (480, 800, 1200 en 1600 px) die `npm run fotos` daarvan maakt.
@@ -52,7 +54,9 @@ Lever foto's liefst **minimaal 1600 px breed** aan. De website snijdt ze zelf bi
 
 | Plek (`data-foto`) | Wat moet erop staan |
 |---|---|
-| `held` (Home) | Een brede, liggende foto van de Sporty-kids in actie, buiten. De tekst staat linksonder, dus daar liefst wat rustige ruimte (gras, lucht). |
+| `held` (Home) | Een brede, liggende foto van de Sporty-kids in actie, buiten. De tekst staat linksonder, dus daar liefst wat rustige ruimte (gras, lucht). Sporty stuurt hier een nieuwe foto voor (feedback november 2026). |
+| `bewegen` (Home, onder de weetjes) | Een brede foto over de hele breedte: kinderen die buiten sporten of rennen. Wordt breed uitgesneden (21 : 9), dus liefst een liggende foto met de actie in het midden. |
+| `locatie-overzicht` (Locaties) | Een algemene foto van hoe de locatie eruitziet: het clubhuis en de sportvelden van Sportpark Middenmeer. Ook breed uitgesneden. |
 | `visie`, `club`, `proefdag` | Kinderen die samen iets doen: een kring, handen op elkaar, samen lachen. |
 | `tim-en-sureyo` (Alles over Sporty, Onze droom) | Tim en Sureyo samen. |
 | `abonnement`, `vakantie`, `pauze` | Sporten en spelen: buiten, op het schoolplein, in de vakantie. |

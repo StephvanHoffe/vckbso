@@ -52,6 +52,20 @@
   var geteld = {};
   var volleDagen = [];
 
+  // Gewenste startdatum: standaard vandaag, maar niet vóór de opening van Sporty (data-start-vanaf)
+  var startVeld = form.querySelector("[data-start-vanaf]");
+  var standaardStart = startVeld && startVeld.getAttribute("data-start-vanaf") > vandaag ? startVeld.getAttribute("data-start-vanaf") : vandaag;
+
+  // Dagen waarop Sporty nog niet open is (tot de datum in data-alle-dagen-vanaf alleen de dagen in data-dagen-open)
+  var dichteDagen = (function () {
+    var groep = form.querySelector("[data-dagen-open]");
+    if (!groep) return [];
+    var vanaf = groep.getAttribute("data-alle-dagen-vanaf");
+    if (vanaf && vandaag >= vanaf) return [];
+    var open = groep.getAttribute("data-dagen-open").split(",").map(Number);
+    return [1, 2, 3, 4, 5].filter(function (dag) { return open.indexOf(dag) === -1; });
+  })();
+
   // Sjablonen van een kind (stap 1) en van de delen per kind (stap 2 t/m 4), nog leeg
   var kindSjabloon = kinderenLijst.querySelector("[data-kind]").cloneNode(true);
   var deelSjablonen = perKind.map(function (wrap) { return wrap.querySelector("[data-kind]").cloneNode(true); });
@@ -113,14 +127,22 @@
     form.querySelectorAll("[data-kind-weg] [data-kindnaam]").forEach(function (el, i) { el.textContent = namen[i]; });
     var samen = namen.length > 1 ? namen.slice(0, -1).join(", ") + " en " + namen[namen.length - 1] : namen[0];
     form.querySelectorAll("[data-kindnamen]").forEach(function (el) { el.textContent = samen; });
+    form.querySelectorAll("[data-zit]").forEach(function (el) { el.textContent = namen.length > 1 ? "zitten" : "zit"; });
+    // De uitleg over de open dagen staat maar één keer, bij het eerste kind
+    form.querySelectorAll("[data-dagen-beperkt]").forEach(function (el, i) { el.hidden = !dichteDagen.length || i > 0; });
     kindErbij.hidden = blokken.length >= MAX_KINDEREN;
     kindMax.hidden = blokken.length < MAX_KINDEREN;
   };
 
   var pasVolleDagenToe = function (root) {
     root.querySelectorAll("[data-dag]").forEach(function (vak) {
-      var vol = volleDagen.indexOf(parseInt(vak.getAttribute("data-dag"), 10)) > -1;
-      vak.disabled = vol;
+      var dag = parseInt(vak.getAttribute("data-dag"), 10);
+      var vol = volleDagen.indexOf(dag) > -1;
+      var dicht = dichteDagen.indexOf(dag) > -1;
+      var keuze = vak.closest("label");
+      vak.disabled = vol || dicht;
+      if (dicht) vak.checked = false;
+      if (keuze) keuze.classList.toggle("choice--dicht", dicht);
       if (vol) {
         vak.checked = false;
         var label = vak.closest("label");
@@ -128,6 +150,10 @@
         if (label) label.classList.add("choice--vol");
       }
     });
+  };
+
+  var vulStandaardStart = function () {
+    form.querySelectorAll("[data-start-vanaf]").forEach(function (el) { if (!el.value) el.value = standaardStart; });
   };
 
   var zetAantal = function (aantal) {
@@ -150,6 +176,7 @@
     }
     form.querySelectorAll("[data-max-today]").forEach(function (el) { el.max = vandaag; });
     form.querySelectorAll("[data-min-today]").forEach(function (el) { el.min = vandaag; });
+    vulStandaardStart();
     werkNamenBij();
   };
 
@@ -170,6 +197,7 @@
     zetAantal(aantal - 1);
     form.querySelectorAll('[name^="kinderen["]').forEach(function (veld) { if (veld.type === "checkbox" || veld.type === "radio") veld.checked = false; else veld.value = veld.defaultValue; });
     vul(data.velden);
+    vulStandaardStart();
     werkNamenBij();
     bewaar();
   };
@@ -323,12 +351,11 @@
         ["Voorletters", w(k + "[voorletters]")],
         ["Geslacht", labelVan(k + "[geslacht]", data[k + "[geslacht]"])],
         ["Geboortedatum", datumNl(w(k + "[geboortedatum]"))],
-        ["Gewenste start", datumNl(w(k + "[startdatum]")) || "Zo snel mogelijk"],
+        ["Gewenste start", datumNl(w(k + "[startdatum]"))],
         ["Groep of klas", w(k + "[groep_klas]")],
-        ["Goed om te weten", w(k + "[allergieen]")],
-        ["Sportclub", w(k + "[sportclub]")]
+        ["Goed om te weten", w(k + "[allergieen]")]
       ] });
-      blokken.push({ titel: "School van " + kindNaam(i), stap: 1, regels: [["School", [w(k + "[school]"), w(k + "[school_plaats]")].filter(Boolean).join(", ")]] });
+      blokken.push({ titel: "School van " + kindNaam(i), stap: 1, regels: [["School", w(k + "[school]")]] });
       blokken.push({ titel: "Abonnement en dagen van " + kindNaam(i), stap: 3, regels: [
         ["Abonnement", labelVan(k + "[abonnement]", data[k + "[abonnement]"]).replace(/\s+Vaste dagen[\s\S]*$/, "")],
         ["Dagen", dagen.length ? dagen.length + (dagen.length === 1 ? " dag" : " dagen") + " per week: " + dagen.join(", ") : ""],
@@ -526,13 +553,15 @@
   voortgang.hidden = false;
   if (alles) alles.closest("[data-alles]").hidden = false;
   partnerBlok.hidden = true;
+  pasVolleDagenToe(form);
   zetAantal(1);
 
   var bewaard = opslag.lees();
   var startStap = 0;
-  if (bewaard && bewaard.velden && Object.keys(bewaard.velden).some(function (k) { var v = bewaard.velden[k]; return Array.isArray(v) ? v.length : v && v !== "Amsterdam" && v !== "sporty-52"; })) {
+  if (bewaard && bewaard.velden && Object.keys(bewaard.velden).some(function (k) { var v = bewaard.velden[k]; return Array.isArray(v) ? v.length : v && v !== standaardStart && v !== "sporty-52"; })) {
     zetAantal(bewaard.aantal || 1);
     vul(bewaard.velden);
+    vulStandaardStart();
     partnerBlok.hidden = !partnerJa();
     werkNamenBij();
     form.querySelectorAll("[data-minstens-een]").forEach(function (groep) {

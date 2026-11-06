@@ -1,7 +1,8 @@
 <?php
 /*
  * Kinddossier en kindvolgsysteem.
- * Team (binnen de eigen groepen): gegevens, aanwezigheid, observaties per ontwikkelgebied.
+ * Team (binnen de eigen groepen): gegevens, aanwezigheid, observaties per ontwikkelgebied, en verborgen
+ * notities die alleen het team ziet (nooit de ouders in Mijn BSO; wel bij een formeel inzageverzoek).
  * Met het recht klanten beheren: ook groep, verzorgers en het controleren van gezag.
  * Verzorger: inzien met het recht "dossier"; wijzigen en toestemming geven alleen
  * met gecontroleerd gezag.
@@ -10,7 +11,7 @@ require __DIR__ . '/inc/bootstrap.php';
 
 $gebruiker = vereis_login();
 $kind = kind_met_toegang(get_int('id'), 'dossier');
-$kind = ontsleutel_kolommen($kind, ['bijzonderheden', 'ophaalpersonen'], true);
+$kind = ontsleutel_kolommen($kind, ['bijzonderheden', 'ophaalpersonen', 'team_notities'], true);
 $team = is_team($gebruiker);
 if ($team) {
     vereis_recht('kinderen');
@@ -69,6 +70,17 @@ if (is_post()) {
             flash('succes', 'De gegevens zijn opgeslagen.');
             redirect($terug);
         }
+    }
+
+    // Verborgen notities: alleen het team (ook zonder het recht klanten beheren), nooit ouders
+    if ($actie === 'team_notities' && $team) {
+        $tekst = mb_substr(trim(invoer('team_notities')), 0, 4000);
+        q('UPDATE kinderen SET team_notities = ?, team_notities_op = ?, team_notities_door = ? WHERE id = ?', [
+            $tekst === '' ? '' : versleutel($tekst), nu(), (int) $gebruiker['id'], $kind['id'],
+        ]);
+        log_actie($tekst === '' ? 'Verborgen notities gewist' : 'Verborgen notities aangepast', '', null, 'wijziging', $onderwerp);
+        flash('succes', 'De verborgen notities over ' . $kind['voornaam'] . ' zijn opgeslagen. Ouders zien ze niet.');
+        redirect($terug . '#notities');
     }
 
     if ($actie === 'observatie' && $team) {
@@ -262,7 +274,24 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
       </details>
 <?php endif; ?>
     </section>
-<?php if ($team): ?>
+<?php if ($team):
+    $notitieDoor = $kind['team_notities_door'] ? rij('SELECT naam FROM gebruikers WHERE id = ?', [$kind['team_notities_door']]) : null; ?>
+    <section class="panel panel--notities" id="notities" aria-labelledby="notities-titel">
+      <div class="panel__kop"><h2 id="notities-titel"><?= icoon('lock') ?>Verborgen notities</h2><span class="muted">Alleen voor het team</span></div>
+      <p class="note"><?= icoon('info') ?><span>Ouders zien deze notities niet in Mijn BSO. Schrijf feitelijk en respectvol, alsof de ouders meelezen: vragen ze formeel inzage in hun gegevens, dan hebben ze daar wel recht op.</span></p>
+      <form class="form" method="post" action="<?= e($terug) ?>#notities">
+        <?= csrf_veld() ?>
+        <input type="hidden" name="actie" value="team_notities">
+        <div class="field">
+          <label for="team_notities">Notities over <?= e($kind['voornaam']) ?></label>
+          <textarea id="team_notities" name="team_notities" rows="5" maxlength="4000" placeholder="Bijvoorbeeld: speelt liever niet samen met ..., heeft extra begeleiding nodig bij ..."><?= e($kind['team_notities']) ?></textarea>
+<?php if ($kind['team_notities_op']): ?>
+          <p class="field__hint">Laatst aangepast <?= e(datum_nl($kind['team_notities_op'], "d MMMM y 'om' HH:mm")) ?><?= $notitieDoor ? ' door ' . e($notitieDoor['naam']) : '' ?>.</p>
+<?php endif; ?>
+        </div>
+        <div class="form__acties"><button class="btn" type="submit">Notities opslaan</button></div>
+      </form>
+    </section>
 <?= verzorgers_paneel($kind, $verzorgers, $beheerder, $terug) ?>
 <?php endif; ?>
 

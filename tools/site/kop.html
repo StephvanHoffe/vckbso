@@ -4,7 +4,19 @@
     <nav class="site-nav" id="site-nav" aria-label="Hoofdmenu">
       <ul class="site-nav__list">
         <li class="site-nav__home"><a href="{{P}}index.html"{{home}}>Home</a></li>
-        <li><a href="{{P}}alles-over-sporty.html"{{alles}}>Alles over Sporty</a></li>
+        <li class="site-nav__sub">
+          <div class="site-nav__rij">
+            <a href="{{P}}alles-over-sporty.html"{{alles}}>Alles over Sporty</a>
+            <button class="site-nav__open" type="button" aria-expanded="false" aria-controls="menu-alles"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron"></use></svg><span class="visually-hidden">Onderdelen van Alles over Sporty</span></button>
+          </div>
+          <ul class="site-nav__submenu" id="menu-alles">
+            <li><a href="{{P}}alles-over-sporty.html"{{s:alles-over-sporty.html}}>Visie en droom</a></li>
+            <li><a href="{{P}}abonnementen.html"{{s:abonnementen.html}}>Abonnement en kosten</a></li>
+            <li><a href="{{P}}vakantie-en-studiedagen.html"{{s:vakantie-en-studiedagen.html}}>Vakantie- en studiedagen</a></li>
+            <li><a href="{{P}}community.html"{{s:community.html}}>Welkom bij de club</a></li>
+            <li><a href="{{P}}pauzebegeleiding.html"{{s:pauzebegeleiding.html}}>Pauzebegeleiding voor scholen</a></li>
+          </ul>
+        </li>
         <li><a href="{{P}}een-middag-bij-sporty.html"{{middag}}>Een middag bij Sporty</a></li>
         <li><a href="{{P}}locaties/sportpark-middenmeer.html"{{locaties}}>Locaties</a></li>
         <li><a href="{{P}}team.html"{{team}}>Team</a></li>

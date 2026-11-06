@@ -48,3 +48,27 @@ test("bij elk verplicht veld staat een foutmelding, en het formulier werkt ook z
   assert.match(form, /action="beheer\/aanvraag\.php" method="post"/);
   assert.doesNotMatch(form, /<section class="aanmelden__stap"[^>]* hidden/, "zonder JavaScript staan alle stappen in beeld");
 });
+
+test("de open dagen in het formulier zijn dezelfde als in de beheeromgeving", () => {
+  const php = lees("beheer/inc/openingsdagen.php");
+  const constante = (naam) => php.match(new RegExp(`const ${naam} = ([^;]+);`))[1];
+  const groep = form.match(/<fieldset class="field keuzegroep"[^>]*data-dagen-open="([\d,]+)" data-alle-dagen-vanaf="([\d-]+)"/);
+  assert.ok(groep, "data-dagen-open en data-alle-dagen-vanaf bij de dagen");
+  assert.equal(`[${groep[1].split(",").join(", ")}]`, constante("SPORTY_EERSTE_DAGEN"));
+  assert.equal(`'${groep[2]}'`, constante("SPORTY_ALLE_DAGEN_VANAF"));
+  assert.match(form, new RegExp(`data-start-vanaf=${constante("SPORTY_OPEN_VANAF").replaceAll("'", '"')}`));
+  // Zonder JavaScript staan de dichte dagen al uit, met de uitleg erbij
+  const open = groep[1].split(",");
+  for (const dag of ["1", "2", "3", "4", "5"]) {
+    const vak = form.match(new RegExp(`<input type="checkbox" name="kinderen\\[0\\]\\[dagen\\]\\[\\]" value="${dag}"[^>]*>`))[0];
+    assert.equal(/\sdisabled/.test(vak), !open.includes(dag), `dag ${dag}`);
+  }
+  assert.match(form, /data-dagen-beperkt>Van 4 januari tot de zomervakantie zijn we open op dinsdag en donderdag/);
+});
+
+test("voorletters, startdatum en groep van het kind zijn verplicht; sportclub en plaats zijn weg", () => {
+  for (const id of ["k0-voorletters", "k0-startdatum", "k0-groep"]) assert.match(form, new RegExp(`<input id="${id}"[^>]*\\srequired`), id);
+  assert.doesNotMatch(form, /sportclub|school_plaats/);
+  assert.doesNotMatch(inc, /sportclub|school_plaats/);
+  assert.match(form, /Op welke school <span data-zit>zit<\/span> <span data-kindnamen>je kind<\/span>\? Noteer hier de school\./);
+});

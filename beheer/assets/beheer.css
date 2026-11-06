@@ -469,6 +469,34 @@ a.tegel:hover {
   margin-top: 0.15em;
 }
 
+/* Verborgen notities (alleen team): rustig grijs met een slotje, zodat duidelijk is dat ouders dit niet zien */
+.team-notitie {
+  display: inline-flex;
+  max-width: 18rem;
+  align-items: flex-start;
+  gap: 0.35em;
+  color: var(--color-text);
+  font-size: var(--step--1);
+  text-decoration: none;
+}
+
+.team-notitie:hover span {
+  text-decoration: underline;
+}
+
+.team-notitie .icon,
+.panel--notities h2 .icon {
+  flex: none;
+  margin-top: 0.15em;
+  color: var(--color-text-muted);
+}
+
+.panel--notities h2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+}
+
 /* ---------- Tabellen ---------- */
 
 .tabel {

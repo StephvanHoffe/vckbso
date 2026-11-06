@@ -8,6 +8,7 @@
     "seo": "node tools/structured-data.mjs",
     "kop-en-voet": "node tools/kop-en-voet.mjs",
     "fotos": "node tools/fotos.mjs",
+    "kaart": "node tools/kaart.mjs",
     "og-image": "node tools/og-image.mjs",
     "logo": "node tools/logo/maak-logo.mjs",
     "voorbeeld": "node tools/voorbeeld/bouw.mjs",

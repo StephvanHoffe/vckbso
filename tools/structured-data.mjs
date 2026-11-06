@@ -38,7 +38,12 @@ export const BSO = {
   telephone: "+31612345678",
   email: "info@sporty.nl",
   address: { "@type": "PostalAddress", streetAddress: "Voorlandpad 17", postalCode: "1098 TZ", addressLocality: "Amsterdam", addressCountry: "NL" },
-  areaServed: { "@type": "City", name: "Amsterdam" },
+  areaServed: [
+    { "@type": "Place", name: "Watergraafsmeer, Amsterdam" },
+    { "@type": "Place", name: "Amsterdam-Oost" },
+    { "@type": "City", name: "Amsterdam" },
+  ],
+  keywords: "BSO, buitenschoolse opvang, sportieve BSO, sport-BSO, Watergraafsmeer, Amsterdam-Oost",
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
@@ -73,6 +78,7 @@ export const PAGINAS = [
   "contact.html",
   "proefdag.html",
   "aanmelden.html",
+  "blijf-op-de-hoogte.html",
   "klachtenregeling.html",
   "privacy.html",
   "voorwaarden.html",

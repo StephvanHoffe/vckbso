@@ -524,6 +524,34 @@ function migreer(PDO $pdo): void
                 PRIMARY KEY (datum, stap)
             );
             SQL,
+
+        // Verborgen notities per kind (november 2026): alleen voor het team, nooit zichtbaar voor ouders in
+        // Mijn BSO. Versleuteld, met wie ze het laatst heeft aangepast en wanneer.
+        12 => <<<'SQL'
+            ALTER TABLE kinderen ADD COLUMN team_notities TEXT NOT NULL DEFAULT '';
+            ALTER TABLE kinderen ADD COLUMN team_notities_op TEXT;
+            ALTER TABLE kinderen ADD COLUMN team_notities_door INTEGER;
+            SQL,
+
+        // Blijf op de hoogte (november 2026): ouders met interesse, met dubbele bevestiging en een afmeldlink.
+        // token_hash om een link terug te vinden; token (versleuteld) om de afmeldlink onder elke e-mail te zetten.
+        13 => <<<'SQL'
+            CREATE TABLE interesse (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                naam TEXT NOT NULL,
+                email TEXT NOT NULL,
+                telefoon TEXT NOT NULL DEFAULT '',
+                token_hash TEXT NOT NULL UNIQUE,
+                token TEXT NOT NULL,
+                bron TEXT NOT NULL DEFAULT '',
+                aangemaakt_op TEXT NOT NULL,
+                bevestigd_op TEXT,
+                pakket_op TEXT
+            );
+            CREATE INDEX interesse_email ON interesse(email);
+            INSERT OR IGNORE INTO instellingen (sleutel, waarde) VALUES ('bewaar_interesse_maanden', '24');
+            INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) SELECT id, 'interesse' FROM gebruikers WHERE rol = 'beheerder';
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

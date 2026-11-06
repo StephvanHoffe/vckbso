@@ -29,6 +29,7 @@ export const PAGINAS = {
   "klachtenregeling.html": "",
   "privacy.html": "",
   "voorwaarden.html": "",
+  "blijf-op-de-hoogte.html": "",
   "404.html": "",
 };
 
@@ -41,6 +42,7 @@ function vul(sjabloon, pagina) {
   const actief = PAGINAS[pagina];
   return sjabloon
     .replace(/\{\{(home|alles|middag|locaties|team|coach|contact|club)\}\}/g, (_, item) => (item === actief ? (HOOFD[item] === pagina ? ' aria-current="page"' : ' aria-current="true"') : ""))
+    .replace(/\{\{s:([^}]+)\}\}/g, (_, doel) => (doel === pagina ? ' aria-current="page"' : ""))
     .replaceAll("{{P}}", prefix(pagina));
 }
 
