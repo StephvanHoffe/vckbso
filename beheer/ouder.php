@@ -154,6 +154,9 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
     <dt>Ouder</dt><dd><?= e(aanvraag_naam($extra)) ?><?= ($extra['voorletters'] ?? '') !== '' ? ' (' . e($extra['voorletters']) . ')' : '' ?><?= ($extra['geslacht'] ?? '') !== '' ? ', ' . e(mb_strtolower(AANVRAAG_GESLACHT_OUDER[$extra['geslacht']] ?? '')) : '' ?></dd>
     <dt>Partner</dt><dd><?php if (!empty($extra['partner'])): $p = $extra['partner']; ?><?= e(aanvraag_naam($p)) ?><?= ($p['email'] ?? '') !== '' ? '<br><a href="mailto:' . e($p['email']) . '">' . e($p['email']) . '</a>' : '' ?><?= ($p['telefoon'] ?? '') !== '' ? '<br><a href="tel:' . e(preg_replace('/[^0-9+]/', '', $p['telefoon'])) . '">' . e($p['telefoon']) . '</a>' : '' ?><br><span class="muted">Nodig de partner uit als verzorger in het dossier van het kind, als dat gewenst is.</span><?php else: ?>Niet opgegeven<?php endif; ?></dd>
     <dt>Gevonden via</dt><dd><?= e(AANVRAAG_GEVONDEN[$extra['gevonden'] ?? ''] ?? '-') ?></dd>
+<?php if (($extra['taal'] ?? 'nl') === 'en'): ?>
+    <dt>Taal</dt><dd>Aangemeld via de Engelse website: spreek deze ouder liever in het Engels aan.</dd>
+<?php endif; ?>
   </dl>
 <?php foreach ($kinderen as $kind): $k = aanvraag_gegevens((string) ($kind['aanvraag'] ?? '')); if (!$k) { continue; } ?>
   <h3><?= e(kindnaam($kind)) ?></h3>

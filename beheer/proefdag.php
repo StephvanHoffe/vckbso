@@ -24,14 +24,14 @@ function proefdag_antwoord(bool $alsJson, int $code, array $extra = [], array $f
         echo json_encode(['ok' => $code < 300, 'fouten' => (object) $fouten, 'melding' => $melding] + $extra, JSON_UNESCAPED_UNICODE);
         exit;
     }
-    pagina_begin($code < 300 ? 'Proefdag geboekt' : 'Proefdag niet geboekt', '', ['publiek' => true]);
+    pagina_begin($code < 300 ? t('Proefdag geboekt', 'Trial day booked') : t('Proefdag niet geboekt', 'Trial day not booked'), '', ['publiek' => true]);
     echo '<div class="auth"><div class="panel">';
     if ($code < 300) {
-        echo '<h1>Joepie, je proefdag staat!</h1>';
-        echo '<div class="melding melding--succes" role="status">' . icoon('check') . '<p>We zien je graag op <strong>' . e($extra['moment'] ?? '') . '</strong>. Je krijgt een bevestiging per e-mail.</p></div>';
+        echo '<h1>' . e(t('Joepie, je proefdag staat!', "Hooray, your trial day is booked!")) . '</h1>';
+        echo '<div class="melding melding--succes" role="status">' . icoon('check') . '<p>' . e(t('We zien je graag op ', "We look forward to seeing you on ")) . '<strong>' . e($extra['moment'] ?? '') . '</strong>. ' . e(t('Je krijgt een bevestiging per e-mail.', "You'll receive a confirmation by email.")) . '</p></div>';
     } else {
-        echo '<h1>Je proefdag is nog niet geboekt</h1>';
-        echo '<div class="melding melding--fout" role="alert">' . icoon('alert') . '<p>' . e($melding ?: 'Er ging iets niet goed:') . '</p></div>';
+        echo '<h1>' . e(t('Je proefdag is nog niet geboekt', "Your trial day isn't booked yet")) . '</h1>';
+        echo '<div class="melding melding--fout" role="alert">' . icoon('alert') . '<p>' . e($melding ?: t('Er ging iets niet goed:', 'Something went wrong:')) . '</p></div>';
         if ($fouten) {
             echo '<ul>';
             foreach ($fouten as $tekst) {
@@ -40,7 +40,7 @@ function proefdag_antwoord(bool $alsJson, int $code, array $extra = [], array $f
             echo '</ul>';
         }
     }
-    echo '<a class="btn btn--secondary" href="../proefdag.html#boeken">' . icoon('back') . 'Terug naar de proefdag</a>';
+    echo '<a class="btn btn--secondary" href="' . e(website_pagina('proefdag.html', 'trial-day.html')) . '#boeken">' . icoon('back') . e(t('Terug naar de proefdag', 'Back to the trial day')) . '</a>';
     echo '</div></div>';
     pagina_einde();
     exit;
@@ -62,14 +62,14 @@ if (!is_post()) {
         echo json_encode(['ok' => true, 'momenten' => $momenten], JSON_UNESCAPED_UNICODE);
         exit;
     }
-    redirect('../proefdag.html#boeken');
+    redirect(website_pagina('proefdag.html', 'trial-day.html') . '#boeken');
 }
 
 // Alleen vanaf onze eigen website (de browser stuurt mee waar het formulier vandaan komt)
 $herkomst = (string) ($_SERVER['HTTP_ORIGIN'] ?? '');
 $eigen = [parse_url(basis_url(), PHP_URL_HOST), parse_url('http://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST)];
 if ($herkomst !== '' && !in_array(parse_url($herkomst, PHP_URL_HOST), $eigen, true)) {
-    proefdag_antwoord($alsJson, 403, [], [], 'Je proefdag kan alleen via onze eigen website worden geboekt.');
+    proefdag_antwoord($alsJson, 403, [], [], t('Je proefdag kan alleen via onze eigen website worden geboekt.', 'You can only book a trial day via our own website.'));
 }
 
 // Verborgen veld ingevuld: een robot. Doe alsof het gelukt is, maar bewaar niets.
@@ -79,7 +79,7 @@ if (invoer('website') !== '') {
 
 // Hooguit 5 boekingen en 30 pogingen per kwartier vanaf hetzelfde adres
 if (recente_pogingen('proefdag:' . ip_adres()) >= MAX_PROEFDAGEN_PER_KWARTIER || te_veel_verzoeken('proefdag-poging:' . ip_adres(), 30)) {
-    proefdag_antwoord($alsJson, 429, [], [], 'Er zijn net al een paar proefdagen vanaf dit adres geboekt. Probeer het over een kwartier nog eens, of bel ons even.');
+    proefdag_antwoord($alsJson, 429, [], [], t('Er zijn net al een paar proefdagen vanaf dit adres geboekt. Probeer het over een kwartier nog eens, of bel ons even.', 'A few trial days were just booked from this address. Please try again in 15 minutes, or give us a call.'));
 }
 
 $waarden = [];
@@ -90,37 +90,37 @@ $momentId = (int) invoer('moment_id');
 
 $fouten = [];
 if ($momentId <= 0) {
-    $fouten['moment_id'] = 'Kies een moment voor je proefdag.';
+    $fouten['moment_id'] = t('Kies een moment voor je proefdag.', 'Choose a time for your trial day.');
 }
 if (!geldige_naam($waarden['naam'])) {
-    $fouten['naam'] = $waarden['naam'] === '' ? 'Vul je naam in.' : 'Vul je naam in (zonder links of e-mailadressen).';
+    $fouten['naam'] = $waarden['naam'] === '' ? t('Vul je naam in.', 'Fill in your name.') : t('Vul je naam in (zonder links of e-mailadressen).', 'Fill in your name (without links or email addresses).');
 }
 if (!geldig_email($waarden['email']) || mb_strlen($waarden['email']) > 200) {
-    $fouten['email'] = $waarden['email'] === '' ? 'Vul je e-mailadres in, dan sturen we je een bevestiging.' : 'Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.';
+    $fouten['email'] = $waarden['email'] === '' ? t('Vul je e-mailadres in, dan sturen we je een bevestiging.', "Fill in your email address and we'll send you a confirmation.") : t('Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.', "That doesn't look like a valid email address. Please check it, for example name@example.com.");
 }
 if (!geldig_telefoon($waarden['telefoon'])) {
-    $fouten['telefoon'] = $waarden['telefoon'] === '' ? 'Vul je telefoonnummer in, voor als er iets verandert.' : 'Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78.';
+    $fouten['telefoon'] = $waarden['telefoon'] === '' ? t('Vul je telefoonnummer in, voor als er iets verandert.', 'Fill in your phone number, in case anything changes.') : t('Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78.', 'Fill in a valid phone number, for example +31 6 12 34 56 78.');
 }
 if (!geldige_naam($waarden['kind_naam'])) {
-    $fouten['kind_naam'] = $waarden['kind_naam'] === '' ? 'Vul de naam van je kind in.' : 'Vul de naam van je kind in (zonder links of e-mailadressen).';
+    $fouten['kind_naam'] = $waarden['kind_naam'] === '' ? t('Vul de naam van je kind in.', "Fill in your child's name.") : t('Vul de naam van je kind in (zonder links of e-mailadressen).', "Fill in your child's name (without links or email addresses).");
 }
 if (!in_array($waarden['kind_leeftijd'], PROEFDAG_LEEFTIJDEN, true)) {
-    $fouten['kind_leeftijd'] = 'Kies de leeftijd van je kind.';
+    $fouten['kind_leeftijd'] = t('Kies de leeftijd van je kind.', "Choose your child's age.");
 }
 $waarden['opmerking'] = mb_substr($waarden['opmerking'], 0, 1000);
 if (invoer('toestemming') === '') {
-    $fouten['toestemming'] = 'Vink aan dat we je gegevens voor de proefdag mogen gebruiken.';
+    $fouten['toestemming'] = t('Vink aan dat we je gegevens voor de proefdag mogen gebruiken.', 'Tick the box to let us use your details for the trial day.');
 }
 // Hooguit 3 proefdagen tegelijk op één e-mailadres (bijvoorbeeld voor broertjes en zusjes)
 if (!isset($fouten['email']) && (int) waarde("SELECT COUNT(*) FROM proefdag_boekingen b JOIN proefdag_momenten m ON m.id = b.moment_id WHERE lower(b.email) = lower(?) AND b.status = 'geboekt' AND m.datum >= ?", [$waarden['email'], vandaag()]) >= 3) {
-    $fouten['email'] = 'Op dit e-mailadres staan al een paar proefdagen. Wil je iets veranderen? Bel of mail ons even.';
+    $fouten['email'] = t('Op dit e-mailadres staan al een paar proefdagen. Wil je iets veranderen? Bel of mail ons even.', 'There are already a few trial days booked with this email address. Want to change something? Just call or email us.');
 }
 if ($fouten) {
-    proefdag_antwoord($alsJson, 422, [], $fouten, count($fouten) === 1 ? 'Er is nog 1 veld niet goed ingevuld.' : 'Er zijn nog ' . count($fouten) . ' velden niet goed ingevuld.');
+    proefdag_antwoord($alsJson, 422, [], $fouten, count($fouten) === 1 ? t('Er is nog 1 veld niet goed ingevuld.', "1 field isn't filled in correctly yet.") : t('Er zijn nog ' . count($fouten) . ' velden niet goed ingevuld.', count($fouten) . " fields aren't filled in correctly yet."));
 }
 
 if (te_veel_mails_naar($waarden['email'])) {
-    proefdag_antwoord($alsJson, 429, [], [], 'We hebben net al een paar mails naar dit e-mailadres gestuurd. Probeer het over een kwartier nog eens, of bel ons even.');
+    proefdag_antwoord($alsJson, 429, [], [], t('We hebben net al een paar mails naar dit e-mailadres gestuurd. Probeer het over een kwartier nog eens, of bel ons even.', "We've just sent a few emails to this address. Please try again in 15 minutes, or give us a call."));
 }
 
 // Boeken: controle op een vrije plek en de boeking zelf in één transactie
@@ -128,14 +128,14 @@ try {
     $moment = transactie(function () use ($momentId, $waarden) {
         $moment = rij('SELECT * FROM proefdag_momenten WHERE id = ?', [$momentId]);
         if (!$moment || $moment['datum'] <= vandaag()) {
-            throw new DomainException('Dit moment kun je niet (meer) kiezen. Kies een ander moment.');
+            throw new DomainException(t('Dit moment kun je niet (meer) kiezen. Kies een ander moment.', "You can't choose this time (any more). Please choose another time."));
         }
         if (proefdag_vrij($momentId) <= 0) {
-            throw new DomainException('Dit moment is net vol geraakt. Kies een ander moment.');
+            throw new DomainException(t('Dit moment is net vol geraakt. Kies een ander moment.', 'This time has just filled up. Please choose another time.'));
         }
-        q('INSERT INTO proefdag_boekingen (moment_id, naam, email, telefoon, kind_naam, kind_leeftijd, opmerking, aangemaakt_op, verwijderen_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
+        q('INSERT INTO proefdag_boekingen (moment_id, naam, email, telefoon, kind_naam, kind_leeftijd, opmerking, taal, aangemaakt_op, verwijderen_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
             $momentId, $waarden['naam'], $waarden['email'], $waarden['telefoon'], $waarden['kind_naam'], $waarden['kind_leeftijd'],
-            $waarden['opmerking'] !== '' ? versleutel($waarden['opmerking']) : '', nu(), proefdag_verwijderdatum($moment['datum']),
+            $waarden['opmerking'] !== '' ? versleutel($waarden['opmerking']) : '', taal(), nu(), proefdag_verwijderdatum($moment['datum']),
         ]);
         return $moment;
     });
@@ -143,19 +143,20 @@ try {
     proefdag_antwoord($alsJson, 409, [], ['moment_id' => $fout->getMessage()], $fout->getMessage());
 } catch (Throwable $fout) {
     error_log('Proefdag boeken: ' . $fout->getMessage());
-    proefdag_antwoord($alsJson, 500, [], [], 'Het boeken is niet gelukt. Probeer het nog eens, of bel of mail ons.');
+    proefdag_antwoord($alsJson, 500, [], [], t('Het boeken is niet gelukt. Probeer het nog eens, of bel of mail ons.', "Booking didn't work. Please try again, or call or email us."));
 }
 $id = laatste_id();
 registreer_poging('proefdag:' . ip_adres());
 log_actie('Proefdag geboekt via de website', 'proefdag ' . $id . ' op ' . $moment['datum'], null, 'wijziging', 'proefdag:' . $id);
 
 $wanneer = proefdag_omschrijving($moment);
+$wanneerBezoeker = proefdag_omschrijving($moment, taal()); // voor de ouder in de eigen taal, voor het team Nederlands
 $adres = 'Sporty, Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer)';
 // Melding voor het team (zonder persoonsgegevens) en een bevestiging voor de ouder
 mail_team_tekst('team_proefdag', ['wanneer' => $wanneer, 'link' => app_url('proefdagen.php')]);
 // TODO: tekst van de bevestigingsmail laten controleren door Sporty (aan te passen onder Instellingen → E-mails)
 stuur_mailtekst($waarden['email'], 'proefdag_bevestiging', [
-    'voornaam' => explode(' ', $waarden['naam'])[0], 'kind' => explode(' ', $waarden['kind_naam'])[0], 'wanneer' => $wanneer, 'adres' => $adres,
+    'voornaam' => explode(' ', $waarden['naam'])[0], 'kind' => explode(' ', $waarden['kind_naam'])[0], 'wanneer' => $wanneerBezoeker, 'adres' => $adres,
 ]);
 
-proefdag_antwoord($alsJson, 200, ['moment' => $wanneer]);
+proefdag_antwoord($alsJson, 200, ['moment' => $wanneerBezoeker]);

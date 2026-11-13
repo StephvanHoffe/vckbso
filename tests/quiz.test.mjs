@@ -53,7 +53,8 @@ for (const [pagina, taal] of Object.entries(PAGINAS)) {
       // Feedback van november 2026: de link onder de knoppen in de hero gaat nu naar Een middag bij Sporty
       assert.match(html, /class="held__quiz"><a [^>]*href="een-middag-bij-sporty\.html">Bekijk hier wat we allemaal uitspoken/);
     } else {
-      assert.match(html, /class="(?:hero|held)__quiz"><a [^>]*href="#quiz"/);
+      // De Engelse homepage volgt de Nederlandse: de link gaat naar An afternoon at Sporty
+      assert.match(html, /class="held__quiz"><a [^>]*href="an-afternoon-at-sporty\.html">/);
     }
   });
 }

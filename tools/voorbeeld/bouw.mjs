@@ -216,9 +216,9 @@ if (BUNDEL) {
     .filter((p) => !/^(beheer|tools|tests|docs|content|voorbeeld|node_modules)\/|^assets\/fotos\/bron\/|^design\/(?!tokens\.css$)|^package|README|CLAUDE|briefing|vercel\.json|\.gitignore|\.htaccess|robots\.txt|sitemap\.xml|^404\.html|BRONNEN\.md|OFL\.txt/.test(p));
   for (const p of siteBestanden) {
     if (!p.endsWith(".html")) { kopieer(REPO + p, W + p); continue; }
-    const prefix = p.includes("/") ? "../" : "";
-    const html = readFileSync(REPO + p, "utf8").replace(/href="((?:\.\.\/)?)beheer\/([a-z-]+)\.php"/g, (_, terug, naam) => `href="${terug}beheer/${naam === "privacy" ? "ouder-privacy" : naam}.html"`)
-      .replace('data-proefdag="beheer/proefdag.php"', 'data-proefdag="beheer/proefdag-momenten.json"');
+    const prefix = "../".repeat(p.split("/").length - 1); // en/locations/… ligt twee mappen diep
+    const html = readFileSync(REPO + p, "utf8").replace(/href="((?:\.\.\/)*)beheer\/([a-z-]+)\.php"/g, (_, terug, naam) => `href="${terug}beheer/${naam === "privacy" ? "ouder-privacy" : naam}.html"`)
+      .replace(/data-proefdag="((?:\.\.\/)*)beheer\/proefdag\.php"/, 'data-proefdag="$1beheer/proefdag-momenten.json"');
     schrijf(W + p, injecteer(html, "website", { vb: prefix, site: prefix, overzicht: "voorbeeld.html" }));
   }
   schrijf(W + "voorbeeld.html", overzichtspagina("", ""));

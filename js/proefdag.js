@@ -30,10 +30,23 @@
     return el;
   };
 
-  var MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
-  var WEEKDAGEN = [["ma", "maandag"], ["di", "dinsdag"], ["wo", "woensdag"], ["do", "donderdag"], ["vr", "vrijdag"]];
+  // Tweetalig: op de Engelse pagina (<html lang="en">) de Engelse teksten
+  var EN = (document.documentElement.getAttribute("lang") || "").slice(0, 2) === "en";
+  var t = function (nl, en) { return EN ? en : nl; };
+  var MAANDEN = EN
+    ? ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    : ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"];
+  var WEEKDAGEN = EN
+    ? [["Mon", "Monday"], ["Tue", "Tuesday"], ["Wed", "Wednesday"], ["Thu", "Thursday"], ["Fri", "Friday"]]
+    : [["ma", "maandag"], ["di", "dinsdag"], ["wo", "woensdag"], ["do", "donderdag"], ["vr", "vrijdag"]];
   var iso = function (d) { return d.toISOString().slice(0, 10); };
   var groot = function (tekst) { return tekst.charAt(0).toUpperCase() + tekst.slice(1); };
+  // De naam van de dag: de server geeft hem in het Nederlands ("dinsdag 24 november"); in het Engels maken we hem zelf
+  var dagNaam = function (m) {
+    if (!EN) return m.dag;
+    var d = new Date(m.datum + "T00:00:00Z");
+    return WEEKDAGEN[(d.getUTCDay() + 6) % 7][1] + " " + d.getUTCDate() + " " + MAANDEN[d.getUTCMonth()];
+  };
 
   /*
    * Agenda: een maand met maandag t/m vrijdag. Alleen dagen waarop het team een moment heeft klaargezet
@@ -59,7 +72,7 @@
     var gekozen = null;
 
     dagen.forEach(function (datum) {
-      var naam = perDag[datum][0].dag;
+      var naam = dagNaam(perDag[datum][0]);
       var dag = maak("div", "momenten__dag");
       dag.hidden = true;
       dag.appendChild(maak("p", "momenten__datum", groot(naam)));
@@ -72,12 +85,12 @@
         rondje.value = String(m.id);
         rondje.required = true;
         rondje.setAttribute("data-fout", "moment-fout");
-        rondje.setAttribute("data-msg-required", "Kies een dag in de agenda en daarna een tijd.");
+        rondje.setAttribute("data-msg-required", t("Kies een dag in de agenda en daarna een tijd.", "Choose a day in the calendar and then a time."));
         rondje.setAttribute("aria-describedby", "moment-fout");
         label.appendChild(rondje);
         label.appendChild(maak("span", "visually-hidden", naam + ", "));
-        label.appendChild(maak("span", "moment__tijd", m.begin + "–" + m.eind + " uur"));
-        label.appendChild(maak("span", "moment__vrij", m.vrij === 1 ? "nog 1 plek" : "nog " + m.vrij + " plekken"));
+        label.appendChild(maak("span", "moment__tijd", m.begin + "–" + m.eind + t(" uur", "")));
+        label.appendChild(maak("span", "moment__vrij", m.vrij === 1 ? t("nog 1 plek", "1 place left") : t("nog " + m.vrij + " plekken", m.vrij + " places left")));
         tijden.appendChild(label);
       });
       dag.appendChild(tijden);
@@ -107,7 +120,7 @@
       }
       // De gekozen dag staat al boven de tijden: de aanwijzing is alleen nog voor schermlezers
       keuzeTekst.classList.add("visually-hidden");
-      keuzeTekst.textContent = groot(perDag[datum][0].dag) + " gekozen. " + (rondjes.length === 1 ? "Er is één tijd, die staat al aan." : "Kies hieronder een tijd.");
+      keuzeTekst.textContent = groot(dagNaam(perDag[datum][0])) + t(" gekozen. ", " chosen. ") + (rondjes.length === 1 ? t("Er is één tijd, die staat al aan.", "There's one time, and it's already selected.") : t("Kies hieronder een tijd.", "Choose a time below."));
     };
 
     var teken = function () {
@@ -116,11 +129,11 @@
       var kop = maak("div", "kalender__kop");
       var terug = maak("button", "kalender__pijl");
       terug.type = "button";
-      terug.innerHTML = '<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg><span class="visually-hidden">Vorige maand</span>';
+      terug.innerHTML = '<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg><span class="visually-hidden">' + t("Vorige maand", "Previous month") + '</span>';
       terug.disabled = maand === 0;
       var verder = maak("button", "kalender__pijl kalender__pijl--verder");
       verder.type = "button";
-      verder.innerHTML = '<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg><span class="visually-hidden">Volgende maand</span>';
+      verder.innerHTML = '<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg><span class="visually-hidden">' + t("Volgende maand", "Next month") + '</span>';
       verder.disabled = maand === maanden.length - 1;
       var titel = maak("p", "kalender__maand", MAANDEN[jaarMaand[1] - 1] + " " + jaarMaand[0]);
       titel.id = "kalender-maand";
@@ -163,7 +176,7 @@
               knop.setAttribute("data-datum", datum);
               knop.setAttribute("aria-pressed", String(datum === gekozen));
               var aantal = perDag[datum].length;
-              knop.setAttribute("aria-label", groot(perDag[datum][0].dag) + ", " + aantal + (aantal === 1 ? " moment" : " momenten") + " vrij");
+              knop.setAttribute("aria-label", groot(dagNaam(perDag[datum][0])) + ", " + aantal + (aantal === 1 ? t(" moment vrij", " time available") : t(" momenten vrij", " times available")));
               knop.addEventListener("click", function (event) { kies(event.currentTarget.getAttribute("data-datum")); });
               td.appendChild(knop);
             } else {
@@ -216,7 +229,7 @@
     klaar.querySelector("[data-proefdag-wanneer]").textContent = wanneer;
     form.hidden = true;
     klaar.hidden = false;
-    if (wolk) wolk.textContent = "Joepie! Ik zie je snel!";
+    if (wolk) wolk.textContent = t("Joepie! Ik zie je snel!", "Hooray! See you soon!");
     setTimeout(function () {
       klaar.focus();
     }, 0);

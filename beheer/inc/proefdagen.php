@@ -49,8 +49,12 @@ function proefdag_momenten_open(): array
 }
 
 /** Een moment voor op de website en in e-mails, bijvoorbeeld "dinsdag 10 november, 15:00–16:30 uur". */
-function proefdag_omschrijving(array $moment): string
+function proefdag_omschrijving(array $moment, string $taal = 'nl'): string
 {
+    if ($taal === 'en') {
+        // Bijvoorbeeld: Tuesday 24 November, 15:00–16:30
+        return date('l j F', strtotime($moment['datum'] . ' 12:00')) . ', ' . $moment['begin'] . '–' . $moment['eind'];
+    }
     return datum_nl($moment['datum'], 'EEEE d MMMM') . ', ' . $moment['begin'] . '–' . $moment['eind'] . ' uur';
 }
 

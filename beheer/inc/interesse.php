@@ -25,9 +25,9 @@ function interesse_hash(string $token): string
     return hash('sha256', $token);
 }
 
-function interesse_link(string $soort, string $token): string
+function interesse_link(string $soort, string $token, string $taal = 'nl'): string
 {
-    return app_url('op-de-hoogte.php?' . $soort . '=' . $token);
+    return app_url('op-de-hoogte.php?' . $soort . '=' . $token . ($taal === 'en' ? '&taal=en' : ''));
 }
 
 /** De aanmelding bij een code uit een link, of null. */
@@ -42,7 +42,7 @@ function interesse_via_token(string $token): ?array
 /** De persoonlijke afmeldlink van iemand op de lijst (voor onder elke e-mail). */
 function interesse_afmeldlink(array $rij): string
 {
-    return interesse_link('afmelden', ontsleutel((string) $rij['token']));
+    return interesse_link('afmelden', ontsleutel((string) $rij['token']), (string) ($rij['taal'] ?? 'nl'));
 }
 
 /**
@@ -59,12 +59,12 @@ function interesse_aanmelden(string $naam, string $email, string $telefoon, stri
     }
     $token = interesse_token();
     if ($bestaand) {
-        q('UPDATE interesse SET naam = ?, telefoon = ?, token_hash = ?, token = ?, aangemaakt_op = ? WHERE id = ?', [$naam, $telefoon, interesse_hash($token), versleutel($token), nu(), $bestaand['id']]);
+        q('UPDATE interesse SET naam = ?, telefoon = ?, token_hash = ?, token = ?, taal = ?, aangemaakt_op = ? WHERE id = ?', [$naam, $telefoon, interesse_hash($token), versleutel($token), taal(), nu(), $bestaand['id']]);
     } else {
-        q('INSERT INTO interesse (naam, email, telefoon, token_hash, token, bron, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?)', [$naam, $email, $telefoon, interesse_hash($token), versleutel($token), $bron, nu()]);
+        q('INSERT INTO interesse (naam, email, telefoon, token_hash, token, bron, taal, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [$naam, $email, $telefoon, interesse_hash($token), versleutel($token), $bron, taal(), nu()]);
     }
     // TODO: tekst van de bevestigingsmail laten controleren door Sporty (aan te passen onder Instellingen → E-mails), en laten weten wat er in het kennismakingspakket zit en hoe ouders het krijgen
-    stuur_mailtekst($email, 'op_de_hoogte_bevestigen', ['voornaam' => $voornaam, 'link' => interesse_link('bevestig', $token), 'dagen' => INTERESSE_ONBEVESTIGD_DAGEN]);
+    stuur_mailtekst($email, 'op_de_hoogte_bevestigen', ['voornaam' => $voornaam, 'link' => interesse_link('bevestig', $token, taal()), 'dagen' => INTERESSE_ONBEVESTIGD_DAGEN]);
 }
 
 /** Wist een aanmelding helemaal (afmelden, of door het team). */

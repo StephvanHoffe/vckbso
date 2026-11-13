@@ -24,14 +24,14 @@ function aanvraag_antwoord(bool $alsJson, int $code, array $fouten = [], string 
         echo json_encode(['ok' => $code < 300, 'fouten' => (object) $fouten, 'melding' => $melding], JSON_UNESCAPED_UNICODE);
         exit;
     }
-    pagina_begin($code < 300 ? 'Aanmelding verstuurd' : 'Aanmelding niet verstuurd', '', ['publiek' => true]);
+    pagina_begin($code < 300 ? t('Aanmelding verstuurd', 'Sign-up sent') : t('Aanmelding niet verstuurd', 'Sign-up not sent'), '', ['publiek' => true]);
     echo '<div class="auth"><div class="panel">';
     if ($code < 300) {
-        echo '<h1>Gelukt! Je aanmelding is binnen.</h1>';
-        echo '<div class="melding melding--succes" role="status">' . icoon('check') . '<p>Bedankt voor je aanmelding. We bekijken de mogelijkheden en nemen contact met je op. Je ontvangt ook een bevestiging per e-mail.</p></div>';
+        echo '<h1>' . e(t('Gelukt! Je aanmelding is binnen.', 'Done! Your sign-up is in.')) . '</h1>';
+        echo '<div class="melding melding--succes" role="status">' . icoon('check') . '<p>' . e(t('Bedankt voor je aanmelding. We bekijken de mogelijkheden en nemen contact met je op. Je ontvangt ook een bevestiging per e-mail.', "Thanks for signing up. We'll look at the options and get in touch. You'll also receive a confirmation by email.")) . '</p></div>';
     } else {
-        echo '<h1>Je aanmelding is nog niet verstuurd</h1>';
-        echo '<div class="melding melding--fout" role="alert">' . icoon('alert') . '<p>' . e($melding ?: 'Er ging iets niet goed:') . '</p></div>';
+        echo '<h1>' . e(t('Je aanmelding is nog niet verstuurd', "Your sign-up hasn't been sent yet")) . '</h1>';
+        echo '<div class="melding melding--fout" role="alert">' . icoon('alert') . '<p>' . e($melding ?: t('Er ging iets niet goed:', 'Something went wrong:')) . '</p></div>';
         if ($fouten) {
             echo '<ul>';
             foreach ($fouten as $tekst) {
@@ -40,7 +40,7 @@ function aanvraag_antwoord(bool $alsJson, int $code, array $fouten = [], string 
             echo '</ul>';
         }
     }
-    echo '<a class="btn btn--secondary" href="../aanmelden.html">' . icoon('back') . 'Terug naar het aanmeldformulier</a>';
+    echo '<a class="btn btn--secondary" href="' . e(website_pagina('aanmelden.html', 'join-the-club.html')) . '">' . icoon('back') . e(t('Terug naar het aanmeldformulier', 'Back to the sign-up form')) . '</a>';
     echo '</div></div>';
     pagina_einde();
     exit;
@@ -53,14 +53,14 @@ if (!is_post()) {
         echo json_encode(['ok' => true, 'volle_dagen' => array_map('intval', volle_dagen())]);
         exit;
     }
-    redirect('../aanmelden.html');
+    redirect(website_pagina('aanmelden.html', 'join-the-club.html'));
 }
 
 // Alleen vanaf onze eigen website
 $herkomst = (string) ($_SERVER['HTTP_ORIGIN'] ?? '');
 $eigen = [parse_url(basis_url(), PHP_URL_HOST), parse_url('http://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST)];
 if ($herkomst !== '' && !in_array(parse_url($herkomst, PHP_URL_HOST), $eigen, true)) {
-    aanvraag_antwoord($alsJson, 403, [], 'Je aanmelding kan alleen via onze eigen website worden verstuurd.');
+    aanvraag_antwoord($alsJson, 403, [], t('Je aanmelding kan alleen via onze eigen website worden verstuurd.', 'You can only send your sign-up via our own website.'));
 }
 
 // Anonieme telling per stap (hooguit 60 per kwartier per adres, zodat niemand de cijfers kan opblazen)
@@ -77,12 +77,12 @@ if (invoer('website') !== '') {
     aanvraag_antwoord($alsJson, 200);
 }
 if (te_veel_verzoeken('a:' . ip_adres(), 10)) {
-    aanvraag_antwoord($alsJson, 429, [], 'Er zijn net erg veel aanmeldingen verstuurd vanaf dit netwerk. Probeer het over een kwartier opnieuw, of bel ons even.');
+    aanvraag_antwoord($alsJson, 429, [], t('Er zijn net erg veel aanmeldingen verstuurd vanaf dit netwerk. Probeer het over een kwartier opnieuw, of bel ons even.', 'A lot of sign-ups were just sent from this network. Please try again in 15 minutes, or give us a call.'));
 }
 
 [$aanvraag, $fouten] = lees_aanvraag($_POST);
 if ($fouten) {
-    aanvraag_antwoord($alsJson, 422, $fouten, count($fouten) === 1 ? 'Er is nog 1 veld niet goed ingevuld.' : 'Er zijn nog ' . count($fouten) . ' velden niet goed ingevuld.');
+    aanvraag_antwoord($alsJson, 422, $fouten, count($fouten) === 1 ? t('Er is nog 1 veld niet goed ingevuld.', "1 field isn't filled in correctly yet.") : t('Er zijn nog ' . count($fouten) . ' velden niet goed ingevuld.', count($fouten) . " fields aren't filled in correctly yet."));
 }
 
 // Hooguit 3 aanmeldingen per kwartier naar hetzelfde e-mailadres (geen mailbom via ons formulier)
@@ -104,7 +104,7 @@ try {
     $ouderId = bewaar_aanvraag($aanvraag);
 } catch (Throwable $fout) {
     error_log('Aanvraag opslaan: ' . $fout->getMessage());
-    aanvraag_antwoord($alsJson, 500, [], 'Het versturen is niet gelukt. Probeer het nog eens, of bel of mail ons.');
+    aanvraag_antwoord($alsJson, 500, [], t('Het versturen is niet gelukt. Probeer het nog eens, of bel of mail ons.', "Sending didn't work. Please try again, or call or email us."));
 }
 tel_aanvraagstap(8);
 $aantal = count($aanvraag['kinderen']);
@@ -116,7 +116,7 @@ $namen = array_map(fn ($k) => $k['voornaam'], $aanvraag['kinderen']);
 // TODO: tekst van de bevestigingsmail volgt van Sporty (nu een voorlopige tekst). Sporty past hem zelf aan onder Instellingen → E-mails.
 stuur_mailtekst($aanvraag['ouder']['email'], 'aanmelding_ontvangen', [
     'voornaam' => $aanvraag['ouder']['voornaam'],
-    'kinderen' => count($namen) > 1 ? implode(', ', array_slice($namen, 0, -1)) . ' en ' . end($namen) : $namen[0],
+    'kinderen' => count($namen) > 1 ? implode(', ', array_slice($namen, 0, -1)) . t(' en ', ' and ') . end($namen) : $namen[0],
 ]);
 
 aanvraag_antwoord($alsJson, 200);

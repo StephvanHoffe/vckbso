@@ -203,6 +203,35 @@ function uren_nl(float $uren): string
     return rtrim(rtrim(number_format($uren, 2, ',', ''), '0'), ',');
 }
 
+/* ---------- Taal van de bezoeker ---------- */
+
+/**
+ * 'en' als een openbaar formulier van de Engelse website komt (verborgen veld taal=en, of ?taal=en in een
+ * link uit een Engelse e-mail), anders 'nl'. Mijn BSO zelf is Nederlands; dit geldt alleen voor de
+ * antwoorden, foutmeldingen en e-mails aan bezoekers van de Engelse website.
+ */
+function taal(?string $zet = null): string
+{
+    static $vast = null;
+    // Vastzetten, bijvoorbeeld op de taal van een aanmelding, of per ontvanger bij een update ('' wist het weer)
+    if ($zet !== null) {
+        $vast = in_array($zet, ['nl', 'en'], true) ? $zet : null;
+    }
+    return $vast ?? ((($_POST['taal'] ?? $_GET['taal'] ?? '') === 'en') ? 'en' : 'nl');
+}
+
+/** De Nederlandse of de Engelse tekst, in de taal van de bezoeker. */
+function t(string $nl, string $en): string
+{
+    return taal() === 'en' ? $en : $nl;
+}
+
+/** Het adres van een pagina van de website, in de taal van de bezoeker (Engels: zie tools/site/talen.mjs). */
+function website_pagina(string $nl, string $en): string
+{
+    return taal() === 'en' ? '../en/' . $en : '../' . $nl;
+}
+
 /* ---------- Invoer controleren ---------- */
 
 function geldig_email(string $email): bool

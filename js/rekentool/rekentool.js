@@ -11,11 +11,24 @@
   const basis = document.querySelector("[data-rekentool]");
   if (!basis || !R) return;
 
+  // Tweetalig: op de Engelse pagina (<html lang="en">) de Engelse teksten
+  const EN = /^en/.test(document.documentElement.getAttribute("lang") || "");
+  const t = (nl, en) => (EN ? en : nl);
   const MAX_KINDEREN = 5;
   const PROEFBEREKENING = "https://www.belastingdienst.nl/wps/wcm/connect/nl/toeslagen/content/hulpmiddel-proefberekening-toeslagen";
-  const DAGNAMEN = { ma: "Maandag", di: "Dinsdag", wo: "Woensdag", do: "Donderdag", vr: "Vrijdag" };
-  const SOORTNAMEN = { bso: "Buitenschoolse opvang", dagopvang: "Dagopvang (kinderdagverblijf)", gastouder: "Gastouderopvang" };
-  const SOORTKORT = { bso: "bso", dagopvang: "dagopvang", gastouder: "gastouderopvang" };
+  const DAGNAMEN = EN
+    ? { ma: "Monday", di: "Tuesday", wo: "Wednesday", do: "Thursday", vr: "Friday" }
+    : { ma: "Maandag", di: "Dinsdag", wo: "Woensdag", do: "Donderdag", vr: "Vrijdag" };
+  const SOORTNAMEN = EN
+    ? { bso: "After-school care (BSO)", dagopvang: "Day care (kinderdagverblijf)", gastouder: "Childminder (gastouderopvang)" }
+    : { bso: "Buitenschoolse opvang", dagopvang: "Dagopvang (kinderdagverblijf)", gastouder: "Gastouderopvang" };
+  const SOORTKORT = EN
+    ? { bso: "after-school care", dagopvang: "day care", gastouder: "childminders" }
+    : { bso: "bso", dagopvang: "dagopvang", gastouder: "gastouderopvang" };
+  const naamVan = (vorm) => (EN && vorm.naamEngels) || vorm.naam;
+  const rangtel = (n) => (EN ? n + (n === 1 ? "st" : n === 2 ? "nd" : n === 3 ? "rd" : "th") : n + "e");
+  // Bedragen zoals mensen ze typen: in het Engels 55,000 en 9.50; de berekening leest de Nederlandse notatie
+  const invoerTekst = (tekst) => (EN ? tekst.replace(/[,\s]/g, "").replace(/\./g, ",") : tekst);
 
   // Het jaar van de tabel: uit de instellingen, anders het nieuwste dat er is
   const beschikbaar = Object.keys(jaren).map(Number).sort((a, b) => b - a);
@@ -64,9 +77,9 @@
     if (vormen.length) {
       const vck = document.createElement("optgroup");
       vck.label = "Sporty";
-      vormen.forEach((vorm, i) => vck.append(optie("vck:" + i, vorm.naam)));
+      vormen.forEach((vorm, i) => vck.append(optie("vck:" + i, naamVan(vorm))));
       const elders = document.createElement("optgroup");
-      elders.label = "Andere opvang (bijvoorbeeld voor een broertje of zusje)";
+      elders.label = t("Andere opvang (bijvoorbeeld voor een broertje of zusje)", "Other childcare (for example for a brother or sister)");
       R.SOORTEN.forEach((soort) => elders.append(optie("eigen:" + soort, SOORTNAMEN[soort])));
       select.append(vck, elders);
     } else {
@@ -86,20 +99,20 @@
       const input = document.createElement("input");
       input.type = "checkbox";
       input.value = dag;
-      const uren = school > 0 ? R.honderdsten(school) + " uur" : R.honderdsten(vakantie) + " uur in de vakantie";
+      const uren = school > 0 ? R.honderdsten(school) + t(" uur", " hours") : R.honderdsten(vakantie) + t(" uur in de vakantie", " hours in the holidays");
       label.append(input, document.createTextNode(DAGNAMEN[dag]));
       if (!vast) label.append(" ", Object.assign(document.createElement("span"), { className: "choice__extra", textContent: "(" + uren + ")" }));
       houder.append(label);
     });
     const uitleg = kindEl.querySelector("[data-rt-dagen-uitleg]");
     if (vast) {
-      uitleg.textContent = "Per vaste dag per week gemiddeld " + R.honderdsten(R.leesUren(vorm.urenPerMaandPerDag)) + " uur per maand, het hele jaar door. Uurtarief " + R.euro(R.leesCenten(vorm.uurtarief)) + ".";
+      uitleg.textContent = t("Per vaste dag per week gemiddeld ", "For each fixed day a week, on average ") + R.honderdsten(R.leesUren(vorm.urenPerMaandPerDag)) + t(" uur per maand, het hele jaar door. Uurtarief ", " hours a month, all year round. Hourly rate ") + R.euro(R.leesCenten(vorm.uurtarief)) + ".";
       return;
     }
     const delen = [];
-    if (vorm.schoolweken) delen.push(vorm.schoolweken + " schoolweken");
-    if (vorm.vakantieweken) delen.push(vorm.vakantieweken + " vakantieweken van " + R.honderdsten(vakantie) + " uur per dag");
-    uitleg.textContent = "Per jaar: " + delen.join(" en ") + ". Uurtarief " + R.euro(R.leesCenten(vorm.uurtarief)) + ".";
+    if (vorm.schoolweken) delen.push(vorm.schoolweken + t(" schoolweken", " school weeks"));
+    if (vorm.vakantieweken) delen.push(vorm.vakantieweken + t(" vakantieweken van ", " holiday weeks of ") + R.honderdsten(vakantie) + t(" uur per dag", " hours a day"));
+    uitleg.textContent = t("Per jaar: ", "Per year: ") + delen.join(t(" en ", " and ")) + t(". Uurtarief ", ". Hourly rate ") + R.euro(R.leesCenten(vorm.uurtarief)) + ".";
   }
 
   function wisselOpvang(kindEl) {
@@ -113,10 +126,10 @@
   function nummerKinderen() {
     const kinderen = lijst.querySelectorAll("[data-rt-kind]");
     kinderen.forEach((kindEl, i) => {
-      kindEl.querySelector("[data-rt-kind-titel]").textContent = "Kind " + (i + 1);
+      kindEl.querySelector("[data-rt-kind-titel]").textContent = t("Kind ", "Child ") + (i + 1);
       const verwijder = kindEl.querySelector("[data-rt-verwijder]");
       verwijder.hidden = kinderen.length === 1;
-      verwijder.querySelector("[data-rt-verwijder-wie]").textContent = "kind " + (i + 1);
+      verwijder.querySelector("[data-rt-verwijder-wie]").textContent = t("kind ", "child ") + (i + 1);
     });
     knopToevoegen.hidden = kinderen.length >= MAX_KINDEREN;
   }
@@ -163,34 +176,34 @@
   function leesInvoer() {
     const ontbreekt = [];
     const inkomenVeld = form.querySelector("#rt-inkomen");
-    const inkomen = R.leesInkomen(inkomenVeld.value);
-    mogelijkeFout(inkomenVeld, form.querySelector("#rt-inkomen-fout"), inkomen !== null, "Vul een bedrag in hele euro's in, bijvoorbeeld 55.000.");
-    if (inkomen === null) ontbreekt.push("jullie inkomen");
+    const inkomen = R.leesInkomen(invoerTekst(inkomenVeld.value));
+    mogelijkeFout(inkomenVeld, form.querySelector("#rt-inkomen-fout"), inkomen !== null, t("Vul een bedrag in hele euro's in, bijvoorbeeld 55.000.", "Enter an amount in whole euros, for example 55,000."));
+    if (inkomen === null) ontbreekt.push(t("jullie inkomen", "your income"));
 
     const kinderen = [];
     lijst.querySelectorAll("[data-rt-kind]").forEach((kindEl, i) => {
-      const naam = "kind " + (i + 1);
+      const naam = t("kind ", "child ") + (i + 1);
       const waarde = kindEl.querySelector("[data-rt-opvang]").value;
       if (waarde.startsWith("vck:")) {
         const vorm = vormen[Number(waarde.slice(4))];
         const dagen = Array.from(kindEl.querySelectorAll("[data-rt-dagen] input:checked"), (el) => el.value);
         const uren = dagen.length ? R.urenPerMaand(vorm, dagen) : null;
-        kindEl.querySelector("[data-rt-uren-uitkomst]").textContent = dagen.length ? "Samen " + R.honderdsten(uren) + " uur per maand." : "";
-        if (!dagen.length) ontbreekt.push("de dagen van " + naam);
-        else kinderen.push({ naam, omschrijving: vorm.naam, soort: vorm.soort, uurtarief: R.leesCenten(vorm.uurtarief), uren });
+        kindEl.querySelector("[data-rt-uren-uitkomst]").textContent = dagen.length ? t("Samen ", "Together ") + R.honderdsten(uren) + t(" uur per maand.", " hours a month.") : "";
+        if (!dagen.length) ontbreekt.push(t("de dagen van ", "the days for ") + naam);
+        else kinderen.push({ naam, omschrijving: naamVan(vorm), soort: vorm.soort, uurtarief: R.leesCenten(vorm.uurtarief), uren });
       } else {
         const soort = waarde.slice(6);
         const prijsVeld = kindEl.querySelector("[data-rt-uurprijs]");
         const urenVeld = kindEl.querySelector("[data-rt-uren]");
-        const prijs = R.leesCenten(prijsVeld.value);
-        const uren = R.leesUren(urenVeld.value);
+        const prijs = R.leesCenten(invoerTekst(prijsVeld.value));
+        const uren = R.leesUren(invoerTekst(urenVeld.value));
         const prijsGoed = prijs !== null && prijs > 0 && prijs <= 10000;
         const urenGoed = uren !== null && uren > 0 && uren <= 74400;
-        mogelijkeFout(prijsVeld, kindEl.querySelector("[data-rt-uurprijs-fout]"), prijsGoed, "Vul de uurprijs in euro in, bijvoorbeeld 9,50.");
-        mogelijkeFout(urenVeld, kindEl.querySelector("[data-rt-uren-fout]"), urenGoed, "Vul het aantal uren per maand in, bijvoorbeeld 45 (hoogstens 744).");
+        mogelijkeFout(prijsVeld, kindEl.querySelector("[data-rt-uurprijs-fout]"), prijsGoed, t("Vul de uurprijs in euro in, bijvoorbeeld 9,50.", "Enter the hourly rate in euros, for example 9.50."));
+        mogelijkeFout(urenVeld, kindEl.querySelector("[data-rt-uren-fout]"), urenGoed, t("Vul het aantal uren per maand in, bijvoorbeeld 45 (hoogstens 744).", "Enter the number of hours a month, for example 45 (744 at most)."));
         kindEl.querySelector("[data-rt-uren-uitkomst]").textContent = "";
-        if (!prijsGoed) ontbreekt.push("de uurprijs van " + naam);
-        if (!urenGoed) ontbreekt.push("de uren van " + naam);
+        if (!prijsGoed) ontbreekt.push(t("de uurprijs van ", "the hourly rate for ") + naam);
+        if (!urenGoed) ontbreekt.push(t("de uren van ", "the hours for ") + naam);
         if (prijsGoed && urenGoed) kinderen.push({ naam, omschrijving: SOORTNAMEN[soort], soort, uurtarief: prijs, uren });
       }
     });
@@ -208,17 +221,17 @@
   }
 
   function opsomming(delen) {
-    return delen.length < 2 ? delen.join("") : delen.slice(0, -1).join(", ") + " en " + delen[delen.length - 1];
+    return delen.length < 2 ? delen.join("") : delen.slice(0, -1).join(", ") + t(" en ", " and ") + delen[delen.length - 1];
   }
 
   function toonLeeg(ontbreekt) {
-    veld("netto").textContent = "€ –";
+    veld("netto").textContent = t("€ –", "€–");
     veld("kosten").textContent = "–";
     veld("toeslag").textContent = "–";
     veld("perkind").textContent = "";
     veld("stappen").textContent = "";
     veld("uitleg").hidden = true;
-    zetStatus("Vul " + opsomming(ontbreekt) + " in om te rekenen.");
+    zetStatus(t("Vul " + opsomming(ontbreekt) + " in om te rekenen.", "Fill in " + opsomming(ontbreekt) + " to calculate."));
   }
 
   function toonUitkomst(invoer, r) {
@@ -226,8 +239,10 @@
     veld("kosten").textContent = R.euro(r.totaalKosten);
     veld("toeslag").textContent = r.werkt ? "− " + R.euro(r.totaalToeslag) : R.euro(0);
     zetStatus(r.werkt
-      ? "Je betaalt ongeveer " + R.euro(r.totaalNetto) + " per maand. De kinderopvangtoeslag is ongeveer " + R.euro(r.totaalToeslag) + " per maand."
-      : "Zonder werk, studie of traject krijg je meestal geen kinderopvangtoeslag. Je betaalt dan " + R.euro(r.totaalKosten) + " per maand.");
+      ? t("Je betaalt ongeveer " + R.euro(r.totaalNetto) + " per maand. De kinderopvangtoeslag is ongeveer " + R.euro(r.totaalToeslag) + " per maand.",
+        "You pay about " + R.euro(r.totaalNetto) + " a month. The childcare benefit is about " + R.euro(r.totaalToeslag) + " a month.")
+      : t("Zonder werk, studie of traject krijg je meestal geen kinderopvangtoeslag. Je betaalt dan " + R.euro(r.totaalKosten) + " per maand.",
+        "Without work, study or a training programme you usually don't get childcare benefit. You then pay " + R.euro(r.totaalKosten) + " a month."));
 
     // Per kind
     const perKind = veld("perkind");
@@ -236,9 +251,9 @@
       r.kinderen.forEach((k, i) => {
         const blok = maak("div", "", "rekentool__kind-uitkomst");
         const kop = maak("p", "", "rekentool__kind-kop");
-        kop.append(maak("strong", "Kind " + (i + 1)), document.createTextNode(" · " + invoer.kinderen[i].omschrijving + (r.werkt ? " · " + k.positie + "e kind" : "")));
+        kop.append(maak("strong", t("Kind ", "Child ") + (i + 1)), document.createTextNode(" · " + invoer.kinderen[i].omschrijving + (r.werkt ? " · " + rangtel(k.positie) + t(" kind", " child") : "")));
         const dl = maak("dl", "", "rekentool__som rekentool__som--klein");
-        [["Kosten", R.euro(k.kosten)], ["Toeslag", (r.werkt ? "− " : "") + R.euro(k.toeslag)], ["Je betaalt", R.euro(k.nettokosten)]].forEach(([dt, dd]) => {
+        [[t("Kosten", "Costs"), R.euro(k.kosten)], [t("Toeslag", "Benefit"), (r.werkt ? "− " : "") + R.euro(k.toeslag)], [t("Je betaalt", "You pay"), R.euro(k.nettokosten)]].forEach(([dt, dd]) => {
           const rij = maak("div");
           rij.append(maak("dt", dt), maak("dd", dd));
           dl.append(rij);
@@ -252,45 +267,53 @@
     const stappen = veld("stappen");
     stappen.textContent = "";
     veld("uitleg").hidden = false;
-    const tot = r.rij.tot === null ? "en hoger" : "tot en met " + R.euroHeel(r.rij.tot);
-    stappen.append(maak("p", "Jullie inkomen van " + R.euroHeel(r.inkomen) + " valt in de schijf van " + R.euroHeel(r.rij.van) + " " + tot + ". Daarbij hoort " + R.procent(r.rij.eerste) + " voor het 1e kind en " + R.procent(r.rij.volgend) + " voor elk volgend kind."));
+    const tot = r.rij.tot === null ? t("en hoger", "and up") : t("tot en met ", "to ") + R.euroHeel(r.rij.tot);
+    stappen.append(maak("p", EN
+      ? "Your income of " + R.euroHeel(r.inkomen) + " falls in the bracket from " + R.euroHeel(r.rij.van) + " " + tot + ". That comes with " + R.procent(r.rij.eerste) + " for the 1st child and " + R.procent(r.rij.volgend) + " for every next child."
+      : "Jullie inkomen van " + R.euroHeel(r.inkomen) + " valt in de schijf van " + R.euroHeel(r.rij.van) + " " + tot + ". Daarbij hoort " + R.procent(r.rij.eerste) + " voor het 1e kind en " + R.procent(r.rij.volgend) + " voor elk volgend kind."));
     const volgorde = r.kinderen.slice().sort((a, b) => a.positie - b.positie);
     volgorde.forEach((k) => {
       const i = k.index;
       const blok = maak("div", "", "rekentool__stap");
-      blok.append(maak("h4", "Kind " + (i + 1) + (r.kinderen.length > 1 ? " (" + k.positie + "e kind)" : "")));
+      blok.append(maak("h4", t("Kind ", "Child ") + (i + 1) + (r.kinderen.length > 1 ? " (" + rangtel(k.positie) + t(" kind)", " child)") : "")));
       const ol = maak("ol");
-      const prijsTekst = k.uurtarief > k.maxUurprijs
-        ? "De uurprijs is " + R.euro(k.uurtarief) + ". Dat is meer dan het maximum voor " + SOORTKORT[k.soort] + ", dus de toeslag rekent met " + R.euro(k.uurprijs) + " per uur."
-        : "De uurprijs is " + R.euro(k.uurtarief) + ". Dat is niet meer dan het maximum voor " + SOORTKORT[k.soort] + " (" + R.euro(k.maxUurprijs) + "), dus de toeslag rekent met " + R.euro(k.uurprijs) + " per uur.";
+      const prijsTekst = EN
+        ? (k.uurtarief > k.maxUurprijs
+          ? "The hourly rate is " + R.euro(k.uurtarief) + ". That's more than the maximum for " + SOORTKORT[k.soort] + ", so the benefit is calculated with " + R.euro(k.uurprijs) + " an hour."
+          : "The hourly rate is " + R.euro(k.uurtarief) + ". That's not more than the maximum for " + SOORTKORT[k.soort] + " (" + R.euro(k.maxUurprijs) + "), so the benefit is calculated with " + R.euro(k.uurprijs) + " an hour.")
+        : (k.uurtarief > k.maxUurprijs
+          ? "De uurprijs is " + R.euro(k.uurtarief) + ". Dat is meer dan het maximum voor " + SOORTKORT[k.soort] + ", dus de toeslag rekent met " + R.euro(k.uurprijs) + " per uur."
+          : "De uurprijs is " + R.euro(k.uurtarief) + ". Dat is niet meer dan het maximum voor " + SOORTKORT[k.soort] + " (" + R.euro(k.maxUurprijs) + "), dus de toeslag rekent met " + R.euro(k.uurprijs) + " per uur.");
       const urenTekst = k.uren > k.vergoedeUren
-        ? R.honderdsten(k.uren) + " uur per maand. Toeslag krijg je voor maximaal " + R.honderdsten(k.vergoedeUren) + " uur."
-        : R.honderdsten(k.uren) + " uur per maand.";
+        ? R.honderdsten(k.uren) + t(" uur per maand. Toeslag krijg je voor maximaal ", " hours a month. You get benefit for at most ") + R.honderdsten(k.vergoedeUren) + t(" uur.", " hours.")
+        : R.honderdsten(k.uren) + t(" uur per maand.", " hours a month.");
       ol.append(
         maak("li", prijsTekst),
         maak("li", urenTekst),
-        maak("li", "Opvangkosten voor de toeslag: " + R.honderdsten(k.vergoedeUren) + " × " + R.euro(k.uurprijs) + " = " + R.euro(k.opvangkosten) + "."),
-        maak("li", r.werkt ? "Toeslag: " + R.procent(k.percentage) + " van " + R.euro(k.opvangkosten) + " = " + R.euro(k.toeslag) + "." : "Geen toeslag, omdat je hebt aangegeven dat je niet werkt."),
-        maak("li", "Wat de opvang rekent: " + R.honderdsten(k.uren) + " × " + R.euro(k.uurtarief) + " = " + R.euro(k.kosten) + ". Je betaalt zelf " + R.euro(k.nettokosten) + ".")
+        maak("li", t("Opvangkosten voor de toeslag: ", "Childcare costs for the benefit: ") + R.honderdsten(k.vergoedeUren) + " × " + R.euro(k.uurprijs) + " = " + R.euro(k.opvangkosten) + "."),
+        maak("li", r.werkt ? t("Toeslag: ", "Benefit: ") + R.procent(k.percentage) + t(" van ", " of ") + R.euro(k.opvangkosten) + " = " + R.euro(k.toeslag) + "." : t("Geen toeslag, omdat je hebt aangegeven dat je niet werkt.", "No benefit, because you said you don't work.")),
+        maak("li", t("Wat de opvang rekent: ", "What the childcare charges: ") + R.honderdsten(k.uren) + " × " + R.euro(k.uurtarief) + " = " + R.euro(k.kosten) + t(". Je betaalt zelf ", ". You pay ") + R.euro(k.nettokosten) + ".")
       );
       blok.append(ol);
       stappen.append(blok);
     });
     if (r.werkt) {
-      stappen.append(maak("p", "Totaal toeslag: " + R.euro(r.totaalToeslag) + " per maand. De Belastingdienst betaalt hele euro's uit, naar beneden afgerond: " + R.euroHeel(r.totaalToeslagUitbetaald / 100) + " per maand."));
+      stappen.append(maak("p", EN
+        ? "Total benefit: " + R.euro(r.totaalToeslag) + " a month. The Dutch Tax Administration (Belastingdienst) pays out whole euros, rounded down: " + R.euroHeel(r.totaalToeslagUitbetaald / 100) + " a month."
+        : "Totaal toeslag: " + R.euro(r.totaalToeslag) + " per maand. De Belastingdienst betaalt hele euro's uit, naar beneden afgerond: " + R.euroHeel(r.totaalToeslagUitbetaald / 100) + " per maand."));
     }
   }
 
   function reken() {
     const invoer = leesInvoer();
     if (invoer.ontbreekt.length || !invoer.kinderen.length) {
-      toonLeeg(invoer.ontbreekt.length ? invoer.ontbreekt : ["de gegevens van je kind"]);
+      toonLeeg(invoer.ontbreekt.length ? invoer.ontbreekt : [t("de gegevens van je kind", "your child's details")]);
       return;
     }
     try {
       toonUitkomst(invoer, R.bereken({ inkomen: invoer.inkomen, werkt: invoer.werkt, kinderen: invoer.kinderen }, jaar));
     } catch (fout) {
-      toonLeeg(["alle velden"]);
+      toonLeeg([t("alle velden", "all fields")]);
       if (window.console) console.error(fout);
     }
   }

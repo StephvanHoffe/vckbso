@@ -38,13 +38,19 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
         $ongelezen = is_team($gebruiker) ? ongelezen_voor_team() : ongelezen_voor_ouder((int) $gebruiker['id']);
     }
     $omgeving = $gebruiker && is_ouder($gebruiker) ? 'Mijn BSO' : 'Beheer';
+    // Openbare antwoordpagina's van formulieren op de Engelse website: in het Engels
+    $en = !$gebruiker && taal() === 'en';
+    $website = $en ? '../en/index.html' : '../index.html';
+    if ($en) {
+        $omgeving = 'Sporty';
+    }
     ?>
 <!doctype html>
-<html lang="nl">
+<html lang="<?= $en ? 'en' : 'nl' ?>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title><?= e($titel) ?> · <?= e($omgeving) ?> · Sporty</title>
+<title><?= e($titel) ?> · <?= $en ? 'Sporty' : e($omgeving) . ' · Sporty' ?></title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#fc6200">
 <link rel="icon" href="../favicon.ico" sizes="32x32">
@@ -61,10 +67,10 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
 </head>
 <body class="beheer<?= $gebruiker ? '' : ' beheer--publiek' ?>">
 <?= icoon_sprite() ?>
-<a class="skip-link" href="#inhoud">Naar de inhoud</a>
+<a class="skip-link" href="#inhoud"><?= $en ? 'Skip to content' : 'Naar de inhoud' ?></a>
 <header class="app-header">
   <div class="app-header__inner">
-    <a class="logo" href="<?= $gebruiker ? 'index.php' : '../index.html' ?>" aria-label="Sporty, <?= $gebruiker ? 'naar het overzicht' : 'naar de website' ?>"><img class="logo__woordmerk" src="../assets/img/sporty-woordmerk.svg" alt="" width="84" height="40"><span class="app-header__omgeving"><?= e($omgeving) ?></span></a>
+    <a class="logo" href="<?= $gebruiker ? 'index.php' : $website ?>" aria-label="Sporty, <?= $gebruiker ? 'naar het overzicht' : ($en ? 'to the website' : 'naar de website') ?>"><img class="logo__woordmerk" src="../assets/img/sporty-woordmerk.svg" alt="" width="84" height="40"><?php if (!$en): ?><span class="app-header__omgeving"><?= e($omgeving) ?></span><?php endif; ?></a>
 <?php if ($gebruiker): ?>
     <ul class="app-account">
       <li><a href="profiel.php"<?= $actief === 'profiel.php' ? ' aria-current="page"' : '' ?>><?= icoon('user') ?><span class="app-account__label"><?= e(explode(' ', $gebruiker['naam'])[0]) ?><span class="visually-hidden">, mijn gegevens</span></span></a></li>
@@ -79,7 +85,7 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
     </ul>
   </nav>
 <?php else: ?>
-    <a class="link-arrow app-header__terug" href="../index.html">Naar de website<?= icoon('arrow') ?></a>
+    <a class="link-arrow app-header__terug" href="<?= $website ?>"><?= $en ? 'To the website' : 'Naar de website' ?><?= icoon('arrow') ?></a>
   </div>
 <?php endif; ?>
 </header>
@@ -98,7 +104,7 @@ function pagina_einde(): void
     ?>
 </main>
 <footer class="app-footer">
-  <p>Sporty · <?= e(instelling('telefoon', '06 12 34 56 78')) ?> · <a href="mailto:<?= e(instelling('email', 'info@bsosporty.nl')) ?>"><?= e(instelling('email', 'info@bsosporty.nl')) ?></a> · <a href="../privacy.html">Privacyverklaring</a></p>
+  <p>Sporty · <?= e(instelling('telefoon', '06 12 34 56 78')) ?> · <a href="mailto:<?= e(instelling('email', 'info@bsosporty.nl')) ?>"><?= e(instelling('email', 'info@bsosporty.nl')) ?></a> · <a href="<?= e(website_pagina('privacy.html', 'privacy.html')) ?>"><?= e(t('Privacyverklaring', 'Privacy statement')) ?></a></p>
 </footer>
 </body>
 </html>

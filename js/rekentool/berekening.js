@@ -239,29 +239,33 @@
 
   /* ---------- Weergave ---------- */
 
-  const euroOpmaak = typeof Intl !== "undefined" ? new Intl.NumberFormat("nl-NL", { style: "currency", currency: "EUR" }) : null;
+  // Op de Engelse pagina (<html lang="en">) Engelse notatie: €1,234.56 en 93.90% (in Node, voor de tests: Nederlands)
+  const EN = typeof document !== "undefined" && /^en/.test(document.documentElement.getAttribute("lang") || "");
+  const DUIZEND = EN ? "," : ".";
+  const KOMMA = EN ? "." : ",";
+  const euroOpmaak = typeof Intl !== "undefined" ? new Intl.NumberFormat(EN ? "en-GB" : "nl-NL", { style: "currency", currency: "EUR" }) : null;
 
   function euro(centen) {
     const teken = centen < 0 ? "-" : "";
     const abs = Math.abs(centen);
     if (euroOpmaak) return euroOpmaak.format(centen / 100);
-    return teken + "€ " + Math.floor(abs / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "," + String(abs % 100).padStart(2, "0");
+    return teken + (EN ? "€" : "€ ") + Math.floor(abs / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, DUIZEND) + KOMMA + String(abs % 100).padStart(2, "0");
   }
 
   function euroHeel(euros) {
-    return "€ " + String(euros).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return (EN ? "€" : "€ ") + String(euros).replace(/\B(?=(\d{3})+(?!\d))/g, DUIZEND);
   }
 
   /** Honderdsten als tekst met komma, zonder overbodige nullen: 4333 -> "43,33", 12200 -> "122". */
   function honderdsten(waarde) {
-    const geheel = Math.floor(waarde / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    const geheel = Math.floor(waarde / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, DUIZEND);
     const rest = waarde % 100;
-    return rest === 0 ? geheel : geheel + "," + String(rest).padStart(2, "0").replace(/0$/, "");
+    return rest === 0 ? geheel : geheel + KOMMA + String(rest).padStart(2, "0").replace(/0$/, "");
   }
 
   /** Percentage in honderdsten van een procent: 9390 -> "93,90%". */
   function procent(waarde) {
-    return Math.floor(waarde / 100) + "," + String(waarde % 100).padStart(2, "0") + "%";
+    return Math.floor(waarde / 100) + KOMMA + String(waarde % 100).padStart(2, "0") + "%";
   }
 
   root.VCKRekentool = Object.freeze({

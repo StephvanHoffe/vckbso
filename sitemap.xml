@@ -10,81 +10,129 @@
   </url>
   <url>
     <loc>https://bsosporty.nl/alles-over-sporty.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/alles-over-sporty.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/about-sporty.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/alles-over-sporty.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/abonnementen.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/abonnementen.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/membership-and-costs.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/abonnementen.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/vakantie-en-studiedagen.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/vakantie-en-studiedagen.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/holidays-and-study-days.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/vakantie-en-studiedagen.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/community.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/community.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/welcome-to-the-club.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/community.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/pauzebegeleiding.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/pauzebegeleiding.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/lunch-break-supervision.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/pauzebegeleiding.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/een-middag-bij-sporty.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/een-middag-bij-sporty.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/an-afternoon-at-sporty.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/een-middag-bij-sporty.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/locaties/sportpark-middenmeer.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/locaties/sportpark-middenmeer.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/locations/sportpark-middenmeer.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/locaties/sportpark-middenmeer.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/team.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/team.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/team.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/team.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/word-sporty-coach.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/word-sporty-coach.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/become-a-sporty-coach.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/word-sporty-coach.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/contact.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/proefdag.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/proefdag.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/trial-day.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/proefdag.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/aanmelden.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/aanmelden.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/join-the-club.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/aanmelden.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/blijf-op-de-hoogte.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/blijf-op-de-hoogte.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/stay-in-the-loop.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/blijf-op-de-hoogte.html"/>
     <lastmod>2026-11-06</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/klachtenregeling.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/klachtenregeling.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/complaints-procedure.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/klachtenregeling.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/privacy.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/privacy.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://bsosporty.nl/voorwaarden.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/voorwaarden.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/terms-and-conditions.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/voorwaarden.html"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.3</priority>
   </url>
@@ -93,7 +141,135 @@
     <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/"/>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/about-sporty.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/alles-over-sporty.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/about-sporty.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/alles-over-sporty.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/membership-and-costs.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/abonnementen.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/membership-and-costs.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/abonnementen.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/holidays-and-study-days.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/vakantie-en-studiedagen.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/holidays-and-study-days.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/vakantie-en-studiedagen.html"/>
+    <lastmod>2026-11-13</lastmod>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/welcome-to-the-club.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/community.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/welcome-to-the-club.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/community.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/lunch-break-supervision.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/pauzebegeleiding.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/lunch-break-supervision.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/pauzebegeleiding.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/an-afternoon-at-sporty.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/een-middag-bij-sporty.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/an-afternoon-at-sporty.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/een-middag-bij-sporty.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/locations/sportpark-middenmeer.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/locaties/sportpark-middenmeer.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/locations/sportpark-middenmeer.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/locaties/sportpark-middenmeer.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/team.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/team.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/team.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/team.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/become-a-sporty-coach.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/word-sporty-coach.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/become-a-sporty-coach.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/word-sporty-coach.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/contact.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/trial-day.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/proefdag.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/trial-day.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/proefdag.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/join-the-club.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/aanmelden.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/join-the-club.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/aanmelden.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/stay-in-the-loop.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/blijf-op-de-hoogte.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/stay-in-the-loop.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/blijf-op-de-hoogte.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/complaints-procedure.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/klachtenregeling.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/complaints-procedure.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/klachtenregeling.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/privacy.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/privacy.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/privacy.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://bsosporty.nl/en/terms-and-conditions.html</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/voorwaarden.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/terms-and-conditions.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/voorwaarden.html"/>
+    <lastmod>2026-11-13</lastmod>
+    <priority>0.2</priority>
   </url>
 </urlset>

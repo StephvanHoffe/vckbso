@@ -16,10 +16,24 @@
   var form = document.querySelector("[data-aanmelden]");
   if (!form) return;
 
+  // Tweetalig: op de Engelse pagina (<html lang="en">) de Engelse teksten
+  var EN = (document.documentElement.getAttribute("lang") || "").slice(0, 2) === "en";
+  var t = function (nl, en) { return EN ? en : nl; };
+  var MAAND_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  var en = function (lijst) { return lijst.length > 1 ? lijst.slice(0, -1).join(", ") + t(" en ", " and ") + lijst[lijst.length - 1] : lijst[0]; };
+
   var MAX_KINDEREN = 6;
   var SLEUTEL = "sporty-aanmelden";
   var ENDPOINT = form.getAttribute("action");
-  var WOLKJES = [
+  var WOLKJES = EN ? [
+    "No worries, you're not committing to anything yet!",
+    "Which school does your little star go to?",
+    "One membership, everything included. Nice and easy!",
+    "Which days shall we play sports together?",
+    "Your little star is almost signed up, on to the next step!",
+    "Nearly there, the goal is in sight!",
+    "One more click and I'll run for the goal!"
+  ] : [
     "Geen zorgen, je zit nog nergens aan vast!",
     "Op welke school zit je kleine topper?",
     "Eén abonnement, alles erin. Lekker makkelijk!",
@@ -28,7 +42,7 @@
     "Nog even en we zijn bij het doel!",
     "Nog één klik en ik ren naar het doel!"
   ];
-  var DAGNAMEN = ["", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag"];
+  var DAGNAMEN = EN ? ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"] : ["", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag"];
 
   var stappen = [].slice.call(form.querySelectorAll("[data-stap]"));
   var verder = form.querySelector("[data-verder]");
@@ -84,7 +98,12 @@
     try { if (navigator.sendBeacon) navigator.sendBeacon(ENDPOINT + "?stap=" + stap); } catch (e) { /* niet belangrijk */ }
   };
 
-  var datumNl = function (iso) { return iso ? iso.split("-").reverse().join("-") : ""; };
+  // Datum zoals we hem tonen: 04-01-2027, of in het Engels 4 January 2027
+  var datumNl = function (iso) {
+    if (!iso) return "";
+    var d = iso.split("-");
+    return EN ? Number(d[2]) + " " + MAAND_EN[Number(d[1]) - 1] + " " + d[0] : d.reverse().join("-");
+  };
 
   var toonStatus = function (soort, tekst) {
     status.className = "form-status form-status--" + soort;
@@ -109,14 +128,14 @@
   var kindNaam = function (i) {
     var veld = document.getElementById("k" + i + "-voornaam");
     var naam = veld ? veld.value.trim() : "";
-    return naam || (kindBlokken().length > 1 ? "kind " + (i + 1) : "je kind");
+    return naam || (kindBlokken().length > 1 ? t("kind ", "child ") + (i + 1) : t("je kind", "your child"));
   };
 
   var werkNamenBij = function () {
     var blokken = kindBlokken();
     var namen = blokken.map(function (b, i) { return kindNaam(i); });
     blokken.forEach(function (blok, i) {
-      blok.querySelector("[data-kind-titel]").textContent = blokken.length > 1 ? "Kind " + (i + 1) + (namen[i].indexOf("kind ") === 0 ? "" : ": " + namen[i]) : "Jouw kind";
+      blok.querySelector("[data-kind-titel]").textContent = blokken.length > 1 ? t("Kind ", "Child ") + (i + 1) + (namen[i].indexOf(t("kind ", "child ")) === 0 ? "" : ": " + namen[i]) : t("Jouw kind", "Your child");
       blok.querySelector("[data-kind-weg]").hidden = blokken.length === 1;
     });
     perKind.forEach(function (wrap) {
@@ -125,9 +144,9 @@
       });
     });
     form.querySelectorAll("[data-kind-weg] [data-kindnaam]").forEach(function (el, i) { el.textContent = namen[i]; });
-    var samen = namen.length > 1 ? namen.slice(0, -1).join(", ") + " en " + namen[namen.length - 1] : namen[0];
+    var samen = en(namen);
     form.querySelectorAll("[data-kindnamen]").forEach(function (el) { el.textContent = samen; });
-    form.querySelectorAll("[data-zit]").forEach(function (el) { el.textContent = namen.length > 1 ? "zitten" : "zit"; });
+    form.querySelectorAll("[data-zit]").forEach(function (el) { el.textContent = namen.length > 1 ? t("zitten", "do") : t("zit", "does"); });
     // De uitleg over de open dagen staat maar één keer, bij het eerste kind
     form.querySelectorAll("[data-dagen-beperkt]").forEach(function (el, i) { el.hidden = !dichteDagen.length || i > 0; });
     kindErbij.hidden = blokken.length >= MAX_KINDEREN;
@@ -146,7 +165,7 @@
       if (vol) {
         vak.checked = false;
         var label = vak.closest("label");
-        if (label && !label.querySelector(".vol")) label.insertAdjacentHTML("beforeend", ' <span class="vol">(vol)</span>');
+        if (label && !label.querySelector(".vol")) label.insertAdjacentHTML("beforeend", ' <span class="vol">' + t("(vol)", "(full)") + '</span>');
         if (label) label.classList.add("choice--vol");
       }
     });
@@ -228,18 +247,18 @@
     var groep = veld.closest("[data-minstens-een]");
     if (groep) {
       var vakjes = groep.querySelectorAll('input[type="checkbox"]');
-      if (![].some.call(vakjes, function (v) { return v.checked; })) tekst = vakjes[0].getAttribute("data-msg-required") || "Kies minstens één.";
+      if (![].some.call(vakjes, function (v) { return v.checked; })) tekst = vakjes[0].getAttribute("data-msg-required") || t("Kies minstens één.", "Choose at least one.");
       zetFout(vakjes[0], tekst);
       return !tekst;
     }
     if (veld.hasAttribute("data-verplicht-bij-partner") && partnerJa() && !veld.value.trim()) {
-      tekst = msg("required", "Dit veld is verplicht.");
+      tekst = msg("required", t("Dit veld is verplicht.", "Please fill in this field."));
     } else {
       var v = veld.validity;
-      if (v.valueMissing) tekst = msg("required", "Dit veld is verplicht.");
-      else if (v.badInput || v.typeMismatch) tekst = msg("type", "Controleer dit veld nog even.");
-      else if (v.patternMismatch) tekst = msg("pattern", "Controleer dit veld nog even.");
-      else if (v.rangeOverflow || v.rangeUnderflow) tekst = msg("range", "Controleer dit veld nog even.");
+      if (v.valueMissing) tekst = msg("required", t("Dit veld is verplicht.", "Please fill in this field."));
+      else if (v.badInput || v.typeMismatch) tekst = msg("type", t("Controleer dit veld nog even.", "Please check this field."));
+      else if (v.patternMismatch) tekst = msg("pattern", t("Controleer dit veld nog even.", "Please check this field."));
+      else if (v.rangeOverflow || v.rangeUnderflow) tekst = msg("range", t("Controleer dit veld nog even.", "Please check this field."));
     }
     zetFout(veld, tekst);
     return !tekst;
@@ -261,7 +280,7 @@
   var valideerStap = function (index) {
     var fout = veldenVan(stappen[index]).filter(function (veld) { return !valideer(veld); });
     if (fout.length) {
-      toonStatus("error", fout.length === 1 ? "Er is nog 1 veld niet goed ingevuld. Kijk even bij de melding in rood." : "Er zijn nog " + fout.length + " velden niet goed ingevuld. Kijk even bij de meldingen in rood.");
+      toonStatus("error", fout.length === 1 ? t("Er is nog 1 veld niet goed ingevuld. Kijk even bij de melding in rood.", "1 field isn't filled in correctly yet. Have a look at the message in red.") : t("Er zijn nog " + fout.length + " velden niet goed ingevuld. Kijk even bij de meldingen in rood.", fout.length + " fields aren't filled in correctly yet. Have a look at the messages in red."));
       fout[0].focus();
       return false;
     }
@@ -280,7 +299,7 @@
     verstuur.hidden = !laatste;
     terug.hidden = huidig === 0;
     var stap = stappen[huidig];
-    voortgang.querySelector("[data-voortgang-tekst]").textContent = "Stap " + (huidig + 1) + " van " + stappen.length;
+    voortgang.querySelector("[data-voortgang-tekst]").textContent = t("Stap ", "Step ") + (huidig + 1) + t(" van ", " of ") + stappen.length;
     voortgang.querySelector("[data-voortgang-naam]").textContent = stap.getAttribute("data-stapnaam");
     voortgang.style.setProperty("--voortgang", String(huidig / (stappen.length - 1)));
     wolk.textContent = WOLKJES[huidig] || "";
@@ -340,43 +359,45 @@
     var w = function (naam) { return (data[naam] || "").trim ? (data[naam] || "").trim() : data[naam]; };
     var labelVan = function (naamVeld, waarde) {
       var el = form.querySelector('[name="' + naamVeld + '"][value="' + waarde + '"]');
-      return el ? el.closest("label").textContent.replace("(vol)", "").trim() : "";
+      if (!el) return "";
+      var naam = el.closest("label").querySelector(".abo-keuze__naam");
+      return (naam || el.closest("label")).textContent.replace(/\((vol|full)\)/, "").trim();
     };
     var blokken = [];
     kindBlokken().forEach(function (b, i) {
       var k = "kinderen[" + i + "]";
       var dagen = (data[k + "[dagen][]"] || []).map(function (d) { return DAGNAMEN[d]; });
-      blokken.push({ titel: kindBlokken().length > 1 ? "Kind " + (i + 1) : "Je kind", stap: 0, regels: [
-        ["Naam", [w(k + "[voornaam]"), w(k + "[tussenvoegsel]"), w(k + "[achternaam]")].filter(Boolean).join(" ")],
-        ["Voorletters", w(k + "[voorletters]")],
-        ["Geslacht", labelVan(k + "[geslacht]", data[k + "[geslacht]"])],
-        ["Geboortedatum", datumNl(w(k + "[geboortedatum]"))],
-        ["Gewenste start", datumNl(w(k + "[startdatum]"))],
-        ["Groep of klas", w(k + "[groep_klas]")],
-        ["Goed om te weten", w(k + "[allergieen]")]
+      blokken.push({ titel: kindBlokken().length > 1 ? t("Kind ", "Child ") + (i + 1) : t("Je kind", "Your child"), stap: 0, regels: [
+        [t("Naam", "Name"), [w(k + "[voornaam]"), w(k + "[tussenvoegsel]"), w(k + "[achternaam]")].filter(Boolean).join(" ")],
+        [t("Voorletters", "Initials"), w(k + "[voorletters]")],
+        [t("Geslacht", "Gender"), labelVan(k + "[geslacht]", data[k + "[geslacht]"])],
+        [t("Geboortedatum", "Date of birth"), datumNl(w(k + "[geboortedatum]"))],
+        [t("Gewenste start", "Preferred start date"), datumNl(w(k + "[startdatum]"))],
+        [t("Groep of klas", "School year (groep) or class"), w(k + "[groep_klas]")],
+        [t("Goed om te weten", "Good to know"), w(k + "[allergieen]")]
       ] });
-      blokken.push({ titel: "School van " + kindNaam(i), stap: 1, regels: [["School", w(k + "[school]")]] });
-      blokken.push({ titel: "Abonnement en dagen van " + kindNaam(i), stap: 3, regels: [
-        ["Abonnement", labelVan(k + "[abonnement]", data[k + "[abonnement]"]).replace(/\s+Vaste dagen[\s\S]*$/, "")],
-        ["Dagen", dagen.length ? dagen.length + (dagen.length === 1 ? " dag" : " dagen") + " per week: " + dagen.join(", ") : ""],
-        ["Toelichting", w(k + "[toelichting]")]
+      blokken.push({ titel: t("School van ", "School of ") + kindNaam(i), stap: 1, regels: [[t("School", "School"), w(k + "[school]")]] });
+      blokken.push({ titel: t("Abonnement en dagen van ", "Membership and days for ") + kindNaam(i), stap: 3, regels: [
+        [t("Abonnement", "Membership"), labelVan(k + "[abonnement]", data[k + "[abonnement]"])],
+        [t("Dagen", "Days"), dagen.length ? dagen.length + (dagen.length === 1 ? t(" dag", " day") : t(" dagen", " days")) + t(" per week: ", " a week: ") + dagen.join(", ") : ""],
+        [t("Toelichting", "Notes"), w(k + "[toelichting]")]
       ] });
     });
-    blokken.push({ titel: "Jouw gegevens", stap: 4, regels: [
-      ["Naam", [w("voornaam"), w("tussenvoegsel"), w("achternaam")].filter(Boolean).join(" ")],
-      ["Voorletters", w("voorletters")],
-      ["Geslacht", data.geslacht ? labelVan("geslacht", data.geslacht) : ""],
-      ["Adres", [w("straat") + " " + w("huisnummer"), (w("postcode") + " " + w("plaats")).trim()].filter(function (r) { return r.trim(); }).join(", ")],
-      ["E-mail", w("email")],
-      ["Telefoon", w("telefoon")],
-      ["Gevonden via", w("gevonden") ? form.querySelector('#gevonden option[value="' + w("gevonden") + '"]').textContent : ""],
-      ["Opmerkingen", w("opmerkingen")]
+    blokken.push({ titel: t("Jouw gegevens", "Your details"), stap: 4, regels: [
+      [t("Naam", "Name"), [w("voornaam"), w("tussenvoegsel"), w("achternaam")].filter(Boolean).join(" ")],
+      [t("Voorletters", "Initials"), w("voorletters")],
+      [t("Geslacht", "Gender"), data.geslacht ? labelVan("geslacht", data.geslacht) : ""],
+      [t("Adres", "Address"), [w("straat") + " " + w("huisnummer"), (w("postcode") + " " + w("plaats")).trim()].filter(function (r) { return r.trim(); }).join(", ")],
+      [t("E-mail", "Email"), w("email")],
+      [t("Telefoon", "Phone"), w("telefoon")],
+      [t("Gevonden via", "Found us via"), w("gevonden") ? form.querySelector('#gevonden option[value="' + w("gevonden") + '"]').textContent : ""],
+      [t("Opmerkingen", "Comments"), w("opmerkingen")]
     ] });
     blokken.push({ titel: "Partner", stap: 5, regels: partnerJa() ? [
-      ["Naam", [w("partner_voornaam"), w("partner_tussenvoegsel"), w("partner_achternaam")].filter(Boolean).join(" ")],
-      ["E-mail", w("partner_email")],
-      ["Telefoon", w("partner_telefoon")]
-    ] : [["Partner", "Niet toegevoegd"]] });
+      [t("Naam", "Name"), [w("partner_voornaam"), w("partner_tussenvoegsel"), w("partner_achternaam")].filter(Boolean).join(" ")],
+      [t("E-mail", "Email"), w("partner_email")],
+      [t("Telefoon", "Phone"), w("partner_telefoon")]
+    ] : [["Partner", t("Niet toegevoegd", "Not added")]] });
 
     overzicht.textContent = "";
     blokken.forEach(function (blok) {
@@ -390,7 +411,7 @@
       knop.type = "button";
       knop.className = "link-button overzicht__aanpassen";
       knop.setAttribute("data-naar", String(blok.stap));
-      knop.innerHTML = '<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-potlood"></use></svg>Aanpassen<span class="visually-hidden"></span>';
+      knop.innerHTML = '<svg class="icon" aria-hidden="true" focusable="false"><use href="#i-potlood"></use></svg>' + t("Aanpassen", "Edit") + '<span class="visually-hidden"></span>';
       knop.querySelector(".visually-hidden").textContent = ": " + blok.titel.charAt(0).toLowerCase() + blok.titel.slice(1);
       kop.appendChild(h);
       kop.appendChild(knop);
@@ -494,7 +515,7 @@
 
     var tekst = verstuur.innerHTML;
     verstuur.disabled = true;
-    verstuur.textContent = "Bezig met versturen…";
+    verstuur.textContent = t("Bezig met versturen…", "Sending…");
     form.setAttribute("aria-busy", "true");
     fetch(ENDPOINT, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } })
       .then(function (antwoord) {
@@ -509,9 +530,9 @@
           bewaardMelding.hidden = true;
           voortgang.style.setProperty("--voortgang", "1");
           voortgang.classList.add("is-klaar");
-          voortgang.querySelector("[data-voortgang-tekst]").textContent = "Verstuurd";
-          voortgang.querySelector("[data-voortgang-naam]").textContent = "Welkom bij de club!";
-          wolk.textContent = "Woef! Tot snel bij de club!";
+          voortgang.querySelector("[data-voortgang-tekst]").textContent = t("Verstuurd", "Sent");
+          voortgang.querySelector("[data-voortgang-naam]").textContent = t("Welkom bij de club!", "Welcome to the club!");
+          wolk.textContent = t("Woef! Tot snel bij de club!", "Woof! See you soon at the club!");
           klaar.hidden = false;
           klaar.focus({ preventScroll: true });
           klaar.scrollIntoView({ block: "start", behavior: "auto" });
@@ -530,10 +551,10 @@
           if (stap !== huidig) gaNaar(stap, true);
           eerste.focus();
         }
-        toonStatus("error", resultaat.body.melding || "Oeps, het versturen is niet gelukt. Probeer het nog eens of bel ons even.");
+        toonStatus("error", resultaat.body.melding || t("Oeps, het versturen is niet gelukt. Probeer het nog eens of bel ons even.", "Oops, that didn't work. Please try again or give us a call."));
       })
       .catch(function (fout) {
-        toonStatus("error", fout && fout.geenServer ? form.getAttribute("data-geen-server") : "Oeps, het versturen is niet gelukt. Probeer het nog eens of bel ons even.");
+        toonStatus("error", fout && fout.geenServer ? form.getAttribute("data-geen-server") : t("Oeps, het versturen is niet gelukt. Probeer het nog eens of bel ons even.", "Oops, that didn't work. Please try again or give us a call."));
       })
       .then(function () {
         verstuur.disabled = false;
@@ -585,7 +606,9 @@
       pasVolleDagenToe(form);
       var uitleg = form.querySelector("[data-volle-dagen]");
       var namen = volleDagen.map(function (d) { return DAGNAMEN[d]; });
-      uitleg.textContent = "Op " + (namen.length > 1 ? namen.slice(0, -1).join(", ") + " en " + namen[namen.length - 1] : namen[0]) + " zitten we op dit moment vol. Wil je toch graag die dag? Zet het bij de toelichting, dan kijken we naar de wachtlijst.";
+      uitleg.textContent = EN
+        ? "We're currently full on " + en(namen) + ". Would you still like that day? Mention it in the notes and we'll look at the waiting list."
+        : "Op " + en(namen) + " zitten we op dit moment vol. Wil je toch graag die dag? Zet het bij de toelichting, dan kijken we naar de wachtlijst.";
       uitleg.hidden = false;
     })
     .catch(function () { /* zonder beheeromgeving: alle dagen kiesbaar */ });

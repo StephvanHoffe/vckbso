@@ -56,14 +56,14 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `beheer/` | Beheeromgeving voor het team en Mijn BSO voor ouders (PHP 8.2+, SQLite). Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md). |
 | `beheer/cli/` | Dagelijks onderhoud (bewaartermijnen), versleutelde back-up en herstel, via cron of de opdrachtregel |
 | `privacy.html`, `voorwaarden.html`, `404.html` | Privacyverklaring, algemene voorwaarden en foutpagina |
-| `en/index.html` | Eerste opzet van de Engelse versie (taalkeuze NL/EN in de header). Volgt nog de eerste indeling; de gegevens (adres, tijden, leeftijd) zijn bijgewerkt. |
-| `tools/site/` en `tools/kop-en-voet.mjs` | De gedeelde header (`kop.html`), footer (`voet.html`) en iconenset (`sprite.svg`) van alle Nederlandse pagina's. Pas ze hier aan en draai `npm run kop-en-voet`. |
+| `en/` | De Engelse website (november 2026): elke pagina heeft een Engelse tegenhanger met een eigen adres, zoals `en/join-the-club.html`. De taalknop in de header gaat naar dezelfde pagina in de andere taal. Welke pagina bij welke hoort staat in `tools/site/talen.mjs`; woordenlijst en werkwijze in [`docs/engels.md`](docs/engels.md). |
+| `tools/site/` en `tools/kop-en-voet.mjs` | De gedeelde header (`kop.html`, Engels `kop.en.html`), footer (`voet.html`, `voet.en.html`) en iconenset (`sprite.svg`) van alle pagina's. Pas ze hier aan en draai `npm run kop-en-voet`. |
 | `design/tokens.css` | Design tokens: kleuren, letters, ruimte, vormen en beweging. Ook de `@font-face`-regels. |
 | `css/style.css` | Alle opmaak, mobile-first |
 | `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole van het contact- en sollicitatieformulier (ook soort en grootte van het cv) |
 | `js/quiz.js` | De Sporty-quiz op de homepage ("Past jouw kind bij Sporty?", in het Engels "Is your child a Sporty kid?"). De vragen, Henny's reacties, de knopteksten en de uitslagen staan per taal in `index.html` en `en/index.html` (sectie `#quiz`) en zijn daar aan te passen; elk antwoord hoort bij een van vier types (Stuiterbal, Teamcaptain, Spelbedenker, Chillkampioen). De laatste vraag is de leeftijd (4 t/m 12 jaar). De eerste drie vragen komen van Sporty. Er wordt niets opgeslagen of verstuurd. |
 | `js/rekentool/` | Rekentool kinderopvangtoeslag op de pagina Abonnement en kosten: officiële bedragen per jaar (`toeslag-2026.js`), de tarieven van Sporty (`instellingen.js`), de berekening (`berekening.js`) en het formulier (`rekentool.js`). Zie [Rekentool](#rekentool-kinderopvangtoeslag). |
-| `tests/` | Automatische tests (`npm test`): de rekentool, met de tabel uit de brochure van Dienst Toeslagen als tweede bron, de SEO-basis van alle pagina's en de quiz op de homepage |
+| `tests/` | Automatische tests (`npm test`): de rekentool, met de tabel uit de brochure van Dienst Toeslagen als tweede bron, de SEO-basis van alle pagina's, de quiz op de homepage en de Engelse website |
 | `assets/fonts/` | Poppins en Caveat Brush (alleen hoofdletters), lokaal gehost, OFL-licentie |
 | `design/moodboard-sporty.jpg` | Het moodboard van de klant (eerste huisstijl, 8 oktober 2026) |
 | `design/logo/`, `design/henny/` | De logo's en Henny zoals de klant ze op 22 oktober 2026 aanleverde (originelen in PNG/JPG) |
@@ -82,7 +82,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `docs/live-zetten-vimexx.md` | Stappenplan om de site en Mijn BSO live te zetten op een Managed VPS bij Vimexx, met het uploadpakket (`npm run pakket`) |
 | `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, de verplichte eisen (toegang, beveiliging, logboek, ouderrechten, bewaarbeleid), installatie, back-ups, Stripe en TODO's |
 
-Header, footer en de iconenset staan in elke pagina, zodat elke pagina gewone HTML blijft. Pas ze aan in `tools/site/` en draai `npm run kop-en-voet`; het script zet ze in alle Nederlandse pagina's. De Engelse pagina heeft een eigen header en footer.
+Header, footer en de iconenset staan in elke pagina, zodat elke pagina gewone HTML blijft. Pas ze aan in `tools/site/` en draai `npm run kop-en-voet`; het script zet ze in alle pagina's, Nederlands en Engels. Pas een tekst altijd in beide talen aan; `npm test` controleert dat de Engelse pagina's compleet zijn en geen Nederlandse resten hebben.
 
 ## Rekentool kinderopvangtoeslag
 
@@ -129,7 +129,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Privacyverklaring laten controleren: bewaartermijnen, verwerkers (formulierendienst, hosting, Stripe) en de verwerking van gegevens van kinderen in Mijn BSO.
 - [ ] Domein `bsosporty.nl` registreren en de mailbox info@bsosporty.nl aanmaken (allebei gekozen op 13 november 2026; de site gebruikt ze al overal).
 - [ ] SEO-stappen die alleen Sporty zelf kan zetten: Google Bedrijfsprofiel, Search Console, LRK-nummer, vermeldingen bij scholen en verenigingen. Zie [`docs/seo.md`](docs/seo.md#nog-te-doen-door-sporty).
-- [ ] Engelse teksten na akkoord van de klant op de Nederlandse teksten van november 2026. Nu staat er alleen een Engelse startpagina, met de eerste indeling (de quiz en de gegevens zijn bijgewerkt).
+- [ ] Engelse deelafbeelding (`og-image.jpg` heeft nu Nederlandse tekst; de Engelse pagina's gebruiken dezelfde).
 - [ ] Beheeromgeving live zetten: hosting met PHP 8.2+ en https, `beheer/config.php` met twee sleutels, cron voor onderhoud en back-ups, Stripe koppelen, uurtarief en groepen instellen. Bewaartermijnen laten bevestigen. De volledige lijst staat in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#nog-te-doen-todo).
 
 ## Live zetten

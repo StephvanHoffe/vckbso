@@ -278,7 +278,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 
 - **Contactformulier:** Contactformulier met naam, e-mail, telefoon (optioneel) en bericht, met duidelijke foutmeldingen en een bevestiging na versturen. Berichten gaan naar info@bsosporty.nl. Bij een statische site: gebruik een formulierendienst en zet de endpoint-URL als TODO in de code, met een `mailto:`-link als terugvaloptie.
 - **Google Maps-kaart:** Kaart met de locatie, meteen zichtbaar (feedback 6 november 2026). Het is een eigen kaartbeeld uit OpenStreetMap (`npm run kaart`, met bronvermelding) dat bij een klik Google Maps opent, plus een link "Route plannen". Er laadt niets van Google op de pagina, dus geen cookies en geen toestemming nodig.
-- **Meertalig (bv. NL/EN):** Meertalig (Nederlands en Engels): taalkeuze in de header, teksten per taal gescheiden. De Engelse teksten volgen of worden vertaald na akkoord van de klant.
+- **Meertalig (bv. NL/EN):** Meertalig (Nederlands en Engels): taalkeuze in de header, teksten per taal gescheiden. De Engelse teksten volgen of worden vertaald na akkoord van de klant. Sinds 13 november 2026 (akkoord van de klant op alle teksten) staat de hele website in het Engels onder `en/`, met per pagina een tegenhanger (`tools/site/talen.mjs`) en de woordenlijst in `docs/engels.md`; Mijn BSO blijft Nederlands, maar de openbare formulieren antwoorden en mailen in het Engels. Pas teksten altijd in beide talen aan.
 - **Overige wensen:** In de backend van de website wil ik een compleet kindvolgsysteem om zo alle kinderen individueel bij te kunnen houden en eventueel hun ontwikkeling te monitoren.
 
 ## Gegevens op de website

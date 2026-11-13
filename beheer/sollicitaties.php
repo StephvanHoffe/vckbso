@@ -67,7 +67,7 @@ if ($sollicitatie) {
     $s = ontsleutel_kolommen($sollicitatie, ['motivatie', 'link', 'notitie'], true);
     $dagen = array_filter(explode(',', $s['dagen']));
     echo '<a class="terug-link" href="sollicitaties.php">' . icoon('back') . 'Alle sollicitaties</a>';
-    pagina_kop($s['naam'], sollicitatie_badge($s['status']) . ' Binnengekomen op ' . e(moment_nl($s['aangemaakt_op'])) . '.');
+    pagina_kop($s['naam'], sollicitatie_badge($s['status']) . ' Binnengekomen op ' . e(moment_nl($s['aangemaakt_op'])) . '.' . (($s['taal'] ?? 'nl') === 'en' ? ' Via de Engelse website: antwoord liever in het Engels.' : ''));
     ?>
 <div class="kolommen">
   <section class="panel" aria-labelledby="sollicitant-titel">
@@ -151,7 +151,7 @@ pagina_kop('Sollicitaties', 'Sollicitaties via de pagina Word Sporty coach op de
       <tbody>
 <?php foreach ($sollicitaties as $rij): ?>
         <tr>
-          <th scope="row"><a href="sollicitaties.php?id=<?= (int) $rij['id'] ?>"><?= e($rij['naam']) ?></a></th>
+          <th scope="row"><a href="sollicitaties.php?id=<?= (int) $rij['id'] ?>"><?= e($rij['naam']) ?></a><?php if (($rij['taal'] ?? 'nl') === 'en'): ?> <span class="badge badge--nieuw" title="Via de Engelse website">Engels</span><?php endif; ?></th>
           <td><?= e(datum_nl($rij['aangemaakt_op'], 'd MMM y')) ?></td>
           <td><?= $rij['cv_bestand'] ? 'Ja' : 'Nee' ?></td>
           <td><?= $rij['motivatie_bestand'] || $rij['motivatie'] !== '' ? 'Ja' : 'Nee' ?></td>

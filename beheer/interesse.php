@@ -56,10 +56,12 @@ if (is_post()) {
         if (!$fouten) {
             $gelukt = 0;
             foreach ($ontvangers as $r) {
+                taal((string) ($r['taal'] ?? 'nl')); // de aanhef en afmeldregel in de taal van de ontvanger
                 $gelukt += stuur_mailtekst($r['email'], 'op_de_hoogte_update', [
                     'voornaam' => explode(' ', trim($r['naam']))[0], 'onderwerp' => $update['onderwerp'], 'bericht' => $update['tekst'], 'afmeldlink' => interesse_afmeldlink($r),
                 ]) ? 1 : 0;
             }
+            taal(''); // terug naar normaal
             log_actie('Update verstuurd aan Blijf op de hoogte', $update['onderwerp'] . " ({$gelukt} van " . count($ontvangers) . ')');
             $totaal = count($ontvangers);
             flash($gelukt === $totaal ? 'succes' : 'fout', $gelukt === $totaal
@@ -94,7 +96,7 @@ pagina_kop('Op de hoogte', 'Ouders die via de website op de hoogte willen blijve
       <tbody>
 <?php foreach ($lijst as $r): ?>
         <tr>
-          <th scope="row"><?= e($r['naam']) ?></th>
+          <th scope="row"><?= e($r['naam']) ?><?php if (($r['taal'] ?? 'nl') === 'en'): ?> <span class="badge badge--nieuw" title="Aangemeld via de Engelse website">Engels</span><?php endif; ?></th>
           <td><a href="mailto:<?= e($r['email']) ?>"><?= e($r['email']) ?></a><?php if ($r['telefoon'] !== ''): ?><br><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $r['telefoon'])) ?>"><?= e($r['telefoon']) ?></a><?php endif; ?></td>
           <td><?= e(datum_nl($r['aangemaakt_op'])) ?></td>
           <td><?= $r['bevestigd_op'] ? '<span class="badge badge--actief">Bevestigd</span>' : '<span class="badge badge--nieuw">Wacht op bevestiging</span>' ?></td>
@@ -118,6 +120,9 @@ pagina_kop('Op de hoogte', 'Ouders die via de website op de hoogte willen blijve
 
 <section class="panel" aria-labelledby="update-titel" style="margin-top: var(--space-l)">
   <h2 id="update-titel">Update sturen</h2>
+<?php $engelsTal = count(array_filter($bevestigd, fn ($r) => ($r['taal'] ?? 'nl') === 'en')); if ($engelsTal): ?>
+  <div class="melding melding--info"><?= icoon('info') ?><p><?= $engelsTal === 1 ? 'Eén persoon' : $engelsTal . ' mensen' ?> op de lijst meldde zich aan via de Engelse website. Die krijgen de Engelse aanhef en afmeldregel, maar wel het bericht dat je hieronder schrijft. Zet er dus ook een korte Engelse versie in.</p></div>
+<?php endif; ?>
   <p class="muted">Gaat naar iedereen die bevestigd op de lijst staat (<?= count($bevestigd) ?>), elk in een eigen e-mail die begint met "Hoi" en de voornaam. Onder elke e-mail staat een persoonlijke afmeldlink.<?php if (team_mag('instellingen')): ?> Wat er rond je bericht staat, pas je aan bij <a href="mailteksten.php?sleutel=op_de_hoogte_update">E-mails</a>.<?php endif; ?></p>
   <form class="form" method="post" data-bevestig="Deze update naar <?= count($bevestigd) ?> <?= count($bevestigd) === 1 ? 'persoon' : 'mensen' ?> sturen?">
     <?= csrf_veld() ?>

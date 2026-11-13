@@ -612,6 +612,14 @@ function migreer(PDO $pdo): void
 
         // Eigen domein (13 november 2026): info@sporty.nl wordt info@bsosporty.nl (alleen als het adres nog niet zelf was aangepast)
         19 => "UPDATE instellingen SET waarde = 'info@bsosporty.nl' WHERE sleutel = 'email' AND waarde = 'info@sporty.nl';",
+
+        // Engelse website (november 2026): in welke taal iemand zich aanmeldde, voor de e-mails en zodat het team
+        // weet dat het die persoon liever in het Engels aanspreekt
+        20 => <<<'SQL'
+            ALTER TABLE interesse ADD COLUMN taal TEXT NOT NULL DEFAULT 'nl';
+            ALTER TABLE proefdag_boekingen ADD COLUMN taal TEXT NOT NULL DEFAULT 'nl';
+            ALTER TABLE sollicitaties ADD COLUMN taal TEXT NOT NULL DEFAULT 'nl';
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

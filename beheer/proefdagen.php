@@ -98,7 +98,7 @@ $toonMoment = function (array $moment, array $lijst, bool $voorbij): void {
         <tbody>
 <?php foreach ($lijst as $b): ?>
           <tr>
-            <th scope="row"><?= e($b['naam']) ?><br><span class="muted">geboekt <?= e(moment_nl($b['aangemaakt_op'])) ?></span></th>
+            <th scope="row"><?= e($b['naam']) ?><?php if (($b['taal'] ?? 'nl') === 'en'): ?> <span class="badge badge--nieuw" title="Via de Engelse website">Engels</span><?php endif; ?><br><span class="muted">geboekt <?= e(moment_nl($b['aangemaakt_op'])) ?></span></th>
             <td><?= e($b['kind_naam']) ?> (<?= e($b['kind_leeftijd']) ?>)</td>
             <td><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $b['telefoon'])) ?>"><?= e($b['telefoon']) ?></a><br><a href="mailto:<?= e($b['email']) ?>"><?= e($b['email']) ?></a></td>
             <td><?= $b['opmerking'] !== '' ? nl2br(e($b['opmerking'])) : '<span class="muted">-</span>' ?></td>

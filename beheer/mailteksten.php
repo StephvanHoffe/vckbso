@@ -52,7 +52,7 @@ if (is_post() && $def) {
         $waarden = mailtekst_voorbeeldwaarden($sleutel);
         $voorbeeld = [mailtekst_vul((string) $onderwerp, $waarden), mailtekst_vul($tekst, $waarden)];
         if ($actie === 'test') {
-            $gelukt = stuur_mail((string) $gebruiker['email'], '[Test] ' . ($voorbeeld[0] !== '' ? $voorbeeld[0] : $def['naam']), $voorbeeld[1]);
+            $gelukt = stuur_mail((string) $gebruiker['email'], '[Test] ' . ($voorbeeld[0] !== '' ? $voorbeeld[0] : $def['naam']), $voorbeeld[1], str_ends_with($sleutel, '_en') ? 'en' : 'nl');
             log_actie('Testmail verstuurd', $def['naam']);
             flash($gelukt ? 'succes' : 'fout', $gelukt
                 ? 'De testmail is verstuurd naar ' . $gebruiker['email'] . ', met voorbeeldgegevens. Vergeet niet op te slaan als de tekst goed is.'

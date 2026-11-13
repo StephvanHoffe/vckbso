@@ -6,6 +6,10 @@
   root.classList.add("js");
   window.vckReady = true;
 
+  // Tweetalig: op de Engelse pagina's (<html lang="en">) de Engelse tekst
+  var EN = (root.getAttribute("lang") || "").slice(0, 2) === "en";
+  var t = function (nl, en) { return EN ? en : nl; };
+
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* ---------- Mobiel menu ---------- */
@@ -19,7 +23,7 @@
     var setOpen = function (open) {
       header.classList.toggle("is-open", open);
       toggle.setAttribute("aria-expanded", String(open));
-      if (toggleLabel) toggleLabel.textContent = open ? "Menu sluiten" : "Menu openen";
+      if (toggleLabel) toggleLabel.textContent = open ? t("Menu sluiten", "Close menu") : t("Menu openen", "Open menu");
     };
 
     toggle.addEventListener("click", function () {
@@ -124,7 +128,7 @@
     if (cell && !cell.querySelector(".today-label")) {
       var label = document.createElement("span");
       label.className = "today-label";
-      label.textContent = row.closest("[lang='en']") ? "today" : "vandaag";
+      label.textContent = EN || row.closest("[lang='en']") ? "today" : "vandaag";
       cell.append(" ", label); // spatie: op smalle schermen mag het label onder de dagnaam vallen
     }
   });
@@ -176,19 +180,19 @@
       var v = field.validity;
       var msg = function (key, fallback) { return field.getAttribute("data-msg-" + key) || fallback; };
       var text = "";
-      if (v.valueMissing) text = msg("required", "Dit veld is verplicht.");
-      else if (v.badInput) text = msg("type", "Controleer dit veld nog even.");
-      else if (v.typeMismatch) text = msg("type", "Controleer dit veld nog even.");
-      else if (v.patternMismatch) text = msg("pattern", "Controleer dit veld nog even.");
-      else if (v.tooShort) text = msg("short", "Dit is wat kort.");
-      else if (v.rangeOverflow || v.rangeUnderflow) text = msg("range", "Controleer dit veld nog even.");
+      if (v.valueMissing) text = msg("required", t("Dit veld is verplicht.", "Please fill in this field."));
+      else if (v.badInput) text = msg("type", t("Controleer dit veld nog even.", "Please check this field."));
+      else if (v.typeMismatch) text = msg("type", t("Controleer dit veld nog even.", "Please check this field."));
+      else if (v.patternMismatch) text = msg("pattern", t("Controleer dit veld nog even.", "Please check this field."));
+      else if (v.tooShort) text = msg("short", t("Dit is wat kort.", "This is a bit short."));
+      else if (v.rangeOverflow || v.rangeUnderflow) text = msg("range", t("Controleer dit veld nog even.", "Please check this field."));
       // Bestanden (zoals een cv): soort en grootte
       if (!text && field.type === "file" && field.files && field.files.length) {
         var file = field.files[0];
         var maxMb = parseFloat(field.getAttribute("data-max-mb") || "0");
         var accept = (field.getAttribute("accept") || "").split(",").map(function (ext) { return ext.trim().toLowerCase(); }).filter(Boolean);
-        if (accept.length && !accept.some(function (ext) { return file.name.toLowerCase().slice(-ext.length) === ext; })) text = msg("filetype", "Dit soort bestand kunnen we niet ontvangen.");
-        else if (maxMb && file.size > maxMb * 1024 * 1024) text = msg("size", "Dit bestand is te groot.");
+        if (accept.length && !accept.some(function (ext) { return file.name.toLowerCase().slice(-ext.length) === ext; })) text = msg("filetype", t("Dit soort bestand kunnen we niet ontvangen.", "We can't receive this type of file."));
+        else if (maxMb && file.size > maxMb * 1024 * 1024) text = msg("size", t("Dit bestand is te groot.", "This file is too large."));
       }
       setError(field, text);
       return !text;
@@ -291,8 +295,8 @@
         if (!value) return;
         if (field.type === "date") value = value.split("-").reverse().join("-");
         // Een bestand gaat niet mee in een mailto-link: noem de naam en vraag om het als bijlage toe te voegen
-        if (field.type === "file") value = Array.prototype.map.call(field.files, function (f) { return f.name; }).join(", ") + " (voeg dit bestand als bijlage toe)";
-        if (field.type === "checkbox" && !field.closest("[data-choice-group]")) value = "ja";
+        if (field.type === "file") value = Array.prototype.map.call(field.files, function (f) { return f.name; }).join(", ") + t(" (voeg dit bestand als bijlage toe)", " (please attach this file)");
+        if (field.type === "checkbox" && !field.closest("[data-choice-group]")) value = t("ja", "yes");
         var label = labelOf(field);
         if (!(label in values)) {
           order.push(label);
@@ -313,8 +317,8 @@
       var invalid = getFields().filter(function (field) { return !validate(field); });
       if (invalid.length) {
         showStatus("error", invalid.length === 1
-          ? "Er is nog 1 veld niet goed ingevuld. Kijk even bij de melding in rood."
-          : "Er zijn nog " + invalid.length + " velden niet goed ingevuld. Kijk even bij de meldingen in rood.");
+          ? t("Er is nog 1 veld niet goed ingevuld. Kijk even bij de melding in rood.", "1 field isn't filled in correctly yet. Have a look at the message in red.")
+          : t("Er zijn nog " + invalid.length + " velden niet goed ingevuld. Kijk even bij de meldingen in rood.", invalid.length + " fields aren't filled in correctly yet. Have a look at the messages in red."));
         invalid[0].focus();
         return;
       }
@@ -326,9 +330,11 @@
       var endpoint = form.getAttribute("action") || "";
 
       var openMail = function () {
-        var subject = data.get("onderwerp") || form.getAttribute("data-subject") || "Bericht via de website";
+        // Het onderwerp: de tekst van de gekozen optie (niet de waarde, zoals "proefdag")
+        var keuze = form.querySelector("select[name='onderwerp']");
+        var subject = (keuze && keuze.value ? keuze.options[keuze.selectedIndex].text : data.get("onderwerp")) || form.getAttribute("data-subject") || t("Bericht via de website", "Message via the website");
         var mailtoUrl = "mailto:" + mailto + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(summary());
-        var mailtoText = form.getAttribute("data-mailto-success") || "Je e-mailprogramma wordt geopend met je bericht erin. Verstuur het daar, dan komt het bij ons binnen!";
+        var mailtoText = form.getAttribute("data-mailto-success") || t("Je e-mailprogramma wordt geopend met je bericht erin. Verstuur het daar, dan komt het bij ons binnen!", "Your email program will open with your message in it. Send it from there and it will reach us!");
         window.location.href = mailtoUrl;
         showStatus("success", mailtoText);
       };
@@ -341,7 +347,7 @@
 
       if (submit) {
         submit.disabled = true;
-        submit.textContent = "Bezig met versturen…";
+        submit.textContent = t("Bezig met versturen…", "Sending…");
       }
       form.setAttribute("aria-busy", "true");
 
@@ -356,7 +362,7 @@
             form.dispatchEvent(new CustomEvent("formulier-verstuurd", { detail: result.body }));
             form.reset();
             getFields().forEach(function (field) { field.removeAttribute("aria-invalid"); });
-            showStatus("success", form.getAttribute("data-success") || "Joepie, je bericht is verstuurd! We reageren zo snel mogelijk.");
+            showStatus("success", form.getAttribute("data-success") || t("Joepie, je bericht is verstuurd! We reageren zo snel mogelijk.", "Hooray, your message has been sent! We'll get back to you as soon as we can."));
             status.setAttribute("tabindex", "-1");
             status.focus();
             return;
@@ -370,7 +376,7 @@
             setError(field, fouten[name]);
             eerste = eerste || field;
           });
-          showStatus("error", result.body.melding || "Oeps, het versturen is niet gelukt. Probeer het nog eens of mail ons direct via " + mailto + ".");
+          showStatus("error", result.body.melding || t("Oeps, het versturen is niet gelukt. Probeer het nog eens of mail ons direct via ", "Oops, that didn't work. Please try again or email us directly at ") + mailto + ".");
           if (eerste) eerste.focus();
         })
         .catch(function (error) {
@@ -382,7 +388,7 @@
             showStatus("error", form.getAttribute("data-geen-server"));
             return;
           }
-          showStatus("error", "Oeps, het versturen is niet gelukt. Probeer het nog eens of mail ons direct via " + mailto + ".");
+          showStatus("error", t("Oeps, het versturen is niet gelukt. Probeer het nog eens of mail ons direct via ", "Oops, that didn't work. Please try again or email us directly at ") + mailto + ".");
         })
         .then(function () {
           if (submit) {
@@ -402,7 +408,7 @@
 
     var zet = function (speelt) {
       if (speelt) video.play().catch(function () {}); else video.pause();
-      knop.textContent = speelt ? "Pauzeer" : "Speel af";
+      knop.textContent = speelt ? t("Pauzeer", "Pause") : t("Speel af", "Play");
     };
 
     zet(!reduceMotion);

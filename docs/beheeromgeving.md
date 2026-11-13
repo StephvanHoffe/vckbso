@@ -117,13 +117,23 @@ Op de pagina **Proefdag** (`proefdag.html`) kiezen ouders zelf een moment voor e
 
 ## E-mails aanpassen
 
-Onder **Instellingen → E-mails aanpassen** (recht Instellingen) staan alle 23 e-mails die Mijn BSO verstuurt: 12 aan ouders, sollicitanten en andere bezoekers, 10 aan het team (meldingen en uitnodigingen voor collega's) en de ondertekening onder elke e-mail. Per e-mail zie je wanneer hij gaat.
+Onder **Instellingen → E-mails aanpassen** (recht Instellingen) staan alle 33 e-mails die Mijn BSO verstuurt: 13 aan ouders, sollicitanten en andere bezoekers, 11 aan het team (meldingen en uitnodigingen voor collega's), de ondertekening onder elke e-mail en 8 Engelse versies (zie [De Engelse website](#de-engelse-website)). Per e-mail zie je wanneer hij gaat.
 
 - **Aanpassen:** onderwerp en tekst, als gewone tekst zonder opmaak. Invulvelden tussen accolades, zoals `{voornaam}` of `{link}`, vult Mijn BSO bij het versturen in. Per e-mail staat welke velden er zijn, met een voorbeeld.
 - **Controle bij opslaan:** een invulveld dat niet bestaat (een tikfout als `{vornaam}`) wordt geweigerd, en verplichte velden, zoals de link om een wachtwoord te kiezen of de afmeldlink, moeten blijven staan.
 - **Voorbeeld en testmail:** "Voorbeeld bekijken" toont de e-mail met voorbeeldgegevens; "Testmail naar mij" stuurt hem naar je eigen adres. Beide zonder op te slaan.
 - **Terug naar de standaard:** met één klik, en het overzicht laat zien welke e-mails zijn aangepast (met datum). Elke wijziging staat in het logboek.
 - **Techniek:** de standaardteksten staan in `beheer/inc/mailteksten.php` (`MAILTEKSTEN`), een aangepaste tekst in de tabel `mail_teksten` (migratie 14). Verstuur een e-mail altijd met `stuur_mailtekst()` of `mail_team_tekst()`; `npm test` controleert dat er geen e-mail buiten deze lijst om gaat en dat de standaardteksten kloppen.
+
+## De Engelse website
+
+Sinds november 2026 staat de hele website ook in het Engels (`/en/`, zie [`docs/engels.md`](engels.md)). Mijn BSO zelf blijft Nederlands, maar wie een formulier op de Engelse site invult, krijgt alles wat daarna komt in het Engels.
+
+- **Welke formulieren:** Kom bij de club (`aanvraag.php`), proefdag (`proefdag.php`), Blijf op de hoogte (`op-de-hoogte.php`, ook de pagina's om te bevestigen en af te melden) en solliciteren (`solliciteren.php`). De Engelse formulieren sturen `taal=en` mee.
+- **Wat er Engels is:** foutmeldingen, de pagina na versturen en de bevestigingsmail, met een Engelse ondertekening en een link naar de Engelse site. Updates aan de lijst Op de hoogte gaan naar Engelse inschrijvers met de Engelse ondertekening en afmeldpagina; de tekst van de update zelf schrijf je één keer (Interesse toont hoeveel inschrijvers Engels zijn). Meldingen aan het team blijven Nederlands.
+- **Engelse e-mails aanpassen:** onder Instellingen → E-mails aanpassen, groep "In het Engels". Pas je een Nederlandse tekst aan, pas dan de Engelse ook aan.
+- **Waar je het ziet:** bij de ouder ("Aangemeld via de Engelse website"), bij proefdagen, sollicitaties en Op de hoogte (label "Engels").
+- **Techniek:** `taal()`, `t()` en `website_pagina()` in `beheer/inc/helpers.php`; de taal staat bij de aanvraag (versleuteld, in `aanvraag`) en in de kolom `taal` van `interesse`, `proefdag_boekingen` en `sollicitaties` (migratie 20). De Engelse mailteksten hebben dezelfde sleutel met `_en` erachter; `stuur_mailtekst()` kiest ze vanzelf. `npm test` controleert dat elke Engelse e-mail dezelfde invulvelden heeft als de Nederlandse.
 
 ## Koppelingen
 
@@ -380,4 +390,4 @@ Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met b
 - [ ] E-mail via een betrouwbare SMTP-dienst als de `mail()`-functie van de hosting in de spam belandt (nu: `mail.methode = mail`).
 - [ ] PHP 8.2 krijgt beveiligingsupdates tot eind 2026: kies bij de hosting liefst PHP 8.3 of nieuwer.
 - [ ] Jaaropgave voor de kinderopvangtoeslag per ouder (overzicht van uren en bedragen per kind per jaar).
-- [ ] Engelse versie van Mijn BSO (nu alleen Nederlands).
+- [ ] Mijn BSO zelf in het Engels (nu Nederlands; de openbare formulieren en hun e-mails zijn al Engels voor wie de Engelse website gebruikt).

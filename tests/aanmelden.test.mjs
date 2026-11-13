@@ -15,8 +15,10 @@ const sleutels = (constante) => [...inc.match(new RegExp(`const ${constante} = \
 test("het formulier heeft 7 stappen, in volgorde, en Henny zegt bij elke stap iets", () => {
   const stappen = [...form.matchAll(/data-stap="(\d)"/g)].map((m) => +m[1]);
   assert.deepEqual(stappen, [1, 2, 3, 4, 5, 6, 7]);
-  const wolkjes = script.match(/var WOLKJES = \[([\s\S]*?)\];/)[1].match(/"[^"]+"/g);
-  assert.equal(wolkjes.length, 7);
+  // Henny's wolkjes in het Engels en in het Nederlands
+  const [, engels, nederlands] = script.match(/var WOLKJES = EN \? \[([\s\S]*?)\] : \[([\s\S]*?)\];/);
+  assert.equal(engels.match(/"[^"]+"/g).length, 7);
+  assert.equal(nederlands.match(/"[^"]+"/g).length, 7);
   assert.match(form, /Verstuur vrijblijvend/);
   assert.match(html, /Aanmelden is helemaal vrijblijvend/);
 });
@@ -71,4 +73,12 @@ test("voorletters, startdatum en groep van het kind zijn verplicht; sportclub en
   assert.doesNotMatch(form, /sportclub|school_plaats/);
   assert.doesNotMatch(inc, /sportclub|school_plaats/);
   assert.match(form, /Op welke school <span data-zit>zit<\/span> <span data-kindnamen>je kind<\/span>\? Noteer hier de school\./);
+});
+
+test("het Engelse formulier (en/join-the-club.html) stuurt dezelfde velden en keuzes, met taal=en", () => {
+  const en = lees("en/join-the-club.html").match(/<form class="form aanmelden__form"[\s\S]*?<\/form>/)[0];
+  const velden = (f) => [...f.matchAll(/ name="([^"]+)"(?: value="([^"]*)")?/g)].map((m) => m[1] + "=" + (m[2] ?? "")).filter((v) => v !== "taal=en").sort();
+  assert.deepEqual(velden(en), velden(form));
+  assert.match(en, /<form[^>]*>\s*<input type="hidden" name="taal" value="en">/);
+  assert.match(en, /action="\.\.\/beheer\/aanvraag\.php"/);
 });

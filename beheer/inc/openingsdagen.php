@@ -29,6 +29,8 @@ function is_open_dag(string $datum): bool
 /** "dinsdag en donderdag" */
 function weekdagen_tekst(array $dagen): string
 {
-    $namen = array_map(fn (int $d) => WEEKDAGEN[$d] ?? (string) $d, array_values($dagen));
-    return count($namen) > 1 ? implode(', ', array_slice($namen, 0, -1)) . ' en ' . end($namen) : (string) ($namen[0] ?? '');
+    // In de taal van de bezoeker (Engels voor formulieren van de Engelse website)
+    $engels = [1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 7 => 'Sunday'];
+    $namen = array_map(fn (int $d) => (taal() === 'en' ? $engels[$d] ?? null : WEEKDAGEN[$d] ?? null) ?? (string) $d, array_values($dagen));
+    return count($namen) > 1 ? implode(', ', array_slice($namen, 0, -1)) . t(' en ', ' and ') . end($namen) : (string) ($namen[0] ?? '');
 }

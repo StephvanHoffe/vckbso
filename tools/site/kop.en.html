@@ -1,0 +1,35 @@
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="logo" href="{{E}}index.html" aria-label="Sporty, go to the homepage"><img class="logo__woordmerk" src="{{P}}assets/img/sporty-woordmerk.svg" alt="" width="97" height="46"></a>
+    <nav class="site-nav" id="site-nav" aria-label="Main menu">
+      <ul class="site-nav__list">
+        <li class="site-nav__home"><a href="{{E}}index.html"{{home}}>Home</a></li>
+        <li class="site-nav__sub">
+          <div class="site-nav__rij">
+            <a href="{{E}}about-sporty.html"{{alles}}>About Sporty</a>
+            <button class="site-nav__open" type="button" aria-expanded="false" aria-controls="menu-alles"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chevron"></use></svg><span class="visually-hidden">More about Sporty</span></button>
+          </div>
+          <ul class="site-nav__submenu" id="menu-alles">
+            <li><a href="{{E}}about-sporty.html"{{s:alles-over-sporty.html}}>Our vision and dream</a></li>
+            <li><a href="{{E}}membership-and-costs.html"{{s:abonnementen.html}}>Membership and costs</a></li>
+            <li><a href="{{E}}holidays-and-study-days.html"{{s:vakantie-en-studiedagen.html}}>Holidays and study days</a></li>
+            <li><a href="{{E}}welcome-to-the-club.html"{{s:community.html}}>Welcome to the club</a></li>
+            <li><a href="{{E}}lunch-break-supervision.html"{{s:pauzebegeleiding.html}}>Lunch-break supervision for schools</a></li>
+          </ul>
+        </li>
+        <li><a href="{{E}}an-afternoon-at-sporty.html"{{middag}}>An afternoon at Sporty</a></li>
+        <li><a href="{{E}}locations/sportpark-middenmeer.html"{{locaties}}>Locations</a></li>
+        <li><a href="{{E}}team.html"{{team}}>Team</a></li>
+        <li><a href="{{E}}become-a-sporty-coach.html"{{coach}}>Become a coach</a></li>
+        <li><a href="{{E}}contact.html"{{contact}}>Contact</a></li>
+        <li class="site-nav__login"><a href="{{P}}beheer/inloggen.php" hreflang="nl" title="Log in to Mijn BSO (in Dutch)"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-inloggen"></use></svg><span class="site-nav__login-tekst">Log in</span><span class="visually-hidden"> to Mijn BSO (in Dutch)</span></a></li>
+      </ul>
+      <ul class="lang" aria-label="Choose your language">
+        <li><a href="{{NL}}" lang="nl" hreflang="nl"><span aria-hidden="true">NL</span><span class="visually-hidden">Nederlands</span></a></li>
+        <li><a href="{{EN}}" lang="en" hreflang="en" aria-current="true"><span aria-hidden="true">EN</span><span class="visually-hidden">English</span></a></li>
+      </ul>
+    </nav>
+    <a class="btn btn--small site-header__cta" href="{{E}}join-the-club.html"{{club}}>Join the club<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="nav-toggle__bars" aria-hidden="true"></span><span class="visually-hidden">Open menu</span></button>
+  </div>
+</header>

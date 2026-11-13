@@ -7,6 +7,10 @@
  * - Contact: de BSO zelf, het kruimelpad en alle veelgestelde vragen (FAQPage).
  * - Overige pagina's: het kruimelpad.
  *
+ * - Engelse pagina's (en/): een WebPage in het Engels die bij dezelfde BSO hoort, het kruimelpad,
+ *   en op Contact de Engelse veelgestelde vragen.
+ * - Elke pagina krijgt hreflang-links naar zijn Nederlandse en Engelse versie (tools/site/talen.mjs).
+ *
  * Kruimelpad en vragen komen uit de zichtbare HTML, zodat ze altijd overeenkomen met wat
  * bezoekers zien. Pas je een vraag, een pagina of de gegevens hieronder aan? Draai dan:
  *
@@ -15,6 +19,7 @@
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { ENGELS, NEDERLANDS, adres } from "./site/talen.mjs";
 
 export const SITE = "https://bsosporty.nl";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
@@ -81,7 +86,8 @@ export const PAGINAS = [
   "klachtenregeling.html",
   "privacy.html",
   "voorwaarden.html",
-  "en/index.html",
+  // De Engelse versies (en/index.html eerst, zoals altijd)
+  ...Object.values(ENGELS),
 ];
 
 const ENTITEITEN = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", eacute: "é", euml: "ë", iuml: "ï", ndash: "–", mdash: "—", hellip: "…" };
@@ -138,11 +144,13 @@ export function gegevensVoor(pagina, html) {
   const graaf = [];
   if (pagina === "index.html") graaf.push(BSO, WEBSITE);
   if (pagina === "contact.html" || pagina === "locaties/sportpark-middenmeer.html") graaf.push(BSO);
-  if (pagina === "en/index.html") {
+  if (NEDERLANDS[pagina]) {
+    // Engelse pagina: verwijst naar dezelfde BSO en website, met de Engelse titel
+    const url = adres(SITE, pagina);
     graaf.push({
       "@type": "WebPage",
-      "@id": `${SITE}/en/#webpage`,
-      url: `${SITE}/en/`,
+      "@id": `${url}#webpage`,
+      url,
       name: tekst(html.match(/<title>([\s\S]*?)<\/title>/)[1]),
       inLanguage: "en",
       isPartOf: { "@id": WEBSITE["@id"] },
@@ -151,17 +159,26 @@ export function gegevensVoor(pagina, html) {
   }
   const pad = kruimelpad(html);
   if (pad) graaf.push(pad);
-  if (pagina === "contact.html") graaf.push(vragen(html));
+  if (pagina === "contact.html" || pagina === "en/contact.html") graaf.push(vragen(html));
   return { "@context": "https://schema.org", "@graph": graaf };
+}
+
+/** De hreflang-links van een pagina en zijn tegenhanger: Nederlands, Engels, en Nederlands als standaard. */
+export function hreflangVoor(pagina) {
+  const nl = NEDERLANDS[pagina] ?? pagina;
+  const en = ENGELS[nl];
+  if (!en) return "";
+  return [["nl", nl], ["en", en], ["x-default", nl]].map(([taal, p]) => `<link rel="alternate" hreflang="${taal}" href="${adres(SITE, p)}">`).join("\n") + "\n";
 }
 
 const SCRIPT = /<script type="application\/ld\+json">[\s\S]*?<\/script>\n?/g;
 
-/** De pagina met bijgewerkte JSON-LD (één blok, vlak voor </head>). */
+/** De pagina met bijgewerkte hreflang-links (direct na de canonical) en JSON-LD (één blok, vlak voor </head>). */
 export function bijgewerkt(pagina, html) {
-  const json = JSON.stringify(gegevensVoor(pagina, html)).replace(/</g, "\\u003c");
-  const zonder = html.replace(SCRIPT, "");
-  return zonder.replace("</head>", `<script type="application/ld+json">${json}</script>\n</head>`);
+  let uit = html.replace(/<link rel="alternate" hreflang="[^"]+" href="[^"]+">\n/g, "");
+  uit = uit.replace(/(<link rel="canonical" href="[^"]+">\n)/, (canon) => canon + hreflangVoor(pagina));
+  const json = JSON.stringify(gegevensVoor(pagina, uit)).replace(/</g, "\\u003c");
+  return uit.replace(SCRIPT, "").replace("</head>", `<script type="application/ld+json">${json}</script>\n</head>`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

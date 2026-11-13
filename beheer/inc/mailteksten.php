@@ -16,6 +16,7 @@ declare(strict_types=1);
 const MAILTEKST_GROEPEN = [
     'ouders' => ['Aan ouders, sollicitanten en andere bezoekers', 'Deze e-mails gaan naar ouders en andere mensen buiten het team.'],
     'team' => ['Aan het team', 'Meldingen voor het team en uitnodigingen voor collega\'s. De meldingen gaan naar het teamadres onder Koppelingen.'],
+    'engels' => ['In het Engels', 'Bevestigingen voor wie een formulier op de Engelse website invult. Mijn BSO kiest ze vanzelf; pas je hierboven een Nederlandse tekst aan, pas dan de Engelse ook aan.'],
     'algemeen' => ['Onder elke e-mail', 'Deze tekst staat onderaan elke e-mail die Mijn BSO verstuurt.'],
 ];
 
@@ -252,6 +253,91 @@ const MAILTEKSTEN = [
     ],
 
     // ---------- Onder elke e-mail ----------
+    // ---------- In het Engels (formulieren op de Engelse website, zie taal() in helpers.php) ----------
+    'aanmelding_ontvangen_en' => [
+        'groep' => 'engels',
+        'naam' => 'Aanmelding ontvangen (Engels)',
+        'wanneer' => 'Direct nadat een ouder het aanmeldformulier op de Engelse website ("Join the club") heeft verstuurd.',
+        'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kinderen' => ['Voornamen van de aangemelde kinderen', 'Noor and Daan']],
+        'verplicht' => [],
+        'onderwerp' => 'Your Sporty sign-up is in!',
+        'tekst' => "Hi {voornaam},\n\nHow lovely that you've signed up {kinderen} at Sporty! We've received your sign-up. Signing up is free and without obligation: you're not committed to anything yet.\n\nWe'll look at the options and get in touch soon to meet you and complete your sign-up. After that you'll receive a link to log in to Mijn BSO, our parent portal (in Dutch).\n\nCan't wait? Feel free to drop by at Sportpark Middenmeer, or book a free trial day.\n\nSee you soon!\nTeam Sporty (and Henny: woof!)",
+    ],
+
+    'aanmelding_bestaand_account_en' => [
+        'groep' => 'engels',
+        'naam' => 'Aanmelding met een bekend e-mailadres (Engels)',
+        'wanneer' => 'Als iemand het Engelse aanmeldformulier verstuurt met een e-mailadres dat al in Mijn BSO staat.',
+        'velden' => ['inloggen' => ['Link naar Mijn BSO', 'https://…/inloggen.php'], 'wachtwoord' => ['Link om een nieuw wachtwoord aan te vragen', 'https://…/wachtwoord-vergeten.php']],
+        'verplicht' => [],
+        'onderwerp' => 'Your sign-up at Sporty',
+        'tekst' => "Hi,\n\nWe just received a sign-up via our website with this email address. We already know this address, so we haven't saved the sign-up again.\n\nDid you sign up before and are you still waiting to hear from us? Then there's nothing you need to do: we'll be in touch soon.\n\nAlready have an account? Log in to Mijn BSO, our parent portal (in Dutch):\n{inloggen}\nForgotten your password? Request a new one here:\n{wachtwoord}\n\nWould you like to sign up another child? Send us a message in Mijn BSO, or give us a call or an email.\n\nWasn't this you? Then you can ignore this email.\n\nTeam Sporty",
+    ],
+
+    'proefdag_bevestiging_en' => [
+        'groep' => 'engels',
+        'naam' => 'Proefdag geboekt (Engels)',
+        'wanneer' => 'Direct nadat een ouder op de Engelse website een proefdag heeft geboekt.',
+        'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kind' => ['Voornaam van het kind', 'Noor'], 'wanneer' => ['Dag en tijd van de proefdag', 'Tuesday 10 November, 15:00–16:30'], 'adres' => ['Adres van het clubhuis', 'Sporty, Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer)']],
+        'verplicht' => ['wanneer'],
+        'onderwerp' => 'Your Sporty trial day is booked!',
+        'tekst' => "Hi {voornaam},\n\nHow lovely that you're coming to meet us! Your free trial day is booked for {wanneer}.\n\nWhere: {adres}\n\nWe'll show you around the clubhouse, you'll meet the coaches and you can ask all your questions. Do bring {kind}: fancy joining in? Then they can jump straight into a game.\n\nCan't make it after all? Just let us know by replying to this email or giving us a call.\n\nSee you then!\nTeam Sporty (and Henny, who's already wagging his tail)",
+    ],
+
+    'op_de_hoogte_bevestigen_en' => [
+        'groep' => 'engels',
+        'naam' => 'Blijf op de hoogte: aanmelding bevestigen (Engels)',
+        'wanneer' => 'Direct nadat iemand zich op de Engelse website heeft aangemeld om op de hoogte te blijven ("Stay in the loop").',
+        'velden' => ['voornaam' => ['Voornaam', 'Fatima'], 'link' => ['Link om de aanmelding te bevestigen', 'https://…/op-de-hoogte.php?bevestig=…'], 'dagen' => ['Na hoeveel dagen we niet-bevestigde aanmeldingen wissen', '14']],
+        'verplicht' => ['link'],
+        'onderwerp' => 'Confirm your Sporty sign-up',
+        'tekst' => "Hi {voornaam},\n\nGreat that you want to stay in the loop with Sporty! Please confirm your sign-up with this link:\n{link}\n\nAfter that we'll keep you posted on the latest news, and you'll get some Sporty welcome goodies. We'll let you know how you'll receive them.\n\nDidn't sign up yourself? Then there's nothing you need to do. Without confirmation we'll delete your details within {dagen} days.\n\nSee you soon!\nTeam Sporty (and Henny: woof!)",
+    ],
+
+    'op_de_hoogte_al_op_lijst_en' => [
+        'groep' => 'engels',
+        'naam' => 'Blijf op de hoogte: staat al op de lijst (Engels)',
+        'wanneer' => 'Als iemand zich op de Engelse website opnieuw aanmeldt terwijl het e-mailadres al bevestigd op de lijst staat.',
+        'velden' => ['voornaam' => ['Voornaam', 'Fatima'], 'afmeldlink' => ['Persoonlijke link om je af te melden', 'https://…/op-de-hoogte.php?afmelden=…']],
+        'verplicht' => ['afmeldlink'],
+        'onderwerp' => "You're already on Sporty's list",
+        'tekst' => "Hi {voornaam},\n\nYou just signed up again to stay in the loop with Sporty, but you were already on our list. So there's nothing you need to do!\n\n--\nYou're receiving this email because you signed up to stay in the loop with Sporty.\nNo more emails? Unsubscribe here: {afmeldlink}",
+    ],
+
+    'sollicitatie_ontvangen_en' => [
+        'groep' => 'engels',
+        'naam' => 'Sollicitatie ontvangen (Engels)',
+        'wanneer' => 'Direct nadat iemand via de Engelse pagina "Become a Sporty coach" heeft gesolliciteerd.',
+        'velden' => [
+            'voornaam' => ['Voornaam van de sollicitant', 'Lisa'],
+            'bijlagen' => ['Wat er is meegestuurd: "your CV" of "your CV and cover letter"', 'your CV and cover letter'],
+            'bewaren' => ['Hoe lang we de sollicitatie bewaren (hangt af van de keuze van de sollicitant)', "If there's no place for you, we'll delete your details no later than 4 weeks after letting you know."],
+        ],
+        'verplicht' => ['bewaren'],
+        'onderwerp' => "We've received your application",
+        'tekst' => "Hi {voornaam},\n\nHow great that you want to become a Sporty coach! We've received your application, with {bijlagen}. We'll read everything and get in touch as soon as we can.\n\n{bewaren}\n\nBest wishes,\nTeam Sporty",
+    ],
+
+    'op_de_hoogte_update_en' => [
+        'groep' => 'engels',
+        'naam' => 'Blijf op de hoogte: update van het team (Engels)',
+        'wanneer' => 'Als het team een update verstuurt, voor wie zich op de Engelse website aanmeldde. Onderwerp en bericht zijn dezelfde als voor iedereen; hier pas je aan wat eromheen staat.',
+        'velden' => ['voornaam' => ['Voornaam', 'Fatima'], 'onderwerp' => ['Het onderwerp dat je bij de update invult', 'Sporty opent op 4 januari!'], 'bericht' => ['Het bericht dat je bij de update schrijft', 'We openen op maandag 4 januari 2027. …'], 'afmeldlink' => ['Persoonlijke link om je af te melden', 'https://…/op-de-hoogte.php?afmelden=…']],
+        'verplicht' => ['bericht', 'afmeldlink'],
+        'onderwerp' => '{onderwerp}',
+        'tekst' => "Hi {voornaam},\n\n{bericht}\n\n--\nYou're receiving this email because you signed up to stay in the loop with Sporty.\nNo more emails? Unsubscribe here: {afmeldlink}",
+    ],
+
+    'ondertekening_en' => [
+        'groep' => 'engels',
+        'naam' => 'Ondertekening (Engels)',
+        'wanneer' => 'Onder elke Engelse e-mail.',
+        'velden' => ['bedrijfsnaam' => ['De naam uit Instellingen', 'Sporty'], 'website' => ['Adres van de Engelse website', 'https://…/en/']],
+        'verplicht' => [],
+        'onderwerp' => null,
+        'tekst' => "--\n{bedrijfsnaam}\n{website}",
+    ],
+
     'ondertekening' => [
         'groep' => 'algemeen',
         'naam' => 'Ondertekening',
@@ -340,11 +426,20 @@ function mailtekst_controleer(string $sleutel, string $onderwerp, string $tekst)
     return $fouten;
 }
 
-/** Stuurt een e-mail met de (eventueel aangepaste) tekst. */
+/**
+ * De e-mail in de taal van de bezoeker: komt het formulier van de Engelse website (taal() is 'en') en is er
+ * een Engelse versie (sleutel_en), dan die. Meldingen voor het team blijven Nederlands.
+ */
+function mailtekst_in_taal(string $sleutel): string
+{
+    return taal() === 'en' && isset(MAILTEKSTEN[$sleutel . '_en']) ? $sleutel . '_en' : $sleutel;
+}
+
+/** Stuurt een e-mail met de (eventueel aangepaste) tekst, in de taal van de bezoeker. */
 function stuur_mailtekst(string $aan, string $sleutel, array $waarden = []): bool
 {
-    [$onderwerp, $tekst] = mailtekst($sleutel, $waarden);
-    return stuur_mail($aan, $onderwerp, $tekst);
+    [$onderwerp, $tekst] = mailtekst(mailtekst_in_taal($sleutel), $waarden);
+    return stuur_mail($aan, $onderwerp, $tekst, taal());
 }
 
 /** Stuurt een melding met de (eventueel aangepaste) tekst naar het teamadres. */

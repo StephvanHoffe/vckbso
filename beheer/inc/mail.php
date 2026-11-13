@@ -20,11 +20,13 @@ function mail_laatste_fout(): string
     return (string) ($GLOBALS['mail_fout'] ?? '');
 }
 
-function stuur_mail(string $aan, string $onderwerp, string $tekst): bool
+function stuur_mail(string $aan, string $onderwerp, string $tekst, string $taal = 'nl'): bool
 {
     $GLOBALS['mail_fout'] = '';
     $onderwerp = trim((string) preg_replace('/[\r\n\t]+/', ' ', $onderwerp));
-    [, $ondertekening] = mailtekst('ondertekening', ['bedrijfsnaam' => instelling('bedrijfsnaam', 'Sporty'), 'website' => basis_url() . '/']);
+    [, $ondertekening] = $taal === 'en'
+        ? mailtekst('ondertekening_en', ['bedrijfsnaam' => instelling('bedrijfsnaam', 'Sporty'), 'website' => dirname(basis_url()) . '/en/'])
+        : mailtekst('ondertekening', ['bedrijfsnaam' => instelling('bedrijfsnaam', 'Sporty'), 'website' => basis_url() . '/']);
     $tekst .= "\n\n" . $ondertekening . "\n";
     $methode = mail_methode();
 

@@ -55,45 +55,45 @@ function lees_aanvraag(array $post): array
             'toelichting' => $tekst($k['toelichting'] ?? '', 500),
             'allergieen' => $tekst($k['allergieen'] ?? '', 500),
         ];
-        $wie = $kind['voornaam'] !== '' ? $kind['voornaam'] : 'kind ' . ($i + 1);
+        $wie = $kind['voornaam'] !== '' ? $kind['voornaam'] : t('kind ', 'child ') . ($i + 1);
         if (!geldige_naam($kind['voornaam'])) {
-            $fouten[$veld('voornaam')] = 'Vul de voornaam van je kind in' . ($kind['voornaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
+            $fouten[$veld('voornaam')] = t('Vul de voornaam van je kind in', "Fill in your child's first name") . ($kind['voornaam'] !== '' ? t(' (zonder links of e-mailadressen)', ' (without links or email addresses)') : '') . '.';
         }
         if (!geldige_naam($kind['achternaam'])) {
-            $fouten[$veld('achternaam')] = "Vul de achternaam van {$wie} in" . ($kind['achternaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
+            $fouten[$veld('achternaam')] = t("Vul de achternaam van {$wie} in", "Fill in {$wie}'s surname") . ($kind['achternaam'] !== '' ? t(' (zonder links of e-mailadressen)', ' (without links or email addresses)') : '') . '.';
         }
         if ($kind['voorletters'] === '') {
-            $fouten[$veld('voorletters')] = "Vul de voorletters van {$wie} in.";
+            $fouten[$veld('voorletters')] = t("Vul de voorletters van {$wie} in.", "Fill in {$wie}'s initials.");
         }
         if (!array_key_exists($kind['geslacht'], AANVRAAG_GESLACHT_KIND)) {
-            $fouten[$veld('geslacht')] = "Kies jongen, meisje of anders voor {$wie}.";
+            $fouten[$veld('geslacht')] = t("Kies jongen, meisje of anders voor {$wie}.", "Choose boy, girl or other for {$wie}.");
         }
         if (!geldige_datum($kind['geboortedatum']) || $kind['geboortedatum'] > vandaag() || $kind['geboortedatum'] < date('Y-m-d', strtotime('-16 years'))) {
-            $fouten[$veld('geboortedatum')] = "Vul een geldige geboortedatum in voor {$wie}.";
+            $fouten[$veld('geboortedatum')] = t("Vul een geldige geboortedatum in voor {$wie}.", "Fill in a valid date of birth for {$wie}.");
         }
         if ($kind['startdatum'] === '') {
-            $fouten[$veld('startdatum')] = "Kies de gewenste startdatum voor {$wie}.";
+            $fouten[$veld('startdatum')] = t("Kies de gewenste startdatum voor {$wie}.", "Choose the preferred start date for {$wie}.");
         } elseif (!geldige_datum($kind['startdatum']) || $kind['startdatum'] < vandaag()) {
-            $fouten[$veld('startdatum')] = 'Kies een startdatum vanaf vandaag.';
+            $fouten[$veld('startdatum')] = t('Kies een startdatum vanaf vandaag.', 'Choose a start date from today onwards.');
         }
         if ($kind['groep_klas'] === '') {
-            $fouten[$veld('groep_klas')] = "Vul de groep of klas van {$wie} in.";
+            $fouten[$veld('groep_klas')] = t("Vul de groep of klas van {$wie} in.", "Fill in {$wie}'s school year (groep) or class.");
         }
         if ($kind['school'] === '') {
-            $fouten[$veld('school')] = "Vul de school van {$wie} in.";
+            $fouten[$veld('school')] = t("Vul de school van {$wie} in.", "Fill in {$wie}'s school.");
         }
         if (!array_key_exists($kind['abonnement'], AANVRAAG_ABONNEMENTEN)) {
             $kind['abonnement'] = array_key_first(AANVRAAG_ABONNEMENTEN);
         }
         if (!$kind['dagen']) {
-            $fouten[$veld('dagen') . '[]'] = "Kies minstens één dag voor {$wie}.";
+            $fouten[$veld('dagen') . '[]'] = t("Kies minstens één dag voor {$wie}.", "Choose at least one day for {$wie}.");
         } elseif (array_diff($kind['dagen'], open_weekdagen())) {
-            $fouten[$veld('dagen') . '[]'] = 'Tot de zomervakantie zijn we alleen open op ' . weekdagen_tekst(open_weekdagen()) . '. Wil je een andere dag? Zet het bij de toelichting.';
+            $fouten[$veld('dagen') . '[]'] = t('Tot de zomervakantie zijn we alleen open op ' . weekdagen_tekst(open_weekdagen()) . '. Wil je een andere dag? Zet het bij de toelichting.', 'Until the summer holiday we are only open on ' . weekdagen_tekst(open_weekdagen()) . '. Would you like a different day? Mention it in the notes.');
         }
         $kinderen[] = $kind;
     }
     if (!$kinderen) {
-        $fouten['kinderen[0][voornaam]'] = 'Vul de gegevens van je kind in.';
+        $fouten['kinderen[0][voornaam]'] = t('Vul de gegevens van je kind in.', "Fill in your child's details.");
     }
 
     $ouder = [
@@ -115,29 +115,29 @@ function lees_aanvraag(array $post): array
         $ouder['geslacht'] = '';
     }
     if (!geldige_naam($ouder['voornaam'])) {
-        $fouten['voornaam'] = 'Vul je voornaam in' . ($ouder['voornaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
+        $fouten['voornaam'] = t('Vul je voornaam in', 'Fill in your first name') . ($ouder['voornaam'] !== '' ? t(' (zonder links of e-mailadressen)', ' (without links or email addresses)') : '') . '.';
     }
     if (!geldige_naam($ouder['achternaam'])) {
-        $fouten['achternaam'] = 'Vul je achternaam in' . ($ouder['achternaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
+        $fouten['achternaam'] = t('Vul je achternaam in', 'Fill in your surname') . ($ouder['achternaam'] !== '' ? t(' (zonder links of e-mailadressen)', ' (without links or email addresses)') : '') . '.';
     }
     if (!geldige_postcode($ouder['postcode'])) {
-        $fouten['postcode'] = 'Vul een geldige postcode in, bijvoorbeeld 1098 TZ.';
+        $fouten['postcode'] = t('Vul een geldige postcode in, bijvoorbeeld 1098 TZ.', 'Fill in a valid Dutch postcode, for example 1098 TZ.');
     }
     if ($ouder['huisnummer'] === '') {
-        $fouten['huisnummer'] = 'Vul je huisnummer in.';
+        $fouten['huisnummer'] = t('Vul je huisnummer in.', 'Fill in your house number.');
     }
     if ($ouder['straat'] === '') {
-        $fouten['straat'] = 'Vul je straat in.';
+        $fouten['straat'] = t('Vul je straat in.', 'Fill in your street.');
     }
     if ($ouder['plaats'] === '') {
-        $fouten['plaats'] = 'Vul je woonplaats in.';
+        $fouten['plaats'] = t('Vul je woonplaats in.', 'Fill in your town or city.');
     }
     if (!geldig_email($ouder['email'])) {
-        $fouten['email'] = $ouder['email'] === '' ? 'Vul je e-mailadres in, dan sturen we je een bevestiging.' : 'Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.';
+        $fouten['email'] = $ouder['email'] === '' ? t('Vul je e-mailadres in, dan sturen we je een bevestiging.', "Fill in your email address and we'll send you a confirmation.") : t('Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.', "That doesn't look like a valid email address. Please check it, for example name@example.com.");
     }
     // Een bekend e-mailadres geeft hier bewust geen foutmelding: zie aanvraag.php (geen accounts uitproberen)
     if (!geldig_telefoon($ouder['telefoon'])) {
-        $fouten['telefoon'] = $ouder['telefoon'] === '' ? 'Vul je telefoonnummer in, dan kunnen we je bellen.' : 'Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78.';
+        $fouten['telefoon'] = $ouder['telefoon'] === '' ? t('Vul je telefoonnummer in, dan kunnen we je bellen.', 'Fill in your phone number so we can call you.') : t('Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78.', 'Fill in a valid phone number, for example +31 6 12 34 56 78.');
     }
 
     $partner = null;
@@ -150,22 +150,26 @@ function lees_aanvraag(array $post): array
             'telefoon' => $tekst($post['partner_telefoon'] ?? '', 30),
         ];
         if (!geldige_naam($partner['voornaam'])) {
-            $fouten['partner_voornaam'] = 'Vul de voornaam van je partner in' . ($partner['voornaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
+            $fouten['partner_voornaam'] = t('Vul de voornaam van je partner in', "Fill in your partner's first name") . ($partner['voornaam'] !== '' ? t(' (zonder links of e-mailadressen)', ' (without links or email addresses)') : '') . '.';
         }
         if (!geldige_naam($partner['achternaam'])) {
-            $fouten['partner_achternaam'] = 'Vul de achternaam van je partner in' . ($partner['achternaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
+            $fouten['partner_achternaam'] = t('Vul de achternaam van je partner in', "Fill in your partner's surname") . ($partner['achternaam'] !== '' ? t(' (zonder links of e-mailadressen)', ' (without links or email addresses)') : '') . '.';
         }
         if ($partner['email'] !== '' && !geldig_email($partner['email'])) {
-            $fouten['partner_email'] = 'Dit lijkt geen geldig e-mailadres.';
+            $fouten['partner_email'] = t('Dit lijkt geen geldig e-mailadres.', "That doesn't look like a valid email address.");
         }
         if ($partner['telefoon'] !== '' && !geldig_telefoon($partner['telefoon'])) {
-            $fouten['partner_telefoon'] = 'Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78.';
+            $fouten['partner_telefoon'] = t('Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78.', 'Fill in a valid phone number, for example +31 6 12 34 56 78.');
         }
     } elseif (($post['partner'] ?? '') !== 'nee') {
-        $fouten['partner'] = 'Kies of je de gegevens van je partner wilt toevoegen.';
+        $fouten['partner'] = t('Kies of je de gegevens van je partner wilt toevoegen.', "Choose whether you'd like to add your partner's details.");
     }
 
-    foreach (['akkoord_privacy' => 'Vink aan dat je akkoord gaat met de registratie van je gegevens volgens de privacyverklaring.', 'akkoord_voorwaarden' => 'Vink aan dat je akkoord gaat met de algemene voorwaarden.', 'akkoord_correct' => 'Vink aan dat de gegevens kloppen.'] as $vinkje => $melding) {
+    foreach ([
+        'akkoord_privacy' => t('Vink aan dat je akkoord gaat met de registratie van je gegevens volgens de privacyverklaring.', 'Tick the box to agree to us recording your details as described in the privacy statement.'),
+        'akkoord_voorwaarden' => t('Vink aan dat je akkoord gaat met de algemene voorwaarden.', 'Tick the box to agree to the terms and conditions.'),
+        'akkoord_correct' => t('Vink aan dat de gegevens kloppen.', 'Tick the box to confirm your details are correct.'),
+    ] as $vinkje => $melding) {
         if (empty($post[$vinkje])) {
             $fouten[$vinkje] = $melding;
         }
@@ -198,7 +202,7 @@ function bewaar_aanvraag(array $aanvraag): int
         $extra = [
             'voornaam' => $ouder['voornaam'], 'tussenvoegsel' => $ouder['tussenvoegsel'], 'achternaam' => $ouder['achternaam'],
             'voorletters' => $ouder['voorletters'], 'geslacht' => $ouder['geslacht'], 'gevonden' => $ouder['gevonden'],
-            'partner' => $aanvraag['partner'], 'verstuurd_op' => nu(),
+            'partner' => $aanvraag['partner'], 'verstuurd_op' => nu(), 'taal' => taal(),
         ];
         q("INSERT INTO gebruikers (rol, status, naam, email, telefoon, straat, postcode, plaats, contactvoorkeur, wachtwoord_hash, gewenste_dagen, gewenste_startdatum, opmerkingen, aanvraag, aangemaakt_op)
            VALUES ('ouder', 'nieuw', ?, ?, ?, ?, ?, ?, '', NULL, ?, ?, ?, ?, ?)", [

@@ -23,6 +23,7 @@
     opvangvormen: [
       {
         naam: "Sporty Abonnement (52 weken)",
+        naamEngels: "Sporty membership (52 weeks)", // op de Engelse pagina
         soort: "bso",
         uurtarief: 10.31,
         urenPerMaandPerDag: 27.5,

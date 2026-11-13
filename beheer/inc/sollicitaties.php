@@ -82,15 +82,15 @@ function cv_type(string $pad, string $naam): ?string
  */
 function cv_fout(array $upload, string $wat = 'cv'): ?string
 {
-    $teGroot = 'Dit bestand is groter dan 5 MB. Maak het wat kleiner, of stuur het later per mail.';
+    $teGroot = t('Dit bestand is groter dan 5 MB. Maak het wat kleiner, of stuur het later per mail.', 'This file is larger than 5 MB. Make it a bit smaller, or send it later by email.');
     if (($upload['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-        return in_array($upload['error'] ?? 0, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) ? $teGroot : 'Je ' . $wat . ' kon niet worden geüpload. Probeer het nog eens.';
+        return in_array($upload['error'] ?? 0, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true) ? $teGroot : t('Je ' . $wat . ' kon niet worden geüpload. Probeer het nog eens.', 'Your ' . ($wat === 'cv' ? 'CV' : 'cover letter') . " couldn't be uploaded. Please try again.");
     }
     if ($upload['size'] > CV_MAX_BYTES) {
         return $teGroot;
     }
     if (cv_type($upload['tmp_name'], (string) ($upload['name'] ?? '')) === null) {
-        return 'Kies een pdf- of Word-bestand (.pdf, .doc of .docx).';
+        return t('Kies een pdf- of Word-bestand (.pdf, .doc of .docx).', 'Choose a PDF or Word file (.pdf, .doc or .docx).');
     }
     return null;
 }
