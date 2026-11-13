@@ -79,6 +79,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `tools/voorbeeld/` | Bouwscript (`bouw.mjs`), extra demogegevens, de overzichtspagina en de voorbeeldbalk |
 | `vercel.json` | Alleen voor Vercel: stuurt `/beheer/` door naar het voorbeeld, stuurt de oude adressen door naar de nieuwe pagina's en zet `noindex` op het voorbeeld |
 | `docs/seo.md` | Wat er voor de vindbaarheid is gedaan, wat Sporty nog zelf moet regelen (domein, adres, Google Bedrijfsprofiel) en onderhoud |
+| `docs/live-zetten-vimexx.md` | Stappenplan om de site en Mijn BSO live te zetten op een Managed VPS bij Vimexx, met het uploadpakket (`npm run pakket`) |
 | `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, de verplichte eisen (toegang, beveiliging, logboek, ouderrechten, bewaarbeleid), installatie, back-ups, Stripe en TODO's |
 
 Header, footer en de iconenset staan in elke pagina, zodat elke pagina gewone HTML blijft. Pas ze aan in `tools/site/` en draai `npm run kop-en-voet`; het script zet ze in alle Nederlandse pagina's. De Engelse pagina heeft een eigen header en footer.

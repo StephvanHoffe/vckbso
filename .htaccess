@@ -1,5 +1,24 @@
-# Website Sporty (Apache). Oude adressen uit de eerste versie van de site sturen we door naar de nieuwe pagina's,
-# zodat links en zoekresultaten blijven werken. Op Vercel staat hetzelfde in vercel.json.
+# Website Sporty (Apache, bijvoorbeeld een Managed VPS bij Vimexx). Zie docs/live-zetten-vimexx.md.
+# Op Vercel (het voorbeeld) wordt dit bestand niet gebruikt; daar staat de doorverwijzing in vercel.json.
+
+Options -Indexes
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Altijd via een beveiligde verbinding (https)
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # www.domein.nl -> domein.nl (het adres zonder www is het hoofdadres, zoals in sitemap.xml)
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+</IfModule>
+
+# Oude adressen uit de eerste versie van de site sturen we door naar de nieuwe pagina's,
+# zodat links en zoekresultaten blijven werken.
 <IfModule mod_alias.c>
   Redirect 301 /over-ons.html /alles-over-sporty.html
   Redirect 301 /diensten.html /een-middag-bij-sporty.html
@@ -8,4 +27,38 @@
   Redirect 301 /werken-bij.html /word-sporty-coach.html
 </IfModule>
 
-ErrorDocument 404 /404.html
+# Beveiligingskoppen voor de hele site (Mijn BSO zet er in beheer/ nog strengere bij)
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+  # Alleen na een geslaagde https-verbinding: de browser onthoudt een jaar lang dat de site https gebruikt
+  Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on'"
+</IfModule>
+
+# Kleiner versturen (sneller laden)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json application/xml image/svg+xml application/manifest+json
+</IfModule>
+
+# Bewaren in de browser. De bestandsnamen veranderen niet bij een nieuwe versie, dus css en js kort,
+# foto's en letters langer. Pagina's altijd vers.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 day"
+  ExpiresByType application/javascript "access plus 1 day"
+  ExpiresByType image/avif "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/x-icon "access plus 30 days"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Verborgen bestanden (zoals .git of .user.ini) nooit tonen; de map voor certificaten wel
+<IfModule mod_rewrite.c>
+  RewriteRule (^|/)\.(?!well-known/) - [F]
+</IfModule>

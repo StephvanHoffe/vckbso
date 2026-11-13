@@ -259,6 +259,8 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
 
 ## Live zetten
 
+**Keuze (november 2026): alles bij Vimexx, op een Managed VPS.** Het stappenplan daarvoor, met het uploadpakket (`npm run pakket`), staat in [`docs/live-zetten-vimexx.md`](live-zetten-vimexx.md). Hieronder de algemene stappen voor elke hosting.
+
 1. **Hosting met PHP 8.2+** en https (de statische website alleen kan op elke host, de beheeromgeving niet). Upload de hele site inclusief `beheer/`.
 2. Maak twee sleutels, één voor de gegevens en één voor de back-ups:
    ```sh
@@ -296,7 +298,7 @@ location ~ ^/beheer/.+\.php$ { include fastcgi_params; fastcgi_param SCRIPT_FILE
 client_max_body_size 64m;
 ```
 
-Zet voor foto's van telefoons in PHP: `upload_max_filesize = 16M`, `post_max_size = 64M`.
+Zet voor foto's van telefoons in PHP: `upload_max_filesize = 16M`, `post_max_size = 64M`. Met `mod_php` gebeurt dat via `beheer/.htaccess`, met PHP-FPM (zoals bij DirectAdmin) via `beheer/.user.ini`.
 
 ### Stripe koppelen
 

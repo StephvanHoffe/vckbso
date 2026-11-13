@@ -12,6 +12,7 @@
     "og-image": "node tools/og-image.mjs",
     "logo": "node tools/logo/maak-logo.mjs",
     "voorbeeld": "node tools/voorbeeld/bouw.mjs",
+    "pakket": "node tools/pakket.mjs",
     "serve": "npx --yes serve . -l 8080"
   },
   "devDependencies": {

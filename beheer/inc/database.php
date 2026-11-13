@@ -35,6 +35,13 @@ function db(): PDO
     $pdo->exec('PRAGMA foreign_keys = ON');
     $pdo->exec('PRAGMA busy_timeout = 5000');
     $pdo->exec('PRAGMA journal_mode = WAL');
+    // Alleen leesbaar voor de gebruiker waaronder PHP draait (niet voor andere gebruikers op de server)
+    foreach (['', '-wal', '-shm'] as $achtervoegsel) {
+        $bestand = data_dir() . '/beheer.sqlite' . $achtervoegsel;
+        if (is_file($bestand) && (fileperms($bestand) & 0077) !== 0) {
+            @chmod($bestand, 0600);
+        }
+    }
     migreer($pdo);
     return $pdo;
 }
