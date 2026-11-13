@@ -35,7 +35,7 @@ export const BSO = {
   image: `${SITE}/assets/img/og-image.jpg`,
   logo: `${SITE}/assets/img/sporty-logo-512.png`,
   telephone: "+31612345678",
-  email: "info@sporty.nl",
+  email: "info@bsosporty.nl",
   address: { "@type": "PostalAddress", streetAddress: "Voorlandpad 17", postalCode: "1098 TZ", addressLocality: "Amsterdam", addressCountry: "NL" },
   areaServed: [
     { "@type": "Place", name: "Watergraafsmeer, Amsterdam" },
@@ -47,7 +47,7 @@ export const BSO = {
     "@type": "ContactPoint",
     contactType: "customer service",
     telephone: "+31612345678",
-    email: "info@sporty.nl",
+    email: "info@bsosporty.nl",
     availableLanguage: ["nl", "en"],
     hoursAvailable: { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "13:30" },
   },

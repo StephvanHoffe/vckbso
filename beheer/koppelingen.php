@@ -134,7 +134,7 @@ if (is_post()) {
         $invoer['beveiliging'] = $invoer['beveiliging'] === 'ssl' ? 'ssl' : 'starttls';
         $invoer['host'] = strtolower($invoer['host']);
         if (!smtp_adres_ok($invoer['van'])) {
-            $fouten['van'] = 'Vul een geldig e-mailadres in, bijvoorbeeld info@sporty.nl.';
+            $fouten['van'] = 'Vul een geldig e-mailadres in, bijvoorbeeld info@bsosporty.nl.';
         }
         if ($invoer['van_naam'] === '') {
             $fouten['van_naam'] = 'Vul de naam in die ouders als afzender zien.';
@@ -390,7 +390,7 @@ pagina_kop('Koppelingen', 'Hier koppel je Mijn BSO aan andere diensten. Sleutels
     <form class="form koppeling__mail" method="post" action="koppelingen.php#email">
       <?= csrf_veld() ?>
       <?= $keuzes('methode', [
-          'smtp' => ['Eigen mailserver (SMTP)', 'Aanbevolen. De e-mail gaat via de mailbox van jullie eigen domein, zoals info@sporty.nl, en komt zo het best aan.'],
+          'smtp' => ['Eigen mailserver (SMTP)', 'Aanbevolen. De e-mail gaat via de mailbox van jullie eigen domein, zoals info@bsosporty.nl, en komt zo het best aan.'],
           'mail' => ['Mailfunctie van de webserver', 'Werkt bij de meeste webhosting zonder instellingen, maar komt vaker in de map met ongewenste e-mail terecht.'],
           'log' => ['Testmodus', 'Er wordt niets verstuurd. E-mails komen alleen in het logbestand op de server (data/mail.log).'],
       ], [$invoer['methode']], 'Versturen via', 'radio') ?>

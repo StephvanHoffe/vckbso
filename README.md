@@ -100,14 +100,14 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 **Gegevens van de klant**
 - [x] Adres: Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer), uit de teksten van november 2026.
-- [ ] Telefoonnummer, WhatsApp-nummer en e-mailadressen op het nieuwe domein (nu staan het oude nummer en info@sporty.nl er als tijdelijke gegevens; de WhatsApp-knoppen op Contact en in het aanmeldformulier gebruiken ook het tijdelijke nummer).
+- [ ] Telefoonnummer en WhatsApp-nummer (nu staat het oude nummer er als tijdelijk gegeven; de WhatsApp-knoppen op Contact en in het aanmeldformulier gebruiken ook het tijdelijke nummer). Het e-mailadres is info@bsosporty.nl (13 november 2026).
 - [ ] Wat er in het Sporty-kennismakingspakket zit en hoe ouders het krijgen (Blijf op de hoogte).
 - [ ] De teksten van de e-mails (bevestiging van een aanmelding, een proefdag en Blijf op de hoogte zijn nu voorlopige teksten). Sporty past alle e-mails zelf aan in Mijn BSO onder Instellingen → E-mails aanpassen.
 - [ ] Nieuwe hero-foto voor de homepage (Sporty stuurt die mee), en de foto's voor de nieuwe plekken `bewegen` (homepage) en `locatie-overzicht` (Locaties); zie `assets/fotos/BRONNEN.md`.
 - [ ] LRK-nummer (footer, Abonnement en kosten, veelgestelde vragen) en het GGD-inspectierapport (footer).
 - [ ] De tijden van het middagprogramma (homepage en Een middag bij Sporty; ook voor de openingstijden in de schema.org-gegevens).
 - [ ] Antwoorden op de veelgestelde vragen die nog openstaan (staan als TODO in `contact.html`).
-- [ ] Bevestigen dat het domein sporty.nl van Sporty is en dat info@sporty.nl werkt (nu staat er een andere website op sporty.nl). Zie [Live zetten](#live-zetten).
+- [ ] De mailbox info@bsosporty.nl aanmaken en testen vóór de livegang. Zie [Live zetten](#live-zetten).
 - [ ] Vectorbestanden (SVG of PDF) van de logo's van de ontwerper. De logo's op de site zijn met de computer omgezet uit de aangeleverde afbeeldingen (`design/logo/`); vervang `assets/img/sporty-logo*.svg` en `sporty-woordmerk*.svg` door de bestanden van de ontwerper en draai `npm run logo`.
 - [ ] KvK-nummer (footer).
 - [ ] Links naar social media (footer).
@@ -125,9 +125,9 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] GIF's (of korte filmpjes) van de teamleden die een doelpunt vieren (Team).
 
 **Techniek**
-- [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@sporty.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
+- [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@bsosporty.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
 - [ ] Privacyverklaring laten controleren: bewaartermijnen, verwerkers (formulierendienst, hosting, Stripe) en de verwerking van gegevens van kinderen in Mijn BSO.
-- [ ] Domein `bsosporty.nl` registreren (gekozen op 13 november 2026; de site gebruikt het al overal) en het e-mailadres op dat domein kiezen (zie hieronder).
+- [ ] Domein `bsosporty.nl` registreren en de mailbox info@bsosporty.nl aanmaken (allebei gekozen op 13 november 2026; de site gebruikt ze al overal).
 - [ ] SEO-stappen die alleen Sporty zelf kan zetten: Google Bedrijfsprofiel, Search Console, LRK-nummer, vermeldingen bij scholen en verenigingen. Zie [`docs/seo.md`](docs/seo.md#nog-te-doen-door-sporty).
 - [ ] Engelse teksten na akkoord van de klant op de Nederlandse teksten van november 2026. Nu staat er alleen een Engelse startpagina, met de eerste indeling (de quiz en de gegevens zijn bijgewerkt).
 - [ ] Beheeromgeving live zetten: hosting met PHP 8.2+ en https, `beheer/config.php` met twee sleutels, cron voor onderhoud en back-ups, Stripe koppelen, uurtarief en groepen instellen. Bewaartermijnen laten bevestigen. De volledige lijst staat in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#nog-te-doen-todo).
@@ -136,6 +136,6 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 De website zelf werkt op elke statische host, maar voor de beheeromgeving (`beheer/`) is hosting met **PHP 8.2 of hoger** en https nodig. Gewone Nederlandse webhosting met PHP is genoeg. Upload de map zonder `node_modules/`, `tools/`, `tests/`, `voorbeeld/`, `assets/fotos/bron/`, `package*.json` en `vercel.json`. Stel `404.html` in als foutpagina. Volg daarna de stappen in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#live-zetten).
 
-**Let op met het e-mailadres:** op de website staat info@sporty.nl. Het domein sporty.nl was op 6 oktober 2026 in gebruik voor een andere website (Sporty.nl, over sport en fitness), met e-mail bij TransIP. Controleer vóór het live zetten dat sporty.nl echt van Sporty is en dat de mailbox info@sporty.nl bestaat. Anders komen berichten van ouders bij een ander terecht, of komen ze nergens aan. Het vorige adres info@vckbso.nl werkte ook niet: het domein vckbso.nl bestond niet. Het websitedomein wordt bsosporty.nl (13 november 2026); een e-mailadres op dat domein ligt dan voor de hand, maar dat moet Sporty eerst bevestigen.
+**Let op met het e-mailadres:** op de website en in Mijn BSO staat info@bsosporty.nl (13 november 2026; eerder info@sporty.nl, maar dat domein was van een andere website). Maak die mailbox aan en test hem vóór het live zetten, anders komen berichten van ouders nergens aan. Zie stap 0 in [`docs/live-zetten-vimexx.md`](docs/live-zetten-vimexx.md).
 
 **Let op bij het koppelen van het domein:** zet je de website op een domein waar al e-mail op draait, wijzig dan alleen de DNS-records voor de website (A/AAAA of CNAME). Laat de MX-, SPF-, DKIM- en DMARC-records ongemoeid, anders stopt de e-mail.

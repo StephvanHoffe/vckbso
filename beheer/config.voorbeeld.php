@@ -42,11 +42,11 @@ return [
     // ],
     // 'mail' => [
     //     'methode' => 'smtp',                  // 'log' (alleen data/mail.log), 'mail' (mailfunctie server) of 'smtp'
-    //     'van' => 'info@sporty.nl',
+    //     'van' => 'info@bsosporty.nl',
     //     'van_naam' => 'Sporty',
     // ],
-    // 'smtp' => ['host' => 'smtp.example.nl', 'poort' => 587, 'beveiliging' => 'starttls', 'gebruiker' => 'info@sporty.nl', 'wachtwoord' => '...'],
-    // 'team_email' => 'info@sporty.nl',         // meldingen van aanmeldingen, berichten en privacyverzoeken
+    // 'smtp' => ['host' => 'smtp.example.nl', 'poort' => 587, 'beveiliging' => 'starttls', 'gebruiker' => 'info@bsosporty.nl', 'wachtwoord' => '...'],
+    // 'team_email' => 'info@bsosporty.nl',         // meldingen van aanmeldingen, berichten en privacyverzoeken
 
     // Back-ups (php beheer/cli/backup.php, dagelijks via cron).
     'backup' => [

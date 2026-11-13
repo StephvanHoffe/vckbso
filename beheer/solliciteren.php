@@ -38,7 +38,7 @@ function sollicitatie_antwoord(bool $alsJson, int $code, array $fouten = [], str
             }
             echo '</ul>';
         }
-        echo '<p>Ga terug naar het formulier en probeer het nog eens, of mail je sollicitatie naar <a href="mailto:' . e(instelling('email', 'info@sporty.nl')) . '">' . e(instelling('email', 'info@sporty.nl')) . '</a>.</p>';
+        echo '<p>Ga terug naar het formulier en probeer het nog eens, of mail je sollicitatie naar <a href="mailto:' . e(instelling('email', 'info@bsosporty.nl')) . '">' . e(instelling('email', 'info@bsosporty.nl')) . '</a>.</p>';
     }
     echo '<a class="btn btn--secondary" href="../word-sporty-coach.html#solliciteren">' . icoon('back') . 'Terug naar Word Sporty coach</a>';
     echo '</div></div>';

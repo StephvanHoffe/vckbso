@@ -17,7 +17,7 @@ Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmi
 ## 0. Vooraf
 
 - [ ] **Domein registreren:** `bsosporty.nl` (gekozen op 13 november 2026), bij voorkeur ook bij Vimexx. De site gebruikt het al overal (sitemap, robots.txt, de kop van elke pagina en de gegevens voor Google).
-- [ ] **E-mailadres op het domein:** op de site staat nog info@sporty.nl (zie `README.md`). Besluit welk adres het wordt, bijvoorbeeld een mailbox op `bsosporty.nl`; de ontwikkelaar past het daarna overal aan.
+- [ ] **Mailbox info@bsosporty.nl aanmaken** (13 november 2026 gekozen; dit adres staat al overal op de site en in Mijn BSO). Kies waar de mail komt te staan: in DirectAdmin bij Vimexx, of bij een maildienst als Google Workspace of Microsoft 365. Zet de mailrecords van het domein goed (MX, SPF, DKIM en DMARC) en test het adres vóór de livegang: de site, het contactformulier en de mails van Mijn BSO verwijzen ernaar.
 - [ ] **Vraag Vimexx** (bijvoorbeeld via de klantenservice):
   1. Is PHP 8.2 of hoger beschikbaar, met de extensies `pdo_sqlite`, `sodium`, `gd`, `intl`, `mbstring`, `curl` (en liefst `exif`)?
   2. Zijn SSH en cronjobs beschikbaar, en wat is het pad naar PHP voor cronjobs (bijvoorbeeld `/usr/local/bin/php`)?
@@ -82,7 +82,7 @@ Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmi
 
 - [ ] Verlaag een dag van tevoren de TTL van de records hieronder (bijvoorbeeld naar 300 seconden), dan gaat de overstap sneller.
 - [ ] Zet het **A-record** van `bsosporty.nl` (`@`) op het IP-adres van de VPS, en `www` op hetzelfde adres (A-record of CNAME naar `@`).
-- [ ] **Laat de mailrecords staan** (MX, SPF, DKIM, DMARC): de e-mail op het domein is in gebruik en mag niet verstoord worden. Verstuurt Mijn BSO later via "Mailfunctie van de webserver", dan moet SPF het IP-adres van de VPS toestaan; via een eigen mailserver of Google Workspace (Koppelingen) hoeft er niets te veranderen.
+- [ ] **Mailrecords** (MX, SPF, DKIM, DMARC): die horen bij de mailbox info@bsosporty.nl (stap 0) en mogen bij het omzetten van de website niet verloren gaan. Verstuurt Mijn BSO via "Mailfunctie van de webserver", dan moet SPF het IP-adres van de VPS toestaan; via de eigen mailserver (Koppelingen → E-mail versturen, SMTP met info@bsosporty.nl) hoeft er niets extra's.
 - [ ] Wijst het domein naar de VPS (controleer met `https://bsosporty.nl`), vraag dan in DirectAdmin het **Let's Encrypt-certificaat** aan voor `bsosporty.nl` en `www.bsosporty.nl`. Daarna stuurt de site alles vanzelf door naar https en naar het adres zonder www.
 
 ## 7. Mijn BSO installeren en instellen

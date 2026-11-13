@@ -33,12 +33,12 @@ test("een geheim is alleen gemaskeerd te zien", (t) => {
 
 test("een e-mail via SMTP heeft nette koppen en een veilige inhoud", (t) => {
   if (!heeftPhp()) return t.skip("php is niet geïnstalleerd");
-  const bericht = php(`echo json_encode(smtp_bericht('info@sporty.nl', 'Sporty "BSO"', 'ouder@example.nl', 'team@sporty.nl', "Welkom bij Sporty, René!\\r\\nBcc: x@y.nl", ".punt aan het begin\\nregel twee met € en é"));`);
+  const bericht = php(`echo json_encode(smtp_bericht('info@bsosporty.nl', 'Sporty "BSO"', 'ouder@example.nl', 'team@bsosporty.nl', "Welkom bij Sporty, René!\\r\\nBcc: x@y.nl", ".punt aan het begin\\nregel twee met € en é"));`);
   const [kop, ...rest] = bericht.split("\r\n\r\n");
   assert.ok(!/(^|[^\r])\n/.test(bericht), "alle regels eindigen op CRLF");
-  assert.match(kop, /^From: "Sporty \\"BSO\\"" <info@sporty\.nl>$/m);
+  assert.match(kop, /^From: "Sporty \\"BSO\\"" <info@bsosporty\.nl>$/m);
   assert.match(kop, /^To: <ouder@example\.nl>$/m);
-  assert.match(kop, /^Reply-To: <team@sporty\.nl>$/m);
+  assert.match(kop, /^Reply-To: <team@bsosporty\.nl>$/m);
   assert.match(kop, /^Subject: Welkom bij Sporty, =\?UTF-8\?Q\?Ren=C3=A9/m, "onderwerp met é is gecodeerd");
   assert.doesNotMatch(kop, /^Bcc:/m, "een regeleinde in het onderwerp kan geen kop toevoegen");
   assert.match(kop, /^Content-Transfer-Encoding: base64$/m);

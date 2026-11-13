@@ -609,6 +609,9 @@ function migreer(PDO $pdo): void
         // Sessies afsluiten (november 2026): na een nieuw wachtwoord of een reset van de tweestapsverificatie
         // gaat sessie_versie omhoog, en vervallen alle andere sessies van die gebruiker.
         18 => 'ALTER TABLE gebruikers ADD COLUMN sessie_versie INTEGER NOT NULL DEFAULT 0;',
+
+        // Eigen domein (13 november 2026): info@sporty.nl wordt info@bsosporty.nl (alleen als het adres nog niet zelf was aangepast)
+        19 => "UPDATE instellingen SET waarde = 'info@bsosporty.nl' WHERE sleutel = 'email' AND waarde = 'info@sporty.nl';",
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

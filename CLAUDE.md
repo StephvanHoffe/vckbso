@@ -276,7 +276,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 
 ## Functies
 
-- **Contactformulier:** Contactformulier met naam, e-mail, telefoon (optioneel) en bericht, met duidelijke foutmeldingen en een bevestiging na versturen. Berichten gaan naar info@sporty.nl. Bij een statische site: gebruik een formulierendienst en zet de endpoint-URL als TODO in de code, met een `mailto:`-link als terugvaloptie.
+- **Contactformulier:** Contactformulier met naam, e-mail, telefoon (optioneel) en bericht, met duidelijke foutmeldingen en een bevestiging na versturen. Berichten gaan naar info@bsosporty.nl. Bij een statische site: gebruik een formulierendienst en zet de endpoint-URL als TODO in de code, met een `mailto:`-link als terugvaloptie.
 - **Google Maps-kaart:** Kaart met de locatie, meteen zichtbaar (feedback 6 november 2026). Het is een eigen kaartbeeld uit OpenStreetMap (`npm run kaart`, met bronvermelding) dat bij een klik Google Maps opent, plus een link "Route plannen". Er laadt niets van Google op de pagina, dus geen cookies en geen toestemming nodig.
 - **Meertalig (bv. NL/EN):** Meertalig (Nederlands en Engels): taalkeuze in de header, teksten per taal gescheiden. De Engelse teksten volgen of worden vertaald na akkoord van de klant.
 - **Overige wensen:** In de backend van de website wil ik een compleet kindvolgsysteem om zo alle kinderen individueel bij te kunnen houden en eventueel hun ontwikkeling te monitoren.
@@ -284,7 +284,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 ## Gegevens op de website
 
 - Bedrijfsnaam: Sporty, ook statutair (bevestigd door de klant op 23 oktober 2026; eerder statutair: Je Dag in Beeld; tot 30 september 2026: BSO VCK)
-- E-mail: info@sporty.nl (als `mailto:`-link; gewijzigd op 6 oktober 2026, eerder info@vckbso.nl)
+- E-mail: info@bsosporty.nl (als `mailto:`-link; gewijzigd op 13 november 2026, eerder info@sporty.nl en daarvoor info@vckbso.nl)
 - Telefoon: 0612345678 (als `tel:`-link)
 
 - Adres: Sporty, Voorlandpad 17, 1098 TZ Amsterdam (clubhuis op Sportpark Middenmeer, Watergraafsmeer; teksten van november 2026)
@@ -302,7 +302,7 @@ Wat er te zien moet zijn: mezelf en mijn team, klanten in actie, sfeer en omgevi
 
 ## Domein en planning
 
-- Domeinnaam: bsosporty.nl (gekozen op 13 november 2026; eerder gewenst: bsovck.nl). Het e-mailadres op de site blijft info@sporty.nl tot de klant een ander adres doorgeeft.
+- Domeinnaam: bsosporty.nl (gekozen op 13 november 2026; eerder gewenst: bsovck.nl). E-mailadres op dat domein: info@bsosporty.nl (13 november 2026).
 - E-mail op het domein in gebruik: ja (niet verstoren bij verhuizen)
 - Planning: zo snel mogelijk
 
