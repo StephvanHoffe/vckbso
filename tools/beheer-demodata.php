@@ -38,8 +38,8 @@ function demo_gebruiker(string $rol, string $naam, string $email, string $hash, 
 }
 
 // Team
-$beheerder = demo_gebruiker('beheerder', 'Demo Beheerder', 'beheerder@demo.bsovck.nl', $hash);
-$begeleider = demo_gebruiker('medewerker', 'Demo Begeleider', 'begeleider@demo.bsovck.nl', $hash);
+$beheerder = demo_gebruiker('beheerder', 'Demo Beheerder', 'beheerder@demo.bsosporty.nl', $hash);
+$begeleider = demo_gebruiker('medewerker', 'Demo Begeleider', 'begeleider@demo.bsosporty.nl', $hash);
 
 // Instellingen (voorbeeldwaarden, geen echte tarieven)
 if (instelling('uurtarief_cent') === '') {
@@ -72,7 +72,7 @@ $gezinnen = [
 ];
 $kinderen = [];
 foreach ($gezinnen as $i => [$ouderNaam, $kids]) {
-    $email = strtolower(str_replace(' ', '.', $ouderNaam)) . '@demo.bsovck.nl';
+    $email = strtolower(str_replace(' ', '.', $ouderNaam)) . '@demo.bsosporty.nl';
     $ouderId = demo_gebruiker('ouder', $ouderNaam, $email, $hash, ['mandaat' => $i === 3 ? 'geen' : 'demo']);
     foreach ($kids as [$voornaam, $achternaam, $leeftijd, $fotos]) {
         $groep = $groepen[strtotime($leeftijd) < strtotime('-8 years') ? min(1, count($groepen) - 1) : 0];
@@ -88,7 +88,7 @@ foreach ($gezinnen as $i => [$ouderNaam, $kids]) {
     }
 }
 // Eén nieuwe aanmelding die nog goedgekeurd moet worden
-$nieuw = demo_gebruiker('ouder', 'Lisa Bos', 'lisa.bos@demo.bsovck.nl', $hash, ['status' => 'nieuw', 'mandaat' => 'demo']);
+$nieuw = demo_gebruiker('ouder', 'Lisa Bos', 'lisa.bos@demo.bsosporty.nl', $hash, ['status' => 'nieuw', 'mandaat' => 'demo']);
 q("INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, foto_toestemming, aangemaakt_op) VALUES (?, 'Mees', 'Bos', ?, 0, ?)", [$nieuw, date('Y-m-d', strtotime('-6 years')), nu()]);
 koppel_verzorger(laatste_id(), $nieuw, 'ouder', true); // gezag opgegeven, nog te controleren
 
@@ -128,7 +128,7 @@ for ($m = 3; $m >= 0; $m--) {
 
 echo "Demogegevens aangemaakt.\n";
 echo "Inloggen met wachtwoord \"" . DEMO_WACHTWOORD . "\":\n";
-echo "  beheerder@demo.bsovck.nl   (beheerder)\n";
-echo "  begeleider@demo.bsovck.nl  (medewerker)\n";
-echo "  sam.de.jong@demo.bsovck.nl (ouder)\n";
+echo "  beheerder@demo.bsosporty.nl   (beheerder)\n";
+echo "  begeleider@demo.bsosporty.nl  (medewerker)\n";
+echo "  sam.de.jong@demo.bsosporty.nl (ouder)\n";
 echo "Het team stelt bij de eerste keer inloggen tweestapsverificatie in (verplicht).\n";

@@ -12,8 +12,7 @@
 
 return [
     // Volledige URL van de beheeromgeving, zonder / aan het eind.
-    // TODO: aanpassen als het domein anders wordt dan bsovck.nl
-    'app_url' => 'https://bsovck.nl/beheer',
+    'app_url' => 'https://bsosporty.nl/beheer',
 
     // Map voor de database en de foto's: BUITEN de webroot, bijvoorbeeld
     // '/home/account/beheer-data'. (De standaardmap beheer/data is met .htaccess
@@ -63,8 +62,8 @@ return [
     //
     // 'organisaties' => [
     //     'vck' => [
-    //         'hosts' => ['bsovck.nl', 'www.bsovck.nl'],
-    //         'app_url' => 'https://bsovck.nl/beheer',
+    //         'hosts' => ['bsosporty.nl', 'www.bsosporty.nl'],
+    //         'app_url' => 'https://bsosporty.nl/beheer',
     //         'data_dir' => '/home/account/data-vck',
     //         'sleutel' => '...',
     //         'backup' => ['map' => '/home/account/backups-vck', 'sleutel' => '...'],

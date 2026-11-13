@@ -16,8 +16,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-// TODO: domein kiezen bij de nieuwe naam Sporty (nu nog bsovck.nl); pas dit aan, ook in de <head> van elke pagina, sitemap.xml en robots.txt
-export const SITE = "https://bsovck.nl";
+export const SITE = "https://bsosporty.nl";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 // Gegevens van de BSO. Houd deze gelijk aan wat op de website staat.

@@ -46,7 +46,7 @@ nieuw_bericht($aylin, $aylin, (int) $kinderen[2]['id'], 'ziekmelding', 'Elif hee
 nieuw_bericht($aylin, $begeleider, (int) $kinderen[2]['id'], 'bericht', 'Beterschap voor Elif! We hebben haar voor beide dagen afgemeld.', false, true);
 
 // Oma als verzorger van Noor: alleen foto's en berichten, geen gezag
-q("INSERT INTO gebruikers (rol, status, naam, email, telefoon, wachtwoord_hash, aangemaakt_op) VALUES ('ouder', 'actief', 'Oma Joke', 'oma.joke@demo.bsovck.nl', '', ?, ?)", [password_hash('demo-wachtwoord', PASSWORD_DEFAULT), nu()]);
+q("INSERT INTO gebruikers (rol, status, naam, email, telefoon, wachtwoord_hash, aangemaakt_op) VALUES ('ouder', 'actief', 'Oma Joke', 'oma.joke@demo.bsosporty.nl', '', ?, ?)", [password_hash('demo-wachtwoord', PASSWORD_DEFAULT), nu()]);
 koppel_verzorger((int) $noor['id'], laatste_id(), 'grootouder', false, ['fotos', 'berichten']);
 
 // Dinsdag zit vol voor nieuwe aanmeldingen (te zien in het aanmeldformulier en bij Groepen)
@@ -58,8 +58,8 @@ q('INSERT INTO avg_verzoeken (gebruiker_id, kind_id, over_naam, soort, toelichti
 // Sollicitaties via Word Sporty coach, met een (verzonnen) cv en motivatie; de tweede nog met een motivatie als tekst (eerste versie van het formulier)
 $cvInhoud = "%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/MediaBox[0 0 595 842]/Parent 2 0 R>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF\n";
 foreach ([
-    ['Demo Sollicitant', 'sollicitant@demo.bsovck.nl', '06 98 76 54 32', '', '', '', '', false, 'nieuw', '-2 days'],
-    ['Demo Stagiair', 'stagiair@demo.bsovck.nl', '06 11 22 33 44', 'Amstelveen', 'Stage lopen', 'maandag,woensdag,vrijdag', 'Ik studeer Sport en Bewegen en zoek een stageplek waar kinderen na school lekker kunnen bewegen. Sporty past daar precies bij.', false, 'gesprek', '-9 days'],
+    ['Demo Sollicitant', 'sollicitant@demo.bsosporty.nl', '06 98 76 54 32', '', '', '', '', false, 'nieuw', '-2 days'],
+    ['Demo Stagiair', 'stagiair@demo.bsosporty.nl', '06 11 22 33 44', 'Amstelveen', 'Stage lopen', 'maandag,woensdag,vrijdag', 'Ik studeer Sport en Bewegen en zoek een stageplek waar kinderen na school lekker kunnen bewegen. Sporty past daar precies bij.', false, 'gesprek', '-9 days'],
 ] as [$naam, $email, $telefoon, $woonplaats, $functie, $dagen, $motivatie, $bewaren, $status, $wanneer]) {
     $bestand = bin2hex(random_bytes(16));
     versleutel_bestand(cv_map() . '/' . $bestand . '.bin', $cvInhoud);
@@ -88,22 +88,22 @@ foreach ($opendagen as $i => $dag) {
     q('INSERT INTO proefdag_momenten (datum, begin, eind, plekken, aangemaakt_op) VALUES (?, ?, ?, ?, ?)', [$dag, '15:00', '16:30', $i === 3 ? 4 : 3, nu()]);
 }
 $eerste = rij('SELECT * FROM proefdag_momenten ORDER BY datum LIMIT 1');
-foreach ([['Demo Ouder', 'proefdag@demo.bsovck.nl', 'Mila', '6', 'Mila is een beetje verlegen, maar dol op tikkertje.'], ['Demo Vader', 'proefdag2@demo.bsovck.nl', 'Daan', '9', '']] as [$naam, $email, $kind, $leeftijd, $opmerking]) {
+foreach ([['Demo Ouder', 'proefdag@demo.bsosporty.nl', 'Mila', '6', 'Mila is een beetje verlegen, maar dol op tikkertje.'], ['Demo Vader', 'proefdag2@demo.bsosporty.nl', 'Daan', '9', '']] as [$naam, $email, $kind, $leeftijd, $opmerking]) {
     q('INSERT INTO proefdag_boekingen (moment_id, naam, email, telefoon, kind_naam, kind_leeftijd, opmerking, aangemaakt_op, verwijderen_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
         $eerste['id'], $naam, $email, '06 12 34 56 78', $kind, $leeftijd, $opmerking !== '' ? versleutel($opmerking) : '', nu(), proefdag_verwijderdatum($eerste['datum']),
     ]);
 }
 
 // De nieuwe aanmelding (Lisa Bos) kwam via het aanmeldformulier op de website: de extra gegevens, en een anonieme telling per stap
-$lisa = rij("SELECT * FROM gebruikers WHERE email = 'lisa.bos@demo.bsovck.nl'");
+$lisa = rij("SELECT * FROM gebruikers WHERE email = 'lisa.bos@demo.bsosporty.nl'");
 if ($lisa) {
-    q('UPDATE gebruikers SET aanvraag = ? WHERE id = ?', [versleutel(json_encode(['voornaam' => 'Lisa', 'tussenvoegsel' => '', 'achternaam' => 'Bos', 'voorletters' => 'L.', 'geslacht' => 'vrouw', 'gevonden' => 'school', 'partner' => ['voornaam' => 'Demo', 'tussenvoegsel' => '', 'achternaam' => 'Partner', 'email' => 'partner@demo.bsovck.nl', 'telefoon' => ''], 'verstuurd_op' => nu()], JSON_UNESCAPED_UNICODE)), $lisa['id']]);
+    q('UPDATE gebruikers SET aanvraag = ? WHERE id = ?', [versleutel(json_encode(['voornaam' => 'Lisa', 'tussenvoegsel' => '', 'achternaam' => 'Bos', 'voorletters' => 'L.', 'geslacht' => 'vrouw', 'gevonden' => 'school', 'partner' => ['voornaam' => 'Demo', 'tussenvoegsel' => '', 'achternaam' => 'Partner', 'email' => 'partner@demo.bsosporty.nl', 'telefoon' => ''], 'verstuurd_op' => nu()], JSON_UNESCAPED_UNICODE)), $lisa['id']]);
     foreach (rijen('SELECT id FROM kinderen WHERE ouder_id = ?', [$lisa['id']]) as $kind) {
         q('UPDATE kinderen SET aanvraag = ? WHERE id = ?', [versleutel(json_encode(['voorletters' => 'L.', 'geslacht' => 'meisje', 'startdatum' => '2027-01-05', 'groep_klas' => 'groep 3', 'abonnement' => 'sporty-52', 'dagen' => [2, 4], 'toelichting' => ''], JSON_UNESCAPED_UNICODE)), $kind['id']]);
     }
 }
 // Blijf op de hoogte: twee bevestigde aanmeldingen (één heeft het kennismakingspakket al) en één die nog moet bevestigen
-foreach ([['Demo Moeder', 'interesse1@demo.bsovck.nl', '06 00 00 00 01', true, true], ['Demo Vader', 'interesse2@demo.bsovck.nl', '', true, false], ['Demo Ouder', 'interesse3@demo.bsovck.nl', '', false, false]] as [$naam, $email, $telefoon, $bevestigd, $pakket]) {
+foreach ([['Demo Moeder', 'interesse1@demo.bsosporty.nl', '06 00 00 00 01', true, true], ['Demo Vader', 'interesse2@demo.bsosporty.nl', '', true, false], ['Demo Ouder', 'interesse3@demo.bsosporty.nl', '', false, false]] as [$naam, $email, $telefoon, $bevestigd, $pakket]) {
     $token = interesse_token();
     q('INSERT INTO interesse (naam, email, telefoon, token_hash, token, bron, aangemaakt_op, bevestigd_op, pakket_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [
         $naam, $email, $telefoon, interesse_hash($token), versleutel($token), 'website', date('Y-m-d H:i:s', strtotime('-5 days')), $bevestigd ? date('Y-m-d H:i:s', strtotime('-5 days')) : null, $pakket ? nu() : null,
@@ -111,7 +111,7 @@ foreach ([['Demo Moeder', 'interesse1@demo.bsovck.nl', '06 00 00 00 01', true, t
 }
 
 // Een verborgen notitie van het team (alleen zichtbaar voor begeleiding en beheer, niet voor ouders)
-$begeleider = rij("SELECT id FROM gebruikers WHERE email = 'begeleider@demo.bsovck.nl'");
+$begeleider = rij("SELECT id FROM gebruikers WHERE email = 'begeleider@demo.bsosporty.nl'");
 foreach (rijen("SELECT id FROM kinderen WHERE voornaam = 'Lieke'") as $kind) {
     q('UPDATE kinderen SET team_notities = ?, team_notities_op = ?, team_notities_door = ? WHERE id = ?', [versleutel('Vindt drukte aan het begin van de middag lastig. Even samen een rustige plek zoeken helpt. Botst soms met een ander kind bij tikspellen: in een ander team zetten.'), nu(), $begeleider['id'] ?? null, $kind['id']]);
 }

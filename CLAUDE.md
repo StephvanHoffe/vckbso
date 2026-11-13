@@ -302,7 +302,7 @@ Wat er te zien moet zijn: mezelf en mijn team, klanten in actie, sfeer en omgevi
 
 ## Domein en planning
 
-- Nog geen domeinnaam; gewenst: bsovck.nl
+- Domeinnaam: bsosporty.nl (gekozen op 13 november 2026; eerder gewenst: bsovck.nl). Het e-mailadres op de site blijft info@sporty.nl tot de klant een ander adres doorgeeft.
 - E-mail op het domein in gebruik: ja (niet verstoren bij verhuizen)
 - Planning: zo snel mogelijk
 

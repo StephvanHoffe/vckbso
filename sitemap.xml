@@ -1,99 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- TODO: domein kiezen bij de nieuwe naam Sporty (nu nog bsovck.nl) en de URL's aanpassen; zie docs/seo.md -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://bsovck.nl/</loc>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://bsovck.nl/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bsovck.nl/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsovck.nl/"/>
+    <loc>https://bsosporty.nl/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/"/>
     <lastmod>2026-11-04</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/alles-over-sporty.html</loc>
+    <loc>https://bsosporty.nl/alles-over-sporty.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/abonnementen.html</loc>
+    <loc>https://bsosporty.nl/abonnementen.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/vakantie-en-studiedagen.html</loc>
+    <loc>https://bsosporty.nl/vakantie-en-studiedagen.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/community.html</loc>
+    <loc>https://bsosporty.nl/community.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/pauzebegeleiding.html</loc>
+    <loc>https://bsosporty.nl/pauzebegeleiding.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/een-middag-bij-sporty.html</loc>
+    <loc>https://bsosporty.nl/een-middag-bij-sporty.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/locaties/sportpark-middenmeer.html</loc>
+    <loc>https://bsosporty.nl/locaties/sportpark-middenmeer.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/team.html</loc>
+    <loc>https://bsosporty.nl/team.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/word-sporty-coach.html</loc>
+    <loc>https://bsosporty.nl/word-sporty-coach.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/contact.html</loc>
+    <loc>https://bsosporty.nl/contact.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/proefdag.html</loc>
+    <loc>https://bsosporty.nl/proefdag.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/aanmelden.html</loc>
+    <loc>https://bsosporty.nl/aanmelden.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/blijf-op-de-hoogte.html</loc>
+    <loc>https://bsosporty.nl/blijf-op-de-hoogte.html</loc>
     <lastmod>2026-11-06</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/klachtenregeling.html</loc>
+    <loc>https://bsosporty.nl/klachtenregeling.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/privacy.html</loc>
+    <loc>https://bsosporty.nl/privacy.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/voorwaarden.html</loc>
+    <loc>https://bsosporty.nl/voorwaarden.html</loc>
     <lastmod>2026-11-04</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://bsovck.nl/en/</loc>
-    <xhtml:link rel="alternate" hreflang="nl" href="https://bsovck.nl/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://bsovck.nl/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsovck.nl/"/>
+    <loc>https://bsosporty.nl/en/</loc>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://bsosporty.nl/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://bsosporty.nl/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bsosporty.nl/"/>
     <lastmod>2026-11-04</lastmod>
     <priority>0.5</priority>
   </url>

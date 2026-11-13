@@ -291,7 +291,7 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
    ```
    Bewaar ze **ook buiten de server**, bijvoorbeeld in een wachtwoordkluis. Zonder de sleutels zijn de gegevens en back-ups onbruikbaar.
 3. Kopieer `beheer/config.voorbeeld.php` naar `beheer/config.php` en vul in:
-   - `app_url`: bijvoorbeeld `https://bsovck.nl/beheer`
+   - `app_url`: bijvoorbeeld `https://bsosporty.nl/beheer`
    - `data_dir`: een map **buiten de webroot**, bijvoorbeeld `/home/account/beheer-data`
    - `sleutel`: de eerste sleutel. Nooit meer wijzigen.
    - `backup.map` (buiten de webroot) en `backup.sleutel`: de tweede sleutel
@@ -304,7 +304,7 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
    45 3 * * * php /pad/naar/site/beheer/cli/backup.php
    ```
    Kopieer de back-upmap daarnaast dagelijks naar een andere plek (in de EU), bijvoorbeeld met de back-updienst van de hosting.
-5. Ga naar `https://bsovck.nl/beheer/`. Je komt op de installatiepagina: vul de installatiecode in, maak het eerste beheerdersaccount aan en stel tweestapsverificatie in. Maak daarna de `installatiecode` weer leeg.
+5. Ga naar `https://bsosporty.nl/beheer/`. Je komt op de installatiepagina: vul de installatiecode in, maak het eerste beheerdersaccount aan en stel tweestapsverificatie in. Maak daarna de `installatiecode` weer leeg.
 6. Vul de **Instellingen** in (KvK, LRK, IBAN, uurtarief, uren per middag, afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders) en maak de **groepen** aan.
 7. Nodig de begeleiders uit onder **Team** en koppel ze aan hun groep(en).
 8. Stel onder **Koppelingen** het versturen van e-mail in (eigen mailserver, met een testmail) en koppel **Stripe** (zie hieronder). Zonder Stripe draait alles in demo-modus: er wordt niets echt afgeschreven; zonder e-mailinstelling worden e-mails niet verstuurd.
@@ -329,7 +329,7 @@ Mijn BSO gebruikt Stripe voor de machtiging (SEPA-incasso), de maandelijkse inca
 
 1. Maak een account aan op [stripe.com](https://stripe.com/nl) en rond de bedrijfscontrole af. Zet onder **Instellingen → Betaalmethoden** **iDEAL | Wero** en **SEPA-incasso** (SEPA Direct Debit) aan. Stel bij **Instellingen → Openbare gegevens** de naam in die ouders op hun afschrift en op de betaalpagina zien.
 2. Vul in Mijn BSO onder **Koppelingen** de **test**-sleutel in (`sk_test_...`, onder Ontwikkelaars → API-sleutels); Mijn BSO test hem meteen. Een beperkte sleutel (`rk_test_...`) kan ook, met schrijfrechten op Customers, Checkout Sessions, PaymentIntents en PaymentMethods en leesrechten op SetupIntents, Charges en Mandates.
-3. Maak onder **Ontwikkelaars → Webhooks** een webhook aan naar `https://bsovck.nl/beheer/stripe-webhook.php` (het echte domein) met deze gebeurtenissen: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `payment_intent.processing`, `payment_intent.succeeded`, `payment_intent.payment_failed`, `payment_intent.canceled`, `charge.refunded`, `charge.dispute.created` en `mandate.updated`. Zet het ondertekeningsgeheim (`whsec_...`) onder Koppelingen bij Webhookgeheim. Het adres en de lijst staan daar ook, om over te nemen.
+3. Maak onder **Ontwikkelaars → Webhooks** een webhook aan naar `https://bsosporty.nl/beheer/stripe-webhook.php` (het echte domein) met deze gebeurtenissen: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `checkout.session.expired`, `payment_intent.processing`, `payment_intent.succeeded`, `payment_intent.payment_failed`, `payment_intent.canceled`, `charge.refunded`, `charge.dispute.created` en `mandate.updated`. Zet het ondertekeningsgeheim (`whsec_...`) onder Koppelingen bij Webhookgeheim. Het adres en de lijst staan daar ook, om over te nemen.
 4. Probeer het hele proces in testmodus: aanmelden, machtiging (kies op de testpagina van de bank "Authorize", of gebruik het test-IBAN `NL39 RABO 0300 0652 64`), facturen maken en de incasso starten. Een SEPA-incasso staat in testmodus na een paar minuten op betaald. Met het test-IBAN `NL91 ABNA 0417 1643 00` mislukt de incasso; dan moet de factuur op "mislukt" komen en de ouder een bericht krijgen.
 5. Werkt alles? Vul onder Koppelingen de **live**-sleutel en het geheim van een live-webhook in. Bovenaan staat dan "Live", en na de eerste echte melding zie je wanneer die binnenkwam.
 
@@ -350,7 +350,7 @@ php -S localhost:8000                              # in de hoofdmap van het proj
 php tools/beheer-demodata.php                      # optioneel: demogegevens
 ```
 
-Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met bijvoorbeeld `beheerder@demo.bsovck.nl` en wachtwoord `demo-wachtwoord`; bij de eerste keer stel je tweestapsverificatie in. E-mails komen in `beheer/data/mail.log`. In ontwikkelmodus staat de sleutel in de datamap; gebruik dat nooit op de echte omgeving.
+Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met bijvoorbeeld `beheerder@demo.bsosporty.nl` en wachtwoord `demo-wachtwoord`; bij de eerste keer stel je tweestapsverificatie in. E-mails komen in `beheer/data/mail.log`. In ontwikkelmodus staat de sleutel in de datamap; gebruik dat nooit op de echte omgeving.
 
 ## Nog te doen (TODO)
 
