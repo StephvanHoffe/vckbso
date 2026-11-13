@@ -3,9 +3,13 @@
   "redirects": [
     { "source": "/over-ons.html", "destination": "/alles-over-sporty.html", "permanent": true },
     { "source": "/diensten.html", "destination": "/een-middag-bij-sporty.html", "permanent": true },
-    { "source": "/prijzen.html", "destination": "/abonnementen.html", "permanent": true },
+    { "source": "/prijzen.html", "destination": "/abonnement-en-kosten.html", "permanent": true },
     { "source": "/veelgestelde-vragen.html", "destination": "/contact.html#veelgestelde-vragen", "permanent": true },
     { "source": "/werken-bij.html", "destination": "/word-sporty-coach.html", "permanent": true },
+    { "source": "/community.html", "destination": "/welkom-bij-de-club.html", "permanent": true },
+    { "source": "/abonnementen.html", "destination": "/abonnement-en-kosten.html", "permanent": true },
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/en/index.html", "destination": "/en/", "permanent": true },
     { "source": "/beheer/inloggen.php", "destination": "/voorbeeld/beheer/inloggen.html", "permanent": false },
     { "source": "/beheer/aanmelden.php", "destination": "/aanmelden.html", "permanent": false },
     { "source": "/beheer/wachtwoord-vergeten.php", "destination": "/voorbeeld/beheer/wachtwoord-vergeten.html", "permanent": false },
@@ -16,7 +20,7 @@
   ],
   "headers": [
     {
-      "source": "/voorbeeld/(.*)",
+      "source": "/(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "noindex" }
       ]

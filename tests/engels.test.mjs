@@ -37,7 +37,8 @@ for (const [nl, en] of paren) {
   test(`${en}: de taalknop wijst naar de tegenhanger, op beide pagina's`, () => {
     for (const [pagina, html] of [[nl, htmlNl], [en, htmlEn]]) {
       const knop = html.match(/<ul class="lang"[\s\S]*?<\/ul>/)[0];
-      const doelen = [...knop.matchAll(/href="([^"]+)"/g)].map((m) => posix.normalize(posix.join(dirname(pagina), m[1])));
+      // Een link naar een map (./, ../, en/) is de index.html daarin
+      const doelen = [...knop.matchAll(/href="([^"]+)"/g)].map((m) => posix.normalize(posix.join(dirname(pagina), m[1].replace(/(^|\/)$/, "$1index.html"))));
       assert.deepEqual(doelen, [nl, en], pagina);
       assert.match(knop, new RegExp(`hreflang="${pagina === en ? "en" : "nl"}" aria-current="true"`), `${pagina}: de huidige taal is gemarkeerd`);
     }

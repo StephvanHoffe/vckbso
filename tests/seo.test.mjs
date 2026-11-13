@@ -2,7 +2,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
-import { PAGINAS, SITE, bijgewerkt, canonical, tekst } from "../tools/structured-data.mjs";
+import { PAGINAS, SITE, bijgewerkt, canonical, inhoudHash, leesLastmod, sitemapXml, tekst } from "../tools/structured-data.mjs";
+import { NEDERLANDS } from "../tools/site/talen.mjs";
 
 const hier = (pad) => new URL("../" + pad, import.meta.url);
 const lees = (pad) => readFileSync(hier(pad), "utf8");
@@ -102,9 +103,51 @@ test("de oude naam BSO VCK en het oude e-mailadres komen nergens meer voor op de
 
 test("alle interne links op de website wijzen naar een bestaande pagina", () => {
   for (const p of [...PAGINAS, "404.html"]) {
-    for (const [, href] of html[p] ? html[p].matchAll(/href="([^"#:?]+\.html)(?:[?#][^"]*)?"/g) : lees(p).matchAll(/href="([^"#:?]+\.html)(?:[?#][^"]*)?"/g)) {
-      const doel = href.startsWith("/") ? href.slice(1) : new URL(href, "https://x/" + p).pathname.slice(1);
+    for (const [, href] of (html[p] ?? lees(p)).matchAll(/href="([^"#:?]*(?:\.html|\/))(?:[?#][^"]*)?"/g)) {
+      let doel = href.startsWith("/") ? href.slice(1) : new URL(href, "https://x/" + p).pathname.slice(1);
+      if (doel === "" || doel.endsWith("/")) doel += "index.html";
       assert.ok(existsSync(hier(doel)), `${p}: link naar ${href}, maar ${doel} bestaat niet`);
     }
+  }
+});
+
+test("links naar de homepage gaan naar de map, net als de canonical (/index.html stuurt door)", () => {
+  for (const p of [...PAGINAS, "404.html"]) {
+    assert.doesNotMatch(html[p] ?? lees(p), /href="[^"#:]*index\.html/, `${p}: link naar index.html in plaats van de map`);
+  }
+  const htaccess = lees(".htaccess");
+  const vercel = JSON.parse(lees("vercel.json"));
+  assert.match(htaccess, /RewriteCond %\{THE_REQUEST\} .*index\\\.html/, ".htaccess: /index.html stuurt niet door naar /");
+  for (const [oud, nieuw] of [["/index.html", "/"], ["/en/index.html", "/en/"], ["/community.html", "/welkom-bij-de-club.html"], ["/abonnementen.html", "/abonnement-en-kosten.html"]]) {
+    assert.ok(vercel.redirects.some((r) => r.source === oud && r.destination === nieuw && r.permanent), `vercel.json: ${oud} stuurt niet door naar ${nieuw}`);
+    if (oud.endsWith("index.html")) continue;
+    assert.match(htaccess, new RegExp(`Redirect 301 ${oud.replace(".", "\\.")} ${nieuw.replace(".", "\\.")}`), `.htaccess: ${oud} stuurt niet door naar ${nieuw}`);
+  }
+  assert.ok(vercel.headers.some((h) => h.source === "/(.*)" && h.headers.some((k) => k.key === "X-Robots-Tag" && /noindex/.test(k.value))), "het voorbeeld op Vercel hoort niet in Google");
+});
+
+test("sitemap.xml en de datums (lastmod) zijn bijgewerkt (anders: npm run seo)", () => {
+  const datums = leesLastmod();
+  for (const p of PAGINAS) {
+    assert.ok(datums[p], `${p} staat niet in tools/site/lastmod.json`);
+    assert.equal(datums[p].hash, inhoudHash(html[p]), `${p}: de inhoud is veranderd; draai npm run seo voor een nieuwe datum in de sitemap`);
+    assert.match(datums[p].datum, /^\d{4}-\d{2}-\d{2}$/);
+  }
+  assert.equal(sitemap, sitemapXml(datums), "sitemap.xml is verouderd; draai npm run seo");
+});
+
+test("Engelse pagina's: Engelse deelafbeelding en de BSO in het Engels op home, locatie en contact", () => {
+  for (const p of PAGINAS) {
+    const engels = Boolean(NEDERLANDS[p]);
+    const beeld = meta(html[p], "og:image");
+    assert.equal(beeld, `${SITE}/assets/img/${engels ? "og-image-en.jpg" : "og-image.jpg"}`, `${p}: verkeerde deelafbeelding`);
+    assert.ok(existsSync(hier(beeld.slice(SITE.length + 1))), `${beeld} bestaat niet`);
+  }
+  for (const p of ["en/index.html", "en/contact.html", "en/locations/sportpark-middenmeer.html"]) {
+    const graaf = JSON.parse(html[p].match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1])["@graph"];
+    const bso = graaf.find((n) => n["@type"] === "ChildCare");
+    assert.ok(bso, `${p}: de BSO (ChildCare) ontbreekt`);
+    assert.match(bso.description, /after-school care/, `${p}: de beschrijving van de BSO is niet Engels`);
+    assert.ok(bso.geo && bso.address, `${p}: adres of coördinaten ontbreken`);
   }
 });

@@ -45,7 +45,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | Pad | Inhoud |
 |---|---|
 | `index.html` | Homepage: "Let's play", Sporty is voor iedereen, de kernwaarden, een middag in vijf stappen, weetjes over bewegen, de quiz, ervaringen van ouders |
-| `alles-over-sporty.html` met `abonnementen.html`, `vakantie-en-studiedagen.html`, `community.html` en `pauzebegeleiding.html` | Alles over Sporty (visie en droom) en de onderdelen eronder, met een eigen submenu. Op `abonnementen.html#rekentool` staat de rekentool kinderopvangtoeslag. |
+| `alles-over-sporty.html` met `abonnement-en-kosten.html`, `vakantie-en-studiedagen.html`, `welkom-bij-de-club.html` en `pauzebegeleiding.html` | Alles over Sporty (visie en droom) en de onderdelen eronder, met een eigen submenu. Op `abonnement-en-kosten.html#rekentool` staat de rekentool kinderopvangtoeslag. |
 | `een-middag-bij-sporty.html`, `locaties/sportpark-middenmeer.html`, `team.html`, `contact.html` | Een middag bij Sporty, het clubhuis op Sportpark Middenmeer (met kaart na een klik), Team Sporty, en contact met de veelgestelde vragen (`contact.html#veelgestelde-vragen`) |
 | `word-sporty-coach.html` | Solliciteren als Sporty coach met cv en motivatie (pdf of Word). Het formulier gaat naar de eigen beheeromgeving (`beheer/solliciteren.php`): gratis, de bestanden worden versleuteld bewaard en het team ziet alles in de beheeromgeving bij Sollicitaties. Zonder beheeromgeving (zoals op Vercel) opent het e-mailprogramma. |
 | `proefdag.html` | Boek een gratis proefdag (alle knoppen "Boek een proefdag" komen hier uit). Ouders kiezen in een agenda een dag en een tijd die het team in de beheeromgeving klaarzet (Proefdagen; `js/proefdag.js` en `beheer/proefdag.php`). Zonder beheeromgeving of zonder momenten staat er een knop naar het contactformulier en het telefoonnummer. |
@@ -69,16 +69,16 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `design/logo/`, `design/henny/` | De logo's en Henny zoals de klant ze op 22 oktober 2026 aanleverde (originelen in PNG/JPG) |
 | `assets/img/henny/` | Henny de hond (zittend, rennend, met bal), uitgeknipt en als WebP |
 | `assets/fotos/` | Foto's in AVIF en WebP (nu nog stockfoto's van Pexels), met de bronbestanden in `bron/` (`npm run fotos`). Fotografen, licentie en welke eigen foto waar komt staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
-| `assets/img/` | Favicon, app-iconen en de deelafbeelding (`og-image.jpg`) |
+| `assets/img/` | Favicon, app-iconen en de deelafbeeldingen (`og-image.jpg`, Engels `og-image-en.jpg`) |
 | `tools/fotos.mjs` | Hulpscript om beelden om te zetten (`npm run fotos`). Niet nodig om de site te draaien. |
 | `tools/structured-data.mjs` | Zet de schema.org-gegevens (JSON-LD) in de pagina's, met kruimelpad en veelgestelde vragen uit de zichtbare HTML (`npm run seo`) |
 | `tools/logo/` | Maakt de favicon, de app-iconen en de intro op de homepage (`npm run logo`) op basis van de officiële logo's in `assets/img/` |
-| `tools/og-image.mjs` | Maakt de deelafbeelding `assets/img/og-image.jpg` opnieuw (`npm run og-image`, vereist Playwright) |
+| `tools/og-image.mjs` | Maakt de deelafbeeldingen `assets/img/og-image.jpg` en `og-image-en.jpg` opnieuw (`npm run og-image`, vereist Playwright) |
 | `tools/beheer-demodata.php` | Vult een lege test-omgeving van de beheeromgeving met verzonnen demogegevens |
 | `voorbeeld/` | Doorklikbare momentopname van Mijn BSO met verzonnen gegevens, voor Vercel. Gemaakt door `npm run voorbeeld`, niet met de hand aanpassen. Zie [Voorbeeld op Vercel](#voorbeeld-op-vercel). |
 | `tools/voorbeeld/` | Bouwscript (`bouw.mjs`), extra demogegevens, de overzichtspagina en de voorbeeldbalk |
 | `vercel.json` | Alleen voor Vercel: stuurt `/beheer/` door naar het voorbeeld, stuurt de oude adressen door naar de nieuwe pagina's en zet `noindex` op het voorbeeld |
-| `docs/seo.md` | Wat er voor de vindbaarheid is gedaan, wat Sporty nog zelf moet regelen (domein, adres, Google Bedrijfsprofiel) en onderhoud |
+| `docs/seo.md` | Wat er voor de vindbaarheid is gedaan, welke informatie nog nodig is van Sporty, wat buiten de website geregeld moet worden (Google Bedrijfsprofiel, Search Console) en onderhoud |
 | `docs/live-zetten-vimexx.md` | Stappenplan om de site en Mijn BSO live te zetten op een Managed VPS bij Vimexx, met het uploadpakket (`npm run pakket`) |
 | `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, de verplichte eisen (toegang, beveiliging, logboek, ouderrechten, bewaarbeleid), installatie, back-ups, Stripe en TODO's |
 
@@ -86,13 +86,13 @@ Header, footer en de iconenset staan in elke pagina, zodat elke pagina gewone HT
 
 ## Rekentool kinderopvangtoeslag
 
-Op de pagina Abonnement en kosten (`abonnementen.html#rekentool`) rekenen ouders uit wat ze per maand betalen na aftrek van de kinderopvangtoeslag. De berekening gebeurt in de browser; er wordt niets verstuurd of opgeslagen.
+Op de pagina Abonnement en kosten (`abonnement-en-kosten.html#rekentool`) rekenen ouders uit wat ze per maand betalen na aftrek van de kinderopvangtoeslag. De berekening gebeurt in de browser; er wordt niets verstuurd of opgeslagen.
 
 - **Hoe er gerekend wordt:** precies volgens de 7 stappen uit de brochure [Berekening kinderopvangtoeslag 2026](https://download.belastingdienst.nl/toeslagen/docs/berekening_kinderopvangtoeslag_tg0801z61fd.pdf) van Dienst Toeslagen: maximale uurprijs, maximaal 230 uur per kind per maand, het 1e kind is het kind met de meeste uren (bij gelijke uren de hoogste kosten), percentage uit de tabel bij het gezamenlijke toetsingsinkomen. Bedragen worden per stap op centen afgerond, zoals in de rekenvoorbeelden van de brochure. Er wordt alleen met hele getallen gerekend (centen), dus zonder afrondingsfouten.
 - **Gecontroleerd met `npm test`:** de tabel is vergeleken met twee officiële bronnen (rijksoverheid.nl en de brochure), de 4 officiële rekenvoorbeelden komen tot op de cent uit, elke grens van alle 69 inkomensschijven is getest, en 20.000 willekeurige situaties geven dezelfde uitkomst als een tweede, apart geschreven berekening.
 - **Wat de rekentool niet weet:** de uitkomst is een schatting. De Belastingdienst stelt de toeslag vast, en die hangt ook af van het aantal maanden dat jij en je partner werken. Dat staat ook bij de rekentool.
 - **Tarieven van Sporty invullen:** in `js/rekentool/instellingen.js` (uurtarief, schoolweken, vakantieweken, uren per dag). Draai daarna `npm test`: de test meldt ontbrekende of ongeldige gegevens. Zolang er geen tarieven zijn, vult de bezoeker zelf een uurprijs en het aantal uren in.
-- **Elk jaar in januari bijwerken:** maak `js/rekentool/toeslag-<jaar>.js` met de nieuwe tabel en maximale uurprijzen (bron: rijksoverheid.nl, "Bedragen kinderopvangtoeslag"), zet de nieuwe brochuretabel in `tests/bronnen/`, pas `jaar` aan in `instellingen.js`, zet het nieuwe bestand in `abonnementen.html` en draai `npm test`. Het kabinet wil de toeslag vanaf 2029 vervangen door een nieuw stelsel; dan moet de rekentool opnieuw worden bekeken.
+- **Elk jaar in januari bijwerken:** maak `js/rekentool/toeslag-<jaar>.js` met de nieuwe tabel en maximale uurprijzen (bron: rijksoverheid.nl, "Bedragen kinderopvangtoeslag"), zet de nieuwe brochuretabel in `tests/bronnen/`, pas `jaar` aan in `instellingen.js`, zet het nieuwe bestand in `abonnement-en-kosten.html` en draai `npm test`. Het kabinet wil de toeslag vanaf 2029 vervangen door een nieuw stelsel; dan moet de rekentool opnieuw worden bekeken.
 
 ## Nog te doen (TODO)
 
@@ -128,8 +128,8 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@bsosporty.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
 - [ ] Privacyverklaring laten controleren: bewaartermijnen, verwerkers (formulierendienst, hosting, Stripe) en de verwerking van gegevens van kinderen in Mijn BSO.
 - [ ] Domein `bsosporty.nl` registreren en de mailbox info@bsosporty.nl aanmaken (allebei gekozen op 13 november 2026; de site gebruikt ze al overal).
-- [ ] SEO-stappen die alleen Sporty zelf kan zetten: Google Bedrijfsprofiel, Search Console, LRK-nummer, vermeldingen bij scholen en verenigingen. Zie [`docs/seo.md`](docs/seo.md#nog-te-doen-door-sporty).
-- [ ] Engelse deelafbeelding (`og-image.jpg` heeft nu Nederlandse tekst; de Engelse pagina's gebruiken dezelfde).
+- [ ] SEO: informatie van Sporty (echt telefoonnummer, begintijd op schooldagen, scholen waar we ophalen, bereikbaarheid, foto's) en stappen buiten de website (Google Bedrijfsprofiel, Search Console, LRK, vermeldingen). Zie [`docs/seo.md`](docs/seo.md#nodig-van-sporty).
+- [ ] Na de opening (4 januari 2027): "Nieuw … open vanaf 4 januari 2027" op de homepage en in de description aanpassen (`index.html`, `en/index.html`).
 - [ ] Beheeromgeving live zetten: hosting met PHP 8.2+ en https, `beheer/config.php` met twee sleutels, cron voor onderhoud en back-ups, Stripe koppelen, uurtarief en groepen instellen. Bewaartermijnen laten bevestigen. De volledige lijst staat in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#nog-te-doen-todo).
 
 ## Live zetten

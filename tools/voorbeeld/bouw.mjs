@@ -223,6 +223,13 @@ if (BUNDEL) {
   }
   schrijf(W + "voorbeeld.html", overzichtspagina("", ""));
   schrijf(BUNDEL + "start.html", overzichtspagina("website/", "website/"));
+  // De website linkt naar mappen (./, ../, en/), zoals de canonical-URL. Een losse bundel kan geen map
+  // openen, dus daar wordt het weer index.html.
+  for (const bestand of alleBestanden(BUNDEL).filter((p) => p.endsWith(".html"))) {
+    const html = readFileSync(bestand, "utf8");
+    const nieuw = html.replace(/href="((?![a-z]+:|\/|#)[^"#?]*\/)([#?][^"]*)?"/g, (_, map, rest = "") => `href="${map}index.html${rest}"`);
+    if (nieuw !== html) writeFileSync(bestand, nieuw);
+  }
   controleerLinks(BUNDEL, BUNDEL);
   console.log(`bundel: ${tel(BUNDEL)} bestanden in ${BUNDEL}`);
 }

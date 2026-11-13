@@ -7,16 +7,22 @@
  * - Contact: de BSO zelf, het kruimelpad en alle veelgestelde vragen (FAQPage).
  * - Overige pagina's: het kruimelpad.
  *
- * - Engelse pagina's (en/): een WebPage in het Engels die bij dezelfde BSO hoort, het kruimelpad,
+ * - Elke pagina: een WebPage in de taal van de pagina die bij dezelfde BSO en website hoort.
+ * - Engelse pagina's (en/): dezelfde opbouw, met de BSO in het Engels op de homepage, Locaties en Contact,
  *   en op Contact de Engelse veelgestelde vragen.
  * - Elke pagina krijgt hreflang-links naar zijn Nederlandse en Engelse versie (tools/site/talen.mjs).
+ *
+ * - sitemap.xml: alle pagina's met hun taalversies. De datum (lastmod) verandert alleen als de inhoud van een
+ *   pagina echt verandert (titel, description of <main>); de vingerafdrukken staan in tools/site/lastmod.json.
+ *   Een nieuwe kop, voet of iconenset telt dus niet als wijziging.
  *
  * Kruimelpad en vragen komen uit de zichtbare HTML, zodat ze altijd overeenkomen met wat
  * bezoekers zien. Pas je een vraag, een pagina of de gegevens hieronder aan? Draai dan:
  *
- *   npm run seo            gegevens bijwerken
+ *   npm run seo            gegevens en sitemap bijwerken
  *   npm run seo -- --check alleen controleren (npm test doet dit ook)
  */
+import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { ENGELS, NEDERLANDS, adres } from "./site/talen.mjs";
@@ -26,9 +32,10 @@ const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 // Gegevens van de BSO. Houd deze gelijk aan wat op de website staat.
 // TODO: sameAs met de links naar social media en het Google Bedrijfsprofiel toevoegen zodra die er zijn.
-// TODO: openingstijden (openingHoursSpecification) toevoegen zodra de tijden van het middagprogramma bekend zijn;
-// nu staan alleen de telefonische bereikbaarheid en het adres erin (op schooldagen open na school tot 18.30 uur,
-// in vakanties en op studiedagen 08.00–18.30 uur).
+// TODO: openingstijden (openingHoursSpecification) toevoegen zodra Sporty laat weten hoe laat de BSO op schooldagen
+// opengaat (nu: "na school" tot 18.30 uur; in vakanties en op studiedagen 08.00–18.30 uur). Denk aan de open dagen:
+// tot 12 juli 2027 dinsdag en donderdag, daarna maandag t/m vrijdag (validFrom/validThrough).
+// TODO: telephone is nog het tijdelijke nummer; vervangen zodra Sporty het echte nummer heeft (ook op de website).
 export const BSO = {
   "@type": "ChildCare",
   "@id": `${SITE}/#sporty`,
@@ -42,6 +49,10 @@ export const BSO = {
   telephone: "+31612345678",
   email: "info@bsosporty.nl",
   address: { "@type": "PostalAddress", streetAddress: "Voorlandpad 17", postalCode: "1098 TZ", addressLocality: "Amsterdam", addressCountry: "NL" },
+  // Dezelfde plek als de kaart op de locatiepagina (tools/kaart.mjs)
+  geo: { "@type": "GeoCoordinates", latitude: 52.3481547, longitude: 4.9535974 },
+  hasMap: "https://www.google.com/maps/search/?api=1&query=Sporty%2C+Voorlandpad+17%2C+1098+TZ+Amsterdam",
+  priceRange: "€ 10,31 per uur",
   areaServed: [
     { "@type": "Place", name: "Watergraafsmeer, Amsterdam" },
     { "@type": "Place", name: "Amsterdam-Oost" },
@@ -58,6 +69,14 @@ export const BSO = {
   },
 };
 
+// De BSO voor de Engelse pagina's: dezelfde gegevens, met een Engelse beschrijving en deelafbeelding
+const BSO_EN = {
+  ...BSO,
+  description: "Active after-school care (BSO) at Sportpark Middenmeer in Amsterdam East, for all children aged 4 to 12. A club full of fun, friendship and growth.",
+  image: `${SITE}/assets/img/og-image-en.jpg`,
+  priceRange: "€10.31 per hour",
+};
+
 const WEBSITE = {
   "@type": "WebSite",
   "@id": `${SITE}/#website`,
@@ -71,9 +90,9 @@ const WEBSITE = {
 export const PAGINAS = [
   "index.html",
   "alles-over-sporty.html",
-  "abonnementen.html",
+  "abonnement-en-kosten.html",
   "vakantie-en-studiedagen.html",
-  "community.html",
+  "welkom-bij-de-club.html",
   "pauzebegeleiding.html",
   "een-middag-bij-sporty.html",
   "locaties/sportpark-middenmeer.html",
@@ -142,21 +161,22 @@ export function vragen(html) {
 /** De JSON-LD die bij een pagina hoort. */
 export function gegevensVoor(pagina, html) {
   const graaf = [];
-  if (pagina === "index.html") graaf.push(BSO, WEBSITE);
-  if (pagina === "contact.html" || pagina === "locaties/sportpark-middenmeer.html") graaf.push(BSO);
-  if (NEDERLANDS[pagina]) {
-    // Engelse pagina: verwijst naar dezelfde BSO en website, met de Engelse titel
-    const url = adres(SITE, pagina);
-    graaf.push({
-      "@type": "WebPage",
-      "@id": `${url}#webpage`,
-      url,
-      name: tekst(html.match(/<title>([\s\S]*?)<\/title>/)[1]),
-      inLanguage: "en",
-      isPartOf: { "@id": WEBSITE["@id"] },
-      about: { "@id": BSO["@id"] },
-    });
-  }
+  const nl = NEDERLANDS[pagina] ?? pagina;
+  const engels = Boolean(NEDERLANDS[pagina]);
+  // De BSO zelf op de homepage, de locatiepagina en Contact (in de taal van de pagina)
+  if (["index.html", "contact.html", "locaties/sportpark-middenmeer.html"].includes(nl)) graaf.push(engels ? BSO_EN : BSO);
+  if (pagina === "index.html") graaf.push(WEBSITE);
+  // Elke pagina: een WebPage in de taal van de pagina, bij dezelfde BSO en website, met de titel
+  const url = adres(SITE, pagina);
+  graaf.push({
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    url,
+    name: tekst(html.match(/<title>([\s\S]*?)<\/title>/)[1]),
+    inLanguage: engels ? "en" : "nl",
+    isPartOf: { "@id": WEBSITE["@id"] },
+    about: { "@id": BSO["@id"] },
+  });
   const pad = kruimelpad(html);
   if (pad) graaf.push(pad);
   if (pagina === "contact.html" || pagina === "en/contact.html") graaf.push(vragen(html));
@@ -181,13 +201,53 @@ export function bijgewerkt(pagina, html) {
   return uit.replace(SCRIPT, "").replace("</head>", `<script type="application/ld+json">${json}</script>\n</head>`);
 }
 
+/* ---------- Sitemap ---------- */
+
+// Prioriteit per pagina (Google kijkt er niet naar, andere zoekmachines soms wel); de Engelse iets lager
+const PRIORITEIT = {
+  "index.html": 1.0, "alles-over-sporty.html": 0.9, "abonnement-en-kosten.html": 0.9, "een-middag-bij-sporty.html": 0.9, "proefdag.html": 0.9,
+  "locaties/sportpark-middenmeer.html": 0.8, "contact.html": 0.8, "aanmelden.html": 0.8, "team.html": 0.7,
+  "vakantie-en-studiedagen.html": 0.6, "welkom-bij-de-club.html": 0.6, "word-sporty-coach.html": 0.6,
+  "pauzebegeleiding.html": 0.5, "blijf-op-de-hoogte.html": 0.5, "klachtenregeling.html": 0.3, "privacy.html": 0.3, "voorwaarden.html": 0.3,
+};
+const LASTMOD = ROOT + "tools/site/lastmod.json";
+
+/** Vingerafdruk van wat een zoekmachine van de pagina indexeert: titel, description en <main>. */
+export function inhoudHash(html) {
+  const deel = (re) => html.match(re)?.[0] ?? "";
+  const inhoud = [/<title>[\s\S]*?<\/title>/, /<meta name="description"[^>]*>/, /<main[\s\S]*<\/main>/].map(deel).join("\n");
+  return createHash("sha256").update(inhoud).digest("hex").slice(0, 16);
+}
+
+export const leesLastmod = () => JSON.parse(readFileSync(LASTMOD, "utf8"));
+
+/** De datums bijgewerkt: een pagina waarvan de inhoud is veranderd (of die nieuw is) krijgt de datum van vandaag. */
+export function lastmodBijgewerkt(oud, htmlPerPagina, vandaag) {
+  return Object.fromEntries(PAGINAS.map((p) => {
+    const hash = inhoudHash(htmlPerPagina[p]);
+    return [p, oud[p]?.hash === hash ? oud[p] : { hash, datum: vandaag }];
+  }));
+}
+
+export function sitemapXml(lastmod) {
+  const urls = PAGINAS.map((pagina) => {
+    const nl = NEDERLANDS[pagina] ?? pagina;
+    const prioriteit = Math.max(0.1, (PRIORITEIT[nl] ?? 0.5) - (NEDERLANDS[pagina] ? 0.1 : 0)).toFixed(1);
+    const talen = [["nl", nl], ["en", ENGELS[nl]], ["x-default", nl]].map(([taal, p]) => `    <xhtml:link rel="alternate" hreflang="${taal}" href="${adres(SITE, p)}"/>`).join("\n");
+    return `  <url>\n    <loc>${adres(SITE, pagina)}</loc>\n${talen}\n    <lastmod>${lastmod[pagina].datum}</lastmod>\n    <priority>${prioriteit}</priority>\n  </url>`;
+  });
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join("\n")}\n</urlset>\n`;
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const alleenControleren = process.argv.includes("--check");
   let verouderd = 0;
+  const htmlPerPagina = {};
   for (const pagina of PAGINAS) {
     const pad = ROOT + pagina;
     const html = readFileSync(pad, "utf8");
     const nieuw = bijgewerkt(pagina, html);
+    htmlPerPagina[pagina] = nieuw;
     if (nieuw === html) continue;
     verouderd++;
     if (alleenControleren) console.error(`Verouderd: ${pagina}`);
@@ -196,8 +256,23 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       console.log(`Bijgewerkt: ${pagina}`);
     }
   }
+  // Sitemap met de datum van de laatste echte wijziging per pagina
+  const vandaag = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Amsterdam" });
+  const oudeDatums = leesLastmod();
+  const datums = lastmodBijgewerkt(oudeDatums, htmlPerPagina, vandaag);
+  const xml = sitemapXml(datums);
+  const datumsTekst = JSON.stringify(datums, null, 2) + "\n";
+  for (const [pad, inhoud] of [[LASTMOD, datumsTekst], [ROOT + "sitemap.xml", xml]]) {
+    if (readFileSync(pad, "utf8") === inhoud) continue;
+    verouderd++;
+    if (alleenControleren) console.error(`Verouderd: ${pad.slice(ROOT.length)}`);
+    else {
+      writeFileSync(pad, inhoud);
+      console.log(`Bijgewerkt: ${pad.slice(ROOT.length)}`);
+    }
+  }
   if (alleenControleren && verouderd) {
-    console.error("Draai npm run seo om de schema.org-gegevens bij te werken.");
+    console.error("Draai npm run seo om de schema.org-gegevens en de sitemap bij te werken.");
     process.exit(1);
   }
   if (!verouderd) console.log("Alle schema.org-gegevens zijn up-to-date.");

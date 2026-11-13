@@ -18,9 +18,9 @@ const lees = (pad) => readFileSync(ROOT + pad, "utf8");
 export const PAGINAS = {
   "index.html": "home",
   "alles-over-sporty.html": "alles",
-  "abonnementen.html": "alles",
+  "abonnement-en-kosten.html": "alles",
   "vakantie-en-studiedagen.html": "alles",
-  "community.html": "alles",
+  "welkom-bij-de-club.html": "alles",
   "pauzebegeleiding.html": "alles",
   "een-middag-bij-sporty.html": "middag",
   "locaties/sportpark-middenmeer.html": "locaties",
@@ -53,7 +53,9 @@ function vul(sjabloon, pagina) {
     .replaceAll("{{NL}}", prefix(pagina) + nl)
     .replaceAll("{{EN}}", prefix(pagina) + (ENGELS[nl] ?? "en/index.html"))
     .replaceAll("{{E}}", NEDERLANDS[pagina] ? prefixEngels(pagina) : prefix(pagina) + "en/")
-    .replaceAll("{{P}}", prefix(pagina));
+    .replaceAll("{{P}}", prefix(pagina))
+    // Links naar de homepage gaan naar de map (./, ../, en/), net als de canonical-URL; /index.html stuurt door naar /
+    .replace(/href="((?:\.\.\/)*|\/)?(en\/)?index\.html(#[^"]*)?"/g, (_, terug = "", en = "", hash = "") => `href="${terug + en || "./"}${hash}"`);
 }
 
 const SPRITE = readFileSync(ROOT + "tools/site/sprite.svg", "utf8");

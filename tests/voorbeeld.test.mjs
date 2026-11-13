@@ -45,13 +45,18 @@ test("het voorbeeld is gemaakt met de huidige naam en het huidige e-mailadres", 
 test("vercel.json stuurt oude adressen door naar de nieuwe pagina's", () => {
   const oud = vercel.redirects.filter((r) => !r.source.startsWith("/beheer"));
   for (const { source, destination, permanent } of oud) {
-    assert.match(source, /^\/[a-z-]+\.html$/, `onverwachte redirect ${source}`);
+    assert.match(source, /^\/(en\/)?[a-z-]+\.html$/, `onverwachte redirect ${source}`);
     assert.equal(permanent, true, `${source}: een oud adres stuur je blijvend door`);
+    // /index.html en /en/index.html bestaan wel: die gaan naar de map zelf (één adres per pagina)
+    if (source.endsWith("/index.html")) {
+      assert.equal(destination, source.replace(/index\.html$/, ""), `${source} hoort naar de map te gaan`);
+      continue;
+    }
     assert.ok(!existsSync(join(ROOT, source)), `${source} bestaat nog, dan is een redirect niet nodig`);
     assert.ok(existsSync(join(ROOT, destination.replace(/#.*$/, ""))), `${source} → ${destination}: bestemming bestaat niet`);
   }
   const htaccess = readFileSync(join(ROOT, ".htaccess"), "utf8");
-  for (const { source, destination } of oud) {
+  for (const { source, destination } of oud.filter((r) => !r.source.endsWith("/index.html"))) {
     assert.ok(htaccess.includes(`Redirect 301 ${source} ${destination}`), `.htaccess mist de doorverwijzing van ${source}`);
   }
 });
@@ -66,8 +71,9 @@ test("vercel.json stuurt de beheeromgeving door naar bestaande pagina's van het 
   assert.equal(vercel.redirects.at(-1).source, "/beheer/:pad*", "de laatste redirect moet alle overige beheerpagina's opvangen");
   // Vercel matcht strikt: /beheer/:pad* vangt /beheer/ (met slash) niet op, anders toont Vercel de PHP-code van beheer/index.php
   assert.ok(vercel.redirects.some((r) => r.source === "/beheer/"), "/beheer/ (met slash aan het eind) heeft een eigen redirect nodig");
-  const kop = vercel.headers.find((h) => h.source === "/voorbeeld/(.*)");
-  assert.ok(kop?.headers.some((h) => h.key === "X-Robots-Tag" && h.value.includes("noindex")), "X-Robots-Tag noindex voor /voorbeeld/ ontbreekt");
+  // Op Vercel staat alleen het voorbeeld: niets daarvan hoort in Google (ook de kopie van de website niet)
+  const kop = vercel.headers.find((h) => h.source === "/(.*)");
+  assert.ok(kop?.headers.some((h) => h.key === "X-Robots-Tag" && h.value.includes("noindex")), "X-Robots-Tag noindex voor het hele voorbeeld ontbreekt");
 });
 
 test("links van de website naar de beheeromgeving hebben een doel in het voorbeeld", () => {

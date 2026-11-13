@@ -76,7 +76,7 @@
       <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Webhook instellen bij Stripe</summary>
       <p>Maak in het dashboard van Stripe onder <strong>Ontwikkelaars → Webhooks</strong> een webhook aan naar dit adres:</p>
       <label class="legend-label" for="webhook-url">Adres van de webhook</label>
-      <input id="webhook-url" class="koppeling__kopieer" readonly value="http://127.0.0.1:38105/beheer/stripe-webhook.php">
+      <input id="webhook-url" class="koppeling__kopieer" readonly value="http://127.0.0.1:32845/beheer/stripe-webhook.php">
       <p>Met deze gebeurtenissen:</p>
       <ul class="koppeling__events"><li><code>checkout.session.completed</code></li><li><code>checkout.session.async_payment_succeeded</code></li><li><code>checkout.session.async_payment_failed</code></li><li><code>checkout.session.expired</code></li><li><code>payment_intent.processing</code></li><li><code>payment_intent.succeeded</code></li><li><code>payment_intent.payment_failed</code></li><li><code>payment_intent.canceled</code></li><li><code>charge.refunded</code></li><li><code>charge.dispute.created</code></li><li><code>mandate.updated</code></li></ul>
       <p>Zet daarna het ondertekeningsgeheim (whsec_…) hierboven bij Webhookgeheim.</p>

@@ -229,7 +229,9 @@ function t(string $nl, string $en): string
 /** Het adres van een pagina van de website, in de taal van de bezoeker (Engels: zie tools/site/talen.mjs). */
 function website_pagina(string $nl, string $en): string
 {
-    return taal() === 'en' ? '../en/' . $en : '../' . $nl;
+    // De homepage als map (../ of ../en/), net als de canonical-URL
+    $pagina = taal() === 'en' ? 'en/' . $en : $nl;
+    return '../' . preg_replace('~(^|/)index\.html$~', '$1', $pagina);
 }
 
 /* ---------- Invoer controleren ---------- */

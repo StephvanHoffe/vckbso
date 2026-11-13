@@ -6,9 +6,9 @@
 export const ENGELS = {
   "index.html": "en/index.html",
   "alles-over-sporty.html": "en/about-sporty.html",
-  "abonnementen.html": "en/membership-and-costs.html",
+  "abonnement-en-kosten.html": "en/membership-and-costs.html",
   "vakantie-en-studiedagen.html": "en/holidays-and-study-days.html",
-  "community.html": "en/welcome-to-the-club.html",
+  "welkom-bij-de-club.html": "en/welcome-to-the-club.html",
   "pauzebegeleiding.html": "en/lunch-break-supervision.html",
   "een-middag-bij-sporty.html": "en/an-afternoon-at-sporty.html",
   "locaties/sportpark-middenmeer.html": "en/locations/sportpark-middenmeer.html",

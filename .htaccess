@@ -16,6 +16,11 @@ ErrorDocument 404 /404.html
   # www.domein.nl -> domein.nl (het adres zonder www is het hoofdadres, zoals in sitemap.xml)
   RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
   RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # /index.html -> / en /en/index.html -> /en/: één adres per pagina, zoals de canonical-URL.
+  # (THE_REQUEST is wat de bezoeker vroeg; zo stuurt de interne DirectoryIndex niet in een rondje.)
+  RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index\.html[?\s]
+  RewriteRule ^ /%1 [R=301,L]
 </IfModule>
 
 # Oude adressen uit de eerste versie van de site sturen we door naar de nieuwe pagina's,
@@ -23,9 +28,12 @@ ErrorDocument 404 /404.html
 <IfModule mod_alias.c>
   Redirect 301 /over-ons.html /alles-over-sporty.html
   Redirect 301 /diensten.html /een-middag-bij-sporty.html
-  Redirect 301 /prijzen.html /abonnementen.html
+  Redirect 301 /prijzen.html /abonnement-en-kosten.html
   Redirect 301 /veelgestelde-vragen.html /contact.html#veelgestelde-vragen
   Redirect 301 /werken-bij.html /word-sporty-coach.html
+  # Nederlandse adressen in plaats van community.html en abonnementen.html (november 2026)
+  Redirect 301 /community.html /welkom-bij-de-club.html
+  Redirect 301 /abonnementen.html /abonnement-en-kosten.html
 </IfModule>
 
 # Beveiligingskoppen voor de hele site (Mijn BSO zet er in beheer/ nog strengere bij)

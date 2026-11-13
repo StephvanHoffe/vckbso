@@ -4348,12 +4348,63 @@ ol.grid {
   position: relative;
 }
 
+/* De kop: een klein label met wat Sporty is en waar (voor bezoekers en zoekmachines), dan "Let's play" */
+.held__kop {
+  margin: 0 0 var(--space-m);
+}
+
+.held__label {
+  --eyebrow-color: var(--color-on-dark);
+  max-width: 33em; /* twee regels op een breed scherm, vrij van de streepjes naast "Let's play" */
+  text-shadow: 0 2px 12px rgb(0 0 0 / 0.45);
+}
+
+/* Nieuw: de openingsdatum als oranje label boven de kop */
+.held__nieuw {
+  margin: 0 0 var(--space-m);
+}
+
+.held__nieuw a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.45em 1em;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 700;
+  line-height: 1.25;
+  text-decoration: none;
+}
+
+.held__nieuw a:hover {
+  background: var(--color-surface);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .held__nieuw a {
+    transition: background-color var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+
+  .held__nieuw a:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.held__nieuw .icon {
+  flex: none;
+  width: 1em;
+  height: 1em;
+}
+
 /* Zoals in het voorbeeld van Sporty: "Let's play" groot, wit en vet, met oranje streepjes */
 .held__titel {
   position: relative;
+  display: block;
   width: fit-content;
   max-width: calc(100% - 2.5rem);
-  margin: 0 0 var(--space-m);
   color: var(--color-on-dark);
   font-family: var(--font-heading);
   font-size: clamp(3.5rem, 1.4rem + 8.5vw, 8.5rem);
@@ -5104,6 +5155,16 @@ ol.grid {
   .vink-lijst {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* Locatiepagina: Sporty in het kort, onder het adres (altijd één kolom) */
+.locatie-kort__titel {
+  margin-top: var(--space-l);
+}
+
+.vink-lijst.locatie-kort {
+  grid-template-columns: minmax(0, 1fr);
+  margin-bottom: var(--space-l);
 }
 
 /* Lijst met een oranje streepje */
