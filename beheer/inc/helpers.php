@@ -210,6 +210,25 @@ function geldig_email(string $email): bool
     return (bool) filter_var($email, FILTER_VALIDATE_EMAIL) && mb_strlen($email) <= 190;
 }
 
+/**
+ * Een naam zoals mensen die invullen: geen links, e-mailadressen of HTML. Namen gaan mee in onze eigen
+ * bevestigingsmails ("Hoi Sam"); zo kan niemand via onze formulieren reclame of phishing versturen.
+ */
+function geldige_naam(string $naam, int $max = 120): bool
+{
+    return trim($naam) !== '' && mb_strlen($naam) <= $max
+        && !preg_match('#[@<>]|://|www\.|\.(nl|com|net|org|eu|io|ru|cn|info|biz|xyz|top|click|link|online|site|shop|app)\b#iu', $naam);
+}
+
+/**
+ * Hooguit 3 mails per kwartier naar hetzelfde e-mailadres vanuit de openbare formulieren
+ * (aanmelden, proefdag, op de hoogte, solliciteren). Telt mee als poging.
+ */
+function te_veel_mails_naar(string $email): bool
+{
+    return te_veel_verzoeken('ontvanger:' . hash('sha256', mb_strtolower(trim($email))), 3);
+}
+
 function geldig_telefoon(string $telefoon): bool
 {
     return (bool) preg_match('/^[0-9 +()\-]{10,20}$/', $telefoon);
@@ -353,8 +372,9 @@ function ip_adres(): string
 
 function is_https(): bool
 {
+    // X-Forwarded-Proto kan iedereen meesturen: alleen vertrouwen achter een eigen proxy (config: achter_proxy)
     return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+        || (cfg('achter_proxy') === true && ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
 }
 
 /** Absolute URL van de beheeromgeving, zonder / aan het eind. */
@@ -363,6 +383,11 @@ function basis_url(): string
     $url = rtrim((string) cfg('app_url', ''), '/');
     if ($url !== '') {
         return $url;
+    }
+    // Zonder app_url zou een link (zoals een wachtwoordlink) het domein uit het verzoek overnemen,
+    // en dat kan een aanvaller vervalsen. Daarom alleen lokaal.
+    if (!is_lokaal()) {
+        throw new RuntimeException('Stel app_url in de configuratie in, bijvoorbeeld https://jouwdomein.nl/beheer.');
     }
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
     $pad = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/beheer/index.php')), '/');

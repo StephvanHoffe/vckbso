@@ -56,11 +56,11 @@ function lees_aanvraag(array $post): array
             'allergieen' => $tekst($k['allergieen'] ?? '', 500),
         ];
         $wie = $kind['voornaam'] !== '' ? $kind['voornaam'] : 'kind ' . ($i + 1);
-        if ($kind['voornaam'] === '') {
-            $fouten[$veld('voornaam')] = 'Vul de voornaam van je kind in.';
+        if (!geldige_naam($kind['voornaam'])) {
+            $fouten[$veld('voornaam')] = 'Vul de voornaam van je kind in' . ($kind['voornaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
         }
-        if ($kind['achternaam'] === '') {
-            $fouten[$veld('achternaam')] = "Vul de achternaam van {$wie} in.";
+        if (!geldige_naam($kind['achternaam'])) {
+            $fouten[$veld('achternaam')] = "Vul de achternaam van {$wie} in" . ($kind['achternaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
         }
         if ($kind['voorletters'] === '') {
             $fouten[$veld('voorletters')] = "Vul de voorletters van {$wie} in.";
@@ -114,11 +114,11 @@ function lees_aanvraag(array $post): array
     if ($ouder['geslacht'] !== '' && !array_key_exists($ouder['geslacht'], AANVRAAG_GESLACHT_OUDER)) {
         $ouder['geslacht'] = '';
     }
-    if ($ouder['voornaam'] === '') {
-        $fouten['voornaam'] = 'Vul je voornaam in.';
+    if (!geldige_naam($ouder['voornaam'])) {
+        $fouten['voornaam'] = 'Vul je voornaam in' . ($ouder['voornaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
     }
-    if ($ouder['achternaam'] === '') {
-        $fouten['achternaam'] = 'Vul je achternaam in.';
+    if (!geldige_naam($ouder['achternaam'])) {
+        $fouten['achternaam'] = 'Vul je achternaam in' . ($ouder['achternaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
     }
     if (!geldige_postcode($ouder['postcode'])) {
         $fouten['postcode'] = 'Vul een geldige postcode in, bijvoorbeeld 1098 TZ.';
@@ -134,9 +134,8 @@ function lees_aanvraag(array $post): array
     }
     if (!geldig_email($ouder['email'])) {
         $fouten['email'] = $ouder['email'] === '' ? 'Vul je e-mailadres in, dan sturen we je een bevestiging.' : 'Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.';
-    } elseif (waarde('SELECT id FROM gebruikers WHERE email = ?', [$ouder['email']])) {
-        $fouten['email'] = 'We kennen dit e-mailadres al. Heb je al een account? Log dan in. Heb je je net aangemeld? Dan nemen we snel contact met je op.';
     }
+    // Een bekend e-mailadres geeft hier bewust geen foutmelding: zie aanvraag.php (geen accounts uitproberen)
     if (!geldig_telefoon($ouder['telefoon'])) {
         $fouten['telefoon'] = $ouder['telefoon'] === '' ? 'Vul je telefoonnummer in, dan kunnen we je bellen.' : 'Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78.';
     }
@@ -150,11 +149,11 @@ function lees_aanvraag(array $post): array
             'email' => $tekst($post['partner_email'] ?? '', 200),
             'telefoon' => $tekst($post['partner_telefoon'] ?? '', 30),
         ];
-        if ($partner['voornaam'] === '') {
-            $fouten['partner_voornaam'] = 'Vul de voornaam van je partner in.';
+        if (!geldige_naam($partner['voornaam'])) {
+            $fouten['partner_voornaam'] = 'Vul de voornaam van je partner in' . ($partner['voornaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
         }
-        if ($partner['achternaam'] === '') {
-            $fouten['partner_achternaam'] = 'Vul de achternaam van je partner in.';
+        if (!geldige_naam($partner['achternaam'])) {
+            $fouten['partner_achternaam'] = 'Vul de achternaam van je partner in' . ($partner['achternaam'] !== '' ? ' (zonder links of e-mailadressen)' : '') . '.';
         }
         if ($partner['email'] !== '' && !geldig_email($partner['email'])) {
             $fouten['partner_email'] = 'Dit lijkt geen geldig e-mailadres.';
@@ -204,7 +203,7 @@ function bewaar_aanvraag(array $aanvraag): int
         q("INSERT INTO gebruikers (rol, status, naam, email, telefoon, straat, postcode, plaats, contactvoorkeur, wachtwoord_hash, gewenste_dagen, gewenste_startdatum, opmerkingen, aanvraag, aangemaakt_op)
            VALUES ('ouder', 'nieuw', ?, ?, ?, ?, ?, ?, '', NULL, ?, ?, ?, ?, ?)", [
             aanvraag_naam($ouder), $ouder['email'], $ouder['telefoon'], trim($ouder['straat'] . ' ' . $ouder['huisnummer']), normaliseer_postcode($ouder['postcode']), $ouder['plaats'],
-            implode(',', $dagen), $starts ? min($starts) : null, $ouder['opmerkingen'], versleutel(json_encode($extra, JSON_UNESCAPED_UNICODE)), nu(),
+            implode(',', $dagen), $starts ? min($starts) : null, versleutel($ouder['opmerkingen']), versleutel(json_encode($extra, JSON_UNESCAPED_UNICODE)), nu(),
         ]);
         $ouderId = laatste_id();
         foreach ($aanvraag['kinderen'] as $kind) {

@@ -31,8 +31,8 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | **Toegang per organisatie**: gegevens van meerdere opvangorganisaties strikt gescheiden | Elke organisatie krijgt een eigen domein, database, fotomap, sessiemap, encryptiesleutel, back-upsleutel en eventueel Stripe-account (zie [Meerdere organisaties](#meerdere-organisaties)). Er is geen gedeelde database waarin een fout filter gegevens kan laten doorlekken. Een onbekend domein krijgt geen toegang; twee organisaties met dezelfde map of sleutel weigert het systeem. |
 | **Persoonlijke accounts** | Iedereen logt in met een eigen e-mailadres. Team en tweede verzorgers worden per persoon uitgenodigd met een eenmalige link. Er zijn geen gedeelde accounts. |
 | **Meervoudige authenticatie** | Tweestapsverificatie met een authenticator-app (TOTP) en 10 eenmalige herstelcodes. Verplicht voor het hele team (kan niet worden overgeslagen); voor ouders aanbevolen of verplicht, naar keuze van de beheerder. Een code werkt maar één keer. |
-| **Versleuteling** | Https met HSTS. Gevoelige velden (bijzonderheden en allergieën, ophaalpersonen, observaties, berichten, privacyverzoeken, motivaties van sollicitanten, het MFA-geheim) en alle foto's, cv's en exports worden versleuteld opgeslagen (libsodium, XSalsa20-Poly1305) met een sleutel die niet in de database staat. Wachtwoorden en herstelcodes alleen als hash. |
-| **Veilige back-ups** | `php beheer/cli/backup.php` maakt dagelijks een versleutelde back-up (XChaCha20-Poly1305, eigen sleutel) van database, foto's, bonnetjes en verwijderregister. Back-ups worden na 30 dagen automatisch verwijderd. |
+| **Versleuteling** | Https met HSTS. Gevoelige velden (bijzonderheden en allergieën, ophaalpersonen, observaties, berichten, opmerkingen bij de aanmelding, privacyverzoeken, motivaties van sollicitanten, het MFA-geheim, de sleutels en wachtwoorden onder Koppelingen) en alle foto's, cv's en exports worden versleuteld opgeslagen (libsodium, XSalsa20-Poly1305) met een sleutel die niet in de database staat. Wachtwoorden en herstelcodes alleen als hash. |
+| **Veilige back-ups** | `php beheer/cli/backup.php` maakt dagelijks een versleutelde back-up (XChaCha20-Poly1305, eigen sleutel) van database, foto's, bonnetjes en verwijderregister. Back-ups worden na 30 dagen automatisch verwijderd. Een kopie gaat naar objectopslag bij een andere partij in de EU, met object lock: niemand kan hem eerder wissen, ook een inbreker op de server niet (zie [Externe back-up](#externe-back-up)). |
 | **Bijgewerkte software** | PHP 8.2 of hoger, geen pakketten van derden (alleen één meegeleverde QR-bibliotheek). De pagina Beveiligingsstatus waarschuwt als de PHP-versie binnen drie maanden geen beveiligingsupdates meer krijgt. |
 | **Controleerbaarheid** | Het logboek registreert inzage (dossier bekeken, foto's, berichten, facturen), wijzigingen, exports, inloggen en beveiligingsacties, per kind of ouder te filteren. Elke regel is met een hashketen aan de vorige gekoppeld: aanpassen of weghalen valt op bij "Controleer logboek". Het logboek zelf is als CSV te exporteren (dat wordt ook gelogd). Bewaartermijn standaard 24 maanden. |
 | **Ouderrechten: inzage, correctie, verwijdering** | Onder **Mijn privacy** downloadt een ouder direct de eigen gegevens (en die van kinderen waarover gecontroleerd gezag bestaat), en dient verzoeken in: inzage, correctie, verwijdering, beperking, bezwaar of overdracht. De beheerder handelt ze af onder **Privacyverzoeken**, met de wettelijke termijn van een maand in beeld, een volledige export (ook interne notities en wie het dossier heeft ingezien) en knoppen om een kinddossier of oudergegevens te wissen. Gegevens die wettelijk bewaard moeten worden (de financiële administratie) blijven staan. |
@@ -132,10 +132,12 @@ Onder **Koppelingen** (eigen recht, standaard alleen beheerders) stel je in waar
 | Koppeling | Wat je instelt | Testen |
 |---|---|---|
 | **Stripe** | Geheime sleutel en webhookgeheim; de betaalmethoden voor de machtiging (iDEAL \| Wero, IBAN) en voor los betalen (iDEAL \| Wero, Bancontact, creditcard). Het adres van de webhook en de gebeurtenissen staan erbij om over te nemen. | Een nieuwe sleutel wordt eerst bij Stripe getest; een foute of publieke sleutel (pk_) wordt geweigerd. Daarnaast "Verbinding testen", en je ziet wanneer de laatste melding van Stripe binnenkwam, of geweigerd werd omdat het webhookgeheim niet klopt. |
+| **Externe back-up** | Objectopslag bij een andere partij in de EU (S3-standaard, bijvoorbeeld Scaleway of Hetzner): adres (endpoint), regio, bucket, map, adresvorm en een toegangssleutel die alleen mag uploaden. | "Opslaan en testen" zet eerst een klein testbestand in de opslag; lukt dat niet, dan wordt er niets opgeslagen. Je ziet wanneer de laatste kopie is verstuurd en de laatste fout. |
 | **E-mail versturen** | Eigen mailserver (SMTP, aanbevolen), de mailfunctie van de webserver of testmodus (alleen `data/mail.log`); afzenderadres, afzendernaam en teamadres; bij SMTP de server, poort, beveiliging (STARTTLS of SSL/TLS), gebruikersnaam en wachtwoord. | "Opslaan en testmail naar mij", met een begrijpelijke foutmelding als het niet lukt (bijvoorbeeld een fout wachtwoord). Je ziet wanneer de laatste e-mail is verstuurd en de laatste fout. |
 
 - **Veilig opgeslagen:** sleutels en wachtwoorden staan versleuteld in de database (tabel `koppelingen`, migratie 17) en zijn na het opslaan niet meer te lezen: je ziet alleen het begin en de laatste vier tekens (`sk_live_…9a3f`), een wachtwoord helemaal niet. Ze komen niet in het logboek; daar staat alleen wát er is gewijzigd en door wie.
-- **Extra bevestiging:** een sleutel of wachtwoord wijzigen, of Stripe ontkoppelen, vraagt om je eigen wachtwoord. Wie de Stripe-sleutel kan veranderen, bepaalt waar het geld naartoe gaat.
+- **Extra bevestiging:** elke wijziging onder Koppelingen (ook een afzenderadres of mailserver), en ontkoppelen, vraagt om je eigen wachtwoord; na 5 foute pogingen is dat een kwartier geblokkeerd. Wie de Stripe-sleutel kan veranderen, bepaalt waar het geld naartoe gaat; wie de mailserver kan veranderen, kan wachtwoordlinks onderscheppen. Verander je de mailserver of gebruikersnaam, dan vul je ook het wachtwoord van de mailbox opnieuw in: zo kan niemand het opgeslagen wachtwoord naar een andere server laten sturen.
+- **Geen interne adressen:** een mailserver of opslag in het interne netwerk van de server (zoals 127.0.0.1 of 192.168.x.x) wordt geweigerd, en de opslag moet https gebruiken.
 - **SMTP zonder extra software:** Mijn BSO verstuurt zelf via de mailserver, altijd versleuteld (STARTTLS op poort 587 of SSL/TLS op poort 465) en met controle van het certificaat. Vraag de gegevens op bij jullie e-mailprovider; met tweestapsverificatie bij de provider gebruik je een app-wachtwoord. Zorg dat SPF en DKIM van het domein deze mailserver toestaan (bij de mailbox van het eigen domein is dat meestal al zo).
 - **config.php gaat voor:** wat in `config.php` staat (bijvoorbeeld bij meerdere organisaties), geldt en is onder Koppelingen alleen te zien. Zo kan een systeembeheerder iets vastzetten.
 - **Techniek:** `beheer/inc/koppelingen.php` (`koppeling()`, `koppeling_zet()`), `beheer/inc/smtp.php` en `beheer/koppelingen.php`. Lees een koppeling altijd met `koppeling()`, niet met `cfg()`; `npm test` controleert dat.
@@ -199,6 +201,8 @@ De beheerder stelt de termijnen in onder **Instellingen → Bewaartermijnen**. D
 
 Het bewaarbeleid draait dagelijks via cron (`php beheer/cli/onderhoud.php`). Zonder cron draait het vanzelf bij het eerste bezoek van de dag.
 
+Om per ongeluk (of kwaadwillig) massaal wissen te voorkomen, heeft elke termijn een minimum: 1 maand, het logboek 12 maanden en de financiële administratie 7 jaar. Een termijn korter maken vraagt om je eigen wachtwoord en komt in het logboek.
+
 ## Logboek
 
 Instellingen → Logboek. Filter op soort (inzage, wijziging, export, inloggen, beveiliging, AVG-verzoek, bewaarbeleid), op teamlid, of op één kind of ouder (link "Logboek" onderaan het dossier van het kind of de ouder). Met **Controleer logboek** wordt de hashketen nagerekend. Met **Exporteren (CSV)** download je de selectie.
@@ -219,7 +223,20 @@ Terugzetten, met de website even offline:
 4. Gebruik het **nieuwste** `verwijderregister.jsonl`: uit de opzijgezette datamap als dat er nog is, anders dat uit de back-up.
 5. Draai `php beheer/cli/onderhoud.php --na-herstel`. Zo worden gegevens die na de back-up zijn gewist, opnieuw gewist.
 
-Bewaar de back-ups op een andere plek dan de server (in de EU) en de back-upsleutel apart, bijvoorbeeld in een wachtwoordkluis. Test het terugzetten minstens één keer per jaar.
+Bewaar de back-upsleutel apart, bijvoorbeeld in een wachtwoordkluis. Test het terugzetten minstens één keer per jaar.
+
+- De back-up wordt eerst als kopie van de database gemaakt in de afgeschermde back-upmap (niet in de gedeelde tijdelijke map van de server), meteen versleuteld en de kopie weggehaald; ook als het script halverwege stopt. Alle bestanden zijn alleen leesbaar voor de eigenaar.
+
+### Externe back-up
+
+Na de back-up stuurt `backup.php` het versleutelde bestand naar objectopslag bij een andere partij in de EU (in te stellen onder **Koppelingen → Externe back-up**). Zo is er nog een kopie als de server kwijt of gehackt is.
+
+- **De aanbieder kan niets lezen:** het bestand is al versleuteld met de back-upsleutel, en die staat niet bij de aanbieder.
+- **Niet te wissen:** zet bij de aanbieder object lock aan (modus "compliance", standaard 30 dagen). Dan kan niemand een back-up eerder verwijderen of overschrijven, ook iemand met de sleutel van de server niet.
+- **Toch op tijd weg:** laat de aanbieder bestanden na 31 dagen automatisch verwijderen. Zo verdwijnen gewiste gegevens ook daar, net als op de server.
+- **Een sleutel die alleen mag uploaden:** geef Mijn BSO geen sleutel waarmee hij kan lezen of wissen.
+- **Mislukt het?** Dan krijgt het team een e-mail (tekst aan te passen onder E-mails aanpassen), staat de fout onder Koppelingen en in de Beveiligingsstatus, en stopt `backup.php` met code 2, zodat ook cron een melding geeft.
+- Techniek: `beheer/inc/externe_backup.php`, S3 met AWS Signature Version 4, zonder extra software.
 
 ## Meerdere organisaties
 
@@ -251,11 +268,17 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
 ### Overige beveiliging
 
 - Alleen via https (wordt afgedwongen buiten `localhost`), met HSTS en strikte beveiligingsheaders (CSP, geen frames, geen caching van pagina's).
-- Wachtwoorden met `password_hash` (bcrypt), minimaal 10 tekens. Na 5 foute pogingen per e-mailadres of IP-adres 15 minuten geblokkeerd; ook voor de code van tweestapsverificatie. Sessies verlopen na 2 uur zonder activiteit.
+- Wachtwoorden met `password_hash` (bcrypt), minimaal 10 tekens. Na 5 foute pogingen per e-mailadres of IP-adres 15 minuten geblokkeerd; ook voor de code van tweestapsverificatie (bij inloggen, nieuwe herstelcodes en uitzetten) en voor je eigen wachtwoord als bevestiging (bij Koppelingen, kortere bewaartermijnen en wachtwoord wijzigen).
+- Sessies verlopen na 2 uur zonder activiteit en hoe dan ook na 12 uur. Wie zijn wachtwoord wijzigt of opnieuw instelt, of wiens tweestapsverificatie door de beheerder wordt gereset, wordt op alle andere apparaten uitgelogd.
+- **Openbare formulieren** (aanmelden, proefdag, op de hoogte, solliciteren): hooguit een paar per kwartier per IP-adres, hooguit 3 mails per kwartier naar hetzelfde e-mailadres, geen links of e-mailadressen in namen (die gaan mee in onze bevestigingsmails), en hooguit 3 openstaande proefdagen per e-mailadres. Aanmelden met een e-mailadres dat al bekend is, geeft hetzelfde antwoord als een nieuwe aanmelding; de eigenaar van dat adres krijgt een mail. Zo kan niemand uitproberen wie er klant is.
+- **Toegang per groep** geldt ook voor berichten: een medewerker die alleen eigen groepen ziet, ziet geen berichten over kinderen in andere groepen, en geen nieuwe aanmeldingen (die hebben nog geen groep). Wie een kind mag ophalen, passen ouders met gezag aan, of een collega die klanten beheert; past het team allergieën of ophaalpersonen aan, dan krijgen de ouders een bericht. Een observatie delen met ouders kan alleen wie hem schreef, of een collega die klanten beheert.
+- Foutmeldingen komen nooit op het scherm, alleen in het foutenlog van de server (behalve in ontwikkelmodus).
+- `X-Forwarded-Proto` wordt alleen vertrouwd met `'achter_proxy' => true` in de configuratie; anders kan iedereen doen alsof een verbinding beveiligd is.
+- De configuratie met de sleutels staat bij voorkeur buiten de webmap: `mijnbso-config.php` naast `public_html` (zie `docs/live-zetten-vimexx.md`). De database en het mailtestlog zijn alleen leesbaar voor de eigenaar.
 - Elk formulier heeft een CSRF-token. Alle uitvoer wordt ge-escaped. Alle databasequery's gebruiken prepared statements.
-- Foto's staan buiten de publieke map en worden alleen via `foto.php` geleverd, na controle. Bij het opslaan wordt de foto opnieuw opgeslagen als JPEG, waardoor EXIF (zoals gps-locatie) verdwijnt.
+- Foto's staan buiten de publieke map en worden alleen via `foto.php` geleverd, na controle, en niet in de browsercache bewaard. Bij het opslaan wordt de foto opnieuw opgeslagen als JPEG, waardoor EXIF (zoals gps-locatie) verdwijnt.
 - E-mails bevatten geen inhoud over kinderen, alleen een seintje met een link.
-- **Beveiligingsstatus** (Instellingen → Beveiligingsstatus) laat zien of alles in orde is: https, sleutel, datamap, PHP-versie, tweestapsverificatie, toegang per groep, gecontroleerd gezag, back-ups, bewaarbeleid en privacyverzoeken.
+- **Beveiligingsstatus** (Instellingen → Beveiligingsstatus) laat zien of alles in orde is: https, sleutel, sleutels buiten de webmap, datamap, PHP-versie, tweestapsverificatie, toegang per groep, gecontroleerd gezag, back-ups, externe back-up, bewaarbeleid en privacyverzoeken.
 
 ## Live zetten
 
@@ -349,8 +372,10 @@ Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met b
 - [ ] Procedure voor een datalek vastleggen (melden bij de Autoriteit Persoonsgegevens binnen 72 uur).
 
 **Techniek**
-- [ ] Hosting met PHP 8.2+ en https, datamap buiten de webroot, twee sleutels (ook in een wachtwoordkluis), cron voor onderhoud en back-up, back-ups naar een tweede locatie.
-- [ ] Terugzetten van een back-up één keer testen op een testomgeving.
+- [ ] Hosting met PHP 8.2+ en https, datamap en `mijnbso-config.php` buiten de webroot, twee sleutels (ook in een wachtwoordkluis), cron voor onderhoud en back-up (zie `docs/live-zetten-vimexx.md`).
+- [ ] Account voor de externe back-up bij een Europese aanbieder van objectopslag, met object lock en een sleutel die alleen mag uploaden; instellen onder Koppelingen.
+- [ ] Terugzetten van een back-up één keer testen op een testomgeving, ook eentje uit de externe opslag.
+- [ ] Vóór de livegang een onafhankelijke beveiligingstest (pentest) van Mijn BSO laten doen; het systeem bevat gegevens van kinderen.
 - [ ] Stripe-account met iDEAL | Wero en SEPA-incasso, eerst testen met de testsleutel en een testwebhook (zie [Stripe koppelen](#stripe-koppelen)).
 - [ ] E-mail via een betrouwbare SMTP-dienst als de `mail()`-functie van de hosting in de spam belandt (nu: `mail.methode = mail`).
 - [ ] PHP 8.2 krijgt beveiligingsupdates tot eind 2026: kies bij de hosting liefst PHP 8.3 of nieuwer.

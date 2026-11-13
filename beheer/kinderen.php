@@ -44,7 +44,7 @@ if (is_ouder($gebruiker)) {
             redirect('kinderen.php');
         }
     }
-    $kinderen = kinderen_van_verzorger((int) $gebruiker['id'], null, false);
+    $kinderen = array_values(array_filter(kinderen_van_verzorger((int) $gebruiker['id'], null, false), 'heeft_enig_recht'));
 
     pagina_begin('Mijn kinderen', 'kinderen.php');
     pagina_kop('Mijn kinderen', 'Bekijk en wijzig de gegevens van je kinderen, zoals allergieën en wie ze mag ophalen.');

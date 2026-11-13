@@ -134,6 +134,17 @@ function mag_namens_kind(int $kindId, int $gebruikerId): bool
  * Kinderen waar deze verzorger bij hoort, eventueel alleen met een bepaald recht.
  * Elke rij bevat de kindgegevens plus de koppeling (v_relatie, v_gezag, v_gezag_gecontroleerd_op, v_recht_*).
  */
+/** Heeft deze verzorger (rij uit kinderen_van_verzorger) bij dit kind minstens één recht? */
+function heeft_enig_recht(array $kind): bool
+{
+    foreach (array_keys(RECHTEN) as $recht) {
+        if ((int) ($kind['v_recht_' . $recht] ?? 0) === 1) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function kinderen_van_verzorger(int $gebruikerId, ?string $recht = null, bool $alleenActief = true): array
 {
     $waar = 'v.gebruiker_id = ? AND k.geanonimiseerd_op IS NULL';
@@ -183,6 +194,9 @@ function koppel_verzorger(int $kindId, int $gebruikerId, string $relatie, bool $
     q('INSERT INTO kind_verzorgers (kind_id, gebruiker_id, relatie, gezag, recht_agenda, recht_dossier, recht_fotos, recht_berichten, aangemaakt_op)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
        ON CONFLICT(kind_id, gebruiker_id) DO UPDATE SET relatie = excluded.relatie, gezag = excluded.gezag,
+         -- Verandert het gezag, dan geldt een eerdere controle niet meer: opnieuw controleren
+         gezag_gecontroleerd_op = CASE WHEN excluded.gezag != kind_verzorgers.gezag THEN NULL ELSE kind_verzorgers.gezag_gecontroleerd_op END,
+         gezag_gecontroleerd_door = CASE WHEN excluded.gezag != kind_verzorgers.gezag THEN NULL ELSE kind_verzorgers.gezag_gecontroleerd_door END,
          recht_agenda = excluded.recht_agenda, recht_dossier = excluded.recht_dossier, recht_fotos = excluded.recht_fotos, recht_berichten = excluded.recht_berichten', [
         $kindId, $gebruikerId, array_key_exists($relatie, RELATIES) ? $relatie : 'anders', $gezag ? 1 : 0,
         in_array('agenda', $rechten, true) ? 1 : 0, in_array('dossier', $rechten, true) ? 1 : 0,

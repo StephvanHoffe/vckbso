@@ -66,7 +66,9 @@ mkdirSync(join(DATA, "sessies"), { recursive: true });
 for (const [rol, r] of Object.entries(ROLLEN)) {
   const sid = ("voorbeeld" + rol).padEnd(32, "0");
   r.cookie = `vck_standaard=${sid}`;
-  writeFileSync(join(DATA, "sessies", `sess_${sid}`), `gebruiker_id|i:${r.id};organisatie|s:9:"standaard";laatst_actief|i:${Math.floor(Date.now() / 1000)};`);
+  // Zelfde velden als log_in_als(): ingelogd_op (sessies verlopen na 12 uur) en sessie_versie (0 in een verse demo-database)
+  const nu = Math.floor(Date.now() / 1000);
+  writeFileSync(join(DATA, "sessies", `sess_${sid}`), `gebruiker_id|i:${r.id};organisatie|s:9:"standaard";laatst_actief|i:${nu};ingelogd_op|i:${nu};sessie_versie|i:0;`);
 }
 
 // Niet in de momentopname: acties, downloads, exports

@@ -30,7 +30,10 @@ function stuur_mail(string $aan, string $onderwerp, string $tekst): bool
 
     if ($methode === 'log') {
         $regel = '[' . nu() . "] Aan: {$aan}\nOnderwerp: {$onderwerp}\n\n{$tekst}\n" . str_repeat('-', 60) . "\n";
-        return file_put_contents(data_dir() . '/mail.log', $regel, FILE_APPEND | LOCK_EX) !== false;
+        $log = data_dir() . '/mail.log';
+        $gelukt = file_put_contents($log, $regel, FILE_APPEND | LOCK_EX) !== false;
+        @chmod($log, 0600); // er staan persoonsgegevens en links in
+        return $gelukt;
     }
 
     $van = (string) koppeling('mail.van');

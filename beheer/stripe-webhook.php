@@ -16,8 +16,12 @@ if (!is_post() || !stripe_actief() || strlen($inhoud) > 1_000_000) {
     exit;
 }
 if (!stripe_handtekening_ok($inhoud, (string) ($_SERVER['HTTP_STRIPE_SIGNATURE'] ?? ''), (string) koppeling('stripe.webhook_geheim'))) {
-    error_log('Stripe-webhook: ongeldige handtekening (controleer het webhookgeheim onder Koppelingen)');
-    instelling_zet('stripe_webhook_geweigerd', nu());
+    // Hooguit één keer per minuut bijhouden: zo kan niemand met nepverzoeken het log of de database volschrijven
+    $vorige = (string) instelling('stripe_webhook_geweigerd', '');
+    if ($vorige === '' || strtotime($vorige) < time() - 60) {
+        error_log('Stripe-webhook: ongeldige handtekening (controleer het webhookgeheim onder Koppelingen)');
+        instelling_zet('stripe_webhook_geweigerd', nu());
+    }
     http_response_code(400);
     exit;
 }

@@ -95,7 +95,7 @@ if (invoer('website') !== '') {
     op_de_hoogte_antwoord($alsJson, 200);
 }
 
-if (recente_pogingen('interesse:' . ip_adres()) >= MAX_INTERESSE_PER_KWARTIER) {
+if (recente_pogingen('interesse:' . ip_adres()) >= MAX_INTERESSE_PER_KWARTIER || te_veel_verzoeken('interesse-poging:' . ip_adres(), 30)) {
     op_de_hoogte_antwoord($alsJson, 429, [], 'Er zijn net al een paar aanmeldingen vanaf dit adres gedaan. Probeer het over een kwartier nog eens.');
 }
 
@@ -103,8 +103,8 @@ $naam = mb_substr(invoer('naam'), 0, 120);
 $email = mb_substr(invoer('email'), 0, 200);
 $telefoon = mb_substr(invoer('telefoon'), 0, 30);
 $fouten = [];
-if ($naam === '') {
-    $fouten['naam'] = 'Vul je naam in.';
+if (!geldige_naam($naam)) {
+    $fouten['naam'] = $naam === '' ? 'Vul je naam in.' : 'Vul je naam in (zonder links of e-mailadressen).';
 }
 if (!geldig_email($email)) {
     $fouten['email'] = $email === '' ? 'Vul je e-mailadres in, dan sturen we je een bevestiging.' : 'Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.';
@@ -117,6 +117,11 @@ if (invoer('toestemming') === '') {
 }
 if ($fouten) {
     op_de_hoogte_antwoord($alsJson, 422, $fouten, count($fouten) === 1 ? 'Er is nog 1 veld niet goed ingevuld.' : 'Er zijn nog ' . count($fouten) . ' velden niet goed ingevuld.');
+}
+
+// Te veel mails naar dit adres: doe alsof het gelukt is (zo verklappen we niets), maar stuur niets
+if (te_veel_mails_naar($email)) {
+    op_de_hoogte_antwoord($alsJson, 200);
 }
 
 try {

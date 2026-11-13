@@ -32,9 +32,21 @@ function melding_voor_team(int $ouderId, string $tekst, ?int $kindId = null): vo
 }
 
 /** Ongelezen berichten binnen de gesprekken die dit teamlid mag zien. */
+/**
+ * SQL-voorwaarde voor het team: een medewerker die alleen eigen groepen ziet, ziet geen berichten
+ * over kinderen in andere groepen (berichten zonder kind, over het gezin, wel).
+ */
+function bericht_binnen_groepen(string $alias = 'b'): string
+{
+    if (team_groep_ids() === null) {
+        return '1 = 1';
+    }
+    return "({$alias}.kind_id IS NULL OR EXISTS (SELECT 1 FROM kinderen bk WHERE bk.id = {$alias}.kind_id AND " . groep_voorwaarde('bk.groep_id') . '))';
+}
+
 function ongelezen_voor_team(): int
 {
-    return (int) waarde('SELECT COUNT(*) FROM berichten b WHERE b.gelezen_team = 0 AND ' . ouder_voorwaarde('b.ouder_id'));
+    return (int) waarde('SELECT COUNT(*) FROM berichten b WHERE b.gelezen_team = 0 AND ' . ouder_voorwaarde('b.ouder_id') . ' AND ' . bericht_binnen_groepen('b'));
 }
 
 function ongelezen_voor_ouder(int $ouderId): int

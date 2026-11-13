@@ -16,8 +16,15 @@ if (is_post()) {
         $gebruiker = rij("SELECT * FROM gebruikers WHERE email = ? AND status != 'gestopt'", [$email]);
         if ($gebruiker) {
             $link = maak_wachtwoordlink((int) $gebruiker['id'], 2);
-            stuur_mailtekst($gebruiker['email'], 'wachtwoord_vergeten', ['naam' => $gebruiker['naam'], 'link' => $link]);
             log_actie('Wachtwoordlink aangevraagd', '', (int) $gebruiker['id']);
+            // De e-mail pas versturen als de pagina al bij de bezoeker is: zo verraadt de responstijd niet
+            // of er een account bij dit adres hoort
+            register_shutdown_function(function () use ($gebruiker, $link) {
+                if (function_exists('fastcgi_finish_request')) {
+                    fastcgi_finish_request();
+                }
+                stuur_mailtekst($gebruiker['email'], 'wachtwoord_vergeten', ['naam' => $gebruiker['naam'], 'link' => $link]);
+            });
         }
         $verstuurd = true; // altijd dezelfde melding, zodat niemand kan zien welke adressen bestaan
     }

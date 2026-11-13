@@ -26,6 +26,13 @@ const KOPPELING_VELDEN = [
     'smtp.beveiliging' => ['Beveiliging', false, 'starttls'],
     'smtp.gebruiker' => ['Gebruikersnaam', false, ''],
     'smtp.wachtwoord' => ['Wachtwoord', true, ''],
+    'extern.endpoint' => ['Adres van de opslag', false, ''],
+    'extern.regio' => ['Regio', false, ''],
+    'extern.bucket' => ['Bucket', false, ''],
+    'extern.map' => ['Map in de bucket', false, 'mijnbso'],
+    'extern.adres' => ['Adresvorm', false, 'host'],
+    'extern.toegangssleutel' => ['Toegangssleutel', false, ''],
+    'extern.geheime_sleutel' => ['Geheime sleutel van de opslag', true, ''],
 ];
 
 /** De waarde uit config.php, of null als die daar niet (of leeg) staat. */
@@ -98,7 +105,7 @@ function koppeling_masker(string $sleutel, string $waarde): string
     if ($waarde === '') {
         return '';
     }
-    if ($sleutel === 'smtp.wachtwoord' || strlen($waarde) < 16) {
+    if (in_array($sleutel, ['smtp.wachtwoord', 'extern.geheime_sleutel'], true) || strlen($waarde) < 16) {
         return '••••••••';
     }
     $voorvoegsel = preg_match('/^((?:sk|rk|pk)_(?:live|test)_|whsec_)/', $waarde, $m) ? $m[1] : '';

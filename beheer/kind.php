@@ -31,8 +31,12 @@ if (is_post()) {
         $velden = [
             'school' => mb_substr(invoer('school'), 0, 120),
             'bijzonderheden' => versleutel(mb_substr(invoer('bijzonderheden'), 0, 2000)),
-            'ophaalpersonen' => versleutel(mb_substr(invoer('ophaalpersonen'), 0, 500)),
         ];
+        // Wie het kind mag ophalen, bepaalt wie gezag heeft (of een collega die klanten beheert, op hun verzoek)
+        $ophalenOud = $kind['ophaalpersonen'];
+        if ($magBeslissen || $beheerder) {
+            $velden['ophaalpersonen'] = versleutel(mb_substr(invoer('ophaalpersonen'), 0, 500));
+        }
         // Toestemming voor foto's is een beslissing van wie gezag heeft (of wordt door de beheerder vastgelegd)
         $oudeKeuze = foto_keuze($kind);
         $nieuweKeuze = ($magBeslissen || $beheerder) ? foto_keuze_invoer() : null;
@@ -69,6 +73,16 @@ if (is_post()) {
                 $weg = verwijder_fotos_na_intrekken((int) $kind['id'], $keuzeNu, 'toestemming ingetrokken');
                 if ($weg) {
                     log_actie("Foto's verwijderd na intrekken toestemming", $weg . " foto('s)", null, 'wijziging', $onderwerp);
+                }
+            }
+            // Past het team iets aan wat ouders zelf ook invullen? Dan krijgen de ouders een bericht
+            if ($team) {
+                $aangepast = array_filter([
+                    $kind['bijzonderheden'] !== mb_substr(invoer('bijzonderheden'), 0, 2000) ? 'allergieën en bijzonderheden' : null,
+                    isset($velden['ophaalpersonen']) && $ophalenOud !== mb_substr(invoer('ophaalpersonen'), 0, 500) ? 'wie ' . $kind['voornaam'] . ' mag ophalen' : null,
+                ]);
+                if ($aangepast) {
+                    bericht_aan_verzorgers((int) $kind['id'], 'dossier', 'Het team heeft bij ' . $kind['voornaam'] . ' aangepast: ' . implode(' en ', $aangepast) . '. Kijk bij de gegevens van ' . $kind['voornaam'] . ' of het klopt.');
                 }
             }
             if (!$team) {
@@ -128,7 +142,8 @@ if (is_post()) {
 
     if ($actie === 'observatie_delen' && $team) {
         $obs = rij('SELECT * FROM observaties WHERE id = ? AND kind_id = ?', [(int) invoer('observatie'), $kind['id']]);
-        if ($obs) {
+        // Delen met ouders: alleen wie de observatie schreef, of een collega die klanten beheert
+        if ($obs && ((int) $obs['auteur_id'] === (int) $gebruiker['id'] || $beheerder)) {
             q('UPDATE observaties SET gedeeld = 1 - gedeeld WHERE id = ?', [$obs['id']]);
             log_actie($obs['gedeeld'] ? 'Observatie niet meer gedeeld' : 'Observatie gedeeld', '', null, 'wijziging', $onderwerp);
             flash('succes', $obs['gedeeld'] ? 'De observatie is niet meer zichtbaar voor de ouders.' : 'De observatie is gedeeld met de ouders.');
@@ -161,8 +176,9 @@ if (is_post()) {
                 flash('fout', 'Kies waarmee je het gezag hebt gecontroleerd.');
                 redirect($terug . '#verzorgers');
             }
+            // "Geen gezag" vastleggen is geen gecontroleerd gezag: dan geen controledatum (die staat in het logboek)
             q('UPDATE kind_verzorgers SET gezag = ?, gezag_gecontroleerd_op = ?, gezag_gecontroleerd_door = ?, gezag_bron = ? WHERE kind_id = ? AND gebruiker_id = ?', [
-                $heeftGezag ? 1 : 0, nu(), $gebruiker['id'], $heeftGezag ? $bron : '', $kind['id'], $koppeling['gebruiker_id'],
+                $heeftGezag ? 1 : 0, $heeftGezag ? nu() : null, $heeftGezag ? $gebruiker['id'] : null, $heeftGezag ? $bron : '', $kind['id'], $koppeling['gebruiker_id'],
             ]);
             log_actie($heeftGezag ? 'Gezag gecontroleerd' : 'Vastgelegd: geen gezag', ($heeftGezag ? GEZAG_BRONNEN[$bron] : '') . ' (' . $wie . ')', null, 'wijziging', $onderwerp);
             flash('succes', 'Het gezag is vastgelegd.');
@@ -281,7 +297,11 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
 <?php endif; ?>
           <div class="field"><label for="school">Basisschool</label><input id="school" name="school" value="<?= e($kind['school']) ?>"></div>
           <div class="field"><label for="bijzonderheden">Allergieën, medicijnen of bijzonderheden</label><textarea id="bijzonderheden" name="bijzonderheden" rows="3"><?= e($kind['bijzonderheden']) ?></textarea></div>
-          <div class="field"><label for="ophaalpersonen">Wie mag <?= e($kind['voornaam']) ?> ophalen, behalve de ouders?</label><input id="ophaalpersonen" name="ophaalpersonen" value="<?= e($kind['ophaalpersonen']) ?>" placeholder="Bijvoorbeeld: oma Els, buurvrouw Fatima"></div>
+<?php if ($magBeslissen || $beheerder): ?>
+          <div class="field"><label for="ophaalpersonen">Wie mag <?= e($kind['voornaam']) ?> ophalen, behalve de ouders?<?= $beheerder ? ' <span class="field__hint">(alleen aanpassen op verzoek van wie gezag heeft)</span>' : '' ?></label><input id="ophaalpersonen" name="ophaalpersonen" value="<?= e($kind['ophaalpersonen']) ?>" placeholder="Bijvoorbeeld: oma Els, buurvrouw Fatima"></div>
+<?php else: ?>
+          <p class="field__hint">Wie <?= e($kind['voornaam']) ?> mag ophalen, passen de ouders zelf aan (of een collega die klanten beheert).</p>
+<?php endif; ?>
 <?php if ($magBeslissen || $beheerder):
     $intrekken = fotos_bij_intrekken((int) $kind['id']); ?>
           <?= foto_keuze_veld($kind['voornaam'], foto_keuze($kind), $fouten, $beheerder ? ' <span class="field__hint">(alleen aanpassen op verzoek van wie gezag heeft)</span>' : '') ?>
@@ -361,12 +381,10 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
 <?php endif; ?>
           </div>
           <p><?= e($obs['tekst']) ?></p>
-<?php if ($team): ?>
+<?php if ($team && ((int) $obs['auteur_id'] === (int) $gebruiker['id'] || $beheerder)): ?>
           <div class="btn-group" style="margin-top: var(--space-2xs)">
             <form class="inline-form" method="post" action="<?= e($terug) ?>"><?= csrf_veld() ?><input type="hidden" name="actie" value="observatie_delen"><input type="hidden" name="observatie" value="<?= (int) $obs['id'] ?>"><button class="link-button" type="submit"><?= $obs['gedeeld'] ? 'Niet meer delen' : 'Delen met ouders' ?></button></form>
-<?php if ((int) $obs['auteur_id'] === (int) $gebruiker['id'] || $beheerder): ?>
             <form class="inline-form" method="post" action="<?= e($terug) ?>" data-bevestig="Deze observatie verwijderen?"><?= csrf_veld() ?><input type="hidden" name="actie" value="observatie_verwijderen"><input type="hidden" name="observatie" value="<?= (int) $obs['id'] ?>"><button class="link-button" type="submit"><?= icoon('trash') ?>Verwijderen</button></form>
-<?php endif; ?>
           </div>
 <?php endif; ?>
         </li>

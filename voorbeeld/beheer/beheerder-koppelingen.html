@@ -66,7 +66,7 @@
       <input type="hidden" name="csrf" value="voorbeeld">      <input type="hidden" name="actie" value="stripe">
       <div class="field"><label for="geheime_sleutel">Geheime sleutel</label><input id="geheime_sleutel" name="geheime_sleutel" type="password" autocomplete="new-password" spellcheck="false" placeholder="sk_live_… of sk_test_…" aria-describedby="geheime_sleutel-hint"><p class="field__hint" id="geheime_sleutel-hint">Nog niet ingevuld. In het dashboard van Stripe onder Ontwikkelaars → API-sleutels. Begin met de testsleutel (sk_test_…). Mijn BSO test een nieuwe sleutel voordat hij wordt opgeslagen.</p></div>      <div class="field"><label for="webhook_geheim">Webhookgeheim</label><input id="webhook_geheim" name="webhook_geheim" type="password" autocomplete="new-password" spellcheck="false" placeholder="whsec_…" aria-describedby="webhook_geheim-hint"><p class="field__hint" id="webhook_geheim-hint">Nog niet ingevuld. Bij de webhook in het dashboard van Stripe ("Ondertekeningsgeheim"). Hiermee weet Mijn BSO zeker dat een melding echt van Stripe komt.</p></div>      <fieldset class="field fotokeuze"><legend class="legend-label">Ouders geven de machtiging af via</legend><div class="choices choices--stapel"><label class="choice choice--uitleg" for="methoden_machtiging-ideal"><input type="checkbox" id="methoden_machtiging-ideal" name="methoden_machtiging[]" value="ideal" checked aria-describedby="methoden_machtiging-ideal-uitleg"><span><strong>iDEAL | Wero</strong><span class="choice__uitleg" id="methoden_machtiging-ideal-uitleg">Via de eigen bank; Stripe schrijft € 0,01 af en betaalt die meteen terug.</span></span></label><label class="choice choice--uitleg" for="methoden_machtiging-sepa_debit"><input type="checkbox" id="methoden_machtiging-sepa_debit" name="methoden_machtiging[]" value="sepa_debit" checked aria-describedby="methoden_machtiging-sepa_debit-uitleg"><span><strong>IBAN invullen</strong><span class="choice__uitleg" id="methoden_machtiging-sepa_debit-uitleg">De ouder vult het rekeningnummer en de naam in.</span></span></label></div></fieldset>      <fieldset class="field fotokeuze"><legend class="legend-label">Een factuur los betalen kan met</legend><div class="choices choices--stapel"><label class="choice choice--uitleg" for="methoden_betalen-ideal"><input type="checkbox" id="methoden_betalen-ideal" name="methoden_betalen[]" value="ideal" checked aria-describedby="methoden_betalen-ideal-uitleg"><span><strong>iDEAL | Wero</strong><span class="choice__uitleg" id="methoden_betalen-ideal-uitleg">Via de eigen bank.</span></span></label><label class="choice choice--uitleg" for="methoden_betalen-bancontact"><input type="checkbox" id="methoden_betalen-bancontact" name="methoden_betalen[]" value="bancontact" aria-describedby="methoden_betalen-bancontact-uitleg"><span><strong>Bancontact</strong><span class="choice__uitleg" id="methoden_betalen-bancontact-uitleg">Voor ouders met een Belgische bankrekening.</span></span></label><label class="choice choice--uitleg" for="methoden_betalen-card"><input type="checkbox" id="methoden_betalen-card" name="methoden_betalen[]" value="card" aria-describedby="methoden_betalen-card-uitleg"><span><strong>Creditcard</strong><span class="choice__uitleg" id="methoden_betalen-card-uitleg">Visa, Mastercard en andere kaarten.</span></span></label></div></fieldset>      <p class="field__hint" style="margin: 0">Zet de gekozen betaalmethoden ook aan in het dashboard van Stripe (Instellingen → Betaalmethoden), en SEPA-incasso voor de automatische incasso.</p>
       <div class="field">
-        <label for="bevestig_wachtwoord">Je eigen wachtwoord <span class="field__hint">(alleen nodig als je een sleutel wijzigt)</span></label>
+        <label for="bevestig_wachtwoord">Je eigen wachtwoord <span class="field__hint">(nodig bij elke wijziging)</span></label>
         <input id="bevestig_wachtwoord" name="bevestig_wachtwoord" type="password" autocomplete="current-password">
               </div>
       <div class="form__acties"><button class="btn" type="submit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>Opslaan</button></div>
@@ -76,7 +76,7 @@
       <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Webhook instellen bij Stripe</summary>
       <p>Maak in het dashboard van Stripe onder <strong>Ontwikkelaars → Webhooks</strong> een webhook aan naar dit adres:</p>
       <label class="legend-label" for="webhook-url">Adres van de webhook</label>
-      <input id="webhook-url" class="koppeling__kopieer" readonly value="http://127.0.0.1:41813/beheer/stripe-webhook.php">
+      <input id="webhook-url" class="koppeling__kopieer" readonly value="http://127.0.0.1:45655/beheer/stripe-webhook.php">
       <p>Met deze gebeurtenissen:</p>
       <ul class="koppeling__events"><li><code>checkout.session.completed</code></li><li><code>checkout.session.async_payment_succeeded</code></li><li><code>checkout.session.async_payment_failed</code></li><li><code>checkout.session.expired</code></li><li><code>payment_intent.processing</code></li><li><code>payment_intent.succeeded</code></li><li><code>payment_intent.payment_failed</code></li><li><code>payment_intent.canceled</code></li><li><code>charge.refunded</code></li><li><code>charge.dispute.created</code></li><li><code>mandate.updated</code></li></ul>
       <p>Zet daarna het ondertekeningsgeheim (whsec_…) hierboven bij Webhookgeheim.</p>
@@ -103,7 +103,7 @@
         </div>
         <div class="field"><label for="gebruiker">Gebruikersnaam</label><input id="gebruiker" name="gebruiker" value="" aria-describedby="gebruiker-hint" autocomplete="off" spellcheck="false"><p class="field__hint" id="gebruiker-hint">Meestal het volledige e-mailadres van de mailbox.</p></div>        <div class="field"><label for="smtp_wachtwoord">Wachtwoord</label><input id="smtp_wachtwoord" name="smtp_wachtwoord" type="password" autocomplete="new-password" spellcheck="false" placeholder="" aria-describedby="smtp_wachtwoord-hint"><p class="field__hint" id="smtp_wachtwoord-hint">Nog niet ingevuld. Gebruikt jullie provider tweestapsverificatie? Maak dan een app-wachtwoord aan en vul dat hier in.</p></div>      </fieldset>
       <div class="field">
-        <label for="bevestig_wachtwoord_mail">Je eigen wachtwoord <span class="field__hint">(alleen nodig als je het wachtwoord van de mailbox wijzigt)</span></label>
+        <label for="bevestig_wachtwoord_mail">Je eigen wachtwoord <span class="field__hint">(nodig bij elke wijziging; niet voor alleen een testmail)</span></label>
         <input id="bevestig_wachtwoord_mail" name="bevestig_wachtwoord" type="password" autocomplete="current-password">
               </div>
       <div class="form__acties">
@@ -116,6 +116,46 @@
     </dl>
   </section>
 </div>
+
+<section class="panel koppeling__extern" id="extern" aria-labelledby="extern-titel">
+  <div class="panel__kop"><h2 id="extern-titel"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-download"></use></svg>Externe back-up</h2><span class="badge badge--demo">Niet ingesteld</span></div>
+  <p class="muted">Elke nacht maakt Mijn BSO een versleutelde back-up op de server. Hier stel je in dat er ook een kopie naar opslag bij een andere partij in de EU gaat, zodat de gegevens niet verloren gaan als de server stuk gaat of wordt gehackt. Die partij kan de back-up niet lezen: de sleutel staat daar niet.</p>
+  <div class="kolommen kolommen--gelijk">
+    <div>
+      <h3>Zo stel je het in bij de aanbieder</h3>
+      <ol class="koppeling__stappen">
+        <li>Maak een account bij een Europese aanbieder van objectopslag (S3), bijvoorbeeld Scaleway, Hetzner, IONOS of Exoscale, met opslag in de EU.</li>
+        <li>Maak een <strong>bucket</strong> met <strong>object lock</strong> aan, met een standaard bewaartermijn van <strong>30 dagen</strong>. Dan kan niemand een back-up eerder wissen, ook een inbreker op de server niet.</li>
+        <li>Stel een regel in die bestanden na <strong>31 dagen</strong> verwijdert. Zo verdwijnen gewiste gegevens ook daar, zoals de privacyverklaring belooft.</li>
+        <li>Maak een <strong>toegangssleutel die alleen mag uploaden</strong> (niet lezen of wissen) en vul de gegevens hiernaast in.</li>
+      </ol>
+      <dl class="gegevens">
+        <dt>Laatste kopie</dt><dd>Nog geen</dd>
+      </dl>
+    </div>
+    <div class="stapel">
+    <form class="form" method="post" action="#">
+      <input type="hidden" name="csrf" value="voorbeeld">      <input type="hidden" name="actie" value="extern">
+      <div class="field"><label for="endpoint">Adres van de opslag (endpoint)</label><input id="endpoint" name="endpoint" value="" aria-describedby="endpoint-hint" autocomplete="off" spellcheck="false"><p class="field__hint" id="endpoint-hint">Bijvoorbeeld https://s3.nl-ams.scw.cloud of https://fsn1.your-objectstorage.com.</p></div>      <div class="form__row">
+        <div class="field field--klein"><label for="regio">Regio</label><input id="regio" name="regio" value="" aria-describedby="regio-hint" autocomplete="off" spellcheck="false"><p class="field__hint" id="regio-hint">Bijvoorbeeld nl-ams of fsn1.</p></div>        <div class="field"><label for="bucket">Bucket</label><input id="bucket" name="bucket" value="" autocomplete="off" spellcheck="false"></div>      </div>
+      <div class="form__row">
+        <div class="field"><label for="map">Map in de bucket</label><input id="map" name="map" value="mijnbso" aria-describedby="map-hint" autocomplete="off" spellcheck="false"><p class="field__hint" id="map-hint">Mag leeg.</p></div>        <div class="field">
+          <label for="adres">Adresvorm</label>
+          <select id="adres" name="adres">
+            <option value="host" selected>bucket.adres (standaard)</option>
+            <option value="pad">adres/bucket</option>
+          </select>
+        </div>
+      </div>
+      <div class="field"><label for="toegangssleutel">Toegangssleutel (access key)</label><input id="toegangssleutel" name="toegangssleutel" value="" autocomplete="off" spellcheck="false"></div>      <div class="field"><label for="extern_geheim">Geheime sleutel (secret key)</label><input id="extern_geheim" name="extern_geheim" type="password" autocomplete="new-password" spellcheck="false" placeholder="" aria-describedby="extern_geheim-hint"><p class="field__hint" id="extern_geheim-hint">Nog niet ingevuld. Van de toegangssleutel die alleen mag uploaden.</p></div>      <div class="field">
+        <label for="bevestig_wachtwoord_extern">Je eigen wachtwoord <span class="field__hint">(nodig bij elke wijziging)</span></label>
+        <input id="bevestig_wachtwoord_extern" name="bevestig_wachtwoord" type="password" autocomplete="current-password">
+              </div>
+      <div class="form__acties"><button class="btn" type="submit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>Opslaan en testen</button></div>
+    </form>
+    </div>
+  </div>
+</section>
 <p class="note"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-lock"></use></svg><span>Alleen collega's met het recht "Koppelingen" zien deze pagina (zie <a href="beheerder-medewerkers.html">Team</a>). Elke wijziging staat in het <a href="beheerder-logboek.html">logboek</a>, zonder de sleutels zelf. Wat in config.php op de server staat, gaat voor op wat hier staat.</span></p>
 </main>
 <footer class="app-footer">

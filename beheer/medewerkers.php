@@ -94,6 +94,7 @@ if (is_post()) {
             flash('succes', 'De rechten van ' . $persoon['naam'] . ' zijn opgeslagen.');
         } elseif ($actie === 'mfa_reset') {
             mfa_zet_uit((int) $persoon['id'], 'reset door collega');
+            beeindig_andere_sessies((int) $persoon['id']);
             flash('succes', 'De tweestapsverificatie van ' . $persoon['naam'] . ' is gereset. Bij de volgende keer inloggen stelt ' . $persoon['naam'] . ' hem opnieuw in.');
         } elseif ($actie === 'stoppen') {
             if (team_mag('team', $persoon) && (int) waarde("SELECT COUNT(*) FROM gebruikers g JOIN team_rechten r ON r.gebruiker_id = g.id AND r.recht = 'team' WHERE g.status = 'actief' AND g.id != ?", [$persoon['id']]) === 0) {
@@ -108,8 +109,13 @@ if (is_post()) {
             log_actie('Collega geactiveerd', '', null, 'beveiliging', $wie);
             flash('succes', $persoon['naam'] . ' kan weer inloggen.');
         } elseif ($actie === 'link') {
-            $_SESSION['laatste_uitnodiging'] = maak_wachtwoordlink((int) $persoon['id'], 72);
-            stuur_mailtekst($persoon['email'], 'medewerker_nieuwe_link', ['naam' => $persoon['naam'], 'link' => $_SESSION['laatste_uitnodiging']]);
+            $link = maak_wachtwoordlink((int) $persoon['id'], 72);
+            stuur_mailtekst($persoon['email'], 'medewerker_nieuwe_link', ['naam' => $persoon['naam'], 'link' => $link]);
+            // De link alleen op het scherm tonen als de collega nog nooit een wachtwoord heeft gekozen (uitnodiging);
+            // anders zou wie de link ziet als die collega kunnen inloggen
+            if (empty($persoon['wachtwoord_hash'])) {
+                $_SESSION['laatste_uitnodiging'] = $link;
+            }
             log_actie('Nieuwe wachtwoordlink', '', null, 'beveiliging', $wie);
             flash('succes', 'Er is een nieuwe link gemaakt en gemaild naar ' . $persoon['naam'] . '.');
         }

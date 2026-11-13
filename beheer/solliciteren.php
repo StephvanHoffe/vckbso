@@ -67,7 +67,7 @@ if (invoer('website') !== '') {
     sollicitatie_antwoord($alsJson, 200);
 }
 
-if (recente_pogingen('sollicitatie:' . ip_adres()) >= MAX_SOLLICITATIES_PER_KWARTIER) {
+if (recente_pogingen('sollicitatie:' . ip_adres()) >= MAX_SOLLICITATIES_PER_KWARTIER || te_veel_verzoeken('sollicitatie-poging:' . ip_adres(), 30)) {
     sollicitatie_antwoord($alsJson, 429, [], 'Er zijn net al een paar sollicitaties vanaf dit adres verstuurd. Probeer het over een kwartier nog eens.');
 }
 
@@ -78,8 +78,8 @@ foreach (['naam', 'email', 'telefoon', 'woonplaats', 'functie', 'motivatie', 'li
 $dagen = array_values(array_intersect(SOLLICITATIE_DAGEN, (array) ($_POST['dagen'] ?? [])));
 
 $fouten = [];
-if ($waarden['naam'] === '' || mb_strlen($waarden['naam']) > 120) {
-    $fouten['naam'] = 'Vul je naam in.';
+if (!geldige_naam($waarden['naam'])) {
+    $fouten['naam'] = $waarden['naam'] === '' ? 'Vul je naam in.' : 'Vul je naam in (zonder links of e-mailadressen).';
 }
 if (!geldig_email($waarden['email']) || mb_strlen($waarden['email']) > 200) {
     $fouten['email'] = $waarden['email'] === '' ? 'Vul je e-mailadres in.' : 'Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.';
@@ -115,10 +115,13 @@ if ($fouten) {
     sollicitatie_antwoord($alsJson, 422, $fouten, count($fouten) === 1 ? 'Er is nog 1 veld niet goed ingevuld.' : 'Er zijn nog ' . count($fouten) . ' velden niet goed ingevuld.');
 }
 
-$cv = bewaar_cv($_FILES['cv']);
-$motivatie = $metMotivatiebestand ? bewaar_cv($_FILES['motivatie'], 'motivatie') : [null, null, null, null];
+$cv = $motivatie = [null, null, null, null];
 $nu = nu();
 try {
+    $cv = bewaar_cv($_FILES['cv']);
+    if ($metMotivatiebestand) {
+        $motivatie = bewaar_cv($_FILES['motivatie'], 'motivatie');
+    }
     q('INSERT INTO sollicitaties (naam, email, telefoon, woonplaats, functie, dagen, motivatie, link, cv_bestand, cv_naam, cv_type, cv_grootte, motivatie_bestand, motivatie_naam, motivatie_type, motivatie_grootte, bewaren, aangemaakt_op, verwijderen_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [
         $waarden['naam'], $waarden['email'], $waarden['telefoon'], $waarden['woonplaats'], $waarden['functie'], implode(',', $dagen),
         $waarden['motivatie'] !== '' ? versleutel($waarden['motivatie']) : '', $waarden['link'] !== '' ? versleutel($waarden['link']) : '',
@@ -136,12 +139,15 @@ log_actie('Sollicitatie ontvangen via de website', 'sollicitatie ' . $id . ', me
 
 // Melding voor het team (zonder persoonsgegevens) en een bevestiging voor de sollicitant
 mail_team_tekst('team_sollicitatie', ['functie' => $waarden['functie'] !== '' ? $waarden['functie'] : 'niet ingevuld', 'link' => app_url('sollicitaties.php?id=' . $id)]);
-stuur_mailtekst($waarden['email'], 'sollicitatie_ontvangen', [
-    'voornaam' => explode(' ', $waarden['naam'])[0],
-    'bijlagen' => $motivatie[0] ? 'je cv en motivatie' : 'je cv',
-    'bewaren' => $bewaren
-        ? 'Je gaf ons toestemming om je sollicitatie een jaar te bewaren, voor als er later een plek vrijkomt. Wil je dat niet meer? Stuur ons dan even een mailtje.'
-        : 'Is er geen plek voor je, dan verwijderen we je gegevens uiterlijk 4 weken nadat we je dat hebben laten weten.',
-]);
+// De sollicitatie is bewaard; alleen de bevestiging slaan we over als er net al veel mails naar dit adres gingen
+if (!te_veel_mails_naar($waarden['email'])) {
+    stuur_mailtekst($waarden['email'], 'sollicitatie_ontvangen', [
+        'voornaam' => explode(' ', $waarden['naam'])[0],
+        'bijlagen' => $motivatie[0] ? 'je cv en motivatie' : 'je cv',
+        'bewaren' => $bewaren
+            ? 'Je gaf ons toestemming om je sollicitatie een jaar te bewaren, voor als er later een plek vrijkomt. Wil je dat niet meer? Stuur ons dan even een mailtje.'
+            : 'Is er geen plek voor je, dan verwijderen we je gegevens uiterlijk 4 weken nadat we je dat hebben laten weten.',
+    ]);
+}
 
 sollicitatie_antwoord($alsJson, 200);

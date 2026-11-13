@@ -54,7 +54,7 @@ Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmi
   php -r "echo base64_encode(random_bytes(32)), PHP_EOL;"
   ```
   Bewaar ze **meteen** in een wachtwoordkluis, met een tweede kopie op een veilige plek. Zonder deze sleutels zijn de gegevens en back-ups onbruikbaar, ook voor Sporty zelf. De eerste sleutel verander je daarna nooit meer.
-- [ ] Kopieer `public_html/beheer/config.voorbeeld.php` naar `public_html/beheer/config.php` en vul in (de webserver geeft dit bestand nooit vrij):
+- [ ] Kopieer `public_html/beheer/config.voorbeeld.php` naar `/home/GEBRUIKER/domains/JOUWDOMEIN.nl/mijnbso-config.php`, dus **naast** `public_html` en niet erin, en vul in. Mijn BSO zoekt de configuratie eerst daar. Zo staan de sleutels buiten de webmap en kan de webserver ze nooit tonen, ook niet bij een verkeerde instelling. Zet de rechten op 600 (alleen jijzelf mag lezen en schrijven):
   ```php
   return [
       'app_url' => 'https://JOUWDOMEIN.nl/beheer',
@@ -65,7 +65,8 @@ Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmi
       'backup' => ['map' => '/home/GEBRUIKER/beheer-backups', 'sleutel' => 'TWEEDE-SLEUTEL', 'bewaardagen' => 30],
   ];
   ```
-  Stripe en e-mail vul je hier níet in; dat doe je in Mijn BSO onder Koppelingen (stap 7).
+  Stripe, e-mail en de externe back-up vul je hier níet in; dat doe je in Mijn BSO onder Koppelingen (stap 7).
+  Laat `achter_proxy` weg: de site staat niet achter een proxy of CDN. Alleen als dat ooit wel zo is, zet je `'achter_proxy' => true`.
 
 ## 5. Geplande taken (cronjobs) in DirectAdmin
 
@@ -86,22 +87,24 @@ Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmi
 ## 7. Mijn BSO installeren en instellen
 
 - [ ] Ga naar `https://JOUWDOMEIN.nl/beheer/`, vul de installatiecode in, maak het eerste beheerdersaccount en stel tweestapsverificatie in.
-- [ ] Maak `installatiecode` in `config.php` daarna weer leeg.
+- [ ] Maak `installatiecode` in `mijnbso-config.php` daarna weer leeg.
 - [ ] **Instellingen:** KvK, LRK, IBAN, uurtarief, uren per middag, afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders. Maak de **groepen** aan en nodig het team uit onder **Team**.
 - [ ] **Koppelingen → E-mail versturen:** kies de eigen mailserver (of Google Workspace) en stuur een testmail.
 - [ ] **Koppelingen → Stripe:** eerst de testsleutel en een testwebhook naar `https://JOUWDOMEIN.nl/beheer/stripe-webhook.php`; als alles werkt de live-sleutel. Zie "Stripe koppelen" in `docs/beheeromgeving.md`.
+- [ ] **Koppelingen → Externe back-up:** neem objectopslag bij een andere partij in de EU (bijvoorbeeld Scaleway in Amsterdam of Hetzner in Duitsland). Maak bij die partij een bucket met **object lock** (standaard 30 dagen, modus "compliance"), een regel die bestanden na 31 dagen verwijdert, en een sleutel die **alleen mag uploaden**. Vul endpoint, regio, bucket en sleutels in en kies "Opslaan en testen". Zie "Externe back-up" in `docs/beheeromgeving.md`.
 
 ## 8. Controleren
 
 - [ ] **Instellingen → Beveiligingsstatus:** alles op "In orde".
 - [ ] `http://JOUWDOMEIN.nl` en `https://www.JOUWDOMEIN.nl` komen uit op `https://JOUWDOMEIN.nl`.
-- [ ] `https://JOUWDOMEIN.nl/beheer/config.php` geeft "Forbidden" (403).
+- [ ] `https://JOUWDOMEIN.nl/beheer/config.php` geeft "Forbidden" (403) of "Niet gevonden" (404). Er staat geen `config.php` in `public_html`; de configuratie staat in `mijnbso-config.php` naast `public_html` (Beveiligingsstatus: "Sleutels buiten de webmap").
+- [ ] Een tweede kopie van de back-up staat de volgende ochtend ook in de externe opslag (Koppelingen → Externe back-up toont "Laatste kopie").
 - [ ] Een proefdag boeken en een aanmelding via de website komen binnen in Mijn BSO.
 - [ ] "Wachtwoord vergeten" stuurt een e-mail die aankomt.
 - [ ] De volgende ochtend staat er een back-up in `/home/GEBRUIKER/beheer-backups`.
 
 ## Daarna
 
-- **Externe back-up:** zet de back-ups ook buiten de server, bij een andere partij in de EU (advies: Europese objectopslag met object lock). Nog te bouwen.
-- **Een nieuwe versie zetten:** maak een nieuw pakket en pak het uit over `public_html` heen. `config.php` en de gegevens blijven staan, want die zitten niet in het pakket en de gegevens staan buiten `public_html`.
+- **Terugzetten oefenen:** zet minstens één keer per jaar een back-up terug op een testomgeving (zie "Back-ups en herstel" in `docs/beheeromgeving.md`), ook eentje uit de externe opslag.
+- **Een nieuwe versie zetten:** maak een nieuw pakket en pak het uit over `public_html` heen. `mijnbso-config.php` en de gegevens blijven staan, want die staan buiten `public_html`.
 - **Vercel:** het voorbeeld op Vercel kan blijven bestaan als testomgeving of worden opgezegd. Zodra de DNS naar Vimexx wijst, komen bezoekers van het domein bij Vimexx uit.

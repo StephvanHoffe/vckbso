@@ -39,7 +39,8 @@ if ($inhoud === null) {
 header_remove('Cache-Control');
 header('Content-Type: image/jpeg');
 header('Content-Length: ' . strlen($inhoud));
-header('Cache-Control: private, max-age=3600');
+// Kinderfoto's niet in de browsercache bewaren (gedeelde computers, en ingetrokken toestemming moet direct gelden)
+header('Cache-Control: private, no-store');
 if (get_str('download') === '1') {
     if (is_team()) {
         foreach (rijen('SELECT kind_id FROM foto_kinderen WHERE foto_id = ?', [$foto['id']]) as $rij) {

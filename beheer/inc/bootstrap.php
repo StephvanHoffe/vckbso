@@ -34,7 +34,11 @@ $standaardConfig = [
     'backup' => ['map' => '', 'sleutel' => '', 'bewaardagen' => 30],
     'organisaties' => [],
 ];
-$configBestand = getenv('VCK_BEHEER_CONFIG') ?: BEHEER_DIR . '/config.php';
+// Waar staat de configuratie (met de sleutels)? Bij voorkeur buiten de openbare webmap: naast public_html
+// als mijnbso-config.php (zie docs/live-zetten-vimexx.md). Anders beheer/config.php, dat .htaccess afschermt.
+$buitenWebmap = dirname((string) realpath(BEHEER_DIR), 2) . '/mijnbso-config.php';
+$configBestand = getenv('VCK_BEHEER_CONFIG') ?: (is_file($buitenWebmap) ? $buitenWebmap : BEHEER_DIR . '/config.php');
+define('CONFIG_BESTAND', $configBestand);
 $GLOBALS['config'] = array_replace_recursive(
     $standaardConfig,
     is_file($configBestand) ? (require $configBestand) : []
@@ -44,6 +48,26 @@ require __DIR__ . '/versleuteling.php';
 kies_organisatie();
 
 require __DIR__ . '/helpers.php';
+
+// Foutmeldingen nooit op het scherm (daar kunnen paden, sleutelnamen of gegevens in staan), wel in het
+// foutenlog van de server. Alleen in ontwikkelmodus zie je ze direct.
+ini_set('log_errors', '1');
+if (cfg('ontwikkelmodus') !== true) {
+    ini_set('display_errors', '0');
+    if (PHP_SAPI !== 'cli') {
+        set_exception_handler(function (Throwable $fout): void {
+            error_log('Mijn BSO: ' . $fout::class . ': ' . $fout->getMessage() . ' in ' . $fout->getFile() . ':' . $fout->getLine());
+            if (!headers_sent()) {
+                http_response_code(500);
+                header('Content-Type: text/html; charset=utf-8');
+                header('Cache-Control: no-store');
+            }
+            echo '<!doctype html><html lang="nl"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Er ging iets mis</title>'
+                . '<body style="font-family: system-ui, sans-serif; max-width: 34rem; margin: 4rem auto; padding: 0 1rem; line-height: 1.5">'
+                . '<h1>Er ging iets mis</h1><p>Probeer het over een paar minuten nog eens. Blijft het misgaan? Neem dan contact met ons op.</p></body></html>';
+        });
+    }
+}
 require __DIR__ . '/database.php';
 require __DIR__ . '/auth.php';
 require __DIR__ . '/rechten.php';
@@ -54,6 +78,7 @@ require __DIR__ . '/smtp.php';
 require __DIR__ . '/mail.php';
 require __DIR__ . '/mailteksten.php';
 require __DIR__ . '/stripe.php';
+require __DIR__ . '/externe_backup.php';
 require __DIR__ . '/agenda.php';
 require __DIR__ . '/berichten.php';
 require __DIR__ . '/facturen.php';

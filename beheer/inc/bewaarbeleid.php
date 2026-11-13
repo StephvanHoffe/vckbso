@@ -26,9 +26,22 @@ const BEWAARTERMIJNEN = [
     'bewaar_logboek_maanden' => ['Logboek: inzage, wijzigingen, exports en inloggen', 'maanden', ''],
 ];
 
+/** Ondergrens per termijn: zo kan niemand met één instelling alle foto's, berichten of het logboek laten wissen. */
+const BEWAAR_MINIMUM = [
+    'bewaar_ontwikkeling_maanden' => 1,
+    'bewaar_kinddossier_maanden' => 1,
+    'bewaar_fotos_maanden' => 1,
+    'bewaar_berichten_maanden' => 1,
+    'bewaar_aanmeldingen_maanden' => 1,
+    'bewaar_account_maanden' => 1,
+    'bewaar_financieel_jaren' => 7,
+    'bewaar_interesse_maanden' => 1,
+    'bewaar_logboek_maanden' => 12,
+];
+
 function bewaartermijn(string $sleutel): int
 {
-    return max(0, (int) instelling($sleutel, '0'));
+    return max(BEWAAR_MINIMUM[$sleutel] ?? 1, (int) instelling($sleutel, '0'));
 }
 
 /** Datum/tijd die $aantal maanden (of jaren) geleden is. */

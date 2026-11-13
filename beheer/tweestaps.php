@@ -25,7 +25,10 @@ if (is_post()) {
             redirect('tweestaps.php');
         }
     } elseif (in_array($actie, ['herstelcodes', 'uitzetten'], true) && $gebruiker['mfa_actief']) {
-        if (!mfa_controleer($gebruiker, invoer('code'))) {
+        if (te_veel_controles('m', (int) $gebruiker['id'])) {
+            $fout = 'Te veel pogingen. Wacht een kwartier en probeer het dan opnieuw.';
+        } elseif (!mfa_controleer($gebruiker, invoer('code'))) {
+            mislukte_controle('m', (int) $gebruiker['id']);
             $fout = 'Deze code klopt niet.';
         } elseif ($actie === 'herstelcodes') {
             $_SESSION['mfa_herstelcodes'] = mfa_herstelcodes_maken((int) $gebruiker['id']);

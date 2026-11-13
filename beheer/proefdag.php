@@ -77,7 +77,8 @@ if (invoer('website') !== '') {
     proefdag_antwoord($alsJson, 200, ['moment' => '']);
 }
 
-if (recente_pogingen('proefdag:' . ip_adres()) >= MAX_PROEFDAGEN_PER_KWARTIER) {
+// Hooguit 5 boekingen en 30 pogingen per kwartier vanaf hetzelfde adres
+if (recente_pogingen('proefdag:' . ip_adres()) >= MAX_PROEFDAGEN_PER_KWARTIER || te_veel_verzoeken('proefdag-poging:' . ip_adres(), 30)) {
     proefdag_antwoord($alsJson, 429, [], [], 'Er zijn net al een paar proefdagen vanaf dit adres geboekt. Probeer het over een kwartier nog eens, of bel ons even.');
 }
 
@@ -91,8 +92,8 @@ $fouten = [];
 if ($momentId <= 0) {
     $fouten['moment_id'] = 'Kies een moment voor je proefdag.';
 }
-if ($waarden['naam'] === '' || mb_strlen($waarden['naam']) > 120) {
-    $fouten['naam'] = 'Vul je naam in.';
+if (!geldige_naam($waarden['naam'])) {
+    $fouten['naam'] = $waarden['naam'] === '' ? 'Vul je naam in.' : 'Vul je naam in (zonder links of e-mailadressen).';
 }
 if (!geldig_email($waarden['email']) || mb_strlen($waarden['email']) > 200) {
     $fouten['email'] = $waarden['email'] === '' ? 'Vul je e-mailadres in, dan sturen we je een bevestiging.' : 'Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.';
@@ -100,8 +101,8 @@ if (!geldig_email($waarden['email']) || mb_strlen($waarden['email']) > 200) {
 if (!geldig_telefoon($waarden['telefoon'])) {
     $fouten['telefoon'] = $waarden['telefoon'] === '' ? 'Vul je telefoonnummer in, voor als er iets verandert.' : 'Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78.';
 }
-if ($waarden['kind_naam'] === '' || mb_strlen($waarden['kind_naam']) > 120) {
-    $fouten['kind_naam'] = 'Vul de naam van je kind in.';
+if (!geldige_naam($waarden['kind_naam'])) {
+    $fouten['kind_naam'] = $waarden['kind_naam'] === '' ? 'Vul de naam van je kind in.' : 'Vul de naam van je kind in (zonder links of e-mailadressen).';
 }
 if (!in_array($waarden['kind_leeftijd'], PROEFDAG_LEEFTIJDEN, true)) {
     $fouten['kind_leeftijd'] = 'Kies de leeftijd van je kind.';
@@ -110,8 +111,16 @@ $waarden['opmerking'] = mb_substr($waarden['opmerking'], 0, 1000);
 if (invoer('toestemming') === '') {
     $fouten['toestemming'] = 'Vink aan dat we je gegevens voor de proefdag mogen gebruiken.';
 }
+// Hooguit 3 proefdagen tegelijk op één e-mailadres (bijvoorbeeld voor broertjes en zusjes)
+if (!isset($fouten['email']) && (int) waarde("SELECT COUNT(*) FROM proefdag_boekingen b JOIN proefdag_momenten m ON m.id = b.moment_id WHERE lower(b.email) = lower(?) AND b.status = 'geboekt' AND m.datum >= ?", [$waarden['email'], vandaag()]) >= 3) {
+    $fouten['email'] = 'Op dit e-mailadres staan al een paar proefdagen. Wil je iets veranderen? Bel of mail ons even.';
+}
 if ($fouten) {
     proefdag_antwoord($alsJson, 422, [], $fouten, count($fouten) === 1 ? 'Er is nog 1 veld niet goed ingevuld.' : 'Er zijn nog ' . count($fouten) . ' velden niet goed ingevuld.');
+}
+
+if (te_veel_mails_naar($waarden['email'])) {
+    proefdag_antwoord($alsJson, 429, [], [], 'We hebben net al een paar mails naar dit e-mailadres gestuurd. Probeer het over een kwartier nog eens, of bel ons even.');
 }
 
 // Boeken: controle op een vrije plek en de boeking zelf in één transactie

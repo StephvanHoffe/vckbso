@@ -63,9 +63,11 @@ if ($herkomst !== '' && !in_array(parse_url($herkomst, PHP_URL_HOST), $eigen, tr
     aanvraag_antwoord($alsJson, 403, [], 'Je aanmelding kan alleen via onze eigen website worden verstuurd.');
 }
 
-// Anonieme telling per stap
+// Anonieme telling per stap (hooguit 60 per kwartier per adres, zodat niemand de cijfers kan opblazen)
 if (isset($_GET['stap'])) {
-    tel_aanvraagstap((int) $_GET['stap']);
+    if (!te_veel_verzoeken('as:' . ip_adres(), 60)) {
+        tel_aanvraagstap((int) $_GET['stap']);
+    }
     http_response_code(204);
     exit;
 }
@@ -81,6 +83,21 @@ if (te_veel_verzoeken('a:' . ip_adres(), 10)) {
 [$aanvraag, $fouten] = lees_aanvraag($_POST);
 if ($fouten) {
     aanvraag_antwoord($alsJson, 422, $fouten, count($fouten) === 1 ? 'Er is nog 1 veld niet goed ingevuld.' : 'Er zijn nog ' . count($fouten) . ' velden niet goed ingevuld.');
+}
+
+// Hooguit 3 aanmeldingen per kwartier naar hetzelfde e-mailadres (geen mailbom via ons formulier)
+if (te_veel_mails_naar($aanvraag['ouder']['email'])) {
+    aanvraag_antwoord($alsJson, 200);
+}
+
+// Bekend e-mailadres: niets opnieuw opslaan, wel een mail naar dat adres. Op de website zie je
+// hetzelfde antwoord als bij een nieuwe aanmelding, zodat niemand kan uitproberen wie er klant is.
+$bekend = rij('SELECT id, email FROM gebruikers WHERE email = ?', [$aanvraag['ouder']['email']]);
+if ($bekend) {
+    tel_aanvraagstap(8);
+    log_actie('Aanmelding met een bekend e-mailadres', 'niet opnieuw opgeslagen', (int) $bekend['id'], 'wijziging', 'gebruiker:' . $bekend['id']);
+    stuur_mailtekst($bekend['email'], 'aanmelding_bestaand_account', ['inloggen' => app_url('inloggen.php'), 'wachtwoord' => app_url('wachtwoord-vergeten.php')]);
+    aanvraag_antwoord($alsJson, 200);
 }
 
 try {

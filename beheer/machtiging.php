@@ -30,9 +30,23 @@ if (get_str('terug') === '1' && stripe_actief()) {
         redirect('machtiging.php');
     }
 }
+// Teruggekomen via "terug" op de pagina van Stripe: die sessie bij Stripe sluiten en de echte status ophalen
+// (niet zomaar op basis van de link, want die kan iedereen openen)
 if (get_str('afgebroken') === '1') {
-    q("UPDATE gebruikers SET mandaat_status = 'geen' WHERE id = ? AND mandaat_status = 'in_behandeling'", [$ouder['id']]);
-    flash('info', 'Je hebt de machtiging afgebroken. Geen probleem: je kunt het altijd nog een keer proberen.');
+    $laatste = stripe_actief() ? rij("SELECT extern_id FROM betalingen WHERE gebruiker_id = ? AND soort = 'machtiging' AND status = 'open' ORDER BY id DESC LIMIT 1", [$ouder['id']]) : null;
+    if ($laatste) {
+        try {
+            stripe('POST', 'checkout/sessions/' . rawurlencode($laatste['extern_id']) . '/expire');
+        } catch (RuntimeException) {
+            // Al afgerond of verlopen: de status hieronder zegt hoe het zit
+        }
+        try {
+            verwerk_checkout_sessie($laatste['extern_id']);
+        } catch (RuntimeException $fout) {
+            error_log('Machtiging controleren: ' . $fout->getMessage());
+        }
+    }
+    flash('info', huidige_gebruiker(true)['mandaat_status'] === 'geldig' ? 'Je machtiging is toch al geregeld.' : 'Je hebt de machtiging afgebroken. Geen probleem: je kunt het altijd nog een keer proberen.');
     redirect('machtiging.php');
 }
 

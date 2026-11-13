@@ -26,10 +26,22 @@ $kinderen = ontsleutel_kolommen($kinderen, ['bijzonderheden']);
 $zonderGezag = array_filter($kinderen, fn ($k) => (int) $k['ouder_id'] === (int) $ouder['id'] && $k['actief']
     && !waarde('SELECT 1 FROM kind_verzorgers WHERE kind_id = ? AND gezag = 1 AND gezag_gecontroleerd_op IS NOT NULL', [$k['id']]));
 
+// Heeft deze ouder ook kinderen in groepen waar deze collega niet bij mag? Dan geen acties die het hele
+// gezin raken (activeren, stoppen, gegevens, wissen, machtiging): daarvoor is iemand nodig die alle groepen ziet.
+$buitenEigenGroepen = team_groep_ids($gebruiker) !== null && (int) waarde(
+    'SELECT COUNT(*) FROM kinderen k WHERE k.geanonimiseerd_op IS NULL AND (k.ouder_id = ? OR EXISTS (SELECT 1 FROM kind_verzorgers v WHERE v.kind_id = k.id AND v.gebruiker_id = ?))
+     AND NOT COALESCE((' . groep_voorwaarde('k.groep_id') . '), 0)',
+    [$ouder['id'], $ouder['id']]
+) > 0;
+
 if (is_post()) {
     csrf_controleer();
     vereis_recht('klanten_beheren');
     $actie = invoer('actie');
+    if ($buitenEigenGroepen && in_array($actie, ['activeren', 'stoppen', 'gegevens', 'wissen', 'mandaat_intrekken'], true)) {
+        flash('fout', $ouder['naam'] . ' heeft ook kinderen in een groep waar je geen toegang toe hebt. Vraag een collega die alle groepen ziet om dit te doen.');
+        redirect($terug);
+    }
 
     if ($actie === 'activeren' && $ouder['status'] !== 'actief' && $zonderGezag) {
         flash('fout', 'Controleer eerst het gezag bij ' . implode(' en ', array_map(fn ($k) => $k['voornaam'], $zonderGezag)) . ' (in het dossier van het kind, onder Verzorgers en gezag).');
@@ -120,7 +132,7 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
     <dt>Contact via</dt><dd><?= e($ouder['contactvoorkeur'] ?: '-') ?></dd>
     <dt>Gewenste dagen</dt><dd><?= e($gewensteDagen ? implode(', ', $gewensteDagen) : '-') ?></dd>
     <dt>Gewenste start</dt><dd><?= e($ouder['gewenste_startdatum'] ? datum_nl($ouder['gewenste_startdatum']) : '-') ?></dd>
-    <dt>Opmerkingen</dt><dd><?= e($ouder['opmerkingen'] ?: '-') ?></dd>
+    <dt>Opmerkingen</dt><dd><?= e(ontsleutel($ouder['opmerkingen']) ?: '-') ?></dd>
   </dl>
   <p>Na de kennismaking: controleer bij elk kind het gezag (in het dossier van het kind, onder Verzorgers en gezag), zet de kinderen in een groep en activeer het account. Daarna kan de ouder zelf dagen kiezen.</p>
 <?php if ($zonderGezag): ?>

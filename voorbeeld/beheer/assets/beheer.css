@@ -2004,3 +2004,14 @@ code {
 .field code {
   overflow-wrap: anywhere;
 }
+
+.koppeling__extern {
+  margin-top: var(--space-l);
+}
+
+.koppeling__stappen {
+  display: grid;
+  gap: var(--space-xs);
+  padding-left: 1.3em;
+  line-height: 1.5;
+}

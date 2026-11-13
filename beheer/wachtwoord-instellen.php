@@ -11,6 +11,7 @@ if ($gebruiker && is_post()) {
     if ($fout === null) {
         q('UPDATE gebruikers SET wachtwoord_hash = ? WHERE id = ?', [password_hash((string) $_POST['wachtwoord'], PASSWORD_DEFAULT), $gebruiker['id']]);
         q('UPDATE tokens SET gebruikt = 1 WHERE id = ?', [$gebruiker['token_id']]);
+        beeindig_andere_sessies((int) $gebruiker['id']);
         log_actie('Wachtwoord ingesteld', '', (int) $gebruiker['id'], 'beveiliging', 'gebruiker:' . $gebruiker['id']);
         na_wachtwoord((int) $gebruiker['id']);
         flash('succes', 'Je wachtwoord is ingesteld. Welkom!');

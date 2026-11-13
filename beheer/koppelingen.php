@@ -25,14 +25,36 @@ $invoer = [
     'beveiliging' => koppeling('smtp.beveiliging') === 'ssl' ? 'ssl' : 'starttls',
     'gebruiker' => (string) koppeling('smtp.gebruiker'),
 ];
-$bevestigd = fn () => password_verify((string) ($_POST['bevestig_wachtwoord'] ?? ''), (string) $gebruiker['wachtwoord_hash']);
-$bewaar = function (string $sleutel, string $waarde) use ($gebruiker): bool {
-    if (koppeling_in_config($sleutel) || (string) koppeling($sleutel) === $waarde) {
-        return false;
+// Elke wijziging vraagt om het eigen wachtwoord (met een rem op raden): wie hier iets omzet, bepaalt
+// waar het geld en de e-mail naartoe gaan.
+$controleer = function () use ($gebruiker): ?string {
+    if (te_veel_controles('k', (int) $gebruiker['id'])) {
+        return 'Te veel pogingen. Wacht een kwartier en probeer het dan opnieuw.';
     }
-    koppeling_zet($sleutel, $waarde, (int) $gebruiker['id']);
-    return true;
+    if (password_verify((string) ($_POST['bevestig_wachtwoord'] ?? ''), (string) $gebruiker['wachtwoord_hash'])) {
+        return null;
+    }
+    mislukte_controle('k', (int) $gebruiker['id']);
+    return ($_POST['bevestig_wachtwoord'] ?? '') === '' ? 'Vul je eigen wachtwoord in om iets te wijzigen.' : 'Je eigen wachtwoord klopt niet.';
 };
+// Wat er verandert: sleutel => nieuwe waarde (waarden uit config.php tellen niet mee)
+$wijzigingen = function (array $nieuw): array {
+    return array_filter($nieuw, fn ($waarde, $sleutel) => !koppeling_in_config($sleutel) && (string) koppeling($sleutel) !== $waarde, ARRAY_FILTER_USE_BOTH);
+};
+$bewaar = function (array $wijzigingen) use ($gebruiker): array {
+    foreach ($wijzigingen as $sleutel => $waarde) {
+        koppeling_zet($sleutel, $waarde, (int) $gebruiker['id']);
+    }
+    return array_map(fn ($sleutel) => mb_strtolower(KOPPELING_VELDEN[$sleutel][0]), array_keys($wijzigingen));
+};
+$invoer += [
+    'endpoint' => (string) koppeling('extern.endpoint'),
+    'regio' => (string) koppeling('extern.regio'),
+    'bucket' => (string) koppeling('extern.bucket'),
+    'map' => (string) koppeling('extern.map'),
+    'adres' => koppeling('extern.adres') === 'pad' ? 'pad' : 'host',
+    'toegangssleutel' => (string) koppeling('extern.toegangssleutel'),
+];
 
 if (is_post()) {
     csrf_controleer();
@@ -52,11 +74,17 @@ if (is_post()) {
         if ($webhook !== '' && !preg_match('/^whsec_[A-Za-z0-9+\/=]{16,}$/', $webhook)) {
             $fouten['webhook_geheim'] = 'Het webhookgeheim begint met whsec_. Je vindt het bij de webhook in het dashboard van Stripe ("Ondertekeningsgeheim").';
         }
-        if (($sleutel !== '' || $webhook !== '') && !$bevestigd()) {
-            $fouten['bevestig_wachtwoord'] = 'Vul je eigen wachtwoord in om een sleutel te wijzigen.';
+        $nieuw = $wijzigingen(array_filter([
+            'stripe.geheime_sleutel' => $sleutel !== '' ? $sleutel : null,
+            'stripe.webhook_geheim' => $webhook !== '' ? $webhook : null,
+            'stripe.methoden_machtiging' => implode(',', $invoer['methoden_machtiging']),
+            'stripe.methoden_betalen' => implode(',', $invoer['methoden_betalen']),
+        ], fn ($w) => $w !== null));
+        if ($nieuw && !$fouten && ($f = $controleer())) {
+            $fouten['bevestig_wachtwoord'] = $f;
         }
         $modus = null;
-        if ($sleutel !== '' && !$fouten) {
+        if (isset($nieuw['stripe.geheime_sleutel']) && !$fouten) {
             try {
                 $modus = stripe_test_sleutel($sleutel);
             } catch (RuntimeException $fout) {
@@ -64,18 +92,7 @@ if (is_post()) {
             }
         }
         if (!$fouten) {
-            $gewijzigd = [];
-            if ($sleutel !== '' && $bewaar('stripe.geheime_sleutel', $sleutel)) {
-                $gewijzigd[] = 'geheime sleutel (' . ($modus === 'live' ? 'live' : 'test') . ')';
-            }
-            if ($webhook !== '' && $bewaar('stripe.webhook_geheim', $webhook)) {
-                $gewijzigd[] = 'webhookgeheim';
-            }
-            foreach (['machtiging', 'betalen'] as $soort) {
-                if ($bewaar('stripe.methoden_' . $soort, implode(',', $invoer['methoden_' . $soort]))) {
-                    $gewijzigd[] = 'betaalmethoden ' . ($soort === 'machtiging' ? 'machtiging' : 'los betalen');
-                }
-            }
+            $gewijzigd = $bewaar($nieuw);
             if ($gewijzigd) {
                 log_actie('Koppeling gewijzigd', 'Stripe: ' . implode(', ', $gewijzigd), null, 'beveiliging');
             }
@@ -95,8 +112,8 @@ if (is_post()) {
     }
 
     if ($actie === 'stripe_ontkoppelen') {
-        if (!$bevestigd()) {
-            flash('fout', 'Vul je eigen wachtwoord in om Stripe te ontkoppelen.');
+        if ($f = $controleer()) {
+            flash('fout', $f);
         } else {
             koppeling_zet('stripe.geheime_sleutel', '', (int) $gebruiker['id']);
             koppeling_zet('stripe.webhook_geheim', '', (int) $gebruiker['id']);
@@ -115,6 +132,7 @@ if (is_post()) {
         $wachtwoord = (string) ($_POST['smtp_wachtwoord'] ?? '');
         $invoer['methode'] = in_array($invoer['methode'], ['log', 'mail', 'smtp'], true) ? $invoer['methode'] : 'log';
         $invoer['beveiliging'] = $invoer['beveiliging'] === 'ssl' ? 'ssl' : 'starttls';
+        $invoer['host'] = strtolower($invoer['host']);
         if (!smtp_adres_ok($invoer['van'])) {
             $fouten['van'] = 'Vul een geldig e-mailadres in, bijvoorbeeld info@sporty.nl.';
         }
@@ -124,30 +142,31 @@ if (is_post()) {
         if (!smtp_adres_ok($invoer['team_email'])) {
             $fouten['team_email'] = 'Vul een geldig e-mailadres in voor het team.';
         }
+        $nieuw = $wijzigingen([
+            'mail.methode' => $invoer['methode'], 'mail.van' => $invoer['van'], 'mail.van_naam' => $invoer['van_naam'], 'team_email' => $invoer['team_email'],
+            'smtp.host' => $invoer['host'], 'smtp.poort' => $invoer['poort'], 'smtp.beveiliging' => $invoer['beveiliging'], 'smtp.gebruiker' => $invoer['gebruiker'],
+        ] + ($wachtwoord !== '' ? ['smtp.wachtwoord' => $wachtwoord] : []));
         if ($invoer['methode'] === 'smtp') {
-            if (!preg_match('/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i', $invoer['host'])) {
-                $fouten['host'] = 'Vul de naam van de mailserver in, bijvoorbeeld smtp.office365.com of mail.jouwprovider.nl.';
+            if (($f = smtp_host_fout($invoer['host'])) !== null) {
+                $fouten['host'] = $f;
             }
             if (!ctype_digit($invoer['poort']) || (int) $invoer['poort'] < 1 || (int) $invoer['poort'] > 65535) {
                 $fouten['poort'] = 'Vul de poort in: meestal 587 (STARTTLS) of 465 (SSL/TLS).';
             }
-            if ($invoer['gebruiker'] !== '' && $wachtwoord === '' && (string) koppeling('smtp.wachtwoord') === '') {
-                $fouten['smtp_wachtwoord'] = 'Vul het wachtwoord van de mailbox in.';
+            // Een andere mailserver krijgt het opgeslagen wachtwoord niet zomaar: vul het dan opnieuw in
+            if ($invoer['gebruiker'] !== '' && $wachtwoord === '' && ((string) koppeling('smtp.wachtwoord') === '' || isset($nieuw['smtp.host']) || isset($nieuw['smtp.gebruiker']))) {
+                $fouten['smtp_wachtwoord'] = (string) koppeling('smtp.wachtwoord') === '' ? 'Vul het wachtwoord van de mailbox in.' : 'Je wijzigt de mailserver of gebruikersnaam: vul het wachtwoord van de mailbox opnieuw in.';
             }
         }
-        if ($wachtwoord !== '' && !$bevestigd()) {
-            $fouten['bevestig_wachtwoord_mail'] = 'Vul je eigen wachtwoord in om het wachtwoord van de mailbox te wijzigen.';
+        if ($nieuw && !$fouten && ($f = $controleer())) {
+            $fouten['bevestig_wachtwoord_mail'] = $f;
         }
         if (!$fouten) {
-            $gewijzigd = [];
-            foreach (['mail.methode' => 'methode', 'mail.van' => 'van', 'mail.van_naam' => 'van_naam', 'team_email' => 'team_email', 'smtp.host' => 'host', 'smtp.poort' => 'poort', 'smtp.beveiliging' => 'beveiliging', 'smtp.gebruiker' => 'gebruiker'] as $sleutel => $veld) {
-                if ($bewaar($sleutel, $invoer[$veld])) {
-                    $gewijzigd[] = mb_strtolower(KOPPELING_VELDEN[$sleutel][0]);
-                }
+            // Andere mailserver of gebruiker zonder nieuw wachtwoord (bijvoorbeeld bij overstap naar de mailfunctie): oud wachtwoord weg
+            if ((isset($nieuw['smtp.host']) || isset($nieuw['smtp.gebruiker'])) && !isset($nieuw['smtp.wachtwoord']) && !koppeling_in_config('smtp.wachtwoord')) {
+                $nieuw['smtp.wachtwoord'] = '';
             }
-            if ($wachtwoord !== '' && $bewaar('smtp.wachtwoord', $wachtwoord)) {
-                $gewijzigd[] = 'wachtwoord van de mailbox';
-            }
+            $gewijzigd = $bewaar($nieuw);
             if ($gewijzigd) {
                 log_actie('Koppeling gewijzigd', 'E-mail: ' . implode(', ', $gewijzigd), null, 'beveiliging');
             }
@@ -156,17 +175,101 @@ if (is_post()) {
                 $gelukt = stuur_mail((string) $gebruiker['email'], 'Testmail van Mijn BSO', "Hoi " . explode(' ', (string) $gebruiker['naam'])[0] . ",\n\nDit is een testmail vanaf de pagina Koppelingen in Mijn BSO. Komt hij aan? Dan werkt het versturen van e-mail.");
                 log_actie('Testmail verstuurd', 'Koppelingen, ' . mail_methode() . ($gelukt ? '' : ', mislukt'));
                 if (!$gelukt) {
-                    flash('fout', 'De instellingen zijn opgeslagen, maar de testmail kon niet worden verstuurd. ' . mail_laatste_fout());
+                    flash('fout', ($gewijzigd ? 'De instellingen zijn opgeslagen, maar de' : 'De') . ' testmail kon niet worden verstuurd. ' . mail_laatste_fout());
                 } elseif (mail_methode() === 'log') {
-                    flash('info', 'Opgeslagen. Mijn BSO staat in testmodus: de testmail is niet verstuurd, maar staat in het logbestand op de server (data/mail.log).');
+                    flash('info', 'Mijn BSO staat in testmodus: de testmail is niet verstuurd, maar staat in het logbestand op de server (data/mail.log).');
                 } else {
-                    flash('succes', 'Opgeslagen, en de testmail is verstuurd naar ' . $gebruiker['email'] . '. Kijk ook even in de map met ongewenste e-mail.');
+                    flash('succes', ($gewijzigd ? 'Opgeslagen, en de' : 'De') . ' testmail is verstuurd naar ' . $gebruiker['email'] . '. Kijk ook even in de map met ongewenste e-mail.');
                 }
             } else {
                 flash('succes', $gewijzigd ? 'De e-mailinstellingen zijn opgeslagen.' : 'Er was niets veranderd.');
             }
             redirect('koppelingen.php#email');
         }
+    }
+
+    /* ---------- Externe back-up ---------- */
+    if ($actie === 'extern') {
+        $formulier = 'extern';
+        foreach (['endpoint', 'regio', 'bucket', 'map', 'adres', 'toegangssleutel'] as $veld) {
+            $invoer[$veld] = trim(mb_substr(invoer($veld), 0, 200));
+        }
+        $geheim = trim((string) ($_POST['extern_geheim'] ?? ''));
+        $invoer['adres'] = $invoer['adres'] === 'pad' ? 'pad' : 'host';
+        $invoer['endpoint'] = rtrim($invoer['endpoint'], '/');
+        $invoer['map'] = trim($invoer['map'], '/');
+        $host = (string) parse_url($invoer['endpoint'], PHP_URL_HOST);
+        // Altijd https; alleen in ontwikkelmodus mag een nagebootste opslag op deze computer (http://localhost)
+        $lokaalTest = cfg('ontwikkelmodus') === true && preg_match('#^http://(localhost|127\.0\.0\.1)(:\d+)?$#', $invoer['endpoint']);
+        if (!$lokaalTest && !preg_match('#^https://[a-z0-9.-]+(:\d+)?$#i', $invoer['endpoint'])) {
+            $fouten['endpoint'] = 'Vul het adres van de opslag in, met https://, bijvoorbeeld https://s3.nl-ams.scw.cloud.';
+        } elseif (($f = smtp_host_fout($host)) !== null) {
+            $fouten['endpoint'] = $f;
+        }
+        if (!preg_match('/^[a-z0-9-]{2,40}$/', $invoer['regio'])) {
+            $fouten['regio'] = 'Vul de regio in, bijvoorbeeld nl-ams, fsn1 of de-fra.';
+        }
+        if (!preg_match('/^[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]$/', $invoer['bucket'])) {
+            $fouten['bucket'] = 'Vul de naam van de bucket in (kleine letters, cijfers en streepjes).';
+        }
+        if ($invoer['map'] !== '' && !preg_match('#^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)*$#', $invoer['map'])) {
+            $fouten['map'] = 'Gebruik alleen letters, cijfers, punten, streepjes en /.';
+        }
+        if (!preg_match('/^[A-Za-z0-9+\/=_-]{8,128}$/', $invoer['toegangssleutel'])) {
+            $fouten['toegangssleutel'] = 'Vul de toegangssleutel (access key) in.';
+        }
+        $nieuw = $wijzigingen([
+            'extern.endpoint' => $invoer['endpoint'], 'extern.regio' => $invoer['regio'], 'extern.bucket' => $invoer['bucket'],
+            'extern.map' => $invoer['map'], 'extern.adres' => $invoer['adres'], 'extern.toegangssleutel' => $invoer['toegangssleutel'],
+        ] + ($geheim !== '' ? ['extern.geheime_sleutel' => $geheim] : []));
+        if ($geheim === '' && ((string) koppeling('extern.geheime_sleutel') === '' || isset($nieuw['extern.endpoint']) || isset($nieuw['extern.toegangssleutel']))) {
+            $fouten['extern_geheim'] = 'Vul de geheime sleutel van de opslag in' . ((string) koppeling('extern.geheime_sleutel') !== '' ? ' (opnieuw, omdat je het adres of de toegangssleutel wijzigt).' : '.');
+        }
+        if ($nieuw && !$fouten && ($f = $controleer())) {
+            $fouten['bevestig_wachtwoord_extern'] = $f;
+        }
+        // Eerst proberen: een klein testbestand uploaden met de nieuwe instellingen
+        if ($nieuw && !$fouten) {
+            try {
+                externe_backup_test(array_merge(externe_backup_instellingen(), [
+                    'endpoint' => $invoer['endpoint'], 'regio' => $invoer['regio'], 'bucket' => $invoer['bucket'], 'map' => $invoer['map'],
+                    'adres' => $invoer['adres'], 'toegangssleutel' => $invoer['toegangssleutel'], 'geheim' => $geheim !== '' ? $geheim : (string) koppeling('extern.geheime_sleutel'),
+                ]));
+            } catch (RuntimeException $fout) {
+                $fouten['endpoint'] = 'Het testbestand kon niet worden geüpload, dus er is niets opgeslagen. ' . $fout->getMessage();
+            }
+        }
+        if (!$fouten) {
+            $gewijzigd = $bewaar($nieuw);
+            if ($gewijzigd) {
+                log_actie('Koppeling gewijzigd', 'Externe back-up: ' . implode(', ', $gewijzigd), null, 'beveiliging');
+            }
+            flash('succes', $gewijzigd ? 'De externe back-up is ingesteld en getest: er staat een klein testbestand in de opslag. Vanaf vannacht gaat er elke dag een kopie van de back-up naartoe.' : 'Er was niets veranderd.');
+            redirect('koppelingen.php#extern');
+        }
+    }
+
+    if ($actie === 'extern_testen') {
+        try {
+            externe_backup_test();
+            flash('succes', 'De verbinding met de externe opslag werkt: er staat een klein testbestand in de map verbindingstest.');
+        } catch (RuntimeException $fout) {
+            flash('fout', 'De verbinding met de externe opslag werkt niet. ' . $fout->getMessage());
+        }
+        redirect('koppelingen.php#extern');
+    }
+
+    if ($actie === 'extern_ontkoppelen') {
+        if ($f = $controleer()) {
+            flash('fout', $f);
+        } else {
+            foreach (['extern.endpoint', 'extern.regio', 'extern.bucket', 'extern.map', 'extern.adres', 'extern.toegangssleutel', 'extern.geheime_sleutel'] as $s) {
+                koppeling_zet($s, '', (int) $gebruiker['id']);
+            }
+            log_actie('Koppeling verwijderd', 'Externe back-up ontkoppeld', null, 'beveiliging');
+            flash('succes', 'De externe back-up is ontkoppeld. De back-ups die al in de opslag staan, blijven daar tot de bewaartermijn voorbij is.');
+        }
+        redirect('koppelingen.php#extern');
     }
 }
 
@@ -219,6 +322,10 @@ $ontvangen = instelling('stripe_webhook_ontvangen');
 $geweigerd = instelling('stripe_webhook_geweigerd');
 $mailFout = instelling('mail_laatste_fout');
 $mailOk = instelling('mail_laatst_verstuurd');
+$externOk = instelling('extern_backup_laatst');
+$externFout = instelling('extern_backup_fout');
+$externStatus = !externe_backup_actief() ? '<span class="badge badge--demo">Niet ingesteld</span>'
+    : ($externFout && substr($externFout, 0, 19) > $externOk ? '<span class="badge badge--mislukt">Laatste keer mislukt</span>' : '<span class="badge badge--geldig">Actief</span>');
 
 pagina_begin('Koppelingen', 'koppelingen.php');
 pagina_kop('Koppelingen', 'Hier koppel je Mijn BSO aan andere diensten. Sleutels en wachtwoorden worden versleuteld opgeslagen: na het opslaan zie je alleen nog het begin en het einde.');
@@ -237,7 +344,7 @@ pagina_kop('Koppelingen', 'Hier koppel je Mijn BSO aan andere diensten. Sleutels
       <?= $keuzes('methoden_betalen', STRIPE_KEUZES_BETALEN, $invoer['methoden_betalen'], 'Een factuur los betalen kan met') ?>
       <p class="field__hint" style="margin: 0">Zet de gekozen betaalmethoden ook aan in het dashboard van Stripe (Instellingen → Betaalmethoden), en SEPA-incasso voor de automatische incasso.</p>
       <div class="field">
-        <label for="bevestig_wachtwoord">Je eigen wachtwoord <span class="field__hint">(alleen nodig als je een sleutel wijzigt)</span></label>
+        <label for="bevestig_wachtwoord">Je eigen wachtwoord <span class="field__hint">(nodig bij elke wijziging)</span></label>
         <input id="bevestig_wachtwoord" name="bevestig_wachtwoord" type="password" autocomplete="current-password"<?= aria_fout($fouten, 'bevestig_wachtwoord') ?>>
         <?= veldfout($fouten, 'bevestig_wachtwoord') ?>
       </div>
@@ -307,7 +414,7 @@ pagina_kop('Koppelingen', 'Hier koppel je Mijn BSO aan andere diensten. Sleutels
         <?= $geheimVeld('smtp.wachtwoord', 'smtp_wachtwoord', 'Wachtwoord', '', 'Gebruikt jullie provider tweestapsverificatie? Maak dan een app-wachtwoord aan en vul dat hier in.') ?>
       </fieldset>
       <div class="field">
-        <label for="bevestig_wachtwoord_mail">Je eigen wachtwoord <span class="field__hint">(alleen nodig als je het wachtwoord van de mailbox wijzigt)</span></label>
+        <label for="bevestig_wachtwoord_mail">Je eigen wachtwoord <span class="field__hint">(nodig bij elke wijziging; niet voor alleen een testmail)</span></label>
         <input id="bevestig_wachtwoord_mail" name="bevestig_wachtwoord" type="password" autocomplete="current-password"<?= aria_fout($fouten, 'bevestig_wachtwoord_mail') ?>>
         <?= veldfout($fouten, 'bevestig_wachtwoord_mail') ?>
       </div>
@@ -324,6 +431,74 @@ pagina_kop('Koppelingen', 'Hier koppel je Mijn BSO aan andere diensten. Sleutels
     </dl>
   </section>
 </div>
+
+<section class="panel koppeling__extern" id="extern" aria-labelledby="extern-titel">
+  <div class="panel__kop"><h2 id="extern-titel"><?= icoon('download') ?>Externe back-up</h2><?= $externStatus ?></div>
+  <p class="muted">Elke nacht maakt Mijn BSO een versleutelde back-up op de server. Hier stel je in dat er ook een kopie naar opslag bij een andere partij in de EU gaat, zodat de gegevens niet verloren gaan als de server stuk gaat of wordt gehackt. Die partij kan de back-up niet lezen: de sleutel staat daar niet.</p>
+  <div class="kolommen kolommen--gelijk">
+    <div>
+      <h3>Zo stel je het in bij de aanbieder</h3>
+      <ol class="koppeling__stappen">
+        <li>Maak een account bij een Europese aanbieder van objectopslag (S3), bijvoorbeeld Scaleway, Hetzner, IONOS of Exoscale, met opslag in de EU.</li>
+        <li>Maak een <strong>bucket</strong> met <strong>object lock</strong> aan, met een standaard bewaartermijn van <strong>30 dagen</strong>. Dan kan niemand een back-up eerder wissen, ook een inbreker op de server niet.</li>
+        <li>Stel een regel in die bestanden na <strong>31 dagen</strong> verwijdert. Zo verdwijnen gewiste gegevens ook daar, zoals de privacyverklaring belooft.</li>
+        <li>Maak een <strong>toegangssleutel die alleen mag uploaden</strong> (niet lezen of wissen) en vul de gegevens hiernaast in.</li>
+      </ol>
+      <dl class="gegevens">
+        <dt>Laatste kopie</dt><dd><?= $externOk ? e(moment_nl($externOk)) : 'Nog geen' ?></dd>
+<?php if ($externFout && substr($externFout, 0, 19) > $externOk): ?>
+        <dt>Laatste fout</dt><dd><span class="let-op"><?= icoon('alert') ?><span><?= e(moment_nl(substr($externFout, 0, 19))) ?>: <?= e(substr($externFout, 20)) ?></span></span></dd>
+<?php endif; ?>
+      </dl>
+<?php if (externe_backup_actief()): ?>
+      <div class="btn-group">
+        <form method="post" action="koppelingen.php#extern"><?= csrf_veld() ?><input type="hidden" name="actie" value="extern_testen"><button class="btn btn--secondary btn--small" type="submit"><?= icoon('check') ?>Verbinding testen</button></form>
+      </div>
+<?php endif; ?>
+    </div>
+    <div class="stapel">
+    <form class="form" method="post" action="koppelingen.php#extern">
+      <?= csrf_veld() ?>
+      <input type="hidden" name="actie" value="extern">
+      <?= $tekstVeld('extern.endpoint', 'endpoint', 'Adres van de opslag (endpoint)', ['hint' => 'Bijvoorbeeld https://s3.nl-ams.scw.cloud of https://fsn1.your-objectstorage.com.']) ?>
+      <div class="form__row">
+        <?= $tekstVeld('extern.regio', 'regio', 'Regio', ['klein' => true, 'hint' => 'Bijvoorbeeld nl-ams of fsn1.']) ?>
+        <?= $tekstVeld('extern.bucket', 'bucket', 'Bucket') ?>
+      </div>
+      <div class="form__row">
+        <?= $tekstVeld('extern.map', 'map', 'Map in de bucket', ['hint' => 'Mag leeg.']) ?>
+        <div class="field">
+          <label for="adres">Adresvorm</label>
+          <select id="adres" name="adres"<?= koppeling_in_config('extern.adres') ? ' disabled' : '' ?>>
+            <option value="host"<?= $invoer['adres'] === 'host' ? ' selected' : '' ?>>bucket.adres (standaard)</option>
+            <option value="pad"<?= $invoer['adres'] === 'pad' ? ' selected' : '' ?>>adres/bucket</option>
+          </select>
+        </div>
+      </div>
+      <?= $tekstVeld('extern.toegangssleutel', 'toegangssleutel', 'Toegangssleutel (access key)') ?>
+      <?= $geheimVeld('extern.geheime_sleutel', 'extern_geheim', 'Geheime sleutel (secret key)', '', 'Van de toegangssleutel die alleen mag uploaden.') ?>
+      <div class="field">
+        <label for="bevestig_wachtwoord_extern">Je eigen wachtwoord <span class="field__hint">(nodig bij elke wijziging)</span></label>
+        <input id="bevestig_wachtwoord_extern" name="bevestig_wachtwoord" type="password" autocomplete="current-password"<?= aria_fout($fouten, 'bevestig_wachtwoord_extern') ?>>
+        <?= veldfout($fouten, 'bevestig_wachtwoord_extern') ?>
+      </div>
+      <div class="form__acties"><button class="btn" type="submit"><?= icoon('check') ?>Opslaan en testen</button></div>
+<?php if (externe_backup_actief() && !koppeling_in_config('extern.geheime_sleutel')): ?>
+    </form>
+    <details class="uitklap">
+      <summary><?= icoon('x') ?>Externe back-up ontkoppelen</summary>
+      <form class="form" method="post" action="koppelingen.php#extern" data-bevestig="De externe back-up ontkoppelen? Er gaan dan geen kopieën meer naar de externe opslag.">
+        <?= csrf_veld() ?><input type="hidden" name="actie" value="extern_ontkoppelen">
+        <div class="field"><label for="bevestig-extern-ontkoppelen">Je eigen wachtwoord</label><input id="bevestig-extern-ontkoppelen" name="bevestig_wachtwoord" type="password" autocomplete="current-password" required></div>
+        <div class="form__acties"><button class="btn btn--gevaar btn--small" type="submit">Ontkoppelen</button></div>
+      </form>
+    </details>
+<?php else: ?>
+    </form>
+<?php endif; ?>
+    </div>
+  </div>
+</section>
 <p class="note"><?= icoon('lock') ?><span>Alleen collega's met het recht "Koppelingen" zien deze pagina (zie <?= link_als('team', 'medewerkers.php', 'Team') ?>). Elke wijziging staat in het <?= link_als('instellingen', 'logboek.php', 'logboek') ?>, zonder de sleutels zelf. Wat in config.php op de server staat, gaat voor op wat hier staat.</span></p>
 <?php
 pagina_einde();

@@ -20,6 +20,28 @@ function smtp_instellingen(): array
     ];
 }
 
+/**
+ * Mag Mijn BSO met deze server verbinden? Een geldige naam, en (behalve in ontwikkelmodus) geen adres in
+ * het interne netwerk van de server: anders kan iemand via de instellingen interne diensten aftasten.
+ * Geeft een foutmelding, of null als het goed is.
+ */
+function smtp_host_fout(string $host): ?string
+{
+    if (!preg_match('/^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i', $host)) {
+        return 'Vul de naam van de server in, bijvoorbeeld smtp.office365.com of mail.jouwprovider.nl.';
+    }
+    if (function_exists('cfg') && cfg('ontwikkelmodus') === true) {
+        return null;
+    }
+    $adressen = filter_var($host, FILTER_VALIDATE_IP) ? [$host] : (strtolower($host) === 'localhost' ? ['127.0.0.1'] : (gethostbynamel($host) ?: []));
+    foreach ($adressen as $ip) {
+        if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            return 'Dit adres hoort bij een intern netwerk. Vul de naam van de server bij je provider in.';
+        }
+    }
+    return null;
+}
+
 function smtp_adres_ok(string $adres): bool
 {
     return $adres !== '' && !preg_match('/[\r\n<>]/', $adres) && filter_var($adres, FILTER_VALIDATE_EMAIL) !== false;
@@ -71,6 +93,9 @@ function smtp_verstuur(array $server, string $van, string $vanNaam, string $aan,
     }
     if ($server['host'] === '' || $server['poort'] < 1 || $server['poort'] > 65535) {
         throw new RuntimeException('Vul de mailserver en de poort in.');
+    }
+    if (($fout = smtp_host_fout($server['host'])) !== null) {
+        throw new RuntimeException($fout);
     }
     $context = stream_context_create(['ssl' => [
         'verify_peer' => true,

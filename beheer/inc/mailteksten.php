@@ -37,6 +37,15 @@ const MAILTEKSTEN = [
         'onderwerp' => 'Je aanmelding bij Sporty is binnen!',
         'tekst' => "Hoi {voornaam},\n\nWat leuk dat je {kinderen} hebt aangemeld bij Sporty! We hebben je aanmelding goed ontvangen. Aanmelden is vrijblijvend: je zit nog nergens aan vast.\n\nWe bekijken de mogelijkheden en nemen snel contact met je op om kennis te maken en je aanmelding af te ronden. Daarna krijg je een link om in te loggen in Mijn BSO.\n\nAlvast zin in? Kom gerust een keer langs op Sportpark Middenmeer, of boek een gratis proefdag.\n\nTot snel!\nTeam Sporty (en Henny: woef!)",
     ],
+    'aanmelding_bestaand_account' => [
+        'groep' => 'ouders',
+        'naam' => 'Aanmelding met een bekend e-mailadres',
+        'wanneer' => 'Als iemand het aanmeldformulier verstuurt met een e-mailadres dat al in Mijn BSO staat. De aanmelding wordt dan niet opnieuw opgeslagen; op de website ziet iedereen hetzelfde antwoord, zodat niemand kan uitproberen wie er klant is.',
+        'velden' => ['inloggen' => ['Link naar Mijn BSO', 'https://…/inloggen.php'], 'wachtwoord' => ['Link om een nieuw wachtwoord aan te vragen', 'https://…/wachtwoord-vergeten.php']],
+        'verplicht' => [],
+        'onderwerp' => 'Je aanmelding bij Sporty',
+        'tekst' => "Hoi,\n\nWe kregen net een aanmelding via de website met dit e-mailadres. Dit adres staat al bij ons bekend, dus we hebben de aanmelding niet opnieuw opgeslagen.\n\nHeb je je al eerder aangemeld en hoor je nog van ons? Dan hoef je niets te doen: we nemen snel contact met je op.\n\nHeb je al een account? Log dan in op Mijn BSO:\n{inloggen}\nWachtwoord kwijt? Vraag hier een nieuw wachtwoord aan:\n{wachtwoord}\n\nWil je nog een kind aanmelden? Stuur ons een bericht in Mijn BSO, of bel of mail ons even.\n\nWas jij dit niet? Dan kun je deze mail negeren.\n\nTeam Sporty",
+    ],
     'account_klaar' => [
         'groep' => 'ouders',
         'naam' => 'Welkom: account staat klaar (met wachtwoordlink)',
@@ -213,6 +222,15 @@ const MAILTEKSTEN = [
         'verplicht' => ['link'],
         'onderwerp' => 'Ziekmelding: {kind}',
         'tekst' => "{ouder} heeft {kind} ziek gemeld ({periode}).\n{link}",
+    ],
+    'team_backup_mislukt' => [
+        'groep' => 'team',
+        'naam' => 'Melding: externe back-up mislukt',
+        'wanneer' => 'Als de nachtelijke back-up niet naar de externe opslag kon worden gestuurd (zie Koppelingen).',
+        'velden' => ['fout' => ['Wat er misging', 'Uploaden mislukt: de geheime sleutel klopt niet.'], 'link' => ['Link naar Koppelingen in Mijn BSO', 'https://…/koppelingen.php#extern']],
+        'verplicht' => ['link'],
+        'onderwerp' => 'Externe back-up mislukt',
+        'tekst' => "De back-up van vannacht staat wel op de server, maar kon niet naar de externe opslag worden gestuurd.\n\n{fout}\n\nControleer de instellingen onder Koppelingen en test de verbinding:\n{link}",
     ],
     'team_opzegging' => [
         'groep' => 'team',

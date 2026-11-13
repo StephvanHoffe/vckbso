@@ -98,7 +98,7 @@ function export_gebruiker(int $gebruikerId): array
             'contactvoorkeur' => $g['contactvoorkeur'], 'status' => $g['status'],
             'aangemaakt_op' => $g['aangemaakt_op'], 'laatst_ingelogd' => $g['laatst_ingelogd'],
             'tweestapsverificatie' => (bool) $g['mfa_actief'],
-            'opgegeven_bij_aanmelding' => ['gewenste_dagen' => $g['gewenste_dagen'], 'gewenste_startdatum' => $g['gewenste_startdatum'], 'opmerkingen' => $g['opmerkingen']],
+            'opgegeven_bij_aanmelding' => ['gewenste_dagen' => $g['gewenste_dagen'], 'gewenste_startdatum' => $g['gewenste_startdatum'], 'opmerkingen' => ontsleutel($g['opmerkingen'])],
         ],
         'machtiging_automatische_incasso' => [
             'status' => status_label($g['mandaat_status']), 'rekening' => $g['mandaat_rekening'], 'op_naam_van' => $g['mandaat_naam'], 'sinds' => $g['mandaat_datum'],

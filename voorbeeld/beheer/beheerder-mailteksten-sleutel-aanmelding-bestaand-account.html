@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Agenda · Beheer · Sporty</title>
+<title>Aanmelding met een bekend e-mailadres · E-mails · Beheer · Sporty</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#fc6200">
 <link rel="icon" href="../../favicon.ico" sizes="32x32">
@@ -38,10 +38,10 @@
   <nav class="app-nav" aria-label="Menu">
     <ul>
       <li><a href="beheerder-index.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-home"></use></svg>Vandaag</a></li>
-      <li><a href="beheerder-agenda.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-calendar"></use></svg>Agenda</a></li>
+      <li><a href="beheerder-agenda.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-calendar"></use></svg>Agenda</a></li>
       <li><a href="beheerder-kinderen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-smile"></use></svg>Kinderen</a></li>
       <li><a href="beheerder-ouders.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-users"></use></svg>Ouders</a></li>
-      <li><a href="beheerder-berichten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chat"></use></svg>Berichten <span class="teller">2<span class="visually-hidden"> ongelezen</span></span></a></li>
+      <li><a href="beheerder-berichten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chat"></use></svg>Berichten</a></li>
       <li><a href="beheerder-fotos.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-camera"></use></svg>Foto&#039;s</a></li>
       <li><a href="beheerder-groepen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-grid"></use></svg>Groepen</a></li>
       <li><a href="beheerder-facturen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-euro"></use></svg>Facturen</a></li>
@@ -52,56 +52,58 @@
       <li><a href="beheerder-sollicitaties.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"></use></svg>Sollicitaties <span class="teller">1<span class="visually-hidden"> nieuw</span></span></a></li>
       <li><a href="beheerder-verzoeken.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken <span class="teller">1<span class="visually-hidden"> open</span></span></a></li>
       <li><a href="beheerder-koppelingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Koppelingen</a></li>
-      <li><a href="beheerder-instellingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
+      <li><a href="beheerder-instellingen.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
     </ul>
   </nav>
 </header>
 <main id="inhoud" class="app-main">
   <p class="demo-balk"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>Demo-modus: Stripe is nog niet gekoppeld, er wordt niets echt afgeschreven. <a href="beheerder-koppelingen.html">Stripe koppelen</a></p>
-<div class="pagina-kop"><div><h1>Agenda</h1><p class="lead">Per groep en per dag: hoeveel kinderen er komen en hoeveel plek er nog is. Klik op een dag voor de namen.</p></div><div class="btn-group"><a class="btn btn--secondary btn--small" href="beheerder-agenda-datum-2026-11-06.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-calendar"></use></svg>Vandaag</a></div></div><section class="panel" aria-labelledby="week-titel">
-  <div class="maandnav">
-    <a class="btn btn--secondary btn--mini" href="beheerder-agenda.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg><span class="visually-hidden">Vorige week</span></a>
-    <h2 id="week-titel">Week 46 <span class="muted" style="font-size: var(--step-0); font-weight: 600; text-transform: none;">9 nov – 13 nov 2026</span></h2>
-    <a class="btn btn--secondary btn--mini" href="#" data-vb-niet="agenda.php?week=2026-11-16"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg><span class="visually-hidden">Volgende week</span></a>
+<a class="terug-link" href="beheerder-mailteksten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>Alle e-mails</a><div class="pagina-kop"><div><h1>Aanmelding met een bekend e-mailadres</h1><p class="lead">Als iemand het aanmeldformulier verstuurt met een e-mailadres dat al in Mijn BSO staat. De aanmelding wordt dan niet opnieuw opgeslagen; op de website ziet iedereen hetzelfde antwoord, zodat niemand kan uitproberen wie er klant is.</p></div></div><div class="kolommen">
+  <section class="panel" aria-labelledby="tekst-titel">
+    <div class="panel__kop"><h2 id="tekst-titel">Tekst</h2><span class="badge">Standaardtekst</span></div>
+    <form class="form" method="post" action="#">
+      <input type="hidden" name="csrf" value="voorbeeld">      <div class="field"><label for="onderwerp">Onderwerp</label><input id="onderwerp" name="onderwerp" maxlength="200" required value="Je aanmelding bij Sporty"></div>
+      <div class="field">
+        <label for="tekst">Tekst van de e-mail</label>
+        <textarea id="tekst" name="tekst" rows="14" maxlength="10000" required class="mailtekst__invoer" aria-describedby="tekst-uitleg">Hoi,
+
+We kregen net een aanmelding via de website met dit e-mailadres. Dit adres staat al bij ons bekend, dus we hebben de aanmelding niet opnieuw opgeslagen.
+
+Heb je je al eerder aangemeld en hoor je nog van ons? Dan hoef je niets te doen: we nemen snel contact met je op.
+
+Heb je al een account? Log dan in op Mijn BSO:
+{inloggen}
+Wachtwoord kwijt? Vraag hier een nieuw wachtwoord aan:
+{wachtwoord}
+
+Wil je nog een kind aanmelden? Stuur ons een bericht in Mijn BSO, of bel of mail ons even.
+
+Was jij dit niet? Dan kun je deze mail negeren.
+
+Team Sporty</textarea>
+                <p class="field__hint" id="tekst-uitleg">Gewone tekst, zonder opmaak. Een witregel maak je met een lege regel. Onder elke e-mail komt vanzelf de <a href="beheerder-mailteksten-sleutel-ondertekening.html">ondertekening</a>.</p>
+      </div>
+      <div class="form__acties">
+        <button class="btn" type="submit" name="actie" value="opslaan"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>Opslaan</button>
+        <button class="btn btn--secondary" type="submit" name="actie" value="voorbeeld">Voorbeeld bekijken</button>
+        <button class="btn btn--secondary" type="submit" name="actie" value="test"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>Testmail naar mij</button>
+      </div>
+    </form>
+  </section>
+  <div class="stapel">
+    <section class="panel" aria-labelledby="velden-titel">
+      <h2 id="velden-titel">Invulvelden</h2>
+      <p class="muted">Zet een invulveld met de accolades in de tekst, dan vult Mijn BSO het bij het versturen in. Velden met een * moeten in de tekst blijven staan.</p>
+      <dl class="gegevens mailtekst__velden">
+        <dt><code>{inloggen}</code></dt>
+        <dd>Link naar Mijn BSO<br><span class="muted">Bijvoorbeeld: https://…/inloggen.php</span></dd>
+        <dt><code>{wachtwoord}</code></dt>
+        <dd>Link om een nieuw wachtwoord aan te vragen<br><span class="muted">Bijvoorbeeld: https://…/wachtwoord-vergeten.php</span></dd>
+      </dl>
+    </section>
+    <p class="note"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><span>Zet in e-mails geen gevoelige gegevens over kinderen, zoals allergieën of gezondheid. Een e-mail kan in verkeerde handen komen; zulke informatie staat veilig in Mijn BSO.</span></p>
   </div>
-  <div class="tabel week">
-    <table>
-      <caption class="visually-hidden">Bezetting per groep in week 46</caption>
-      <thead>
-        <tr><th scope="col">Groep</th>
-          <th scope="col"><a href="#" data-vb-niet="agenda.php?datum=2026-11-09">Ma 9 nov</a></th>
-          <th scope="col"><a href="#" data-vb-niet="agenda.php?datum=2026-11-10">Di 10 nov</a></th>
-          <th scope="col"><a href="#" data-vb-niet="agenda.php?datum=2026-11-11">Wo 11 nov</a></th>
-          <th scope="col"><a href="#" data-vb-niet="agenda.php?datum=2026-11-12">Do 12 nov</a></th>
-          <th scope="col"><a href="#" data-vb-niet="agenda.php?datum=2026-11-13">Vr 13 nov</a></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row"><span class="groep-kleur kleur--sun" aria-hidden="true"></span>De Bengels<br><small class="muted">max 8</small></th>
-          <td><a class="bezetting bezetting--ruim" href="#" data-vb-niet="agenda.php?datum=2026-11-09#groep-1-titel"><span>2 / 8<span class="visually-hidden"> kinderen</span></span><span class="bezetting__balk" aria-hidden="true"><span style="width: 25%"></span></span></a></td>
-          <td><a class="bezetting bezetting--ruim" href="#" data-vb-niet="agenda.php?datum=2026-11-10#groep-1-titel"><span>1 / 8<span class="visually-hidden"> kinderen</span></span><span class="bezetting__balk" aria-hidden="true"><span style="width: 13%"></span></span></a></td>
-          <td><a class="bezetting bezetting--ruim" href="#" data-vb-niet="agenda.php?datum=2026-11-11#groep-1-titel"><span>3 / 8<span class="visually-hidden"> kinderen</span></span><span class="bezetting__balk" aria-hidden="true"><span style="width: 38%"></span></span></a></td>
-          <td><a class="bezetting bezetting--ruim" href="#" data-vb-niet="agenda.php?datum=2026-11-12#groep-1-titel"><span>0 / 8<span class="visually-hidden"> kinderen</span></span><span class="bezetting__balk" aria-hidden="true"><span style="width: 0%"></span></span></a></td>
-          <td><a class="bezetting bezetting--ruim" href="#" data-vb-niet="agenda.php?datum=2026-11-13#groep-1-titel"><span>2 / 8<span class="visually-hidden"> kinderen</span></span><span class="bezetting__balk" aria-hidden="true"><span style="width: 25%"></span></span></a></td>
-        </tr>
-        <tr>
-          <th scope="row"><span class="groep-kleur kleur--mint" aria-hidden="true"></span>De Kanjers<br><small class="muted">max 10</small></th>
-          <td><a class="bezetting bezetting--ruim" href="#" data-vb-niet="agenda.php?datum=2026-11-09#groep-2-titel"><span>1 / 10<span class="visually-hidden"> kinderen</span></span><span class="bezetting__balk" aria-hidden="true"><span style="width: 10%"></span></span></a></td>
-          <td><a class="bezetting bezetting--ruim" href="#" data-vb-niet="agenda.php?datum=2026-11-10#groep-2-titel"><span>2 / 10<span class="visually-hidden"> kinderen</span></span><span class="bezetting__balk" aria-hidden="true"><span style="width: 20%"></span></span></a></td>
-          <td><span class="bezetting bezetting--dicht">Gesloten</span></td>
-          <td><a class="bezetting bezetting--ruim" href="#" data-vb-niet="agenda.php?datum=2026-11-12#groep-2-titel"><span>3 / 10<span class="visually-hidden"> kinderen</span></span><span class="bezetting__balk" aria-hidden="true"><span style="width: 30%"></span></span></a></td>
-          <td><span class="bezetting bezetting--dicht">Gesloten</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <ul class="legenda" aria-label="Uitleg kleuren">
-    <li><span class="badge badge--bevestigd">Ruim plek</span></li>
-    <li><span class="badge badge--wachtlijst">Bijna vol (80%)</span></li>
-    <li><span class="badge badge--ziek">Vol</span></li>
-  </ul>
-</section>
+</div>
 </main>
 <footer class="app-footer">
   <p>Sporty · 06 12 34 56 78 · <a href="mailto:info@sporty.nl">info@sporty.nl</a> · <a href="../../privacy.html">Privacyverklaring</a></p>

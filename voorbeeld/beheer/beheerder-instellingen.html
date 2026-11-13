@@ -133,42 +133,46 @@
       <div class="form">
         <div class="field">
           <label for="bewaar_ontwikkeling_maanden">Ontwikkelingsgegevens: observaties uit het kindvolgsysteem en verborgen notities van het team <span class="field__hint">(maanden, na vertrek van het kind)</span></label>
-          <input id="bewaar_ontwikkeling_maanden" name="bewaar_ontwikkeling_maanden" type="number" min="0" max="240" style="max-width: 8rem" value="3">
+          <input id="bewaar_ontwikkeling_maanden" name="bewaar_ontwikkeling_maanden" type="number" min="1" max="240" style="max-width: 8rem" value="3">
                   </div>
         <div class="field">
           <label for="bewaar_kinddossier_maanden">Kinddossier: gegevens, bijzonderheden, ophaalpersonen, toestemmingen en verzorgers <span class="field__hint">(maanden, na vertrek van het kind; daarna blijft alleen een geanonimiseerde regel voor de financiële administratie)</span></label>
-          <input id="bewaar_kinddossier_maanden" name="bewaar_kinddossier_maanden" type="number" min="0" max="240" style="max-width: 8rem" value="3">
+          <input id="bewaar_kinddossier_maanden" name="bewaar_kinddossier_maanden" type="number" min="1" max="240" style="max-width: 8rem" value="3">
                   </div>
         <div class="field">
           <label for="bewaar_fotos_maanden">Foto&#039;s <span class="field__hint">(maanden, na plaatsen, en uiterlijk bij het wissen van het kinddossier)</span></label>
-          <input id="bewaar_fotos_maanden" name="bewaar_fotos_maanden" type="number" min="0" max="240" style="max-width: 8rem" value="12">
+          <input id="bewaar_fotos_maanden" name="bewaar_fotos_maanden" type="number" min="1" max="240" style="max-width: 8rem" value="12">
                   </div>
         <div class="field">
           <label for="bewaar_berichten_maanden">Berichten en ziekmeldingen <span class="field__hint">(maanden, na verzenden)</span></label>
-          <input id="bewaar_berichten_maanden" name="bewaar_berichten_maanden" type="number" min="0" max="240" style="max-width: 8rem" value="24">
+          <input id="bewaar_berichten_maanden" name="bewaar_berichten_maanden" type="number" min="1" max="240" style="max-width: 8rem" value="24">
                   </div>
         <div class="field">
           <label for="bewaar_aanmeldingen_maanden">Aanmeldingen die niet tot plaatsing leidden <span class="field__hint">(maanden, na aanmelden)</span></label>
-          <input id="bewaar_aanmeldingen_maanden" name="bewaar_aanmeldingen_maanden" type="number" min="0" max="240" style="max-width: 8rem" value="6">
+          <input id="bewaar_aanmeldingen_maanden" name="bewaar_aanmeldingen_maanden" type="number" min="1" max="240" style="max-width: 8rem" value="6">
                   </div>
         <div class="field">
           <label for="bewaar_account_maanden">Account en contactgegevens van gestopte klanten <span class="field__hint">(maanden, na vertrek; naam en adres blijven bij de facturen)</span></label>
-          <input id="bewaar_account_maanden" name="bewaar_account_maanden" type="number" min="0" max="240" style="max-width: 8rem" value="3">
+          <input id="bewaar_account_maanden" name="bewaar_account_maanden" type="number" min="1" max="240" style="max-width: 8rem" value="3">
                   </div>
         <div class="field">
           <label for="bewaar_financieel_jaren">Financiële administratie: facturen, betalingen, de opvangdagen waarop ze zijn gebaseerd, en de boekingen en bonnetjes onder Financiën <span class="field__hint">(jaar, fiscale bewaarplicht)</span></label>
-          <input id="bewaar_financieel_jaren" name="bewaar_financieel_jaren" type="number" min="0" max="240" style="max-width: 8rem" value="7">
+          <input id="bewaar_financieel_jaren" name="bewaar_financieel_jaren" type="number" min="7" max="240" style="max-width: 8rem" value="7">
                   </div>
         <div class="field">
           <label for="bewaar_interesse_maanden">Blijf op de hoogte: naam, e-mail en telefoon van ouders met interesse <span class="field__hint">(maanden, na aanmelden (afmelden kan altijd eerder; wie de aanmelding niet bevestigt: na 14 dagen))</span></label>
-          <input id="bewaar_interesse_maanden" name="bewaar_interesse_maanden" type="number" min="0" max="240" style="max-width: 8rem" value="24">
+          <input id="bewaar_interesse_maanden" name="bewaar_interesse_maanden" type="number" min="1" max="240" style="max-width: 8rem" value="24">
                   </div>
         <div class="field">
           <label for="bewaar_logboek_maanden">Logboek: inzage, wijzigingen, exports en inloggen <span class="field__hint">(maanden)</span></label>
-          <input id="bewaar_logboek_maanden" name="bewaar_logboek_maanden" type="number" min="0" max="240" style="max-width: 8rem" value="24">
+          <input id="bewaar_logboek_maanden" name="bewaar_logboek_maanden" type="number" min="12" max="240" style="max-width: 8rem" value="24">
                   </div>
       </div>
-      <p class="muted">Laatst uitgevoerd: vandaag 21:45.</p>
+      <div class="field">
+        <label for="bevestig_wachtwoord">Je eigen wachtwoord <span class="field__hint">(alleen nodig als je een bewaartermijn korter maakt)</span></label>
+        <input id="bevestig_wachtwoord" name="bevestig_wachtwoord" type="password" autocomplete="current-password" style="max-width: 20rem">
+              </div>
+      <p class="muted">Laatst uitgevoerd: vandaag 14:19.</p>
     </section>
     <section class="panel" aria-labelledby="mfa-titel">
       <h2 id="mfa-titel">Tweestapsverificatie</h2>

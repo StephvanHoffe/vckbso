@@ -4,6 +4,8 @@
 declare(strict_types=1);
 
 const SESSIE_MAX_INACTIEF = 2 * 3600;   // na 2 uur niets doen opnieuw inloggen
+const SESSIE_MAX_DUUR = 12 * 3600;      // en hoe dan ook na 12 uur
+const MAX_CONTROLEPOGINGEN = 5;         // eigen wachtwoord of code opnieuw invullen, binnen een sessie
 const MAX_INLOGPOGINGEN = 5;            // per e-mailadres en per IP ...
 const INLOG_BLOKKADE_MINUTEN = 15;      // ... binnen dit aantal minuten
 const MIN_WACHTWOORD_LENGTE = 10;
@@ -44,6 +46,10 @@ function start_sessie(): void
         $_SESSION = [];
         session_regenerate_id(true);
         flash('info', 'Je was een tijdje niet actief. Log opnieuw in.');
+    } elseif (!empty($_SESSION['gebruiker_id']) && time() - (int) ($_SESSION['ingelogd_op'] ?? 0) > SESSIE_MAX_DUUR) {
+        $_SESSION = [];
+        session_regenerate_id(true);
+        flash('info', 'Je bent al een hele dag ingelogd. Log voor de zekerheid opnieuw in.');
     }
     $_SESSION['laatst_actief'] = time();
 }
@@ -58,6 +64,12 @@ function huidige_gebruiker(bool $vernieuw = false): ?array
     }
     if ($vernieuw || !array_key_exists($id, $cache)) {
         $cache[$id] = rij("SELECT * FROM gebruikers WHERE id = ? AND status != 'gestopt'", [$id]);
+        // Wachtwoord gewijzigd of tweestapsverificatie gereset? Dan geldt deze sessie niet meer.
+        if ($cache[$id] && (int) $cache[$id]['sessie_versie'] !== (int) ($_SESSION['sessie_versie'] ?? -1)) {
+            $cache[$id] = null;
+            $_SESSION = [];
+            session_regenerate_id(true);
+        }
     }
     return $cache[$id];
 }
@@ -124,8 +136,12 @@ function te_veel_verzoeken(string $sleutel, int $max): bool
 {
     $sinds = date('Y-m-d H:i:s', time() - INLOG_BLOKKADE_MINUTEN * 60);
     $aantal = (int) waarde('SELECT COUNT(*) FROM inlogpogingen WHERE sleutel = ? AND tijd >= ?', [$sleutel, $sinds]);
+    if ($aantal >= $max) {
+        // Al geblokkeerd: niet verder bijschrijven, anders groeit de tabel bij een aanval onbeperkt
+        return true;
+    }
     q('INSERT INTO inlogpogingen (sleutel, tijd) VALUES (?, ?)', [$sleutel, nu()]);
-    return $aantal >= $max;
+    return false;
 }
 
 /** Aantal geregistreerde pogingen met deze sleutel in het afgelopen kwartier. */
@@ -158,8 +174,8 @@ function probeer_in_te_loggen(string $email, string $wachtwoord): ?string
         return 'Te veel pogingen. Wacht ' . INLOG_BLOKKADE_MINUTEN . ' minuten en probeer het dan opnieuw, of vraag een nieuw wachtwoord aan.';
     }
     $gebruiker = rij('SELECT * FROM gebruikers WHERE email = ?', [$email]);
-    // Ook zonder bestaand account een hash controleren, zodat de responstijd niets verraadt
-    $hash = $gebruiker['wachtwoord_hash'] ?? '$2y$12$RwGnUuQlm.UHd3LuB7b31.y9TGGWJzH2KvTgHHV8FPK.uJqxq.p2K';
+    // Ook zonder bestaand account een hash controleren (met dezelfde kosten), zodat de responstijd niets verraadt
+    $hash = $gebruiker['wachtwoord_hash'] ?? password_hash(random_bytes(16), PASSWORD_DEFAULT);
     $klopt = password_verify($wachtwoord, $hash);
     if (!$gebruiker || !$klopt || !$gebruiker['wachtwoord_hash']) {
         registreer_mislukte_poging($email);
@@ -208,8 +224,38 @@ function log_in_als(int $gebruikerId, string $methode = 'wachtwoord'): void
     $_SESSION['gebruiker_id'] = $gebruikerId;
     $_SESSION['organisatie'] = cfg('organisatie');
     $_SESSION['laatst_actief'] = time();
+    $_SESSION['ingelogd_op'] = time();
+    $_SESSION['sessie_versie'] = (int) waarde('SELECT sessie_versie FROM gebruikers WHERE id = ?', [$gebruikerId]);
     q('UPDATE gebruikers SET laatst_ingelogd = ? WHERE id = ?', [nu(), $gebruikerId]);
     log_actie('Ingelogd', $methode, $gebruikerId, 'inloggen', 'gebruiker:' . $gebruikerId);
+}
+
+/**
+ * Sluit alle andere sessies van deze gebruiker af (na een nieuw wachtwoord of een reset van de
+ * tweestapsverificatie). Is het de ingelogde gebruiker zelf, dan blijft de huidige sessie geldig.
+ */
+function beeindig_andere_sessies(int $gebruikerId): void
+{
+    q('UPDATE gebruikers SET sessie_versie = sessie_versie + 1 WHERE id = ?', [$gebruikerId]);
+    if ((int) ($_SESSION['gebruiker_id'] ?? 0) === $gebruikerId) {
+        $_SESSION['sessie_versie'] = (int) waarde('SELECT sessie_versie FROM gebruikers WHERE id = ?', [$gebruikerId]);
+        session_regenerate_id(true);
+    }
+}
+
+/**
+ * Rem op het raden van het eigen wachtwoord of een code binnen een sessie (bijvoorbeeld met een
+ * gekaapte sessie). $soort onderscheidt de plek, zoals 'p' (wachtwoord) of 'm' (code).
+ */
+function te_veel_controles(string $soort, int $gebruikerId): bool
+{
+    return recente_pogingen($soort . ':' . $gebruikerId) >= MAX_CONTROLEPOGINGEN;
+}
+
+function mislukte_controle(string $soort, int $gebruikerId): void
+{
+    registreer_poging($soort . ':' . $gebruikerId);
+    log_actie('Controle mislukt', $soort, $gebruikerId, 'beveiliging', 'gebruiker:' . $gebruikerId);
 }
 
 function log_uit(): void

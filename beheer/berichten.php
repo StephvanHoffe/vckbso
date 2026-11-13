@@ -33,7 +33,7 @@ if (is_post() && $ouder) {
             redirect($terug);
         }
         $kindId = (int) invoer('kind') ?: null;
-        if ($kindId && !heeft_recht($kindId, (int) $ouder['id'], 'berichten')) {
+        if ($kindId && (!heeft_recht($kindId, (int) $ouder['id'], 'berichten') || ($team && !team_mag_kind(rij('SELECT * FROM kinderen WHERE id = ?', [$kindId]) ?? ['groep_id' => null])))) {
             $kindId = null;
         }
         nieuw_bericht((int) $ouder['id'], (int) $gebruiker['id'], $kindId, 'bericht', $tekst, !$team, $team);
@@ -78,9 +78,9 @@ if (is_post() && $ouder) {
 if ($team && !$ouder) {
     $gesprekken = rijen(
         "SELECT g.id, g.naam, MAX(b.aangemaakt_op) AS laatste, SUM(b.gelezen_team = 0) AS ongelezen,
-                (SELECT tekst FROM berichten b2 WHERE b2.ouder_id = g.id ORDER BY b2.aangemaakt_op DESC, b2.id DESC LIMIT 1) AS voorbeeld
+                (SELECT tekst FROM berichten b2 WHERE b2.ouder_id = g.id AND " . bericht_binnen_groepen('b2') . " ORDER BY b2.aangemaakt_op DESC, b2.id DESC LIMIT 1) AS voorbeeld
          FROM berichten b JOIN gebruikers g ON g.id = b.ouder_id
-         WHERE " . ouder_voorwaarde('g.id') . "
+         WHERE " . ouder_voorwaarde('g.id') . ' AND ' . bericht_binnen_groepen('b') . "
          GROUP BY g.id ORDER BY ongelezen > 0 DESC, laatste DESC LIMIT 200"
     );
     $gesprekken = ontsleutel_kolommen($gesprekken, ['voorbeeld']);
@@ -123,16 +123,21 @@ if ($team && !$ouder) {
 if ($team) {
     log_inzage('Berichten bekeken', 'gebruiker:' . $ouder['id']);
 }
-q($team ? 'UPDATE berichten SET gelezen_team = 1 WHERE ouder_id = ? AND gelezen_team = 0' : 'UPDATE berichten SET gelezen_ouder = 1 WHERE ouder_id = ? AND gelezen_ouder = 0', [$ouder['id']]);
+// Een medewerker die alleen eigen groepen ziet, leest geen berichten over kinderen in andere groepen
+$binnenGroepen = $team ? bericht_binnen_groepen('b') : '1 = 1';
+q($team ? 'UPDATE berichten SET gelezen_team = 1 WHERE ouder_id = ? AND gelezen_team = 0 AND ' . bericht_binnen_groepen('berichten') : 'UPDATE berichten SET gelezen_ouder = 1 WHERE ouder_id = ? AND gelezen_ouder = 0', [$ouder['id']]);
 
 $berichten = rijen(
-    'SELECT b.*, a.naam AS afzender, a.rol AS afzender_rol, k.voornaam AS kind FROM berichten b
+    "SELECT b.*, a.naam AS afzender, a.rol AS afzender_rol, k.voornaam AS kind FROM berichten b
      LEFT JOIN gebruikers a ON a.id = b.afzender_id LEFT JOIN kinderen k ON k.id = b.kind_id
-     WHERE b.ouder_id = ? ORDER BY b.aangemaakt_op, b.id',
+     WHERE b.ouder_id = ? AND {$binnenGroepen} ORDER BY b.aangemaakt_op, b.id",
     [$ouder['id']]
 );
 $berichten = ontsleutel_kolommen($berichten, ['tekst']);
 $kinderen = kinderen_van_verzorger((int) $ouder['id'], 'berichten');
+if ($team) {
+    $kinderen = array_values(array_filter($kinderen, 'team_mag_kind'));
+}
 $ziekKinderen = kinderen_van_verzorger((int) $ouder['id'], 'agenda');
 
 pagina_begin('Berichten', 'berichten.php');

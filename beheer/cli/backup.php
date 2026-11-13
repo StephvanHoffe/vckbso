@@ -20,6 +20,9 @@ if (PHP_SAPI !== 'cli') {
 }
 require __DIR__ . '/../inc/bootstrap.php';
 
+// Alles wat dit script aanmaakt, is alleen leesbaar voor de eigenaar
+umask(0077);
+
 const BACKUP_BLOK = 1048576; // 1 MB per versleuteld blok
 
 $map = rtrim((string) cfg('backup.map', ''), '/');
@@ -37,9 +40,25 @@ if (!is_dir($map) && !mkdir($map, 0700, true)) {
     stop_met_fout("De map {$map} kan niet worden aangemaakt.");
 }
 
-// 1. Consistente kopie van de database (ook als er net iemand iets opslaat)
-$kopie = sys_get_temp_dir() . '/vck-backup-' . bin2hex(random_bytes(6)) . '.sqlite';
+// Restjes van een eerder afgebroken back-up opruimen (een onversleutelde kopie mag nooit blijven staan).
+// Alleen oudere dan 6 uur: een back-up die op dit moment ook draait, laten we met rust.
+foreach (array_merge(glob($map . '/.kopie-*.sqlite') ?: [], glob($map . '/*.vckbak.tmp') ?: []) as $rest) {
+    if (filemtime($rest) < time() - 6 * 3600) {
+        unlink($rest);
+    }
+}
+
+// 1. Consistente kopie van de database (ook als er net iemand iets opslaat). Die kopie is nog niet
+// versleuteld, dus hij staat in de afgeschermde back-upmap (niet in de gedeelde tijdelijke map) en
+// wordt hoe dan ook weer verwijderd.
+$kopie = $map . '/.kopie-' . bin2hex(random_bytes(6)) . '.sqlite';
+register_shutdown_function(function () use ($kopie): void {
+    if (is_file($kopie)) {
+        unlink($kopie);
+    }
+});
 db()->exec('VACUUM INTO ' . db()->quote($kopie));
+chmod($kopie, 0600);
 
 // 2. Welke bestanden gaan mee?
 $bestanden = ['beheer.sqlite' => $kopie];
@@ -93,6 +112,7 @@ $schrijf(pack('n', 0), true); // einde
 fclose($uit);
 rename($tijdelijk, $map . '/' . $naam);
 unlink($kopie);
+chmod($map . '/' . $naam, 0600);
 
 // 4. Oude back-ups van deze organisatie opruimen
 $dagen = max(1, (int) cfg('backup.bewaardagen', 30));
@@ -108,3 +128,16 @@ instelling_zet('backup_laatst', nu());
 log_actie('Back-up gemaakt', $naam . ', ' . count($bestanden) . ' bestanden', null, 'beveiliging');
 echo "Back-up gemaakt: {$map}/{$naam} (" . count($bestanden) . ' bestanden, ' . round($totaal / 1048576, 1) . " MB)\n";
 echo "Oude back-ups verwijderd: {$opgeruimd}\n";
+
+// 5. Een kopie naar de externe opslag (Koppelingen → Externe back-up). Die partij krijgt alleen het
+// versleutelde bestand; de back-upsleutel staat daar niet. Mislukt het, dan krijgt het team een e-mail.
+if (externe_backup_actief()) {
+    if (externe_backup_verstuur($map . '/' . $naam, $naam)) {
+        echo "Kopie naar de externe opslag gestuurd.\n";
+    } else {
+        fwrite(STDERR, "De kopie naar de externe opslag is mislukt. Zie Koppelingen in Mijn BSO.\n");
+        exit(2);
+    }
+} else {
+    echo "Geen externe back-up ingesteld (Koppelingen → Externe back-up).\n";
+}

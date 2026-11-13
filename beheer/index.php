@@ -9,7 +9,8 @@ $gebruiker = vereis_login();
 $voornaam = explode(' ', $gebruiker['naam'])[0];
 
 if (is_ouder($gebruiker)) {
-    $kinderen = kinderen_van_verzorger((int) $gebruiker['id']);
+    // Alleen kinderen waarvoor deze verzorger minstens één recht heeft (alle rechten uit = niets zien)
+    $kinderen = array_values(array_filter(kinderen_van_verzorger((int) $gebruiker['id']), 'heeft_enig_recht'));
     $fotoKinderen = array_map(fn ($k) => (int) $k['id'], kinderen_van_verzorger((int) $gebruiker['id'], 'fotos'));
     $zonderGecontroleerdGezag = array_filter($kinderen, fn ($k) => (int) $k['v_gezag'] === 1 && empty($k['v_gezag_gecontroleerd_op']));
     $ongelezen = ongelezen_voor_ouder((int) $gebruiker['id']);
@@ -56,17 +57,22 @@ if (is_ouder($gebruiker)) {
 <?php else: ?>
     <ul class="kindlijst">
 <?php foreach ($kinderen as $kind):
-    $volgende = rij("SELECT * FROM inschrijvingen WHERE kind_id = ? AND datum >= ? AND status IN ('bevestigd', 'wachtlijst') ORDER BY datum LIMIT 1", [$kind['id'], vandaag()]);
+    $agenda = (int) $kind['v_recht_agenda'] === 1;
+    $volgende = $agenda ? rij("SELECT * FROM inschrijvingen WHERE kind_id = ? AND datum >= ? AND status IN ('bevestigd', 'wachtlijst') ORDER BY datum LIMIT 1", [$kind['id'], vandaag()]) : null;
     ?>
       <li class="kindrij">
         <div>
-          <div class="kindrij__naam"><a href="kind.php?id=<?= (int) $kind['id'] ?>"><?= e(kindnaam($kind)) ?></a></div>
+          <div class="kindrij__naam"><?= (int) $kind['v_recht_dossier'] === 1 ? '<a href="kind.php?id=' . (int) $kind['id'] . '">' . e(kindnaam($kind)) . '</a>' : e(kindnaam($kind)) ?></div>
           <div class="kindrij__info">
+<?php if ($agenda): ?>
             <span><?= $kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam']) : 'Nog geen groep' ?></span>
             <span><?= $volgende ? 'Volgende keer: ' . e(datum_nl($volgende['datum'], 'EEEE d MMMM')) . ($volgende['status'] === 'wachtlijst' ? ' (wachtlijst)' : '') : 'Nog geen dagen gekozen' ?></span>
+<?php endif; ?>
           </div>
         </div>
+<?php if ($agenda): ?>
         <a class="btn btn--secondary btn--mini" href="agenda.php?kind=<?= (int) $kind['id'] ?>">Agenda<span class="visually-hidden"> van <?= e($kind['voornaam']) ?></span></a>
+<?php endif; ?>
       </li>
 <?php endforeach; ?>
     </ul>
@@ -112,7 +118,8 @@ foreach ($groepen as $groep) {
 }
 // Nieuwe aanmeldingen en kinderen zonder groep: voor wie klanten beheert (intake)
 $klantbeheer = team_mag('klanten_beheren', $gebruiker) && team_mag('ouders', $gebruiker);
-$nieuw = $klantbeheer ? rijen("SELECT g.*, (SELECT COUNT(*) FROM kinderen k WHERE k.ouder_id = g.id) AS aantal_kinderen FROM gebruikers g WHERE g.rol = 'ouder' AND g.status = 'nieuw' ORDER BY g.aangemaakt_op") : [];
+// Nieuwe aanmeldingen hebben nog geen groep: die ziet alleen wie alle groepen ziet
+$nieuw = $klantbeheer && team_groep_ids($gebruiker) === null ? rijen("SELECT g.*, (SELECT COUNT(*) FROM kinderen k WHERE k.ouder_id = g.id) AS aantal_kinderen FROM gebruikers g WHERE g.rol = 'ouder' AND g.status = 'nieuw' ORDER BY g.aangemaakt_op") : [];
 $ongelezen = team_mag('berichten', $gebruiker) ? ongelezen_voor_team() : 0;
 $zonderGroep = $klantbeheer && team_mag('kinderen', $gebruiker) && team_groep_ids($gebruiker) === null ? (int) waarde("SELECT COUNT(*) FROM kinderen k JOIN gebruikers g ON g.id = k.ouder_id WHERE k.groep_id IS NULL AND k.actief = 1 AND g.status = 'actief'") : 0;
 

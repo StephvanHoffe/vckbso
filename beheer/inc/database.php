@@ -605,6 +605,10 @@ function migreer(PDO $pdo): void
             );
             INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) SELECT id, 'koppelingen' FROM gebruikers WHERE rol = 'beheerder';
             SQL,
+
+        // Sessies afsluiten (november 2026): na een nieuw wachtwoord of een reset van de tweestapsverificatie
+        // gaat sessie_versie omhoog, en vervallen alle andere sessies van die gebruiker.
+        18 => 'ALTER TABLE gebruikers ADD COLUMN sessie_versie INTEGER NOT NULL DEFAULT 0;',
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

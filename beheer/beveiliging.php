@@ -50,6 +50,17 @@ $backup = instelling('backup_laatst');
 $backupOk = $backup !== '' && strtotime($backup) > time() - 26 * 3600;
 $voeg($backupOk ? 'ok' : 'probleem', 'Versleutelde back-up', $backup === '' ? 'Er is nog nooit een back-up gemaakt. Stel een dagelijkse taak in: php beheer/cli/backup.php' : ($backupOk ? 'Laatste back-up: ' . moment_nl($backup) . '. Back-ups worden ' . (int) cfg('backup.bewaardagen', 30) . ' dagen bewaard.' : 'De laatste back-up is van ' . moment_nl($backup) . '. Controleer de dagelijkse taak.'));
 
+$extern = instelling('extern_backup_laatst');
+$externOk = externe_backup_actief() && $extern !== '' && strtotime($extern) > time() - 26 * 3600;
+$voeg($externOk ? 'ok' : 'let op', 'Externe back-up', !externe_backup_actief()
+    ? 'Er gaat nog geen kopie van de back-up naar een andere partij. Stel de externe back-up in onder Koppelingen.'
+    : ($externOk ? 'Laatste kopie naar de externe opslag: ' . moment_nl($extern) . '.' : ($extern === '' ? 'Er is nog geen kopie naar de externe opslag gestuurd.' : 'De laatste kopie naar de externe opslag is van ' . moment_nl($extern) . '. Kijk onder Koppelingen wat er misging.')));
+
+$configBuiten = !str_starts_with((string) realpath(CONFIG_BESTAND), dirname((string) realpath(BEHEER_DIR)) . '/');
+$voeg($configBuiten ? 'ok' : 'let op', 'Sleutels buiten de webmap', $configBuiten
+    ? 'De configuratie met de sleutels staat buiten de openbare webmap.'
+    : 'De configuratie staat in beheer/config.php. Die is afgeschermd, maar zet hem liefst buiten de webmap als mijnbso-config.php (zie docs/live-zetten-vimexx.md).');
+
 $bewaar = instelling('bewaarbeleid_laatst');
 $voeg($bewaar !== '' && strtotime($bewaar) > time() - 2 * 86400 ? 'ok' : 'let op', 'Bewaarbeleid', $bewaar !== '' ? 'Laatst uitgevoerd: ' . moment_nl($bewaar) . '.' : 'Nog niet uitgevoerd.');
 

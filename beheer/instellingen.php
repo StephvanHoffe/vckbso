@@ -2,7 +2,7 @@
 /* Instellingen (beheerder): bedrijfsgegevens voor facturen, tarief en afmeldtijd. */
 require __DIR__ . '/inc/bootstrap.php';
 
-vereis_recht('instellingen');
+$gebruiker = vereis_recht('instellingen');
 
 $velden = [
     'bedrijfsnaam' => 'Naam van de BSO',
@@ -50,9 +50,21 @@ if (is_post()) {
             $fouten[$sleutel] = 'Vul een geheel aantal ' . $eenheid . ' in.';
         }
     }
-    // Minimaal de fiscale bewaarplicht voor de financiële administratie
-    if (ctype_digit($waarden['bewaar_financieel_jaren']) && (int) $waarden['bewaar_financieel_jaren'] < 7) {
-        $fouten['bewaar_financieel_jaren'] = 'De fiscale bewaarplicht is 7 jaar; korter mag niet.';
+    // Ondergrenzen, met minimaal de fiscale bewaarplicht voor de financiële administratie
+    foreach (BEWAAR_MINIMUM as $sleutel => $minimum) {
+        if (empty($fouten[$sleutel]) && ctype_digit($waarden[$sleutel]) && (int) $waarden[$sleutel] < $minimum) {
+            $fouten[$sleutel] = $sleutel === 'bewaar_financieel_jaren' ? 'De fiscale bewaarplicht is 7 jaar; korter mag niet.' : 'Minstens ' . $minimum . ' ' . BEWAARTERMIJNEN[$sleutel][1] . '.';
+        }
+    }
+    // Een kortere termijn wist bij het volgende onderhoud meteen gegevens: dat vraagt om je eigen wachtwoord
+    $korter = array_filter(array_keys(BEWAARTERMIJNEN), fn ($s) => ctype_digit($waarden[$s]) && (int) $waarden[$s] < bewaartermijn($s));
+    if ($korter && !$fouten) {
+        if (te_veel_controles('b', (int) $gebruiker['id'])) {
+            $fouten['bevestig_wachtwoord'] = 'Te veel pogingen. Wacht een kwartier en probeer het dan opnieuw.';
+        } elseif (!password_verify((string) ($_POST['bevestig_wachtwoord'] ?? ''), (string) $gebruiker['wachtwoord_hash'])) {
+            mislukte_controle('b', (int) $gebruiker['id']);
+            $fouten['bevestig_wachtwoord'] = 'Je maakt een bewaartermijn korter. Gegevens die daar dan buiten vallen, worden bij het volgende onderhoud gewist. Vul ter bevestiging je eigen wachtwoord in.';
+        }
     }
     $waarden['mfa_ouders'] = $waarden['mfa_ouders'] === 'verplicht' ? 'verplicht' : 'optioneel';
     if (!$fouten) {
@@ -129,10 +141,15 @@ pagina_kop('Instellingen', 'Gegevens voor de facturen, het tarief, afmelden, bev
 <?php foreach (BEWAARTERMIJNEN as $sleutel => [$omschrijving, $eenheid, $uitleg]): ?>
         <div class="field">
           <label for="<?= e($sleutel) ?>"><?= e($omschrijving) ?> <span class="field__hint">(<?= e($eenheid) ?><?= $uitleg ? ', ' . e($uitleg) : '' ?>)</span></label>
-          <input id="<?= e($sleutel) ?>" name="<?= e($sleutel) ?>" type="number" min="0" max="240" style="max-width: 8rem" value="<?= e($waarden[$sleutel]) ?>"<?= aria_fout($fouten, $sleutel) ?>>
+          <input id="<?= e($sleutel) ?>" name="<?= e($sleutel) ?>" type="number" min="<?= (int) (BEWAAR_MINIMUM[$sleutel] ?? 1) ?>" max="240" style="max-width: 8rem" value="<?= e($waarden[$sleutel]) ?>"<?= aria_fout($fouten, $sleutel) ?>>
           <?= veldfout($fouten, $sleutel) ?>
         </div>
 <?php endforeach; ?>
+      </div>
+      <div class="field">
+        <label for="bevestig_wachtwoord">Je eigen wachtwoord <span class="field__hint">(alleen nodig als je een bewaartermijn korter maakt)</span></label>
+        <input id="bevestig_wachtwoord" name="bevestig_wachtwoord" type="password" autocomplete="current-password" style="max-width: 20rem"<?= aria_fout($fouten, 'bevestig_wachtwoord') ?>>
+        <?= veldfout($fouten, 'bevestig_wachtwoord') ?>
       </div>
       <p class="muted">Laatst uitgevoerd: <?= instelling('bewaarbeleid_laatst') ? e(moment_nl(instelling('bewaarbeleid_laatst'))) : 'nog niet' ?>.</p>
     </section>

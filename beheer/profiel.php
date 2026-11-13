@@ -37,7 +37,10 @@ if (is_post()) {
     }
 
     if ($actie === 'wachtwoord') {
-        if (!password_verify((string) ($_POST['huidig'] ?? ''), (string) $gebruiker['wachtwoord_hash'])) {
+        if (te_veel_controles('p', (int) $gebruiker['id'])) {
+            $fouten['huidig'] = 'Te veel pogingen. Wacht een kwartier en probeer het dan opnieuw.';
+        } elseif (!password_verify((string) ($_POST['huidig'] ?? ''), (string) $gebruiker['wachtwoord_hash'])) {
+            mislukte_controle('p', (int) $gebruiker['id']);
             $fouten['huidig'] = 'Je huidige wachtwoord klopt niet.';
         } elseif ($f = controleer_wachtwoord((string) ($_POST['wachtwoord'] ?? ''), (string) ($_POST['wachtwoord2'] ?? ''))) {
             $fouten['wachtwoord'] = $f;
@@ -45,7 +48,7 @@ if (is_post()) {
         if (!$fouten) {
             q('UPDATE gebruikers SET wachtwoord_hash = ? WHERE id = ?', [password_hash((string) $_POST['wachtwoord'], PASSWORD_DEFAULT), $gebruiker['id']]);
             q("UPDATE tokens SET gebruikt = 1 WHERE gebruiker_id = ?", [$gebruiker['id']]);
-            session_regenerate_id(true);
+            beeindig_andere_sessies((int) $gebruiker['id']);
             log_actie('Wachtwoord gewijzigd', '', null, 'beveiliging', 'gebruiker:' . $gebruiker['id']);
             flash('succes', 'Je wachtwoord is gewijzigd.');
             redirect('profiel.php');
