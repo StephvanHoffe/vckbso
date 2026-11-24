@@ -133,6 +133,11 @@
   --color-on-dark-muted: #bdbdbd;    /* 10:1 op zwart */
   --color-dark-surface: #1e1e1e;     /* kaarten op zwart */
 
+  /* WhatsApp (24 november 2026, op verzoek van Sporty): alleen voor de zwevende WhatsApp-knop.
+     Het logo staat wit op WhatsApp-groen, zoals WhatsApp het zelf toont; tekst staat alleen op het donkere groen (wit erop 7,7:1) */
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #075e54;
+
   /* Zachte tinten (alleen oranje en grijs: geen extra kleuren) */
   --color-sand: #ececec;
   --color-sun: #ffc59c;
