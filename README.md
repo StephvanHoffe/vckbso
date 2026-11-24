@@ -30,13 +30,19 @@ php -S localhost:8000
 php tools/beheer-demodata.php                      # optioneel: demogegevens om uit te proberen
 ```
 
-## Voorbeeld op Vercel
+## Vercel: de website en het voorbeeld
 
-De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Vercel draait alleen statische bestanden, geen PHP. Daarom staat er een doorklikbare momentopname van Mijn BSO in `voorbeeld/`, met verzonnen gegevens:
+Sinds 24 november 2026 staat de echte website op Vercel, op **https://bsosporty.nl**, en Mijn BSO bij Vimexx op **https://mijn.bsosporty.nl/beheer/** (zie [`docs/live-zetten-vimexx.md`](docs/live-zetten-vimexx.md)). Op het domein:
+
+- **De binnenkort-pagina:** `middleware.js` toont de binnenkort-pagina zolang Mijn BSO zegt dat de website nog niet live is.
+- **Formulieren en Mijn BSO:** `js/main.js` stuurt de formulieren en links naar `mijn.bsosporty.nl`, en `vercel.json` stuurt `bsosporty.nl/beheer/…` door.
+- **Wat Vercel publiceert:** `.vercelignore` houdt documentatie, broncode van Mijn BSO, tests en tools van Vercel af.
+
+Op het Vercel-adres van het project (https://sporty-sigma.vercel.app) blijft het voorbeeld staan. Vercel draait geen PHP, dus daar staat een doorklikbare momentopname van Mijn BSO in `voorbeeld/`, met verzonnen gegevens:
 
 - **Overzichtspagina:** https://sporty-sigma.vercel.app/voorbeeld/ ("De website en Mijn BSO om door te klikken"), met de website en de beheeromgeving als beheerder, begeleider en ouder.
 - **Links naar Mijn BSO** (Inloggen) gaan op Vercel naar dezelfde pagina's in het voorbeeld. Aanmelden en een proefdag boeken gaan via formulieren op de website; op Vercel laten die zien hoe het werkt, maar slaan ze niets op. Dat regelt `vercel.json`; op gewone PHP-hosting doet dat bestand niets.
-- **Niet in Google:** het voorbeeld heeft `noindex`.
+- **Niet in Google:** het voorbeeld heeft `noindex` (alleen buiten bsosporty.nl).
 - **Opnieuw maken** na wijzigingen in de website of de beheeromgeving: `npm run voorbeeld` (PHP 8.2+ nodig). Het script maakt een tijdelijke demo-omgeving, legt alle schermen vast en ruimt daarna alles op. `npm test` meldt het als het voorbeeld verouderd is of als een link niet klopt.
 - **Welke versie Vercel toont:** Vercel publiceert de productiebranch van deze repository (in Vercel: Settings → Git → Production Branch). Wijzigingen staan pas op sporty-sigma.vercel.app als ze in die branch staan.
 
@@ -79,7 +85,9 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `tools/beheer-demodata.php` | Vult een lege test-omgeving van de beheeromgeving met verzonnen demogegevens |
 | `voorbeeld/` | Doorklikbare momentopname van Mijn BSO met verzonnen gegevens, voor Vercel. Gemaakt door `npm run voorbeeld`, niet met de hand aanpassen. Zie [Voorbeeld op Vercel](#voorbeeld-op-vercel). |
 | `tools/voorbeeld/` | Bouwscript (`bouw.mjs`), extra demogegevens, de overzichtspagina en de voorbeeldbalk |
-| `vercel.json` | Alleen voor Vercel: stuurt `/beheer/` door naar het voorbeeld, stuurt de oude adressen door naar de nieuwe pagina's en zet `noindex` op het voorbeeld |
+| `vercel.json` | Alleen voor Vercel. Op bsosporty.nl: `/beheer/…` naar mijn.bsosporty.nl, geen voorbeeld, beveiligingskoppen (CSP). Elders: `/beheer/` naar het voorbeeld en `noindex`. Overal: de oude adressen naar de nieuwe pagina's |
+| `middleware.js` | Alleen voor Vercel: de binnenkort-pagina op bsosporty.nl zolang de website niet live is (de status komt uit Mijn BSO) |
+| `.vercelignore` | Wat Vercel niet publiceert: documentatie, broncode van Mijn BSO, tests, tools en ontwerpbestanden |
 | `docs/seo.md` | Wat er voor de vindbaarheid is gedaan, welke informatie nog nodig is van Sporty, wat buiten de website geregeld moet worden (Google Bedrijfsprofiel, Search Console) en onderhoud |
 | `docs/live-zetten-vimexx.md` | Stappenplan om de site en Mijn BSO live te zetten op een Managed VPS bij Vimexx, met het uploadpakket (`npm run pakket`) en eerst de binnenkort-pagina (`npm run pakket -- --binnenkort`) |
 | `docs/beheeromgeving.md` | Handleiding van de beheeromgeving: functies, de verplichte eisen (toegang, beveiliging, logboek, ouderrechten, bewaarbeleid), installatie, back-ups, Stripe en TODO's |
@@ -137,7 +145,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 ## Live zetten
 
-De website zelf werkt op elke statische host, maar voor de beheeromgeving (`beheer/`) is hosting met **PHP 8.2 of hoger** en https nodig. Gewone Nederlandse webhosting met PHP is genoeg. Upload de map zonder `node_modules/`, `tools/`, `tests/`, `voorbeeld/`, `assets/fotos/bron/`, `package*.json` en `vercel.json`. Stel `404.html` in als foutpagina. Volg daarna de stappen in [`docs/beheeromgeving.md`](docs/beheeromgeving.md#live-zetten).
+De website staat op Vercel (bsosporty.nl), Mijn BSO bij Vimexx (mijn.bsosporty.nl): volg [`docs/live-zetten-vimexx.md`](docs/live-zetten-vimexx.md). Het pakket voor Mijn BSO maak je met `npm run pakket -- --mijnbso`. Mijn BSO heeft **PHP 8.2 of hoger** en https nodig; gewone Nederlandse webhosting met PHP is genoeg. Alles op één server kan ook (`npm run pakket -- --binnenkort`, zie het einde van dat stappenplan).
 
 **Let op met het e-mailadres:** op de website en in Mijn BSO staat info@bsosporty.nl (13 november 2026; eerder info@sporty.nl, maar dat domein was van een andere website). Maak die mailbox aan en test hem vóór het live zetten, anders komen berichten van ouders nergens aan. Zie stap 0 in [`docs/live-zetten-vimexx.md`](docs/live-zetten-vimexx.md).
 

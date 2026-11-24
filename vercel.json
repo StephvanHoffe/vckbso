@@ -46,6 +46,17 @@
       "permanent": false
     },
     {
+      "source": "/voorbeeld/",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?bsosporty\\.nl"
+        }
+      ],
+      "destination": "/",
+      "permanent": false
+    },
+    {
       "source": "/voorbeeld",
       "has": [
         {

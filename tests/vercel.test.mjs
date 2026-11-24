@@ -100,6 +100,7 @@ test("vercel.json: op het domein gaat /beheer naar mijn.bsosporty.nl en is het v
   assert.equal(naar["/beheer/"], `${MIJN}/beheer/`);
   assert.equal(naar["/beheer"], `${MIJN}/beheer/`);
   assert.equal(naar["/voorbeeld/:pad*"], "/");
+  assert.equal(naar["/voorbeeld/"], "/", "Vercel vangt /voorbeeld/ (met slash) niet op met /voorbeeld/:pad*");
   assert.equal(naar["/voorbeeld"], "/");
   // Alleen buiten het domein: niet in Google
   const noindex = vercel.headers.filter((h) => h.headers.some((k) => k.key === "X-Robots-Tag"));
