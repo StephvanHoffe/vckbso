@@ -2,7 +2,7 @@
  * Pop-up "Blijf op de hoogte" (feedback 2.0, november 2026).
  * Verschijnt één keer als iemand ongeveer 10 seconden op de site is (opgeteld over de pagina's van dit bezoek).
  * - Weggeklikt? Dan pas na OPNIEUW_NA_DAGEN dagen weer. Aangemeld? Dan nooit meer.
- * - Niet tijdens de intro op de homepage, niet als het menu open is en niet terwijl iemand een veld invult.
+ * - Niet tijdens de intro op de homepage, niet als het menu open is, niet terwijl iemand een veld invult en niet tijdens een filmpje met geluid.
  * - Zonder opslag in de browser (bijvoorbeeld een privévenster dat dat blokkeert) verschijnt hij niet,
  *   anders zou hij op elke pagina opnieuw opduiken.
  * - Een <dialog> met showModal(): de focus blijft in de pop-up, Esc sluit hem, en daarna gaat de focus terug.
@@ -48,7 +48,9 @@
   var bezig = function () {
     var actief = document.activeElement;
     var typt = actief && actief !== document.body && actief.matches("input, select, textarea, [contenteditable]");
-    return root.classList.contains("intro-speelt") || Boolean(document.querySelector("dialog[open], .site-header.is-open")) || typt;
+    // Kijkt iemand een filmpje met geluid (zoals op de homepage)? Dan niet storen; de stille juichfilmpjes tellen niet mee.
+    var kijkt = Array.prototype.some.call(document.querySelectorAll("video"), function (video) { return !video.paused && !video.muted; });
+    return root.classList.contains("intro-speelt") || Boolean(document.querySelector("dialog[open], .site-header.is-open")) || typt || kijkt;
   };
 
   var toon = function () {

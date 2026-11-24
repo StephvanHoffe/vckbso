@@ -42,7 +42,7 @@ Wel van de klant zelf: de officiële logo's (`assets/img/sporty-*.svg`), Henny d
 
 De chillruimte (`ruimte-1` op Locaties) heeft nog geen foto. Daar staat tot die tijd Henny op een oranje vlak met de krabbel "Foto volgt!", geen stockfoto. TODO: een foto van de chillruimte.
 
-Nu niet gebruikt (lijken op een gekozen foto): Foto 5, 8 en 9 (een coach in de kantine), 12, 13, 14, 17, 18 en 19 (schoten op doel), 24 (de coach zet pionnen neer), 27, 28, 29 en 30 (het spel bij het doel en een rennende jongen), 32 (een spattende ballon) en 37 en 38 (de emmer water). Het filmpje "Sporty 2.MP4" staat (nog) niet op de website; alleen één beeld eruit (de bakfiets).
+Nu niet gebruikt (lijken op een gekozen foto): Foto 5, 8 en 9 (een coach in de kantine), 12, 13, 14, 17, 18 en 19 (schoten op doel), 24 (de coach zet pionnen neer), 27, 28, 29 en 30 (het spel bij het doel en een rennende jongen), 32 (een spattende ballon) en 37 en 38 (de emmer water). Het filmpje "Sporty 2.MP4" staat op de homepage (zie "Het filmpje op de homepage" hieronder); het beeld van de bakfiets komt eruit.
 
 ## Eigen foto's: wat willen we nog?
 
@@ -80,6 +80,18 @@ Op de teampagina staat per coach een kort filmpje van een voetbaljuichmoment (aa
 4. Nieuw teamlid: kopieer op `team.html` en `en/team.html` een kaart (`<li class="team-lid">`, met een eigen `id`) en pas naam, functie, tekst en de bestandsnamen aan. Doe hetzelfde in het teamblok op de homepage (`index.html` en `en/index.html`, sectie `#team`); `tests/team.test.mjs` controleert dat beide gelijk lopen.
 
 De bronbestanden in `assets/fotos/bron/filmpjes/` zijn al bijgesneden tot 4:5 (1080 × 1350) en zonder geluid opgeslagen; de originele filmpjes van de telefoon heeft Sporty zelf. De map `assets/fotos/bron/` gaat niet mee in het uploadpakket.
+
+## Het filmpje op de homepage
+
+Op de homepage (NL en EN) staat na "Sporty is voor iedereen" het blok "Sporty in 30 seconden" met het eigen filmpje van Sporty ("Sporty 2.MP4", via WeTransfer op 24 november 2026): staand, 32 seconden, met geluid. Een coach vertelt wat Sporty is, met beelden van het ophalen met de bakfiets, de kantine en het voetballen.
+
+| Bestand in `assets/fotos/` | Wat |
+|---|---|
+| `sporty-filmpje.webm`, `sporty-filmpje.mp4` | Het filmpje, 720 × 1280, zonder metadata (VP9 met Opus, en H.264 met AAC), elk ongeveer 4 MB |
+| `sporty-filmpje-poster.webp` | Het stilstaande beeld (de coach met de bal, op 4 seconden) |
+| `sporty-filmpje.nl.vtt`, `sporty-filmpje.en.vtt` | De ondertiteling (WCAG 1.2.2): de gesproken tekst (0 tot 10 seconden), daarna "[vrolijke muziek]". Uitgeschreven met spraakherkenning en nagelezen. TODO: Sporty controleert de tekst. |
+
+Het filmpje speelt pas als je op afspelen drukt (`preload="none"`, geen autoplay), met de ondertiteling in de taal van de pagina aan. De pop-up "Blijf op de hoogte" wacht zolang er een filmpje met geluid speelt. Opnieuw maken: met ffmpeg in twee passes (ongeveer 950 kbit/s), zie de commit van 24 november 2026; `tests/filmpje.test.mjs` controleert de bestanden en de ondertiteling.
 
 ## Privacy bij foto's van kinderen
 
