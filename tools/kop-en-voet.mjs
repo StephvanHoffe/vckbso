@@ -9,7 +9,7 @@
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { ENGELS, NEDERLANDS } from "./site/talen.mjs";
+import { BINNENKORT, ENGELS, NEDERLANDS } from "./site/talen.mjs";
 
 const ROOT = fileURLToPath(new URL("../", import.meta.url));
 const lees = (pad) => readFileSync(ROOT + pad, "utf8");
@@ -41,6 +41,12 @@ export const PAGINAS = {
  * De pop-up staat in voet.html na de footer, tussen <!-- pop-up --> en <!-- /pop-up -->; op deze pagina's laten we dat stuk weg.
  */
 export const GEEN_POP_UP = new Set(["aanmelden.html", "blijf-op-de-hoogte.html", "privacy.html", "404.html"]);
+
+/**
+ * Pagina's met een eigen, eenvoudige kop en voet (zonder menu): alleen de iconen worden bijgewerkt.
+ * De binnenkort-pagina (coming soon, november 2026) staat op het hoofdadres zolang de website nog niet live is.
+ */
+export const ALLEEN_ICONEN = Object.entries(BINNENKORT).flat();
 
 /** Hoofdpagina's per menu-item: daar is het item "page", op de onderliggende pagina's "true". */
 const HOOFD = { home: "index.html", alles: "alles-over-sporty.html", middag: "een-middag-bij-sporty.html", locaties: "locaties/sportpark-middenmeer.html", team: "team.html", coach: "word-sporty-coach.html", contact: "contact.html", club: "aanmelden.html" };
@@ -79,6 +85,7 @@ export function metOnderdelen(html, pagina) {
     return tekst.slice(0, start) + nieuw + tekst.slice(stop + eind.length);
   };
   let uit = vervang(html, '<svg xmlns="http://www.w3.org/2000/svg" hidden>', "</svg>\n", SPRITE, "iconen");
+  if (ALLEEN_ICONEN.includes(pagina)) return uit;
   const engels = Boolean(NEDERLANDS[pagina]);
   uit = vervang(uit, '<header class="site-header">', "</header>\n", vul(engels ? KOP_EN : KOP, pagina), "kop");
   // De pop-up staat direct na de footer (niet erin, anders krijgt hij de stijl van de donkere footer)
@@ -92,7 +99,7 @@ export function metOnderdelen(html, pagina) {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   // Engelse pagina's die (nog) niet bestaan, slaan we over; npm test meldt dat
-  for (const pagina of [...Object.keys(PAGINAS), ...Object.values(ENGELS)].filter((p) => existsSync(ROOT + p))) {
+  for (const pagina of [...new Set([...Object.keys(PAGINAS), ...Object.values(ENGELS), ...ALLEEN_ICONEN])].filter((p) => existsSync(ROOT + p))) {
     const html = lees(pagina);
     const nieuw = metOnderdelen(html, pagina);
     if (nieuw !== html) {

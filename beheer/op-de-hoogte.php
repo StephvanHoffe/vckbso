@@ -76,8 +76,15 @@ foreach (['bevestig', 'afmelden'] as $soort) {
         log_actie('Blijf op de hoogte: aanmelding bevestigd', '', null, 'wijziging', 'interesse:' . $rij['id']);
         // Melding voor het team, zonder persoonsgegevens
         mail_team_tekst('team_op_de_hoogte', ['link' => app_url('interesse.php')]);
+        // Via de binnenkort-pagina aangemeld en de website is al live: dan meteen de mail dat de website live is
+        if ((int) $rij['live_mail'] && website_live_op() !== null && !$rij['live_gemaild_op']) {
+            stuur_live_mail(rij('SELECT * FROM interesse WHERE id = ?', [$rij['id']]));
+        }
     }
-    op_de_hoogte_pagina(t('Gelukt, je blijft op de hoogte!', "Done, you're in the loop!"), e(t('Bedankt! Je staat op onze lijst en we sturen je Sporty-pakket naar het adres dat je hebt ingevuld. Afmelden kan altijd, met de link onder elke e-mail.', "Thanks! You're on our list and we'll send your Sporty goodies to the address you filled in. You can unsubscribe any time, with the link at the bottom of every email.")), true);
+    $wachtOpLive = (int) $rij['live_mail'] && website_live_op() === null;
+    op_de_hoogte_pagina(t('Gelukt, je blijft op de hoogte!', "Done, you're in the loop!"), e(t('Bedankt! Je staat op onze lijst en we sturen je Sporty-pakket naar het adres dat je hebt ingevuld.', "Thanks! You're on our list and we'll send your Sporty goodies to the address you filled in."))
+        . ($wachtOpLive ? ' ' . e(t('Zodra onze website live is, krijg je een mail.', "As soon as our website is live, we'll send you an email.")) : '')
+        . ' ' . e(t('Afmelden kan altijd, met de link onder elke e-mail.', 'You can unsubscribe any time, with the link at the bottom of every email.')), true);
 }
 
 /* ---------- Aanmelden via het formulier op de website ---------- */
@@ -111,7 +118,7 @@ $pakket = [
     'postcode' => mb_substr(invoer('postcode'), 0, 10),
     'plaats' => mb_substr(invoer('plaats'), 0, 80),
 ];
-$bron = invoer('bron') === 'pop-up' ? 'pop-up' : 'website';
+$bron = in_array(invoer('bron'), ['pop-up', 'binnenkort'], true) ? invoer('bron') : 'website';
 $fouten = [];
 if (!geldige_naam($naam)) {
     $fouten['naam'] = $naam === '' ? t('Vul je naam in.', 'Fill in your name.') : t('Vul je naam in (zonder links of e-mailadressen).', 'Fill in your name (without links or email addresses).');

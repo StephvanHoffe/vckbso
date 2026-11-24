@@ -24,3 +24,10 @@ echo 'Bewaarbeleid uitgevoerd (' . cfg('organisatie') . "):\n";
 foreach ($telling as $categorie => $aantal) {
     echo str_pad($categorie, 22) . $aantal . "\n";
 }
+
+// Binnenkort-pagina: staat de website live, dan alsnog de mail aan wie zich later bevestigde of bij wie het
+// versturen eerder mislukte (inc/binnenkort.php)
+[$verstuurd, $mislukt, $over] = stuur_live_mails();
+if ($verstuurd || $mislukt) {
+    echo "Website live, mail aan Blijf op de hoogte: {$verstuurd} verstuurd" . ($mislukt ? ", {$mislukt} mislukt" : '') . ($over ? ", nog {$over} te gaan" : '') . "\n";
+}

@@ -91,6 +91,7 @@ require __DIR__ . '/openingsdagen.php';
 require __DIR__ . '/proefdagen.php';
 require __DIR__ . '/aanvraag.php';
 require __DIR__ . '/interesse.php';
+require __DIR__ . '/binnenkort.php';
 require __DIR__ . '/layout.php';
 require __DIR__ . '/weergave.php';
 

@@ -5,6 +5,8 @@
  * Bijhouden wie het pakket heeft gekregen, iedereen een update sturen (met een afmeldlink per persoon),
  * een CSV maken (komt in het logboek) en iemand verwijderen. Met de naam van het kind en het adres voor het
  * pakket (feedback 2.0); het adres wordt INTERESSE_ADRES_NA_PAKKET_DAGEN dagen na het versturen gewist.
+ * Bovenaan: de binnenkort-pagina (coming soon) en de knop "Website live zetten" (met het recht Instellingen),
+ * die iedereen van de binnenkort-pagina automatisch een mail stuurt (inc/binnenkort.php).
  */
 require __DIR__ . '/inc/bootstrap.php';
 
@@ -41,6 +43,27 @@ if (is_post()) {
         log_actie($rij['pakket_op'] ? 'Kennismakingspakket: toch nog niet gegeven' : 'Kennismakingspakket gegeven', '', null, 'wijziging', 'interesse:' . $rij['id']);
         flash('succes', $rij['pakket_op'] ? 'Aangepast: ' . $rij['naam'] . ' heeft het pakket nog niet.' : 'Genoteerd: het pakket voor ' . $rij['naam'] . ' is verstuurd. Het adres wissen we over ' . INTERESSE_ADRES_NA_PAKKET_DAGEN . ' dagen.');
         redirect('interesse.php');
+    }
+    // De binnenkort-pagina en de livegang: alleen met het recht Instellingen
+    if (in_array($actie, ['live', 'binnenkort_aan'], true)) {
+        if (!team_mag('instellingen')) {
+            niet_gevonden();
+        }
+        try {
+            if ($actie === 'binnenkort_aan') {
+                zet_binnenkort_aan();
+                flash('succes', 'De binnenkort-pagina staat weer aan. Bezoekers zien de website pas weer als je hem live zet.');
+            } else {
+                [$verstuurd, $mislukt, $over] = zet_website_live();
+                flash($mislukt ? 'fout' : 'succes', 'De website is live!'
+                    . ($verstuurd ? ' ' . ($verstuurd === 1 ? 'Eén persoon heeft' : "{$verstuurd} mensen hebben") . ' een mail gekregen.' : '')
+                    . ($mislukt ? " Bij {$mislukt} lukte het versturen niet; klik later nog eens op de knop, of het dagelijkse onderhoud probeert het opnieuw." : '')
+                    . (!$mislukt && $over ? " Nog {$over} te gaan: klik nog een keer op de knop." : ''));
+            }
+        } catch (RuntimeException $fout) {
+            flash('fout', $fout->getMessage());
+        }
+        redirect('interesse.php#website-live');
     }
     if ($actie === 'verwijderen' && $rij) {
         interesse_verwijder($rij, 'door het team');
@@ -88,6 +111,58 @@ pagina_kop('Op de hoogte', 'Ouders die via de website op de hoogte willen blijve
     $bevestigd ? '<a class="btn btn--secondary btn--small" href="interesse.php?export=csv">' . icoon('download') . 'Lijst als CSV</a>' : '');
 ?>
 <?= foutensamenvatting($fouten) ?>
+<?php
+$binnenkortAan = binnenkort_aan();
+$liveOp = website_live_op();
+$wachtOpLive = count(live_mail_wachtend());
+$liveOnbevestigd = count(array_filter($lijst, fn ($r) => (int) $r['live_mail'] && $r['bevestigd_op'] === null));
+$liveGemaild = count(array_filter($lijst, fn ($r) => $r['live_gemaild_op'] !== null));
+$magLive = team_mag('instellingen');
+?>
+<section class="panel" id="website-live" aria-labelledby="live-titel" style="margin-bottom: var(--space-l)">
+  <div class="panel__kop">
+    <h2 id="live-titel">Binnenkort-pagina en livegang</h2>
+    <?= $binnenkortAan ? '<span class="badge badge--nieuw">Binnenkort-pagina staat aan</span>' : '<span class="badge badge--actief">Website is live</span>' ?>
+  </div>
+<?php if ($binnenkortAan): ?>
+  <p>Bezoekers zien op het domein alleen de binnenkort-pagina, waar ze hun gegevens kunnen achterlaten. Zet je de website live, dan krijgt iedereen die zich daar aanmeldde en dat heeft bevestigd automatisch een mail.</p>
+  <p><strong><?= $wachtOpLive === 1 ? 'Eén persoon krijgt' : $wachtOpLive . ' mensen krijgen' ?> die mail</strong><?= $liveOnbevestigd ? ' (en ' . ($liveOnbevestigd === 1 ? 'één aanmelding wacht' : $liveOnbevestigd . ' aanmeldingen wachten') . ' nog op bevestiging; die krijgen de mail zodra ze bevestigen)' : '' ?>.<?php if ($magLive): ?> <a href="mailteksten.php?sleutel=website_live">Bekijk of pas de mail aan</a>.<?php endif; ?></p>
+  <ul class="link-lijst">
+    <li><a href="../binnenkort.html" target="_blank" rel="noopener">Bekijk de binnenkort-pagina</a> (<a href="../en/coming-soon.html" target="_blank" rel="noopener">Engels</a>)</li>
+    <li><a href="voorproef.php">Bekijk de echte website alvast</a> (alleen jij, met een cookie in deze browser; <a href="voorproef.php?uit=1">weer uitzetten</a>)</li>
+  </ul>
+<?php if ($magLive): ?>
+  <form class="form" method="post" data-bevestig="De website live zetten? Iedereen ziet dan de hele website<?= $wachtOpLive ? ', en ' . ($wachtOpLive === 1 ? 'één persoon krijgt' : $wachtOpLive . ' mensen krijgen') . ' meteen een mail' : '' ?>.">
+    <?= csrf_veld() ?>
+    <input type="hidden" name="actie" value="live">
+    <div class="form__acties"><button class="btn" type="submit"><?= icoon('send') ?>Website live zetten</button></div>
+  </form>
+<?php else: ?>
+  <p class="muted">Live zetten kan een collega met het recht Instellingen.</p>
+<?php endif; ?>
+<?php else: ?>
+<?php if ($liveOp): ?>
+  <p>De website staat live sinds <?= e(datum_nl($liveOp, "d MMMM y 'om' HH:mm")) ?>. <?= $liveGemaild === 1 ? 'Eén persoon van de binnenkort-pagina heeft' : $liveGemaild . ' mensen van de binnenkort-pagina hebben' ?> de mail gekregen dat de website live is. Wie zich nu nog bevestigt, krijgt hem meteen.</p>
+<?php else: ?>
+  <p>De website staat live: er staat geen <code><?= e(BINNENKORT_BESTAND) ?></code> in de webmap. De mail aan de binnenkort-pagina is nog niet verstuurd.</p>
+<?php endif; ?>
+<?php if ($wachtOpLive && $magLive): ?>
+  <form class="form" method="post">
+    <?= csrf_veld() ?>
+    <input type="hidden" name="actie" value="live">
+    <p><?= $wachtOpLive === 1 ? 'Eén persoon wacht' : $wachtOpLive . ' mensen wachten' ?> nog op de mail dat de website live is.</p>
+    <div class="form__acties"><button class="btn" type="submit"><?= icoon('send') ?>Mail nu versturen</button></div>
+  </form>
+<?php endif; ?>
+<?php if ($magLive): ?>
+  <form class="inline-form" method="post" data-bevestig="De binnenkort-pagina weer aanzetten? Bezoekers zien de website dan niet meer, totdat je hem opnieuw live zet.">
+    <?= csrf_veld() ?>
+    <input type="hidden" name="actie" value="binnenkort_aan">
+    <button class="link-button" type="submit">Toch terug naar de binnenkort-pagina</button>
+  </form>
+<?php endif; ?>
+<?php endif; ?>
+</section>
 <section class="panel" aria-labelledby="lijst-titel">
   <h2 id="lijst-titel"><?= count($bevestigd) ?> op de lijst<?= $zonderPakket ? ', ' . $zonderPakket . ' nog zonder pakket' : '' ?></h2>
 <?php if ($wachten): ?>

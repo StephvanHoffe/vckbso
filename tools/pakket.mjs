@@ -1,7 +1,11 @@
 // Maakt het uploadpakket voor de hosting (bijvoorbeeld een Managed VPS bij Vimexx): alleen de bestanden
 // die online moeten, zonder voorbeeld, tools, tests, documentatie, ontwerpbestanden of gegevens.
 //
-//   npm run pakket            -> pakket/sporty-website.zip (uitpakken in public_html)
+//   npm run pakket                    -> pakket/sporty-website.zip (uitpakken in public_html)
+//   npm run pakket -- --binnenkort    -> hetzelfde, plus het bestand binnenkort.aan: de website start dan met de
+//                                        binnenkort-pagina (coming soon). Live zetten doe je later in Mijn BSO.
+//                                        Gebruik dit alleen bij de eerste keer uploaden: staat de website al live,
+//                                        dan zet een pakket met --binnenkort hem weer op de binnenkort-pagina.
 //
 // Het script controleert eerst of elke link in de pagina's (href, src, srcset, url()) naar een bestand
 // in het pakket wijst. Ontbreekt er iets, dan stopt het met een foutmelding. Zie docs/live-zetten-vimexx.md.
@@ -66,7 +70,10 @@ export function ontbrekendeLinks(bestanden) {
   return [...new Set(fouten)];
 }
 
-function maakPakket() {
+/** Het bestand dat de binnenkort-pagina aanzet (zie .htaccess en beheer/inc/binnenkort.php). */
+export const BINNENKORT_BESTAND = "binnenkort.aan";
+
+function maakPakket({ binnenkort = false } = {}) {
   const bestanden = bepaalBestanden();
   const fouten = ontbrekendeLinks(bestanden);
   if (fouten.length) {
@@ -80,11 +87,20 @@ function maakPakket() {
   const lijst = join(uitMap, "bestanden.txt");
   writeFileSync(lijst, bestanden.join("\n") + "\n");
   execFileSync("zip", ["-q", "-X", zip, "-@"], { cwd: ROOT, input: bestanden.join("\n") });
+  if (binnenkort) {
+    // In de hoofdmap van het pakket (zip -j: zonder de map pakket/)
+    const vlag = join(uitMap, BINNENKORT_BESTAND);
+    writeFileSync(vlag, "De website staat op de binnenkort-pagina. Live zetten: Mijn BSO → Op de hoogte.\n");
+    execFileSync("zip", ["-q", "-X", "-j", zip, vlag]);
+    rmSync(vlag);
+    writeFileSync(lijst, [...bestanden, BINNENKORT_BESTAND].sort().join("\n") + "\n");
+  }
   const mb = (statSync(zip).size / 1024 / 1024).toFixed(1);
-  console.log(`Klaar: ${relative(ROOT, zip)} (${bestanden.length} bestanden, ${mb} MB).`);
+  console.log(`Klaar: ${relative(ROOT, zip)} (${bestanden.length + (binnenkort ? 1 : 0)} bestanden, ${mb} MB).`);
+  if (binnenkort) console.log("Met binnenkort.aan: bezoekers zien eerst de binnenkort-pagina. Live zetten: Mijn BSO → Op de hoogte.");
   console.log("Pak het uit in public_html en volg docs/live-zetten-vimexx.md.");
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  maakPakket();
+  maakPakket({ binnenkort: process.argv.includes("--binnenkort") });
 }

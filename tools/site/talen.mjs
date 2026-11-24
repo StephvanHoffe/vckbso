@@ -23,6 +23,9 @@ export const ENGELS = {
   "voorwaarden.html": "en/terms-and-conditions.html",
 };
 
+/** De binnenkort-pagina (coming soon, november 2026): tweetalig, maar zonder menu, pop-up of plek in de sitemap. */
+export const BINNENKORT = { "binnenkort.html": "en/coming-soon.html" };
+
 /** Omgekeerd: van de Engelse naar de Nederlandse pagina. */
 export const NEDERLANDS = Object.fromEntries(Object.entries(ENGELS).map(([nl, en]) => [en, nl]));
 

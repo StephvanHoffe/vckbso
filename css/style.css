@@ -7252,3 +7252,84 @@ html:has(.pop-up[open]) {
 .breedbeeld[data-foto="locatie-overzicht"] img {
   object-position: 50% 45%;
 }
+
+/* ---------- Binnenkort-pagina (coming soon, november 2026): binnenkort.html en en/coming-soon.html ---------- */
+/* Een witte kop met alleen het logo, de taalknop en "Blijf op de hoogte"; daaronder de foto van de homepage. */
+.binnenkort-kop .site-header__inner {
+  flex-wrap: nowrap;
+}
+
+.binnenkort-kop .lang {
+  margin-top: 0;
+}
+
+.binnenkort-kop__cta {
+  white-space: nowrap;
+}
+
+/* Op een smal scherm staat de knop al in de foto eronder */
+@media (max-width: 29.99em) {
+  .binnenkort-kop__cta {
+    display: none;
+  }
+}
+
+.held--binnenkort {
+  min-height: clamp(32rem, calc(100svh - var(--header-height)), 50rem);
+  padding-top: var(--space-2xl);
+}
+
+.held__nieuw span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.45em 1em;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.binnenkort__intro {
+  max-width: 34em;
+  margin: 0 0 var(--space-l);
+  font-size: var(--step-1);
+  text-shadow: 0 2px 12px rgb(0 0 0 / 0.45);
+}
+
+/* Henny met een tekstwolkje onder de voordelen */
+.binnenkort__henny {
+  position: relative;
+  width: min(100%, 17rem);
+  margin-top: var(--space-l);
+  padding-top: 4.5rem;
+  border-radius: var(--radius-l);
+}
+
+.binnenkort__henny img {
+  width: 62%;
+  height: auto;
+}
+
+.binnenkort__henny .henny-vak__wolk {
+  top: var(--space-s);
+  left: var(--space-s);
+  max-width: calc(100% - 2 * var(--space-s));
+}
+
+.binnenkort-voet .logo--embleem {
+  margin-right: 0;
+}
+
+.binnenkort-voet .footer-hours {
+  margin-top: var(--space-s);
+}
+
+@media (min-width: 64em) {
+  .binnenkort-voet .site-footer__grid {
+    grid-template-columns: 1.3fr 1fr 1fr;
+  }
+}

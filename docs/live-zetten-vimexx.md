@@ -4,7 +4,19 @@ De website en Mijn BSO komen samen op één **Managed VPS bij Vimexx** (datacent
 
 Vervang hieronder `bsosporty.nl` door het echte domein en `GEBRUIKER` door de gebruikersnaam in DirectAdmin.
 
-Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmin): het uploadpakket, de doorverwijzingen naar https en zonder www, de beveiligingskoppen, de afscherming van code, configuratie en gegevens, de installatie, de inlogcookie (alleen via https), de uploadlimieten voor foto's, het dagelijkse onderhoud en de versleutelde back-up.
+Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmin): het uploadpakket, de doorverwijzingen naar https en zonder www, de beveiligingskoppen, de afscherming van code, configuratie en gegevens, de installatie, de inlogcookie (alleen via https), de uploadlimieten voor foto's, het dagelijkse onderhoud, de versleutelde back-up en de binnenkort-pagina (november 2026).
+
+## Eerst met de binnenkort-pagina (coming soon)
+
+De website gaat eerst online met een **binnenkort-pagina** (`binnenkort.html`, Engels `en/coming-soon.html`): het logo, "Let's play", de openingsdatum en een formulier waarmee ouders hun gegevens achterlaten (net als Blijf op de hoogte: naam, e-mail, adres voor het Sporty-pakket, met een bevestiging per e-mail). De rest van de website is dan nog niet te zien; Mijn BSO werkt wel gewoon.
+
+- **Aanzetten:** maak het pakket met `npm run pakket -- --binnenkort`. Daar zit het bestand `binnenkort.aan` in; zolang dat in `public_html` staat, toont `.htaccess` de binnenkort-pagina op `https://bsosporty.nl/` (en `/en/`) en gaan alle andere pagina's daar tijdelijk naartoe. Gebruik `--binnenkort` alleen bij de eerste keer uploaden.
+- **Aanmeldingen:** komen in Mijn BSO onder **Op de hoogte**, met "via binnenkort-pagina".
+- **De echte website alvast bekijken:** Mijn BSO → Op de hoogte → "Bekijk de echte website alvast". Dat zet een cookie in jouw browser (gemak, geen beveiliging: de inhoud is niet geheim).
+- **Live zetten:** Mijn BSO → Op de hoogte → **Website live zetten** (met het recht Instellingen). Dat haalt `binnenkort.aan` weg, en iedereen die zich op de binnenkort-pagina aanmeldde en dat heeft bevestigd, krijgt **automatisch een mail** dat de website live is (in het Nederlands of Engels, aan te passen onder Instellingen → E-mails → "Binnenkort-pagina: de website is live"). Wie zich daarna nog bevestigt, krijgt de mail meteen; mislukt er een, dan probeert het dagelijkse onderhoud (stap 5) het opnieuw. Niemand krijgt hem twee keer.
+- Haal `binnenkort.aan` dus **niet zelf** weg via Bestandsbeheer: dan gaat de website wel live, maar gaat er geen mail uit. (Gebeurt het toch, dan staat bij Op de hoogte de knop "Mail nu versturen".)
+- Lukt het Mijn BSO niet om het bestand weg te halen (rechten op de server), dan zegt de knop dat; haal het dan weg via Bestandsbeheer en klik nog een keer op de knop.
+- Na de livegang stuurt `binnenkort.html` vanzelf door naar de homepage. Terug naar de binnenkort-pagina kan bij Op de hoogte ("Toch terug naar de binnenkort-pagina").
 
 ## Wie doet wat
 
@@ -40,10 +52,11 @@ Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmi
 
 ## 3. Bestanden uploaden
 
-- [ ] De ontwikkelaar maakt het pakket: `npm run pakket` geeft `pakket/sporty-website.zip`. Er zit alleen in wat online moet: geen gegevens, geen echte configuratie, geen voorbeeld en geen ontwikkelbestanden. Het script controleert ook dat elke link naar een bestaand bestand wijst.
+- [ ] De ontwikkelaar maakt het pakket: `npm run pakket -- --binnenkort` geeft `pakket/sporty-website.zip`, met de binnenkort-pagina aan (zie hierboven; zonder `--binnenkort` staat de hele website meteen live). Er zit alleen in wat online moet: geen gegevens, geen echte configuratie, geen voorbeeld en geen ontwikkelbestanden. Het script controleert ook dat elke link naar een bestaand bestand wijst.
 - [ ] Verwijder in `domains/bsosporty.nl/public_html` de standaardpagina van DirectAdmin (`index.html`).
 - [ ] Upload de zip naar `domains/bsosporty.nl/public_html` en pak hem daar uit (Bestandsbeheer → uitpakken).
-- [ ] Let op dat de verborgen bestanden `.htaccess` (in de hoofdmap en in `beheer/`) en `beheer/.user.ini` erbij staan.
+- [ ] Let op dat de verborgen bestanden `.htaccess` (in de hoofdmap en in `beheer/`) en `beheer/.user.ini` erbij staan, en `binnenkort.aan` in de hoofdmap.
+- [ ] PHP moet `binnenkort.aan` later kunnen weghalen (voor "Website live zetten"). Bij DirectAdmin draait PHP als de eigen gebruiker en mag dat vanzelf.
 
 ## 4. Mappen, sleutels en configuratie
 
@@ -76,7 +89,7 @@ Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmi
   15 3 * * * /usr/local/bin/php /home/GEBRUIKER/domains/bsosporty.nl/public_html/beheer/cli/onderhoud.php
   45 3 * * * /usr/local/bin/php /home/GEBRUIKER/domains/bsosporty.nl/public_html/beheer/cli/backup.php
   ```
-  Het onderhoud wist gegevens volgens de bewaartermijnen; de back-up maakt elke nacht een versleutelde kopie en ruimt kopieën ouder dan 30 dagen op.
+  Het onderhoud wist gegevens volgens de bewaartermijnen (en stuurt na de livegang de mail aan wie zich op de binnenkort-pagina later nog bevestigde); de back-up maakt elke nacht een versleutelde kopie en ruimt kopieën ouder dan 30 dagen op.
 
 ## 6. DNS bij Vimexx
 
@@ -89,7 +102,7 @@ Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmi
 
 - [ ] Ga naar `https://bsosporty.nl/beheer/`, vul de installatiecode in, maak het eerste beheerdersaccount en stel tweestapsverificatie in.
 - [ ] Maak `installatiecode` in `mijnbso-config.php` daarna weer leeg.
-- [ ] **Instellingen:** KvK, LRK, IBAN, uurtarief, uren per middag, afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders. Maak de **groepen** aan en nodig het team uit onder **Team**.
+- [ ] **Instellingen:** KvK, LRK, IBAN, controleer de tarieven (Sporty Abonnement en Incidenteel), afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders. Maak de **groepen** aan en nodig het team uit onder **Team**.
 - [ ] **Koppelingen → E-mail versturen:** kies de eigen mailserver (of Google Workspace) en stuur een testmail.
 - [ ] **Koppelingen → Stripe:** eerst de testsleutel en een testwebhook naar `https://bsosporty.nl/beheer/stripe-webhook.php`; als alles werkt de live-sleutel. Zie "Stripe koppelen" in `docs/beheeromgeving.md`.
 - [ ] **Koppelingen → Externe back-up:** neem objectopslag bij een andere partij in de EU (bijvoorbeeld Scaleway in Amsterdam of Hetzner in Duitsland). Maak bij die partij een bucket met **object lock** (standaard 30 dagen, modus "compliance"), een regel die bestanden na 31 dagen verwijdert, en een sleutel die **alleen mag uploaden**. Vul endpoint, regio, bucket en sleutels in en kies "Opslaan en testen". Zie "Externe back-up" in `docs/beheeromgeving.md`.
@@ -100,12 +113,14 @@ Getest op dezelfde soort opzet (Apache met PHP 8.3 via PHP-FPM, zoals DirectAdmi
 - [ ] `http://bsosporty.nl` en `https://www.bsosporty.nl` komen uit op `https://bsosporty.nl`.
 - [ ] `https://bsosporty.nl/beheer/config.php` geeft "Forbidden" (403) of "Niet gevonden" (404). Er staat geen `config.php` in `public_html`; de configuratie staat in `mijnbso-config.php` naast `public_html` (Beveiligingsstatus: "Sleutels buiten de webmap").
 - [ ] Een tweede kopie van de back-up staat de volgende ochtend ook in de externe opslag (Koppelingen → Externe back-up toont "Laatste kopie").
-- [ ] Een proefdag boeken en een aanmelding via de website komen binnen in Mijn BSO.
+- [ ] `https://bsosporty.nl/` toont de binnenkort-pagina en `https://bsosporty.nl/contact.html` stuurt daarheen. Een aanmelding op de binnenkort-pagina komt binnen bij Op de hoogte, en de bevestigingsmail komt aan.
+- [ ] Met "Bekijk de echte website alvast": een proefdag boeken en een aanmelding via de website komen binnen in Mijn BSO.
 - [ ] "Wachtwoord vergeten" stuurt een e-mail die aankomt.
 - [ ] De volgende ochtend staat er een back-up in `/home/GEBRUIKER/beheer-backups`.
 
 ## Daarna
 
+- **Live gaan:** Mijn BSO → Op de hoogte → **Website live zetten** (zie "Eerst met de binnenkort-pagina"). Controleer daarna dat `https://bsosporty.nl/` de homepage toont, en meld de sitemap aan bij Google Search Console (zie `docs/seo.md`).
 - **Terugzetten oefenen:** zet minstens één keer per jaar een back-up terug op een testomgeving (zie "Back-ups en herstel" in `docs/beheeromgeving.md`), ook eentje uit de externe opslag.
-- **Een nieuwe versie zetten:** maak een nieuw pakket en pak het uit over `public_html` heen. `mijnbso-config.php` en de gegevens blijven staan, want die staan buiten `public_html`.
+- **Een nieuwe versie zetten:** maak een nieuw pakket (`npm run pakket`, zonder `--binnenkort`) en pak het uit over `public_html` heen. `mijnbso-config.php` en de gegevens blijven staan, want die staan buiten `public_html`. Staat de binnenkort-pagina nog aan, dan blijft dat zo: `binnenkort.aan` staat er al en het pakket overschrijft het niet.
 - **Vercel:** het voorbeeld op Vercel kan blijven bestaan als testomgeving of worden opgezegd. Zodra de DNS naar Vimexx wijst, komen bezoekers van het domein bij Vimexx uit.

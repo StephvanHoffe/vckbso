@@ -18,8 +18,8 @@ const INTERESSE_ONBEVESTIGD_DAGEN = 14;
 const MAX_INTERESSE_PER_KWARTIER = 5;
 /** Het adres is alleen nodig voor het pakket: zoveel dagen nadat het is verstuurd, wissen we het. */
 const INTERESSE_ADRES_NA_PAKKET_DAGEN = 30;
-/** Waar iemand zich aanmeldde: de pagina Blijf op de hoogte of de pop-up. */
-const INTERESSE_BRONNEN = ['website' => 'Pagina Blijf op de hoogte', 'pop-up' => 'Pop-up'];
+/** Waar iemand zich aanmeldde: de pagina Blijf op de hoogte, de pop-up of de binnenkort-pagina (coming soon). */
+const INTERESSE_BRONNEN = ['website' => 'Pagina Blijf op de hoogte', 'pop-up' => 'Pop-up', 'binnenkort' => 'Binnenkort-pagina'];
 
 /** Een nieuwe geheime code voor de links in de e-mails (bevestigen en afmelden). */
 function interesse_token(): string
@@ -78,16 +78,21 @@ function interesse_aanmelden(string $naam, string $email, string $telefoon, stri
     $adresVersleuteld = $adres ? versleutel(json_encode($adres, JSON_UNESCAPED_UNICODE)) : '';
     $kindVersleuteld = $kindNaam !== '' ? versleutel($kindNaam) : '';
     $voornaam = explode(' ', trim($naam))[0];
+    // Via de binnenkort-pagina: een mail zodra de website live is (inc/binnenkort.php)
+    $liveMail = $bron === 'binnenkort' ? 1 : 0;
     $bestaand = rij('SELECT * FROM interesse WHERE lower(email) = lower(?)', [$email]);
     if ($bestaand && $bestaand['bevestigd_op']) {
+        if ($liveMail && !(int) $bestaand['live_mail']) {
+            q('UPDATE interesse SET live_mail = 1 WHERE id = ?', [$bestaand['id']]);
+        }
         stuur_mailtekst($email, 'op_de_hoogte_al_op_lijst', ['voornaam' => $voornaam, 'afmeldlink' => interesse_afmeldlink($bestaand)]);
         return;
     }
     $token = interesse_token();
     if ($bestaand) {
-        q('UPDATE interesse SET naam = ?, telefoon = ?, kind_naam = ?, adres = ?, bron = ?, token_hash = ?, token = ?, taal = ?, aangemaakt_op = ? WHERE id = ?', [$naam, $telefoon, $kindVersleuteld, $adresVersleuteld, $bron, interesse_hash($token), versleutel($token), taal(), nu(), $bestaand['id']]);
+        q('UPDATE interesse SET naam = ?, telefoon = ?, kind_naam = ?, adres = ?, bron = ?, live_mail = max(live_mail, ?), token_hash = ?, token = ?, taal = ?, aangemaakt_op = ? WHERE id = ?', [$naam, $telefoon, $kindVersleuteld, $adresVersleuteld, $bron, $liveMail, interesse_hash($token), versleutel($token), taal(), nu(), $bestaand['id']]);
     } else {
-        q('INSERT INTO interesse (naam, email, telefoon, kind_naam, adres, token_hash, token, bron, taal, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$naam, $email, $telefoon, $kindVersleuteld, $adresVersleuteld, interesse_hash($token), versleutel($token), $bron, taal(), nu()]);
+        q('INSERT INTO interesse (naam, email, telefoon, kind_naam, adres, token_hash, token, bron, live_mail, taal, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$naam, $email, $telefoon, $kindVersleuteld, $adresVersleuteld, interesse_hash($token), versleutel($token), $bron, $liveMail, taal(), nu()]);
     }
     // De bevestigingsmail is akkoord (Sporty, november 2026); aan te passen onder Instellingen → E-mails. Het pakket gaat per post.
     stuur_mailtekst($email, 'op_de_hoogte_bevestigen', ['voornaam' => $voornaam, 'link' => interesse_link('bevestig', $token, taal()), 'dagen' => INTERESSE_ONBEVESTIGD_DAGEN]);

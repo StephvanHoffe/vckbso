@@ -150,6 +150,15 @@ const MAILTEKSTEN = [
         'onderwerp' => '{onderwerp}',
         'tekst' => "Hoi {voornaam},\n\n{bericht}\n\n--\nJe krijgt deze e-mail omdat je je bij Sporty hebt aangemeld om op de hoogte te blijven.\nGeen e-mails meer? Meld je hier af: {afmeldlink}",
     ],
+    'website_live' => [
+        'groep' => 'ouders',
+        'naam' => 'Binnenkort-pagina: de website is live',
+        'wanneer' => 'Automatisch, als je de website live zet (Op de hoogte → Website live zetten), aan iedereen die zich op de binnenkort-pagina aanmeldde en dat heeft bevestigd. Wie zich later nog bevestigt, krijgt hem meteen.',
+        'velden' => ['voornaam' => ['Voornaam', 'Fatima'], 'website' => ['Adres van de website', 'https://bsosporty.nl/'], 'afmeldlink' => ['Persoonlijke link om je af te melden', 'https://…/op-de-hoogte.php?afmelden=…']],
+        'verplicht' => ['website', 'afmeldlink'],
+        'onderwerp' => 'Het is zover: de website van Sporty is live!',
+        'tekst' => "Hoi {voornaam},\n\nJe wilde het als eerste weten, dus bij deze: de website van Sporty is live! Kijk rond op {website}\n\nJe leest er alles over een middag bij Sporty, het team en het abonnement. Zin om kennis te maken? Boek een gratis proefdag, of meld je kind meteen aan bij de club.\n\nWe zien je snel!\nTeam Sporty (en Henny, die al kwispelt)\n\n--\nJe krijgt deze e-mail omdat je je bij Sporty hebt aangemeld om op de hoogte te blijven.\nGeen e-mails meer? Meld je hier af: {afmeldlink}",
+    ],
 
     // ---------- Aan het team ----------
     'medewerker_uitnodiging' => [
@@ -326,6 +335,16 @@ const MAILTEKSTEN = [
         'verplicht' => ['bericht', 'afmeldlink'],
         'onderwerp' => '{onderwerp}',
         'tekst' => "Hi {voornaam},\n\n{bericht}\n\n--\nYou're receiving this email because you signed up to stay in the loop with Sporty.\nNo more emails? Unsubscribe here: {afmeldlink}",
+    ],
+
+    'website_live_en' => [
+        'groep' => 'engels',
+        'naam' => 'Binnenkort-pagina: de website is live (Engels)',
+        'wanneer' => 'Als je de website live zet, voor wie zich op de Engelse binnenkort-pagina ("Coming soon") aanmeldde.',
+        'velden' => ['voornaam' => ['Voornaam', 'Fatima'], 'website' => ['Adres van de website', 'https://bsosporty.nl/en/'], 'afmeldlink' => ['Persoonlijke link om je af te melden', 'https://…/op-de-hoogte.php?afmelden=…']],
+        'verplicht' => ['website', 'afmeldlink'],
+        'onderwerp' => "It's here: Sporty's website is live!",
+        'tekst' => "Hi {voornaam},\n\nYou wanted to be the first to know, so here it is: Sporty's website is live! Have a look around at {website}\n\nYou'll find everything about an afternoon at Sporty, the team and the membership. Fancy meeting us? Book a free trial day, or sign your child up for the club straight away.\n\nSee you soon!\nTeam Sporty (and Henny, who's already wagging his tail)\n\n--\nYou're receiving this email because you signed up to stay in the loop with Sporty.\nNo more emails? Unsubscribe here: {afmeldlink}",
     ],
 
     'ondertekening_en' => [

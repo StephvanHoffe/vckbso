@@ -3,12 +3,13 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, posix } from "node:path";
-import { ENGELS, NEDERLANDS } from "../tools/site/talen.mjs";
+import { BINNENKORT, ENGELS, NEDERLANDS } from "../tools/site/talen.mjs";
 import { PAGINAS as MENU } from "../tools/kop-en-voet.mjs";
 import { controleer } from "../tools/site/controleer-engels.mjs";
 
 const lees = (pad) => readFileSync(new URL("../" + pad, import.meta.url), "utf8");
-const paren = Object.entries(ENGELS);
+// Ook de binnenkort-pagina (coming soon) heeft een Engelse tegenhanger met dezelfde opbouw
+const paren = Object.entries({ ...ENGELS, ...BINNENKORT });
 const scripts = (html) => [...html.matchAll(/<script>[\s\S]*?<\/script>/g)].map((m) => m[0]);
 const ids = (html) => [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]).sort();
 const formulieren = (html) => [...html.matchAll(/<form[^>]*action="([^"]*beheer\/[^"]+)"[^>]*>([\s\S]*?)<\/form>/g)];
@@ -21,7 +22,7 @@ test("elke Nederlandse pagina heeft een Engelse versie, en omgekeerd", () => {
   for (const [nl, en] of paren) {
     assert.ok(existsSync(new URL("../" + nl, import.meta.url)), `${nl} bestaat niet`);
     assert.ok(existsSync(new URL("../" + en, import.meta.url)), `${en} bestaat niet`);
-    assert.equal(NEDERLANDS[en], nl);
+    if (ENGELS[nl]) assert.equal(NEDERLANDS[en], nl);
   }
 });
 

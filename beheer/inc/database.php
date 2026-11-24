@@ -649,6 +649,13 @@ function migreer(PDO $pdo): void
                 ('incidenteel_uurtarief_cent', '1200'), ('uren_schooldag', '4,5'), ('uren_hele_dag', '10,5'),
                 ('kosteloos_afmelden_uren', '48');
             SQL,
+
+        // Binnenkort-pagina (coming soon, november 2026): wie zich daar aanmeldt, krijgt een mail zodra de website
+        // live gaat (live_mail = 1); live_gemaild_op onthoudt dat die mail is verstuurd. Zie inc/binnenkort.php.
+        24 => <<<'SQL'
+            ALTER TABLE interesse ADD COLUMN live_mail INTEGER NOT NULL DEFAULT 0;
+            ALTER TABLE interesse ADD COLUMN live_gemaild_op TEXT;
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

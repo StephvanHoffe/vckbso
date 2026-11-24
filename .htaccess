@@ -21,6 +21,35 @@ ErrorDocument 404 /404.html
   # (THE_REQUEST is wat de bezoeker vroeg; zo stuurt de interne DirectoryIndex niet in een rondje.)
   RewriteCond %{THE_REQUEST} \s/+((?:[^?\s]*/)?)index\.html[?\s]
   RewriteRule ^ /%1 [R=301,L]
+
+  # ---------- Binnenkort-pagina (coming soon, november 2026) ----------
+  # Zolang het bestand binnenkort.aan in deze map staat, zien bezoekers op het hoofdadres binnenkort.html (en op /en/
+  # de Engelse versie) en gaan alle andere pagina's daar tijdelijk (302) naartoe. Mijn BSO (beheer/), de bestanden die
+  # de pagina gebruikt en de privacyverklaring blijven gewoon bereikbaar.
+  # Live zetten: Mijn BSO -> Op de hoogte -> "Website live zetten". Dat haalt binnenkort.aan weg en mailt iedereen die
+  # zich op de binnenkort-pagina aanmeldde. Het team bekijkt de echte website vooraf via Mijn BSO (cookie sporty_voorproef;
+  # dat is gemak, geen beveiliging). Zie docs/live-zetten-vimexx.md.
+  RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan -f
+  RewriteCond %{HTTP_COOKIE} !(^|;\s*)sporty_voorproef=1(;|$)
+  RewriteRule ^$ binnenkort.html [L]
+  RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan -f
+  RewriteCond %{HTTP_COOKIE} !(^|;\s*)sporty_voorproef=1(;|$)
+  RewriteRule ^en/$ en/coming-soon.html [L]
+  RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan -f
+  RewriteCond %{HTTP_COOKIE} !(^|;\s*)sporty_voorproef=1(;|$)
+  RewriteRule ^sitemap\.xml$ - [R=404,L]
+  RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan -f
+  RewriteCond %{HTTP_COOKIE} !(^|;\s*)sporty_voorproef=1(;|$)
+  RewriteRule ^en/(?!$|coming-soon\.html$|privacy\.html$) /en/ [R=302,L]
+  RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan -f
+  RewriteCond %{HTTP_COOKIE} !(^|;\s*)sporty_voorproef=1(;|$)
+  RewriteRule ^(?!$|en(/|$)|beheer(/|$)|css/|js/|assets/|design/|\.well-known/|(binnenkort|privacy|404)\.html$|favicon\.ico$|site\.webmanifest$|robots\.txt$) / [R=302,L]
+
+  # Na de livegang stuurt de binnenkort-pagina zelf door naar de homepage
+  RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan !-f
+  RewriteRule ^binnenkort\.html$ / [R=302,L]
+  RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan !-f
+  RewriteRule ^en/coming-soon\.html$ /en/ [R=302,L]
 </IfModule>
 
 # Oude adressen uit de eerste versie van de site sturen we door naar de nieuwe pagina's,
