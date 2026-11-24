@@ -36,7 +36,12 @@ $standaardConfig = [
 ];
 // Waar staat de configuratie (met de sleutels)? Bij voorkeur buiten de openbare webmap: naast public_html
 // als mijnbso-config.php (zie docs/live-zetten-vimexx.md). Anders beheer/config.php, dat .htaccess afschermt.
-$buitenWebmap = dirname((string) realpath(BEHEER_DIR), 2) . '/mijnbso-config.php';
+// Staat Mijn BSO dieper in public_html (een subdomein, zoals mijn.bsosporty.nl in public_html/mijn/beheer), dan naast
+// die public_html.
+$beheerPad = (string) realpath(BEHEER_DIR);
+$webmapPos = strpos($beheerPad, '/public_html/');
+$buitenWebmap = ($webmapPos !== false ? substr($beheerPad, 0, $webmapPos) : dirname($beheerPad, 2)) . '/mijnbso-config.php';
+unset($beheerPad, $webmapPos);
 $configBestand = getenv('VCK_BEHEER_CONFIG') ?: (is_file($buitenWebmap) ? $buitenWebmap : BEHEER_DIR . '/config.php');
 define('CONFIG_BESTAND', $configBestand);
 $GLOBALS['config'] = array_replace_recursive(

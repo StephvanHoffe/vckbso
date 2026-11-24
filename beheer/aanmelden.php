@@ -10,4 +10,4 @@ require __DIR__ . '/inc/bootstrap.php';
 if ($ingelogd = huidige_gebruiker()) {
     redirect(is_ouder($ingelogd) ? 'kinderen.php' : 'index.php');
 }
-redirect('../aanmelden.html');
+redirect(website_link('aanmelden.html'));

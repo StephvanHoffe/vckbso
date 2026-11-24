@@ -1,28 +1,181 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "redirects": [
-    { "source": "/over-ons.html", "destination": "/alles-over-sporty.html", "permanent": true },
-    { "source": "/diensten.html", "destination": "/een-middag-bij-sporty.html", "permanent": true },
-    { "source": "/prijzen.html", "destination": "/abonnement-en-kosten.html", "permanent": true },
-    { "source": "/veelgestelde-vragen.html", "destination": "/contact.html#veelgestelde-vragen", "permanent": true },
-    { "source": "/werken-bij.html", "destination": "/word-sporty-coach.html", "permanent": true },
-    { "source": "/community.html", "destination": "/welkom-bij-de-club.html", "permanent": true },
-    { "source": "/abonnementen.html", "destination": "/abonnement-en-kosten.html", "permanent": true },
-    { "source": "/index.html", "destination": "/", "permanent": true },
-    { "source": "/en/index.html", "destination": "/en/", "permanent": true },
-    { "source": "/beheer/inloggen.php", "destination": "/voorbeeld/beheer/inloggen.html", "permanent": false },
-    { "source": "/beheer/aanmelden.php", "destination": "/aanmelden.html", "permanent": false },
-    { "source": "/beheer/wachtwoord-vergeten.php", "destination": "/voorbeeld/beheer/wachtwoord-vergeten.html", "permanent": false },
-    { "source": "/beheer/privacy.php", "destination": "/voorbeeld/beheer/ouder-privacy.html", "permanent": false },
-    { "source": "/beheer/proefdag.php", "destination": "/voorbeeld/beheer/proefdag-momenten.json", "permanent": false },
-    { "source": "/beheer/", "destination": "/voorbeeld/", "permanent": false },
-    { "source": "/beheer/:pad*", "destination": "/voorbeeld/", "permanent": false }
+    {
+      "source": "/beheer/:pad*",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?bsosporty\\.nl"
+        }
+      ],
+      "destination": "https://mijn.bsosporty.nl/beheer/:pad*",
+      "permanent": false
+    },
+    {
+      "source": "/beheer/",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?bsosporty\\.nl"
+        }
+      ],
+      "destination": "https://mijn.bsosporty.nl/beheer/",
+      "permanent": false
+    },
+    {
+      "source": "/beheer",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?bsosporty\\.nl"
+        }
+      ],
+      "destination": "https://mijn.bsosporty.nl/beheer/",
+      "permanent": false
+    },
+    {
+      "source": "/voorbeeld/:pad*",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?bsosporty\\.nl"
+        }
+      ],
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/voorbeeld",
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?bsosporty\\.nl"
+        }
+      ],
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/over-ons.html",
+      "destination": "/alles-over-sporty.html",
+      "permanent": true
+    },
+    {
+      "source": "/diensten.html",
+      "destination": "/een-middag-bij-sporty.html",
+      "permanent": true
+    },
+    {
+      "source": "/prijzen.html",
+      "destination": "/abonnement-en-kosten.html",
+      "permanent": true
+    },
+    {
+      "source": "/veelgestelde-vragen.html",
+      "destination": "/contact.html#veelgestelde-vragen",
+      "permanent": true
+    },
+    {
+      "source": "/werken-bij.html",
+      "destination": "/word-sporty-coach.html",
+      "permanent": true
+    },
+    {
+      "source": "/community.html",
+      "destination": "/welkom-bij-de-club.html",
+      "permanent": true
+    },
+    {
+      "source": "/abonnementen.html",
+      "destination": "/abonnement-en-kosten.html",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/en/index.html",
+      "destination": "/en/",
+      "permanent": true
+    },
+    {
+      "source": "/beheer/inloggen.php",
+      "destination": "/voorbeeld/beheer/inloggen.html",
+      "permanent": false
+    },
+    {
+      "source": "/beheer/aanmelden.php",
+      "destination": "/aanmelden.html",
+      "permanent": false
+    },
+    {
+      "source": "/beheer/wachtwoord-vergeten.php",
+      "destination": "/voorbeeld/beheer/wachtwoord-vergeten.html",
+      "permanent": false
+    },
+    {
+      "source": "/beheer/privacy.php",
+      "destination": "/voorbeeld/beheer/ouder-privacy.html",
+      "permanent": false
+    },
+    {
+      "source": "/beheer/proefdag.php",
+      "destination": "/voorbeeld/beheer/proefdag-momenten.json",
+      "permanent": false
+    },
+    {
+      "source": "/beheer/",
+      "destination": "/voorbeeld/",
+      "permanent": false
+    },
+    {
+      "source": "/beheer/:pad*",
+      "destination": "/voorbeeld/",
+      "permanent": false
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Robots-Tag", "value": "noindex" }
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'sha256-KzGFexfVLN/ySbAPeJk3zsWkGLyjvn9+5XL739iDx6Q=' 'sha256-UDxZfYFDuMCHL0jf/obV6XX364umnZx7SE+es5Oq4TY='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://mijn.bsosporty.nl; form-action 'self' https://formspree.io https://mijn.bsosporty.nl mailto:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "missing": [
+        {
+          "type": "host",
+          "value": "(www\\.)?bsosporty\\.nl"
+        }
+      ],
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
       ]
     }
   ]

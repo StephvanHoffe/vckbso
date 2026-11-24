@@ -138,7 +138,7 @@ pagina_kop('Mijn privacy', 'Jij bepaalt mee wat er met je gegevens gebeurt, en m
       <dd><?= bewaartermijn($sleutel) ?> <?= e($eenheid) ?><?= $uitleg ? ' ' . e($uitleg) : '' ?></dd>
 <?php endforeach; ?>
     </dl>
-    <p class="muted">Verwijderde gegevens verdwijnen ook uit onze back-ups, uiterlijk <?= (int) cfg('backup.bewaardagen', 30) ?> dagen later. Meer lees je in de <a href="../privacy.html">privacyverklaring</a>.</p>
+    <p class="muted">Verwijderde gegevens verdwijnen ook uit onze back-ups, uiterlijk <?= (int) cfg('backup.bewaardagen', 30) ?> dagen later. Meer lees je in de <a href="<?= e(website_link('privacy.html')) ?>">privacyverklaring</a>.</p>
   </section>
 </div>
 <?php

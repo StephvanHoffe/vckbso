@@ -1,0 +1,17 @@
+# Wat Vercel NIET publiceert. Vercel toont alleen de website (en, buiten bsosporty.nl, het voorbeeld van Mijn BSO in
+# voorbeeld/). Mijn BSO zelf draait bij Vimexx op mijn.bsosporty.nl; zie docs/live-zetten-vimexx.md.
+# Hier staan interne notities, broncode, documentatie, tests en ontwerpbestanden: die horen niet op het internet.
+/beheer
+/docs
+/tools
+/tests
+/content
+/pakket
+/CLAUDE.md
+/README.md
+/briefing.json
+/.htaccess
+/design/*
+!/design/tokens.css
+/assets/fotos/bron
+/assets/fotos/BRONNEN.md

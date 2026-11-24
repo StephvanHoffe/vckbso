@@ -1,6 +1,10 @@
-// Maakt het uploadpakket voor de hosting (bijvoorbeeld een Managed VPS bij Vimexx): alleen de bestanden
-// die online moeten, zonder voorbeeld, tools, tests, documentatie, ontwerpbestanden of gegevens.
+// Maakt het uploadpakket voor de hosting bij Vimexx (DirectAdmin): alleen de bestanden die online moeten, zonder
+// voorbeeld, tools, tests, documentatie, ontwerpbestanden of gegevens.
 //
+//   npm run pakket -- --mijnbso       -> pakket/mijn-bso.zip: alleen Mijn BSO, voor mijn.bsosporty.nl (de website
+//                                        staat op Vercel; sinds november 2026). Uitpakken in public_html/mijn.
+//
+// Of alles op één server (de website en Mijn BSO samen, zonder Vercel):
 //   npm run pakket                    -> pakket/sporty-website.zip (uitpakken in public_html)
 //   npm run pakket -- --binnenkort    -> hetzelfde, plus het bestand binnenkort.aan: de website start dan met de
 //                                        binnenkort-pagina (coming soon). Live zetten doe je later in Mijn BSO.
@@ -73,6 +77,37 @@ export function ontbrekendeLinks(bestanden) {
 /** Het bestand dat de binnenkort-pagina aanzet (zie .htaccess en beheer/inc/binnenkort.php). */
 export const BINNENKORT_BESTAND = "binnenkort.aan";
 
+/** Mijn BSO voor een eigen subdomein: beheer/ en de opmaak die het gebruikt (lettertypen, logo's, css). */
+const MIJN_BSO_BESTANDEN = ["favicon.ico", "design/tokens.css"];
+const MIJN_BSO_MAPPEN = ["beheer", "css", "assets/fonts", "assets/img"];
+/** In de hoofdmap van het subdomein (zip -j): een eigen .htaccess (https, / naar /beheer/) en robots.txt (niet indexeren). */
+const MIJN_BSO_EXTRA = ["tools/mijnbso/.htaccess", "tools/mijnbso/robots.txt"];
+
+export function bepaalMijnBsoBestanden() {
+  const lijst = [...MIJN_BSO_BESTANDEN, ...MIJN_BSO_MAPPEN.flatMap(alleBestanden)];
+  return [...new Set(lijst)].filter((p) => existsSync(join(ROOT, p)) && !UITSLUITEN.some((r) => r.test(p))).sort();
+}
+
+function maakMijnBsoPakket() {
+  const bestanden = bepaalMijnBsoBestanden();
+  const fouten = ontbrekendeLinks(bestanden);
+  if (fouten.length) {
+    console.error(`Deze links wijzen naar een bestand dat niet in het pakket zit:\n  ${fouten.join("\n  ")}`);
+    process.exit(1);
+  }
+  const uitMap = join(ROOT, "pakket");
+  mkdirSync(uitMap, { recursive: true });
+  const zip = join(uitMap, "mijn-bso.zip");
+  rmSync(zip, { force: true });
+  execFileSync("zip", ["-q", "-X", zip, "-@"], { cwd: ROOT, input: bestanden.join("\n") });
+  execFileSync("zip", ["-q", "-X", "-j", zip, ...MIJN_BSO_EXTRA.map((p) => join(ROOT, p))]);
+  const alles = [...bestanden, ".htaccess", "robots.txt"].sort();
+  writeFileSync(join(uitMap, "mijn-bso-bestanden.txt"), alles.join("\n") + "\n");
+  const mb = (statSync(zip).size / 1024 / 1024).toFixed(1);
+  console.log(`Klaar: ${relative(ROOT, zip)} (${alles.length} bestanden, ${mb} MB).`);
+  console.log("Pak het uit in de map van het subdomein (public_html/mijn) en volg docs/live-zetten-vimexx.md.");
+}
+
 function maakPakket({ binnenkort = false } = {}) {
   const bestanden = bepaalBestanden();
   const fouten = ontbrekendeLinks(bestanden);
@@ -102,5 +137,6 @@ function maakPakket({ binnenkort = false } = {}) {
 }
 
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
-  maakPakket({ binnenkort: process.argv.includes("--binnenkort") });
+  if (process.argv.includes("--mijnbso")) maakMijnBsoPakket();
+  else maakPakket({ binnenkort: process.argv.includes("--binnenkort") });
 }

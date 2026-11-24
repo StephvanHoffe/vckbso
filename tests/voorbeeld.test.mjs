@@ -14,6 +14,8 @@ const alle = (map) => readdirSync(map).flatMap((naam) => {
 });
 const paginas = alle(VOORBEELD).filter((p) => p.endsWith(".html"));
 const vercel = JSON.parse(readFileSync(join(ROOT, "vercel.json"), "utf8"));
+// De regels met "has" gelden alleen op het domein (bsosporty.nl): die staan in tests/vercel.test.mjs. Hier het voorbeeld.
+const voorbeeldRedirects = vercel.redirects.filter((r) => !r.has);
 const naarBestand = (url) => join(ROOT, url.endsWith("/") ? url + "index.html" : url);
 
 test("het voorbeeld heeft een overzichtspagina en pagina's voor alle drie de rollen", () => {
@@ -43,7 +45,7 @@ test("het voorbeeld is gemaakt met de huidige naam en het huidige e-mailadres", 
 });
 
 test("vercel.json stuurt oude adressen door naar de nieuwe pagina's", () => {
-  const oud = vercel.redirects.filter((r) => !r.source.startsWith("/beheer"));
+  const oud = voorbeeldRedirects.filter((r) => !r.source.startsWith("/beheer"));
   for (const { source, destination, permanent } of oud) {
     assert.match(source, /^\/(en\/)?[a-z-]+\.html$/, `onverwachte redirect ${source}`);
     assert.equal(permanent, true, `${source}: een oud adres stuur je blijvend door`);
@@ -62,7 +64,7 @@ test("vercel.json stuurt oude adressen door naar de nieuwe pagina's", () => {
 });
 
 test("vercel.json stuurt de beheeromgeving door naar bestaande pagina's van het voorbeeld", () => {
-  const beheer = vercel.redirects.filter((r) => r.source.startsWith("/beheer"));
+  const beheer = voorbeeldRedirects.filter((r) => r.source.startsWith("/beheer"));
   assert.ok(beheer.length > 0);
   for (const { source, destination, permanent } of beheer) {
     assert.equal(permanent, false, `${source}: gebruik een tijdelijke redirect, de echte beheeromgeving kan later wel draaien`);
@@ -70,14 +72,14 @@ test("vercel.json stuurt de beheeromgeving door naar bestaande pagina's van het 
   }
   assert.equal(vercel.redirects.at(-1).source, "/beheer/:pad*", "de laatste redirect moet alle overige beheerpagina's opvangen");
   // Vercel matcht strikt: /beheer/:pad* vangt /beheer/ (met slash) niet op, anders toont Vercel de PHP-code van beheer/index.php
-  assert.ok(vercel.redirects.some((r) => r.source === "/beheer/"), "/beheer/ (met slash aan het eind) heeft een eigen redirect nodig");
-  // Op Vercel staat alleen het voorbeeld: niets daarvan hoort in Google (ook de kopie van de website niet)
-  const kop = vercel.headers.find((h) => h.source === "/(.*)");
-  assert.ok(kop?.headers.some((h) => h.key === "X-Robots-Tag" && h.value.includes("noindex")), "X-Robots-Tag noindex voor het hele voorbeeld ontbreekt");
+  assert.ok(voorbeeldRedirects.some((r) => r.source === "/beheer/"), "/beheer/ (met slash aan het eind) heeft een eigen redirect nodig");
+  // Buiten het domein (het voorbeeld op *.vercel.app) hoort niets in Google
+  const kop = vercel.headers.find((h) => h.source === "/(.*)" && h.missing);
+  assert.ok(kop?.headers.some((h) => h.key === "X-Robots-Tag" && h.value.includes("noindex")), "X-Robots-Tag noindex voor het voorbeeld ontbreekt");
 });
 
 test("links van de website naar de beheeromgeving hebben een doel in het voorbeeld", () => {
-  const specifiek = new Map(vercel.redirects.filter((r) => !r.source.includes(":")).map((r) => [r.source, r.destination]));
+  const specifiek = new Map(voorbeeldRedirects.filter((r) => !r.source.includes(":")).map((r) => [r.source, r.destination]));
   const websitePaginas = readdirSync(ROOT).filter((p) => p.endsWith(".html")).concat(["en/index.html", "locaties/sportpark-middenmeer.html"]);
   for (const p of websitePaginas) {
     for (const [, naam] of readFileSync(join(ROOT, p), "utf8").matchAll(/href="(?:\.\.\/|\/)?beheer\/([a-z-]+\.php)"/g)) {

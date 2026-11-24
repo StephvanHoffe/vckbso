@@ -56,7 +56,9 @@ $voeg($externOk ? 'ok' : 'let op', 'Externe back-up', !externe_backup_actief()
     ? 'Er gaat nog geen kopie van de back-up naar een andere partij. Stel de externe back-up in onder Koppelingen.'
     : ($externOk ? 'Laatste kopie naar de externe opslag: ' . moment_nl($extern) . '.' : ($extern === '' ? 'Er is nog geen kopie naar de externe opslag gestuurd.' : 'De laatste kopie naar de externe opslag is van ' . moment_nl($extern) . '. Kijk onder Koppelingen wat er misging.')));
 
-$configBuiten = !str_starts_with((string) realpath(CONFIG_BESTAND), dirname((string) realpath(BEHEER_DIR)) . '/');
+// Buiten de webmap: niet in de map boven Mijn BSO, en niet in een public_html (ook bij een subdomein in public_html/mijn)
+$configPad = (string) realpath(CONFIG_BESTAND);
+$configBuiten = !str_starts_with($configPad, dirname((string) realpath(BEHEER_DIR)) . '/') && !str_contains($configPad, '/public_html/');
 $voeg($configBuiten ? 'ok' : 'let op', 'Sleutels buiten de webmap', $configBuiten
     ? 'De configuratie met de sleutels staat buiten de openbare webmap.'
     : 'De configuratie staat in beheer/config.php. Die is afgeschermd, maar zet hem liefst buiten de webmap als mijnbso-config.php (zie docs/live-zetten-vimexx.md).');

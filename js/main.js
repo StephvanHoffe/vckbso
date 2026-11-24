@@ -12,6 +12,20 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* ---------- Mijn BSO op een eigen adres (november 2026) ----------
+     Op bsosporty.nl (Vercel) staat Mijn BSO op mijn.bsosporty.nl (Vimexx). De formulieren en links in de HTML wijzen
+     naar beheer/…; hier zetten we ze naar dat adres, vóór de andere scripts (aanmelden, proefdag) ze lezen. Zonder
+     JavaScript stuurt vercel.json bsosporty.nl/beheer/… door. Lokaal en in het voorbeeld blijft alles zoals het is. */
+  if (/^(www\.)?bsosporty\.nl$/.test(location.hostname)) {
+    var naarMijnBso = function (adres) {
+      var url = new URL(adres, location.href);
+      return url.origin === location.origin && /^\/beheer(\/|$)/.test(url.pathname) ? "https://mijn.bsosporty.nl" + url.pathname + url.search + url.hash : adres;
+    };
+    document.querySelectorAll("form[action]").forEach(function (form) { form.setAttribute("action", naarMijnBso(form.getAttribute("action"))); });
+    document.querySelectorAll("[data-proefdag]").forEach(function (el) { el.setAttribute("data-proefdag", naarMijnBso(el.getAttribute("data-proefdag"))); });
+    document.querySelectorAll("a[href]").forEach(function (a) { a.setAttribute("href", naarMijnBso(a.getAttribute("href"))); });
+  }
+
   /* ---------- Mobiel menu ---------- */
   var header = document.querySelector(".site-header");
   var toggle = document.querySelector(".nav-toggle");

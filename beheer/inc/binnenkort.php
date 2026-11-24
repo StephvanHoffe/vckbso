@@ -5,8 +5,13 @@
  * Blijf op de hoogte (bron "binnenkort", met dubbele bevestiging). Gaat de website live, dan krijgt iedereen die
  * zich daar aanmeldde en dat heeft bevestigd automatisch een mail ("website_live" in inc/mailteksten.php).
  *
- * De schakelaar is het bestand binnenkort.aan in de webmap (public_html): .htaccess kijkt of het er staat.
- * "Website live zetten" (bij Op de hoogte, met het recht Instellingen) haalt het bestand weg, onthoudt wanneer de
+ * De schakelaar:
+ * - Alles op één server (website en Mijn BSO samen): het bestand binnenkort.aan in de webmap (public_html);
+ *   .htaccess kijkt of het er staat.
+ * - Website elders (website_url in de configuratie; de website op Vercel, Mijn BSO op mijn.bsosporty.nl, sinds
+ *   november 2026): de instelling website_live_op. De middleware van de website (middleware.js) vraagt die op via
+ *   website-status.php.
+ * "Website live zetten" (bij Op de hoogte, met het recht Instellingen) zet de schakelaar om, onthoudt wanneer de
  * site live ging en stuurt de mails. Wie zich daarna nog bevestigt, krijgt de mail meteen; lukt een mail niet,
  * dan probeert het dagelijkse onderhoud (cli/onderhoud.php) het opnieuw.
  * Het team kan de echte website vooraf bekijken met voorproef.php (een cookie, alleen gemak, geen beveiliging).
@@ -26,9 +31,12 @@ function website_map(): string
     return rtrim($map !== '' ? $map : dirname((string) realpath(BEHEER_DIR)), '/');
 }
 
-/** Staat de binnenkort-pagina aan (staat binnenkort.aan in de webmap)? */
+/** Staat de binnenkort-pagina aan? (website elders: nog niet live gezet; anders: staat binnenkort.aan in de webmap) */
 function binnenkort_aan(): bool
 {
+    if (website_elders()) {
+        return website_live_op() === null;
+    }
     return is_file(website_map() . '/' . BINNENKORT_BESTAND);
 }
 
@@ -42,7 +50,7 @@ function website_live_op(): ?string
 /** Het adres van de website in de taal van de ontvanger, bijvoorbeeld https://bsosporty.nl/ of …/en/. */
 function website_adres(string $taal = 'nl'): string
 {
-    return dirname(basis_url()) . '/' . ($taal === 'en' ? 'en/' : '');
+    return website_url() . '/' . ($taal === 'en' ? 'en/' : '');
 }
 
 /** Aanmeldingen van de binnenkort-pagina die bevestigd zijn en de live-mail nog niet hebben gekregen. */
@@ -102,7 +110,7 @@ function stuur_live_mails(int $max = LIVE_MAILS_PER_KEER): array
 function zet_website_live(): array
 {
     $bestand = website_map() . '/' . BINNENKORT_BESTAND;
-    if (is_file($bestand) && !@unlink($bestand)) {
+    if (!website_elders() && is_file($bestand) && !@unlink($bestand)) {
         throw new RuntimeException('Het bestand ' . BINNENKORT_BESTAND . ' kon niet worden weggehaald. Haal het weg via Bestandsbeheer in DirectAdmin (in public_html) en klik daarna nog een keer op de knop.');
     }
     clearstatcache();
@@ -117,7 +125,7 @@ function zet_website_live(): array
 function zet_binnenkort_aan(): void
 {
     $bestand = website_map() . '/' . BINNENKORT_BESTAND;
-    if (!is_file($bestand) && @file_put_contents($bestand, "De website staat op de binnenkort-pagina. Live zetten: Mijn BSO → Op de hoogte.\n") === false) {
+    if (!website_elders() && !is_file($bestand) && @file_put_contents($bestand, "De website staat op de binnenkort-pagina. Live zetten: Mijn BSO → Op de hoogte.\n") === false) {
         throw new RuntimeException('Het bestand ' . BINNENKORT_BESTAND . ' kon niet worden gemaakt in ' . website_map() . '. Zet het er via Bestandsbeheer in DirectAdmin neer (een leeg bestand is genoeg).');
     }
     instelling_zet('website_live_op', '');

@@ -1,0 +1,44 @@
+# Mijn BSO op mijn.bsosporty.nl (Vimexx, DirectAdmin; november 2026). De website zelf staat op Vercel (bsosporty.nl).
+# Dit bestand hoort in de hoofdmap van het subdomein (public_html/mijn). Gemaakt door npm run pakket -- --mijnbso;
+# zie docs/live-zetten-vimexx.md. Mijn BSO zelf staat in beheer/ (met een eigen, strengere .htaccess).
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Altijd via een beveiligde verbinding (https)
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # mijn.bsosporty.nl zonder pad gaat naar Mijn BSO
+  RewriteRule ^$ /beheer/ [R=302,L]
+
+  # Verborgen bestanden (zoals .user.ini) nooit tonen; de map voor certificaten wel
+  RewriteRule (^|/)\.(?!well-known/) - [F]
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "same-origin"
+  Header always set X-Frame-Options "DENY"
+  Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on'"
+  # Mijn BSO hoort niet in zoekmachines
+  Header always set X-Robots-Tag "noindex, nofollow"
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 day"
+  ExpiresByType application/javascript "access plus 1 day"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/x-icon "access plus 30 days"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>

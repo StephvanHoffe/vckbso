@@ -40,7 +40,7 @@ function pagina_begin(string $titel, string $actief = '', array $opties = []): v
     $omgeving = $gebruiker && is_ouder($gebruiker) ? 'Mijn BSO' : 'Beheer';
     // Openbare antwoordpagina's van formulieren op de Engelse website: in het Engels
     $en = !$gebruiker && taal() === 'en';
-    $website = $en ? '../en/' : '../';
+    $website = website_elders() ? website_url() . '/' . ($en ? 'en/' : '') : ($en ? '../en/' : '../');
     if ($en) {
         $omgeving = 'Sporty';
     }

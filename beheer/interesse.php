@@ -55,7 +55,7 @@ if (is_post()) {
                 flash('succes', 'De binnenkort-pagina staat weer aan. Bezoekers zien de website pas weer als je hem live zet.');
             } else {
                 [$verstuurd, $mislukt, $over] = zet_website_live();
-                flash($mislukt ? 'fout' : 'succes', 'De website is live!'
+                flash($mislukt ? 'fout' : 'succes', 'De website is live!' . (website_elders() ? ' Binnen een minuut ziet iedereen hem.' : '')
                     . ($verstuurd ? ' ' . ($verstuurd === 1 ? 'Eén persoon heeft' : "{$verstuurd} mensen hebben") . ' een mail gekregen.' : '')
                     . ($mislukt ? " Bij {$mislukt} lukte het versturen niet; klik later nog eens op de knop, of het dagelijkse onderhoud probeert het opnieuw." : '')
                     . (!$mislukt && $over ? " Nog {$over} te gaan: klik nog een keer op de knop." : ''));
@@ -128,7 +128,7 @@ $magLive = team_mag('instellingen');
   <p>Bezoekers zien op het domein alleen de binnenkort-pagina, waar ze hun gegevens kunnen achterlaten. Zet je de website live, dan krijgt iedereen die zich daar aanmeldde en dat heeft bevestigd automatisch een mail.</p>
   <p><strong><?= $wachtOpLive === 1 ? 'Eén persoon krijgt' : $wachtOpLive . ' mensen krijgen' ?> die mail</strong><?= $liveOnbevestigd ? ' (en ' . ($liveOnbevestigd === 1 ? 'één aanmelding wacht' : $liveOnbevestigd . ' aanmeldingen wachten') . ' nog op bevestiging; die krijgen de mail zodra ze bevestigen)' : '' ?>.<?php if ($magLive): ?> <a href="mailteksten.php?sleutel=website_live">Bekijk of pas de mail aan</a>.<?php endif; ?></p>
   <ul class="link-lijst">
-    <li><a href="../binnenkort.html" target="_blank" rel="noopener">Bekijk de binnenkort-pagina</a> (<a href="../en/coming-soon.html" target="_blank" rel="noopener">Engels</a>)</li>
+    <li><a href="<?= e(website_link('binnenkort.html')) ?>" target="_blank" rel="noopener">Bekijk de binnenkort-pagina</a> (<a href="<?= e(website_link('en/coming-soon.html')) ?>" target="_blank" rel="noopener">Engels</a>)</li>
     <li><a href="voorproef.php">Bekijk de echte website alvast</a> (alleen jij, met een cookie in deze browser; <a href="voorproef.php?uit=1">weer uitzetten</a>)</li>
   </ul>
 <?php if ($magLive): ?>

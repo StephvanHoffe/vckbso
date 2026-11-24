@@ -25,7 +25,7 @@ function stuur_mail(string $aan, string $onderwerp, string $tekst, string $taal 
     $GLOBALS['mail_fout'] = '';
     $onderwerp = trim((string) preg_replace('/[\r\n\t]+/', ' ', $onderwerp));
     [, $ondertekening] = $taal === 'en'
-        ? mailtekst('ondertekening_en', ['bedrijfsnaam' => instelling('bedrijfsnaam', 'Sporty'), 'website' => dirname(basis_url()) . '/en/'])
+        ? mailtekst('ondertekening_en', ['bedrijfsnaam' => instelling('bedrijfsnaam', 'Sporty'), 'website' => website_url() . '/en/'])
         : mailtekst('ondertekening', ['bedrijfsnaam' => instelling('bedrijfsnaam', 'Sporty'), 'website' => basis_url() . '/']);
     $tekst .= "\n\n" . $ondertekening . "\n";
     $methode = mail_methode();

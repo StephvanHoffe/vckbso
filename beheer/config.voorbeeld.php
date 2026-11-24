@@ -11,8 +11,14 @@
  */
 
 return [
-    // Volledige URL van de beheeromgeving, zonder / aan het eind.
-    'app_url' => 'https://bsosporty.nl/beheer',
+    // Volledige URL van de beheeromgeving, zonder / aan het eind. Sinds november 2026 op een eigen subdomein
+    // (de website staat op Vercel). Alles op één server? Dan 'https://bsosporty.nl/beheer'.
+    'app_url' => 'https://mijn.bsosporty.nl/beheer',
+
+    // Het adres van de website, zonder / aan het eind, als die NIET op deze server staat (de website op Vercel).
+    // Mijn BSO linkt dan daarheen, laat de formulieren van de website toe, en "Website live zetten" werkt via
+    // website-status.php (zie middleware.js). Alles op één server? Dan deze regel weglaten.
+    'website_url' => 'https://bsosporty.nl',
 
     // Map voor de database en de foto's: BUITEN de webroot, bijvoorbeeld
     // '/home/account/beheer-data'. (De standaardmap beheer/data is met .htaccess

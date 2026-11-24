@@ -143,7 +143,7 @@ pagina_kop('Sollicitaties', 'Sollicitaties via de pagina Word Sporty coach op de
 ?>
 <section class="panel" aria-label="Sollicitaties">
 <?php if (!$sollicitaties): ?>
-  <p class="leeg">Nog geen sollicitaties. Ze komen hier binnen zodra iemand het formulier op <a href="../word-sporty-coach.html">Word Sporty coach</a> invult.</p>
+  <p class="leeg">Nog geen sollicitaties. Ze komen hier binnen zodra iemand het formulier op <a href="<?= e(website_link('word-sporty-coach.html')) ?>">Word Sporty coach</a> invult.</p>
 <?php else: ?>
   <div class="tabel">
     <table>

@@ -13,6 +13,8 @@
  * aanmeldingen per kwartier vanaf hetzelfde adres.
  */
 require __DIR__ . '/inc/bootstrap.php';
+// Staat de website op een ander adres (bsosporty.nl, Mijn BSO op mijn.bsosporty.nl), dan mag die het antwoord lezen
+cors_voor_website();
 
 $alsJson = str_contains($_SERVER['HTTP_ACCEPT'] ?? '', 'application/json');
 
@@ -94,9 +96,7 @@ if (!is_post()) {
 }
 
 // Alleen vanaf onze eigen website (de browser stuurt mee waar het formulier vandaan komt)
-$herkomst = (string) ($_SERVER['HTTP_ORIGIN'] ?? '');
-$eigen = [parse_url(basis_url(), PHP_URL_HOST), parse_url('http://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST)];
-if ($herkomst !== '' && !in_array(parse_url($herkomst, PHP_URL_HOST), $eigen, true)) {
+if (!eigen_herkomst()) {
     op_de_hoogte_antwoord($alsJson, 403, [], t('Aanmelden kan alleen via onze eigen website.', 'You can only sign up via our own website.'));
 }
 

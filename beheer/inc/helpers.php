@@ -226,12 +226,84 @@ function t(string $nl, string $en): string
     return taal() === 'en' ? $en : $nl;
 }
 
+/**
+ * Staat de website op een ander adres dan Mijn BSO? Bijvoorbeeld de website op bsosporty.nl (Vercel) en Mijn BSO op
+ * mijn.bsosporty.nl (Vimexx), sinds november 2026. Dat staat in de configuratie als 'website_url'.
+ */
+function website_elders(): bool
+{
+    return trim((string) cfg('website_url', '')) !== '';
+}
+
+/** Het adres van de website, zonder / aan het eind: website_url uit de configuratie, anders de map boven Mijn BSO. */
+function website_url(): string
+{
+    return website_elders() ? rtrim((string) cfg('website_url'), '/') : dirname(basis_url());
+}
+
+/** De hostnamen van de website, met en zonder www (alleen als de website elders staat). */
+function website_hosts(): array
+{
+    if (!website_elders()) {
+        return [];
+    }
+    $host = (string) parse_url(website_url(), PHP_URL_HOST);
+    $kaal = preg_replace('/^www\./', '', $host);
+    return array_values(array_unique([$host, $kaal, 'www.' . $kaal]));
+}
+
+/** Een vaste pagina van de website (zonder taalkeuze), bijvoorbeeld website_link('privacy.html'); '' is de homepage. */
+function website_link(string $pagina = ''): string
+{
+    return website_elders() ? website_url() . '/' . $pagina : '../' . $pagina;
+}
+
 /** Het adres van een pagina van de website, in de taal van de bezoeker (Engels: zie tools/site/talen.mjs). */
 function website_pagina(string $nl, string $en): string
 {
     // De homepage als map (../ of ../en/), net als de canonical-URL
-    $pagina = taal() === 'en' ? 'en/' . $en : $nl;
-    return '../' . preg_replace('~(^|/)index\.html$~', '$1', $pagina);
+    $pagina = preg_replace('~(^|/)index\.html$~', '$1', taal() === 'en' ? 'en/' . $en : $nl);
+    return website_elders() ? website_url() . '/' . $pagina : '../' . $pagina;
+}
+
+/**
+ * Komt een openbaar formulier van onze eigen website (of van Mijn BSO zelf)? Zonder Origin-kop valt dat niet te
+ * zeggen en laten we het door. Staat de website elders, dan ook "null": dat stuurt een browser mee als een formulier
+ * zonder JavaScript via een doorverwijzing (bsosporty.nl/beheer/… naar mijn.bsosporty.nl) binnenkomt.
+ */
+function eigen_herkomst(): bool
+{
+    $herkomst = (string) ($_SERVER['HTTP_ORIGIN'] ?? '');
+    if ($herkomst === '' || ($herkomst === 'null' && website_elders())) {
+        return true;
+    }
+    $eigen = [parse_url(basis_url(), PHP_URL_HOST), parse_url('http://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST), ...website_hosts()];
+    return in_array(parse_url($herkomst, PHP_URL_HOST), $eigen, true);
+}
+
+/**
+ * Staat de website elders, dan mag die de antwoorden van de openbare formulieren lezen (CORS), en alleen die.
+ * Aanroepen bovenaan de openbare formulieren (aanvraag, proefdag, op de hoogte, solliciteren).
+ */
+function cors_voor_website(): void
+{
+    $herkomst = (string) ($_SERVER['HTTP_ORIGIN'] ?? '');
+    if (!website_elders() || $herkomst === '' || PHP_SAPI === 'cli') {
+        return;
+    }
+    $schema = parse_url(website_url(), PHP_URL_SCHEME);
+    if (parse_url($herkomst, PHP_URL_SCHEME) !== $schema || !in_array(parse_url($herkomst, PHP_URL_HOST), website_hosts(), true)) {
+        return;
+    }
+    header('Access-Control-Allow-Origin: ' . $herkomst);
+    header('Vary: Origin', false);
+    if (($_SERVER['REQUEST_METHOD'] ?? '') === 'OPTIONS') {
+        header('Access-Control-Allow-Methods: GET, POST');
+        header('Access-Control-Allow-Headers: Accept, Content-Type');
+        header('Access-Control-Max-Age: 600');
+        http_response_code(204);
+        exit;
+    }
 }
 
 /* ---------- Invoer controleren ---------- */
