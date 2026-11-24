@@ -6,60 +6,59 @@
 
 Wel van de klant zelf: de officiële logo's (`assets/img/sporty-*.svg`), Henny de hond (`assets/img/henny/`), de juichfilmpjes van het team (zie onder) en de foto's hieronder. In de HTML staat bij elke foto `data-foto="…"` (de plek) en de opmerking "Eigen foto van Sporty".
 
-Alle foto's zijn opgeslagen zonder metadata (dus zonder de locatie of het toestel). De foto's uit de chat van 24 november 2026 zijn 1125 of 1500 px breed: kleiner dan de 1600 px die we liefst hebben. `npm run fotos` maakt daarom geen vergrote versies (de grootste versie heet `-1200` of `-1600`, met in de HTML de echte breedte). TODO: de originele foto's (via WeTransfer), vooral voor de grote foto bovenaan de homepage.
+**De originelen.** Sporty stuurde de foto's eerst in de chat (verkleind) en daarna op 24 november 2026 de originelen via WeTransfer: 38 foto's ("Foto 1.jpg" t/m "Foto 38.jpg", 2600 tot 7000 px breed) en een filmpje ("Sporty 2.MP4", staand, 32 seconden, met geluid). De bestanden in `bron/` zijn daaruit gemaakt: zonder metadata (dus zonder de locatie of het toestel), omgezet naar sRGB en hooguit 2000 px breed. `npm run fotos` maakt daar de AVIF- en WebP-versies van (480 tot 1600 px). De originelen zelf staan niet in de repository; Sporty heeft ze.
 
 **Privacy:** op de foto's staan herkenbare kinderen. TODO: Sporty bevestigt dat de ouders schriftelijk toestemming hebben gegeven voor de website (zie "Privacy bij foto's van kinderen").
 
 ### Eigen foto's van Sporty
 
-| Bestand in `bron/` | Wat staat erop | Waar op de site (`data-foto`) |
-|---|---|---|
-| `schot.jpg` | Drie kinderen in oranje Sporty-shirts op het veld; een jongen schiet een oranje bal weg (1125 px) | Home en binnenkort-pagina, de grote foto bovenaan (`held`) |
-| `ballonnen-rennen.jpg` | Kinderen rennen over het kunstgras tijdens een spel met waterballonnen (1125 px) | Home, brede foto onder de weetjes (`bewegen`) |
-| `coach-voetbal.jpg` | Een coach met een bal kijkt toe hoe een jongen tegen de oranje bal trapt (1125 px) | Een middag bij Sporty, bovenaan (`middag`) |
-| `aankomst-veld.jpg` | Een coach zet pionnen neer terwijl een jongen aan komt lopen (1125 px) | Een middag bij Sporty, stap 1 (`middag-1`). TODO: later het ophalen bij school |
-| `samen-eten.jpg` | Een coach tussen de kinderen aan lange tafels in de kantine (1500 px) | Een middag bij Sporty, stap 2 (`middag-2`) |
-| `ballon-plons.jpg` | Een waterballon spat uiteen tussen spelende kinderen (1125 px) | Een middag bij Sporty, stap 3 (`middag-3`) |
-| `bekers.jpg` | Een jongen bouwt aan tafel een toren van bekertjes (staand aangeleverd, 4:3 uitgesneden, 1000 px) | Een middag bij Sporty, stap 4 (`middag-4`) |
-| `ijsje-doel.jpg` | Kinderen eten een waterijsje bij het doel (1500 px) | Een middag bij Sporty, stap 5 (`middag-5`) |
-| `lach-oranje-bal.jpg` | Een lachende jongen in een oranje Sporty-shirt trapt tegen een oranje bal (1125 px) | Alles over Sporty, visie (`visie`) |
-| `spel-emmer.jpg` | Een coach en een groep kinderen spelen een renspel met een emmer water (1125 px) | Alles over Sporty, Onze droom (`tim-en-sureyo`). TODO: een foto van Tim en Sureyo samen |
-| `ballonnen-gooien.jpg` | Drie kinderen rennen en gooien met waterballonnen (1125 px) | Welkom bij de club, bovenaan (`club`) |
-| `rennen-lachen.jpg` | Een jongen rent lachend over het veld (staand aangeleverd, 5:4 uitgesneden, 750 px) | Welkom bij de club, de erepoort (`community-1`). TODO: later een foto van de erepoort |
-| `coach-kletsen.jpg` | Een coach zit met een groep kinderen aan tafel (1500 px) | Welkom bij de club, samen bepalen (`community-2`) |
-| `emmer-water.jpg` | Een jongen gooit een emmer water over een vriend heen (1500 px) | Welkom bij de club, momenten (`community-3`) |
-| `water-inschenken.jpg` | Een coach schenkt water in voor de kinderen in de kantine (1500 px) | Welkom bij de club, ouders (`community-4`). TODO: later een foto van ouders bij een Sporty-evenement |
-| `trappen-pionnen.jpg` | Drie kinderen in oranje Sporty-shirts oefenen schieten tussen de pionnen (1125 px) | Proefdag (`proefdag`) |
-| `samen-voetballen.jpg` | Kinderen voetballen samen op het sportveld (1125 px) | Abonnement en kosten (`abonnement`) |
-| `ballon-coach.jpg` | Een lachende coach speelt met de kinderen een spel met waterballonnen (1125 px) | Pauzebegeleiding (`pauze`) |
-| `ijsje.jpg` | Een jongen in een wit Sporty-shirt met een waterijsje (staand aangeleverd, 4:3 uitgesneden, 1333 px) | Vakantie- en studiedagen (`vakantie`) |
-| `coach-aan-tafel.jpg` | Een coach in een oranje shirt bij de kinderen aan tafel, met de prijzenkast (1500 px) | Word Sporty coach (`coach`) |
-| `boterham.jpg` | Een coach en een jongen eten samen een boterham (1500 px) | Contact (`welkom`) |
-| `pionnen-zetten.jpg` | Een coach zet pionnen neer op het grote kunstgrasveld (1125 px) | Locaties, bovenaan (`locatie`) |
-| `clubhuis.jpg` | Het blauwe clubhuis van buiten, met twee Sporty-vlaggen en een picknicktafel (1086 px) | Locaties, algemene foto van de locatie (`locatie-overzicht`) |
-| `speelkamer.jpg` | De speelkamer met het oranje Sporty-tafelkleed, bouwblokken en knutselspullen (1086 px) | Locaties (`ruimte-2`, Speelkamer) |
-| `kantine.jpg` | De kantine met tafels, tafelvoetbal, de bar en uitzicht op de velden (2016 px) | Locaties (`ruimte-3`, Kantine) |
+| Bestand in `bron/` | Origineel | Wat staat erop | Waar op de site (`data-foto`) |
+|---|---|---|---|
+| `schot.jpg` | Foto 11 | Drie kinderen in oranje Sporty-shirts op het veld; een jongen schiet een oranje bal weg | Home en binnenkort-pagina, de grote foto bovenaan (`held`) |
+| `ballonnen-rennen.jpg` | Foto 25 | Kinderen rennen over het kunstgras tijdens een spel met waterballonnen | Home, brede foto onder de weetjes (`bewegen`) |
+| `coach-voetbal.jpg` | Foto 20 | Een coach met een bal kijkt toe hoe een jongen tegen de oranje bal trapt | Een middag bij Sporty, bovenaan (`middag`) |
+| `bakfiets.jpg` | Sporty 2.MP4 (beeld op 11 seconden, 16:10 uitgesneden, 1080 px) | Een coach fietst met een bakfiets vol zwaaiende kinderen | Een middag bij Sporty, stap 1 ophalen (`middag-1`) |
+| `samen-eten.jpg` | Foto 3 | Een coach tussen de kinderen aan lange tafels in de kantine | Een middag bij Sporty, stap 2 (`middag-2`) |
+| `ballon-plons.jpg` | Foto 35 | Een waterballon spat uiteen tussen spelende kinderen | Een middag bij Sporty, stap 3 (`middag-3`) |
+| `bekers.jpg` | Foto 2 (staand, 4:3 uitgesneden) | Een jongen bouwt aan tafel een toren van bekertjes | Een middag bij Sporty, stap 4 (`middag-4`) |
+| `ijsje-doel.jpg` | Foto 21 | Kinderen eten een waterijsje bij het doel | Een middag bij Sporty, stap 5 (`middag-5`) |
+| `lach-oranje-bal.jpg` | Foto 16 | Een lachende jongen in een oranje Sporty-shirt trapt tegen een oranje bal | Alles over Sporty, visie (`visie`) |
+| `spel-emmer.jpg` | Foto 26 | Een coach en een groep kinderen spelen een renspel met een emmer water | Alles over Sporty, Onze droom (`tim-en-sureyo`). TODO: een foto van Tim en Sureyo samen |
+| `ballonnen-gooien.jpg` | Foto 34 | Drie kinderen rennen en gooien met waterballonnen | Welkom bij de club, bovenaan (`club`) |
+| `rennen-lachen.jpg` | Foto 31 (staand, 5:4 uitgesneden) | Een jongen rent lachend over het veld | Welkom bij de club, de erepoort (`community-1`). TODO: later een foto van de erepoort |
+| `coach-kletsen.jpg` | Foto 6 | Een coach zit met een groep kinderen aan tafel | Welkom bij de club, samen bepalen (`community-2`) |
+| `emmer-water.jpg` | Foto 36 | Een jongen gooit een emmer water over een vriend heen | Welkom bij de club, momenten (`community-3`) |
+| `water-inschenken.jpg` | Foto 7 | Een coach schenkt water in voor de kinderen in de kantine | Welkom bij de club, ouders (`community-4`). TODO: later een foto van ouders bij een Sporty-evenement |
+| `trappen-pionnen.jpg` | Foto 10 | Drie kinderen in oranje Sporty-shirts oefenen schieten tussen de pionnen | Proefdag (`proefdag`) |
+| `samen-voetballen.jpg` | Foto 15 | Kinderen voetballen samen op het sportveld | Abonnement en kosten (`abonnement`) |
+| `ballon-coach.jpg` | Foto 33 | Een lachende coach speelt met de kinderen een spel met waterballonnen | Pauzebegeleiding (`pauze`) |
+| `ijsje.jpg` | Foto 22 (staand, 4:3 uitgesneden) | Een jongen in een wit Sporty-shirt met een waterijsje | Vakantie- en studiedagen (`vakantie`) |
+| `coach-aan-tafel.jpg` | Foto 4 | Een coach in een oranje shirt bij de kinderen aan tafel, met de prijzenkast | Word Sporty coach (`coach`) |
+| `boterham.jpg` | Foto 1 | Een coach en een jongen eten samen een boterham | Contact (`welkom`) |
+| `pionnen-zetten.jpg` | Foto 23 | Een coach zet pionnen neer op het grote kunstgrasveld | Locaties, bovenaan (`locatie`) |
+| `clubhuis.jpg` | (feedback 2.0, 1086 px) | Het blauwe clubhuis van buiten, met twee Sporty-vlaggen en een picknicktafel | Locaties, algemene foto van de locatie (`locatie-overzicht`) |
+| `speelkamer.jpg` | (feedback 2.0, 1086 px) | De speelkamer met het oranje Sporty-tafelkleed, bouwblokken en knutselspullen | Locaties (`ruimte-2`, Speelkamer) |
+| `kantine.jpg` | (feedback 2.0, 2016 px) | De kantine met tafels, tafelvoetbal, de bar en uitzicht op de velden | Locaties (`ruimte-3`, Kantine) |
 
 De chillruimte (`ruimte-1` op Locaties) heeft nog geen foto. Daar staat tot die tijd Henny op een oranje vlak met de krabbel "Foto volgt!", geen stockfoto. TODO: een foto van de chillruimte.
 
-Ook aangeleverd maar nu niet gebruikt (de klant heeft ze zelf): nog een paar schoten op doel, de coach die pionnen neerzet (tweede versie), twee foto's van een coach die water inschenkt (staand), de coach die water gooit bij het doel, en twee versies van de emmer water.
+Nu niet gebruikt (lijken op een gekozen foto): Foto 5, 8 en 9 (een coach in de kantine), 12, 13, 14, 17, 18 en 19 (schoten op doel), 24 (de coach zet pionnen neer), 27, 28, 29 en 30 (het spel bij het doel en een rennende jongen), 32 (een spattende ballon) en 37 en 38 (de emmer water). Het filmpje "Sporty 2.MP4" staat (nog) niet op de website; alleen één beeld eruit (de bakfiets).
 
 ## Eigen foto's: wat willen we nog?
 
 | Plek (`data-foto`) | Wat moet erop staan |
 |---|---|
-| `held` (Home) | Het origineel van `schot.jpg` of een andere brede, liggende foto van minimaal 1600 px. De tekst staat linksonder, dus daar liefst wat rustige ruimte (gras, lucht). |
 | `ruimte-1` (Locaties) | De chillruimte. |
 | `tim-en-sureyo` (Alles over Sporty) | Tim en Sureyo samen. |
-| `middag-1` (Een middag bij Sporty) | Het ophalen bij school (met hesjes); later een kort filmpje per stap van de middag. |
 | `community-1`, `community-4` (Welkom bij de club) | De erepoort, en ouders bij een Sporty-evenement. |
+| `locatie-overzicht`, `ruimte-2` (Locaties) | Grotere versies van het clubhuis en de speelkamer (nu 1086 px). |
 | Team | De foto's van Tim en Anass als bestand (zie hieronder). |
 
 Getekende elementen (sterren, pijlen, kroontjes, hartjes) en handgeschreven krabbels staan óp de beelden, net als in het voorbeeld "Team Sporty" van de klant.
 
 ## Een foto vervangen
 
-1. Zet de nieuwe foto als `.jpg` of `.png` in `assets/fotos/bron/`. Met dezelfde naam als de huidige foto overschrijf je die; een nieuwe naam kan ook.
+1. Zet de nieuwe foto als `.jpg` of `.png` in `assets/fotos/bron/` (zonder metadata, liefst 1600 tot 2000 px breed). Met dezelfde naam als de huidige foto overschrijf je die; een nieuwe naam kan ook.
 2. Draai `npm install` (eenmalig) en daarna `npm run fotos -- <naam>`. Het script maakt de AVIF- en WebP-versies (480, 800, 1200 en 1600 px, of kleiner als de foto kleiner is).
 3. Pas in de HTML de bestandsnamen, de `alt`-tekst en de `width` en `height` aan (zoek op `data-foto="…"`), in beide talen.
 4. Werk de tabel hierboven bij.
