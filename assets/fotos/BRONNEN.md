@@ -91,7 +91,7 @@ Getekende elementen (sterren, pijlen, kroontjes, hartjes) en handgeschreven krab
 
 ## Juichfilmpjes van het team
 
-Op de teampagina staat per coach een kort filmpje van een voetbaljuichmoment (aangeleverd op 24 november 2026), met een foto als stilstaand beeld. `js/main.js` speelt het filmpje in een lus af zolang het in beeld is, met een pauzeknop, en niet vanzelf als iemand "minder beweging" heeft ingesteld. Het filmpje laadt pas als het in beeld komt.
+Op de teampagina staat per coach een kort filmpje van een voetbaljuichmoment (aangeleverd op 24 november 2026), met een foto als stilstaand beeld. Op de homepage (het teamblok) staat alleen dat stilstaande beeld, in een kleinere versie (`<naam>-poster-320.webp`). `js/main.js` speelt het filmpje in een lus af zolang het in beeld is, met een pauzeknop, en niet vanzelf als iemand "minder beweging" heeft ingesteld. Het filmpje laadt pas als het in beeld komt.
 
 | Teamlid | Filmpje | Stilstaand beeld |
 |---|---|---|
@@ -102,8 +102,8 @@ Op de teampagina staat per coach een kort filmpje van een voetbaljuichmoment (aa
 **Een filmpje of foto toevoegen of vervangen**
 1. Zet het filmpje (MOV of MP4, staand, een paar seconden) of de foto in `assets/fotos/bron/filmpjes/`.
 2. Zet een regel in `FILMPJES` in `tools/filmpjes.mjs`: de naam, het bronbestand, waar de uitsnede komt (`boven`) en het stilstaande beeld (een foto, eventueel met een uitsnede, of een seconde uit het filmpje).
-3. Draai `npm run filmpjes` (vereist ffmpeg en `npm install`). Het script maakt in `assets/fotos/` een WebM, een MP4 en een poster, 4:5, zonder geluid en zonder metadata (dus ook zonder de locatie die een telefoon in een filmpje zet).
-4. Nieuw teamlid: kopieer op `team.html` en `en/team.html` een kaart (`<li class="team-lid">`) en pas naam, functie, tekst en de bestandsnamen aan.
+3. Draai `npm run filmpjes` (vereist ffmpeg en `npm install`). Het script maakt in `assets/fotos/` een WebM, een MP4, een poster en een kleine poster voor de homepage, 4:5, zonder geluid en zonder metadata (dus ook zonder de locatie die een telefoon in een filmpje zet).
+4. Nieuw teamlid: kopieer op `team.html` en `en/team.html` een kaart (`<li class="team-lid">`, met een eigen `id`) en pas naam, functie, tekst en de bestandsnamen aan. Doe hetzelfde in het teamblok op de homepage (`index.html` en `en/index.html`, sectie `#team`); `tests/team.test.mjs` controleert dat beide gelijk lopen.
 
 De bronbestanden in `assets/fotos/bron/filmpjes/` zijn al bijgesneden tot 4:5 (1080 × 1350) en zonder geluid opgeslagen; de originele filmpjes van de telefoon heeft Sporty zelf. De map `assets/fotos/bron/` gaat niet mee in het uploadpakket.
 

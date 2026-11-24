@@ -50,7 +50,7 @@ Op het Vercel-adres van het project (https://sporty-sigma.vercel.app) blijft het
 
 | Pad | Inhoud |
 |---|---|
-| `index.html` | Homepage: "Let's play", Sporty is voor iedereen, de kernwaarden, een middag in vijf stappen, weetjes over bewegen, de quiz, ervaringen van ouders |
+| `index.html` | Homepage: "Let's play", Sporty is voor iedereen, de kernwaarden, een middag in vijf stappen, Team Sporty (teamblok met links naar Team), weetjes over bewegen, de quiz, ervaringen van ouders |
 | `alles-over-sporty.html` met `abonnement-en-kosten.html`, `vakantie-en-studiedagen.html`, `welkom-bij-de-club.html` en `pauzebegeleiding.html` | Alles over Sporty (visie en droom) en de onderdelen eronder, met een eigen submenu. Op `abonnement-en-kosten.html#rekentool` staat de rekentool kinderopvangtoeslag. |
 | `een-middag-bij-sporty.html`, `locaties/sportpark-middenmeer.html`, `team.html`, `contact.html` | Een middag bij Sporty, het clubhuis op Sportpark Middenmeer (met kaart na een klik), Team Sporty, en contact met de veelgestelde vragen (`contact.html#veelgestelde-vragen`) |
 | `word-sporty-coach.html` | Solliciteren als Sporty coach met cv en motivatie (pdf of Word). Het formulier gaat naar de eigen beheeromgeving (`beheer/solliciteren.php`): gratis, de bestanden worden versleuteld bewaard en het team ziet alles in de beheeromgeving bij Sollicitaties. Zonder beheeromgeving (zoals op Vercel) opent het e-mailprogramma. |

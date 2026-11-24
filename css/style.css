@@ -6563,6 +6563,83 @@ html:not(.js) .aanmelden__stap + .aanmelden__stap {
   width: 90%;
 }
 
+/* Teamblok op de homepage (feedback 2.0): kleinere teamkaarten die linken naar het teamlid op Team.
+   Twee naast elkaar op een telefoon, vier naast elkaar vanaf een tablet. */
+.team-lijst--home {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-xl) var(--space-m);
+}
+
+@media (min-width: 48em) {
+  .team-lijst--home {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-xl) var(--space-l);
+  }
+}
+
+.team-lid__link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--radius-l);
+}
+
+.team-lid__link:hover {
+  color: inherit;
+}
+
+.team-lijst--home .team-lid__beeld {
+  margin-bottom: var(--space-m);
+}
+
+.team-lijst--home .team-lid__beeld .frame__img {
+  border-width: 3px;
+  box-shadow: 6px 6px 0 var(--color-primary);
+}
+
+.team-lijst--home .team-lid:hover .team-lid__beeld .frame__img,
+.team-lijst--home .team-lid__link:focus-visible .team-lid__beeld .frame__img {
+  rotate: 0deg;
+  translate: 0 -6px;
+}
+
+.team-lijst--home .team-lid__body {
+  text-align: center;
+}
+
+.team-lijst--home .team-lid h3 {
+  font-size: var(--step-1);
+  text-decoration: underline 3px transparent;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--duration) var(--ease-out);
+}
+
+.team-lijst--home .team-lid__link:hover h3 {
+  text-decoration-color: var(--color-primary);
+}
+
+.team-lijst--home .team-lid__functie {
+  margin-bottom: 0;
+}
+
+.team-lijst--home .team-lid__doodle {
+  top: -1.1rem;
+  right: -0.6rem;
+  --maat: 2.4rem;
+}
+
+/* De krabbels passen pas op de bredere kaarten */
+@media (max-width: 71.99em) {
+  .team-lijst--home .team-lid__notitie {
+    display: none;
+  }
+}
+
+.team-blok .btn-group {
+  justify-content: center;
+  margin-top: var(--space-2xl);
+}
+
 /* Word Sporty coach */
 .coach-kaart h2 {
   font-size: var(--step-2);

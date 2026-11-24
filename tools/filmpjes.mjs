@@ -7,6 +7,7 @@
  *   <naam>.mp4          H.264, voor alle andere browsers
  *   <naam>-poster.webp  het stilstaande beeld: wat bezoekers zien tot het filmpje speelt, als het
  *                       gepauzeerd is en bij "minder beweging"
+ *   <naam>-poster-320.webp  hetzelfde beeld kleiner, voor het teamblok op de homepage (320×400)
  * Alles 4:5 (zoals de beelden op de teampagina), 600×750 pixels, zonder geluid en zonder metadata
  * (dus ook zonder de locatie die een telefoon in een filmpje zet).
  *
@@ -14,6 +15,7 @@
  * Een nieuw filmpje: zet het daar neer (MOV of MP4, liefst staand), voeg een regel toe aan FILMPJES
  * en draai:  npm run filmpjes            (alles)
  *            npm run filmpjes -- juich-tim  (alleen dit filmpje)
+ *            npm run filmpjes -- --posters  (alleen de kleine posters opnieuw, uit de grote; geen ffmpeg nodig)
  * Vereist ffmpeg (met libx264 en libvpx-vp9) en sharp (npm install).
  */
 import { execFileSync } from "node:child_process";
@@ -29,6 +31,7 @@ const DOEL = join(ROOT, "assets/fotos");
 const BREEDTE = 600;
 const HOOGTE = 750; // 4:5
 const POSTER = { breedte: 600, hoogte: 750 }; // de beelden op de teampagina zijn hooguit 19rem (304px) breed: genoeg voor een scherp scherm
+const KLEIN = { breedte: 320, hoogte: 400 }; // het teamblok op de homepage (twee naast elkaar op een telefoon)
 
 /**
  * bron:   het bestand in assets/fotos/bron/filmpjes/
@@ -78,10 +81,23 @@ async function maak({ naam, bron, boven, poster }) {
   } finally {
     rmSync(tijdelijk, { recursive: true, force: true });
   }
-  console.log(`✓ ${naam}: webm ${kb(webm)}, mp4 ${kb(mp4)}, poster ${kb(posterPad)}`);
+  const klein = await maakKleinePoster(naam);
+  console.log(`✓ ${naam}: webm ${kb(webm)}, mp4 ${kb(mp4)}, poster ${kb(posterPad)}, klein ${kb(klein)}`);
+}
+
+/** De kleine poster voor het teamblok op de homepage, gemaakt uit de grote. */
+async function maakKleinePoster(naam) {
+  const pad = join(DOEL, `${naam}-poster-${KLEIN.breedte}.webp`);
+  await sharp(join(DOEL, `${naam}-poster.webp`)).resize(KLEIN.breedte, KLEIN.hoogte, { fit: "cover" }).webp({ quality: 74, effort: 6 }).toFile(pad);
+  return pad;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const alleen = new Set(process.argv.slice(2));
-  for (const filmpje of FILMPJES.filter((f) => !alleen.size || alleen.has(f.naam))) await maak(filmpje);
+  const args = process.argv.slice(2);
+  if (args.includes("--posters")) {
+    for (const { naam } of FILMPJES) console.log(`✓ ${naam}: klein ${kb(await maakKleinePoster(naam))}`);
+  } else {
+    const alleen = new Set(args);
+    for (const filmpje of FILMPJES.filter((f) => !alleen.size || alleen.has(f.naam))) await maak(filmpje);
+  }
 }
