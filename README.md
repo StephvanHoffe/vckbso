@@ -6,7 +6,7 @@ Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutair
 - Teksten en indeling volgens de teksten die Sporty in november 2026 aanleverde ("00 Overzicht website" en een document per pagina): hoofdmenu Alles over Sporty · Een middag bij Sporty · Locaties · Team · Word Sporty coach · Contact, met de opvallende knop "Kom bij de club". Sporty is er voor alle kinderen van 4 t/m 12 jaar, op Sportpark Middenmeer (Voorlandpad 17, Amsterdam).
 - Huisstijl volgens de briefing "Look & Feel" van 22 oktober 2026 (en eerder het moodboard en de designprompt): oranje, wit en zwart, de officiële logo's (woordmerk "Sporty" en het ronde logo), de slogan "Let's Play", koppen in Poppins ExtraBold, tekst in DM Sans en de kernwaarden Plezier · Vriendschap · Groei. Voelt als een club waar je bij wilt horen: sportief, vrolijk en met humor ("Na school nog energie voor tien? Die raken we samen wel kwijt."), maar netjes en betrouwbaar voor ouders.
 - Henny de hond, de mascotte, met tekstwolkjes op de site en als hardloper tijdens het aanmelden: in het formulier rent hij naar het doel naarmate je verder invult, bij de machtiging staat hij vlak voor het doel en daarna juicht hij erbij. Getekende elementen (sterren, pijlen, kroontjes) over de beelden, zoals in het voorbeeld "Team Sporty" van de klant.
-- Foto's: tijdelijke stockfoto's van Pexels, gekozen bij elke plek, tot de klant de eigen fotografie aanlevert. Bij de teamplekken staan bewust beelden waarop niemand herkenbaar is. Bronnen en fotografen staan in [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
+- Foto's: sinds 24 november 2026 alleen eigen foto's van Sporty (de stockfoto's zijn weg). Welke foto waar staat en welke nog gewenst zijn: [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
 - Intro op de homepage, gemaakt van de vormen van het officiële ronde logo: de drie kinderen rennen vanaf de rand van het scherm naar het midden, de ring sluit zich om ze heen, "BSO" ploft op het shirt, het woordmerk zwaait omhoog en het lachje verschijnt; het eindbeeld is precies het logo. Eén keer per bezoek (en bij opnieuw laden), over te slaan met een toets, klik, tik of scroll, en niet bij de instelling "minder beweging" of zonder JavaScript.
 - Met een beheeromgeving en ouderportaal in `beheer/` (PHP + SQLite): aanmelden als klant met kinderen, automatische incasso via Stripe, facturen online, koppelingen (Stripe, e-mail via de eigen mailserver) zelf te beheren, groepsagenda met maximale groepsgrootte die twee kanten op werkt, kindvolgsysteem, foto's en berichten, en een overzicht van inkomsten en uitgaven. Met rechten per collega per menuonderdeel, toegang per groep en per verzorger (gecontroleerd gezag), tweestapsverificatie, versleutelde opslag en back-ups, een controleerbaar logboek, privacyverzoeken voor ouders, bewaartermijnen per soort gegevens en strikt gescheiden organisaties. Zie [`docs/beheeromgeving.md`](docs/beheeromgeving.md).
 - Mobile-first en getest op 360, 768 en 1280 px breed, zonder horizontaal scrollen.
@@ -75,7 +75,7 @@ Op het Vercel-adres van het project (https://sporty-sigma.vercel.app) blijft het
 | `design/moodboard-sporty.jpg` | Het moodboard van de klant (eerste huisstijl, 8 oktober 2026) |
 | `design/logo/`, `design/henny/` | De logo's en Henny zoals de klant ze op 22 oktober 2026 aanleverde (originelen in PNG/JPG) |
 | `assets/img/henny/` | Henny de hond (zittend, rennend, met bal), uitgeknipt en als WebP |
-| `assets/fotos/` | Foto's in AVIF en WebP (nu nog stockfoto's van Pexels), met de bronbestanden in `bron/` (`npm run fotos`). Fotografen, licentie en welke eigen foto waar komt staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
+| `assets/fotos/` | Eigen foto's van Sporty in AVIF en WebP, met de bronbestanden in `bron/` (`npm run fotos`). Welke foto waar staat: [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
 | `assets/img/` | Favicon, app-iconen en de deelafbeeldingen (`og-image.jpg`, Engels `og-image-en.jpg`) |
 | `tools/fotos.mjs` | Hulpscript om beelden om te zetten (`npm run fotos`). Niet nodig om de site te draaien. |
 | `tools/filmpjes.mjs` | Zet korte filmpjes om (de juichmomenten op de teampagina): WebM, MP4 en een stilstaand beeld (`npm run filmpjes`, vereist ffmpeg). Zie [`BRONNEN.md`](assets/fotos/BRONNEN.md#juichfilmpjes-van-het-team). |
@@ -133,7 +133,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Algemene voorwaarden en privacyvoorwaarden (Voorwaarden, Privacy) en de klachtenregeling als pdf.
 
 **Beeld**
-- [ ] De tijdelijke stockfoto's (Pexels) vervangen door eigen foto's van het team, de kinderen (met toestemming van de ouders) en de locatie, met nieuwe alt-teksten. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md) voor de lijst.
+- [x] De stockfoto's vervangen door eigen foto's van Sporty (24 november 2026). Nog: de toestemming van de ouders bevestigen, de originelen (scherper) en de foto's die nog ontbreken; zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md).
 
 **Techniek**
 - [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@bsosporty.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
