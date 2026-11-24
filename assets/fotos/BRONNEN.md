@@ -23,15 +23,15 @@ In de HTML staat bij elke foto `data-foto="…"` (de plek) en een opmerking "Sto
 |---|---|---|---|
 | `held.jpg` | [Kinderen voetballen samen op een grasveld in het park](https://www.pexels.com/photo/8813564/) | TODO: controleren op de Pexels-pagina (die was bij het downloaden niet bereikbaar) | Home (`held`); Een middag bij Sporty (`middag-3`) |
 | `kring.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813511/) | Kampus Production | Welkom bij de club (`club`); Proefdag (`proefdag`); Engelse startpagina (`hero`) |
-| `samen.jpg` | [Group of Children Running in Garden](https://www.pexels.com/photo/group-of-children-running-in-garden-16724787/) | Yakup Polat | Vakantie- en studiedagen (`vakantie`); Engelse startpagina (`rennen`) |
+| `samen.jpg` | [Group of Children Running in Garden](https://www.pexels.com/photo/group-of-children-running-in-garden-16724787/) | Yakup Polat | Nu niet gebruikt (sinds 24 november 2026 een eigen foto) |
 | `ophalen.jpg` | [Teacher and Students Walking Around the School Campus](https://www.pexels.com/photo/teacher-and-students-walking-around-the-school-campus-8926835/) | Thirdman | Een middag bij Sporty (`middag-1`) |
 | `sport.jpg` | [Kids Playing Soccer](https://www.pexels.com/photo/kids-playing-soccer-8035099/) | RDNE Stock project | Een middag bij Sporty (`middag`) |
-| `spelletje.jpg` | [Kids Sitting on the Floor and Playing Game with Fingers on Eyes](https://www.pexels.com/photo/kids-sitting-on-the-floor-and-playing-game-with-fingers-on-eyes-8535602/) | Ksenia Chernaya | Een middag bij Sporty (`middag-4`) |
-| `team-handen.jpg` | [Group of People Huddling Up](https://www.pexels.com/photo/group-of-people-huddling-up-1198171/) | Mica Asato | Welkom bij de club (`community-2`); Word Sporty coach (`coach`) |
+| `spelletje.jpg` | [Kids Sitting on the Floor and Playing Game with Fingers on Eyes](https://www.pexels.com/photo/kids-sitting-on-the-floor-and-playing-game-with-fingers-on-eyes-8535602/) | Ksenia Chernaya | Nu niet gebruikt (sinds 24 november 2026 een eigen foto) |
+| `team-handen.jpg` | [Group of People Huddling Up](https://www.pexels.com/photo/group-of-people-huddling-up-1198171/) | Mica Asato | Welkom bij de club (`community-2`) |
 | `plezier.jpg` | [Kids Having Fun at the Park](https://www.pexels.com/photo/kids-having-fun-at-the-park-8033873/) | RDNE Stock project | Abonnement en kosten (`abonnement`); Welkom bij de club (`community-3`) |
 | `voetbal.jpg` | [Young Soccer Player Kicking Ball on Green Field](https://www.pexels.com/photo/person-field-playing-school-972513/) | Markus Spiske | Locaties (`locatie`) |
 | `aandacht.jpg` | [Kids Playing with Teacher in the Classroom](https://www.pexels.com/photo/kids-playing-with-teacher-in-the-classroom-8363102/) | RDNE Stock project | Nu niet gebruikt (bewaard voor later) |
-| `gezellig.jpg` | [Students Eating Their Snacks at the School Canteen](https://www.pexels.com/photo/students-eating-their-snacks-at-the-school-canteen-8617514/) | Yan Krukau | Een middag bij Sporty (`middag-2`) |
+| `gezellig.jpg` | [Students Eating Their Snacks at the School Canteen](https://www.pexels.com/photo/students-eating-their-snacks-at-the-school-canteen-8617514/) | Yan Krukau | Nu niet gebruikt (sinds 24 november 2026 een eigen foto) |
 | `binnen.jpg` | [Women Kneeling on the Floor with Children in a Room](https://www.pexels.com/photo/women-kneeling-on-the-floor-with-children-in-a-room-8441839/) | Pavel Danilyuk | Nu niet gebruikt (de speelkamer heeft sinds 24 november 2026 een eigen foto) |
 | `luisteren.jpg` | [A Woman Talking to her Child at a Park](https://www.pexels.com/photo/a-woman-talking-to-her-child-at-a-park-7880785/) (liggend uitgesneden) | Barbara Olsen | Welkom bij de club (`community-4`); Locaties (`ruimte-1`) |
 | `team-eigenaar.jpg` | [Group of Friends Embracing on Scenic Cliffside](https://www.pexels.com/photo/people-friends-hiking-cliff-7625042/) | PNW Production | Alles over Sporty (`tim-en-sureyo`) |
@@ -44,7 +44,7 @@ In de HTML staat bij elke foto `data-foto="…"` (de plek) en een opmerking "Sto
 | `vragen.jpg` | [Children Raising Their Hands in a Classroom](https://www.pexels.com/photo/children-raising-their-hands-in-a-classroom-8613117/) | Yan Krukau | Nu niet gebruikt (bewaard voor later) |
 | `bewegen.jpg` | [Children Playing Soccer on Grass Field Outdoors](https://www.pexels.com/photo/children-playing-soccer-on-grass-field-outdoors-33618632/) | Jeffry Surianto | Home, brede foto onder de weetjes (`bewegen`) |
 | `sportpark.jpg` | [Top View of Soccer Field](https://www.pexels.com/photo/top-view-of-soccer-field-20559783/) (Hoogeveen, niet Sportpark Middenmeer) | Matthias Groeneveld | Nu niet gebruikt (de locatie heeft sinds 24 november 2026 een eigen foto) |
-| `welkom.jpg` | [Father and Children Running in a Park](https://www.pexels.com/photo/father-and-children-running-in-a-park-4543646/) | Elina Fairytale | Welkom bij de club (`community-1`); Een middag bij Sporty (`middag-5`); Contact (`welkom`) |
+| `welkom.jpg` | [Father and Children Running in a Park](https://www.pexels.com/photo/father-and-children-running-in-a-park-4543646/) | Elina Fairytale | Welkom bij de club (`community-1`); Een middag bij Sporty (`middag-5`) |
 
 De bestanden in `bron/` zijn 1600 px breed. De website gebruikt de AVIF- en WebP-versies in `assets/fotos/` (480, 800, 1200 en 1600 px) die `npm run fotos` daarvan maakt.
 
@@ -57,6 +57,13 @@ Aangeleverd door Sporty op 24 november 2026 (bij "Feedback 2.0"), bijgesneden to
 | `clubhuis.jpg` | Het blauwe clubhuis van buiten, met twee Sporty-vlaggen en een picknicktafel (1086 px breed) | Locaties, algemene foto van de locatie (`locatie-overzicht`) |
 | `speelkamer.jpg` | De speelkamer met het oranje Sporty-tafelkleed, bouwblokken en knutselspullen (1086 px breed) | Locaties (`ruimte-2`, Speelkamer) |
 | `kantine.jpg` | De kantine met tafels, tafelvoetbal, de bar en uitzicht op de velden (2016 px breed) | Locaties (`ruimte-3`, Kantine) |
+| `samen-eten.jpg` | Een coach tussen de kinderen aan lange tafels in de kantine, met de prijzenkast (1500 px breed) | Een middag bij Sporty (`middag-2`, eten en bijkomen) |
+| `bekers.jpg` | Een jongen bouwt aan tafel een toren van bekertjes (staand aangeleverd, 4:3 uitgesneden, 1000 px breed) | Een middag bij Sporty (`middag-4`, eigen avontuur) |
+| `coach-aan-tafel.jpg` | Een coach in een oranje shirt bij de kinderen aan tafel in de kantine (1500 px breed) | Word Sporty coach (`coach`) |
+| `boterham.jpg` | Een coach en een jongen in een oranje Sporty-shirt eten samen een boterham (1500 px breed) | Contact (`welkom`) |
+| `ijsje.jpg` | Een jongen in een wit Sporty-shirt met een waterijsje bij het doel (staand aangeleverd, 4:3 uitgesneden, 1333 px breed) | Vakantie- en studiedagen (`vakantie`) |
+
+De vijf foto's uit de kantine en van het veld (samen-eten t/m ijsje) zijn aangeleverd op 24 november 2026, zonder metadata opgeslagen; ze zijn kleiner dan 1600 px, dus `npm run fotos` maakt geen vergrote versies (de grootste heet `-1600` of `-1200`, met in de HTML de echte breedte). Er staan herkenbare kinderen op: TODO: Sporty bevestigt dat de ouders schriftelijk toestemming hebben gegeven voor de website (zie "Privacy bij foto's van kinderen").
 
 De foto's van het clubhuis en de speelkamer zijn 1086 px breed: op een groot scherm net iets minder scherp. TODO: de originele foto's (via WeTransfer, liefst 1600 px of breder) en een foto van de chillruimte (`ruimte-1`). De 1200-versie van deze twee is daarom 1086 px breed en er is geen 1600-versie.
 

@@ -29,7 +29,10 @@ for (const bestand of bestanden) {
   if (!isSvg && meta.width < 1600) {
     console.warn(`Let op: ${bestand} is ${meta.width}px breed; lever liefst 1600px of meer aan.`);
   }
-  for (const breedte of BREEDTES) {
+  // Kleiner dan 1600 px? Dan geen vergrote versies: alle breedtes eronder, plus één op de eigen breedte (met de naam
+  // van de eerstvolgende maat, bijvoorbeeld foto-1600 van 1500 px). Zet in de HTML bij die versie de echte breedte.
+  const breedtes = isSvg ? BREEDTES : BREEDTES.filter((b, i) => b <= meta.width || i === 0 || BREEDTES[i - 1] < meta.width);
+  for (const breedte of breedtes) {
     // SVG op hoge dichtheid inlezen zodat grote uitsneden scherp blijven
     const invoer = () => sharp(pad, isSvg ? { density: Math.max(72, (72 * breedte) / meta.width) } : {})
       .rotate()
