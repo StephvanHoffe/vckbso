@@ -82,8 +82,8 @@ echo '<a class="terug-link niet-printen" href="facturen.php' . (is_team($gebruik
       <tfoot><tr class="factuur__totaal"><th scope="row" colspan="3">Totaal</th><td class="rechts"><?= e(geld((int) $factuur['bedrag_cent'])) ?></td></tr></tfoot>
     </table>
   </div>
-  <!-- TODO: btw-regel bevestigen met de klant/boekhouder. Kinderopvang is doorgaans vrijgesteld van btw. -->
-  <p class="muted">Kinderopvang is vrijgesteld van btw.</p>
+  <!-- Bevestigd door Sporty (antwoorden van november 2026): Sporty is vrijgesteld van btw -->
+  <p class="muted">Sporty is vrijgesteld van btw.</p>
 <?php if ($factuur['status'] === 'betaald'): ?>
   <p><strong>Betaald op <?= e(datum_nl($factuur['betaald_op'])) ?>.</strong> Bedankt!</p>
 <?php elseif ($factuur['status'] === 'incasso'): ?>

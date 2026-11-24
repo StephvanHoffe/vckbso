@@ -1,5 +1,5 @@
 <?php
-/* Instellingen (beheerder): bedrijfsgegevens voor facturen, tarief en afmeldtijd. */
+/* Instellingen (beheerder): bedrijfsgegevens voor facturen, de tarieven van beide abonnementen en afmelden. */
 require __DIR__ . '/inc/bootstrap.php';
 
 $gebruiker = vereis_recht('instellingen');
@@ -17,9 +17,12 @@ $velden = [
 ];
 $fouten = [];
 $waarden = [];
-foreach (array_merge(array_keys($velden), ['uurtarief', 'uren_per_middag', 'afmelden_tot', 'betaaltermijn_dagen', 'mfa_ouders'], array_keys(BEWAARTERMIJNEN)) as $sleutel) {
-    $waarden[$sleutel] = $sleutel === 'uurtarief'
-        ? (instelling('uurtarief_cent') !== '' ? cent_naar_euro((int) instelling('uurtarief_cent')) : '')
+// Tarieven (in euro op het scherm, in centen opgeslagen) en uren (met een komma, zoals 4,5)
+const TARIEF_VELDEN = ['abonnement_uurtarief' => 'abonnement_uurtarief_cent', 'incidenteel_uurtarief' => 'incidenteel_uurtarief_cent'];
+const UREN_VELDEN = ['abonnement_uren_per_dag' => [1, 60], 'uren_schooldag' => [0.5, 12], 'uren_hele_dag' => [0.5, 14]];
+foreach (array_merge(array_keys($velden), array_keys(TARIEF_VELDEN), array_keys(UREN_VELDEN), ['kosteloos_afmelden_uren', 'afmelden_tot', 'betaaltermijn_dagen', 'mfa_ouders'], array_keys(BEWAARTERMIJNEN)) as $sleutel) {
+    $waarden[$sleutel] = isset(TARIEF_VELDEN[$sleutel])
+        ? (instelling(TARIEF_VELDEN[$sleutel]) !== '' ? cent_naar_euro((int) instelling(TARIEF_VELDEN[$sleutel])) : '')
         : instelling($sleutel);
 }
 
@@ -28,13 +31,21 @@ if (is_post()) {
     foreach (array_keys($waarden) as $sleutel) {
         $waarden[$sleutel] = mb_substr(invoer($sleutel), 0, 200);
     }
-    $cent = $waarden['uurtarief'] === '' ? null : euro_naar_cent($waarden['uurtarief']);
-    if ($waarden['uurtarief'] !== '' && ($cent === null || $cent <= 0)) {
-        $fouten['uurtarief'] = 'Vul het uurtarief in euro in, bijvoorbeeld 10,25.';
+    $centen = [];
+    foreach (TARIEF_VELDEN as $veld => $sleutel) {
+        $centen[$sleutel] = euro_naar_cent($waarden[$veld]);
+        if ($centen[$sleutel] === null || $centen[$sleutel] <= 0) {
+            $fouten[$veld] = 'Vul het uurtarief in euro in, bijvoorbeeld 9,75.';
+        }
     }
-    $uren = str_replace(',', '.', $waarden['uren_per_middag']);
-    if ($waarden['uren_per_middag'] !== '' && (!is_numeric($uren) || (float) $uren <= 0 || (float) $uren > 12)) {
-        $fouten['uren_per_middag'] = 'Vul het aantal uren per middag in, bijvoorbeeld 4,5.';
+    foreach (UREN_VELDEN as $veld => [$min, $max]) {
+        $uren = str_replace(',', '.', $waarden[$veld]);
+        if (!is_numeric($uren) || (float) $uren < $min || (float) $uren > $max) {
+            $fouten[$veld] = 'Vul een aantal uren in, bijvoorbeeld ' . ['abonnement_uren_per_dag' => '27', 'uren_schooldag' => '4,5', 'uren_hele_dag' => '10,5'][$veld] . '.';
+        }
+    }
+    if (!ctype_digit($waarden['kosteloos_afmelden_uren']) || (int) $waarden['kosteloos_afmelden_uren'] > 168) {
+        $fouten['kosteloos_afmelden_uren'] = 'Vul een aantal uren in (0 tot 168), bijvoorbeeld 48.';
     }
     if (!geldige_tijd($waarden['afmelden_tot'])) {
         $fouten['afmelden_tot'] = 'Vul een tijd in, bijvoorbeeld 12:00.';
@@ -71,8 +82,13 @@ if (is_post()) {
         foreach (array_keys($velden) as $sleutel) {
             instelling_zet($sleutel, $waarden[$sleutel]);
         }
-        instelling_zet('uurtarief_cent', $cent === null ? '' : (string) $cent);
-        instelling_zet('uren_per_middag', $waarden['uren_per_middag'] === '' ? '' : str_replace('.', ',', $uren));
+        foreach ($centen as $sleutel => $cent) {
+            instelling_zet($sleutel, (string) $cent);
+        }
+        foreach (array_keys(UREN_VELDEN) as $veld) {
+            instelling_zet($veld, str_replace('.', ',', $waarden[$veld]));
+        }
+        instelling_zet('kosteloos_afmelden_uren', (string) (int) $waarden['kosteloos_afmelden_uren']);
         instelling_zet('afmelden_tot', $waarden['afmelden_tot']);
         instelling_zet('betaaltermijn_dagen', $waarden['betaaltermijn_dagen']);
         instelling_zet('mfa_ouders', $waarden['mfa_ouders']);
@@ -105,21 +121,42 @@ pagina_kop('Instellingen', 'Gegevens voor de facturen, het tarief, afmelden, bev
       </div>
     </section>
     <section class="panel" aria-labelledby="tarief-titel">
-      <h2 id="tarief-titel">Tarief en afspraken</h2>
+      <h2 id="tarief-titel">Tarieven en afspraken</h2>
       <div class="form">
-        <!-- Tarieven van Sporty (feedback 2.0, november 2026): Sporty Abonnement (52 weken) € 9,75 per uur, gemiddeld
-             27 uur per maand per vaste dag; Incidenteel € 12 per uur (4,5 uur per schooldag, 10,5 uur per vakantie- of studiedag).
-             TODO: de facturen rekenen nu per afgenomen middag (uurtarief x uren per middag). Met Sporty afstemmen of de
-             facturen van het abonnement het vaste maandbedrag (27 uur per vaste dag) moeten gebruiken. -->
+        <!-- Tarieven van Sporty (antwoorden van november 2026). Hoe de facturen rekenen: zie beheer/inc/facturen.php -->
+        <p class="field__hint">Elke maand maakt Mijn BSO achteraf de facturen. Het <strong>Sporty Abonnement</strong> is een vast bedrag per maand: vaste dagen per week × uren per maand × uurtarief. <strong>Incidenteel</strong> rekent per afgenomen dag: een schooldag of een vakantie- of studiedag (die zet je in de agenda bij "Deze dag aanpassen").</p>
+        <h3>Sporty Abonnement (52 weken)</h3>
         <div class="field field--klein">
-          <label for="uurtarief">Uurtarief in euro</label>
-          <input id="uurtarief" name="uurtarief" inputmode="decimal" placeholder="bijv. 9,75" value="<?= e($waarden['uurtarief']) ?>"<?= aria_fout($fouten, 'uurtarief') ?>>
-          <?= veldfout($fouten, 'uurtarief') ?>
+          <label for="abonnement_uurtarief">Uurtarief in euro</label>
+          <input id="abonnement_uurtarief" name="abonnement_uurtarief" inputmode="decimal" placeholder="9,75" value="<?= e($waarden['abonnement_uurtarief']) ?>"<?= aria_fout($fouten, 'abonnement_uurtarief') ?>>
+          <?= veldfout($fouten, 'abonnement_uurtarief') ?>
         </div>
         <div class="field field--klein">
-          <label for="uren_per_middag">Uren per middag</label>
-          <input id="uren_per_middag" name="uren_per_middag" inputmode="decimal" placeholder="bijv. 4,5" value="<?= e($waarden['uren_per_middag']) ?>"<?= aria_fout($fouten, 'uren_per_middag') ?>>
-          <?= veldfout($fouten, 'uren_per_middag') ?>
+          <label for="abonnement_uren_per_dag">Uren per maand per vaste dag per week</label>
+          <input id="abonnement_uren_per_dag" name="abonnement_uren_per_dag" inputmode="decimal" placeholder="27" value="<?= e($waarden['abonnement_uren_per_dag']) ?>"<?= aria_fout($fouten, 'abonnement_uren_per_dag') ?>>
+          <?= veldfout($fouten, 'abonnement_uren_per_dag') ?>
+        </div>
+        <h3>Incidenteel</h3>
+        <div class="field field--klein">
+          <label for="incidenteel_uurtarief">Uurtarief in euro</label>
+          <input id="incidenteel_uurtarief" name="incidenteel_uurtarief" inputmode="decimal" placeholder="12" value="<?= e($waarden['incidenteel_uurtarief']) ?>"<?= aria_fout($fouten, 'incidenteel_uurtarief') ?>>
+          <?= veldfout($fouten, 'incidenteel_uurtarief') ?>
+        </div>
+        <div class="field field--klein">
+          <label for="uren_schooldag">Uren per schooldag</label>
+          <input id="uren_schooldag" name="uren_schooldag" inputmode="decimal" placeholder="4,5" value="<?= e($waarden['uren_schooldag']) ?>"<?= aria_fout($fouten, 'uren_schooldag') ?>>
+          <?= veldfout($fouten, 'uren_schooldag') ?>
+        </div>
+        <div class="field field--klein">
+          <label for="uren_hele_dag">Uren per vakantie- of studiedag</label>
+          <input id="uren_hele_dag" name="uren_hele_dag" inputmode="decimal" placeholder="10,5" value="<?= e($waarden['uren_hele_dag']) ?>"<?= aria_fout($fouten, 'uren_hele_dag') ?>>
+          <?= veldfout($fouten, 'uren_hele_dag') ?>
+        </div>
+        <h3>Afmelden en betalen</h3>
+        <div class="field field--klein">
+          <label for="kosteloos_afmelden_uren">Kosteloos afmelden tot <span class="field__hint">(uren van tevoren; later afgemelde incidentele dagen worden gerekend)</span></label>
+          <input id="kosteloos_afmelden_uren" name="kosteloos_afmelden_uren" type="number" min="0" max="168" value="<?= e($waarden['kosteloos_afmelden_uren']) ?>"<?= aria_fout($fouten, 'kosteloos_afmelden_uren') ?>>
+          <?= veldfout($fouten, 'kosteloos_afmelden_uren') ?>
         </div>
         <div class="field field--klein">
           <label for="afmelden_tot">Ouders kunnen afmelden tot <span class="field__hint">(op de dag zelf)</span></label>

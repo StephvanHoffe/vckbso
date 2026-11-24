@@ -22,7 +22,7 @@ const AANVRAAG_GEVONDEN = [
     'buurt' => 'Ik heb Sporty in de buurt gezien',
 ];
 // De abonnementen (feedback 2.0, november 2026): het Sporty Abonnement en Incidenteel (dan zijn vaste dagen niet verplicht)
-const AANVRAAG_ABONNEMENTEN = ['sporty-52' => 'Sporty Abonnement (52 weken)', 'incidenteel' => 'Incidenteel'];
+const AANVRAAG_ABONNEMENTEN = ABONNEMENTEN;
 
 /** Stappen van het formulier (1 t/m 7) en 8 = verstuurd, voor de anonieme telling. */
 const AANVRAAG_STAPPEN = [1 => 'Gegevens kind', 2 => 'School', 3 => 'Abonnement', 4 => 'Dagen', 5 => 'Gegevens ouder', 6 => 'Partner', 7 => 'Controleren', 8 => 'Verstuurd'];
@@ -213,9 +213,12 @@ function bewaar_aanvraag(array $aanvraag): int
         $ouderId = laatste_id();
         foreach ($aanvraag['kinderen'] as $kind) {
             $extraKind = array_intersect_key($kind, array_flip(['voorletters', 'geslacht', 'startdatum', 'groep_klas', 'sportvereniging', 'abonnement', 'dagen', 'toelichting']));
-            q('INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, school, bijzonderheden, foto_toestemming, aanvraag, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?)', [
+            // Het gekozen abonnement staat meteen klaar voor de facturen; het team controleert het bij de kennismaking
+            // (een ouder met status "nieuw" krijgt nog geen factuur, zie inc/facturen.php)
+            q('INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, school, bijzonderheden, foto_toestemming, aanvraag, abonnement, vaste_dagen, abonnement_vanaf, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?)', [
                 $ouderId, $kind['voornaam'], trim($kind['tussenvoegsel'] . ' ' . $kind['achternaam']), $kind['geboortedatum'], $kind['school'],
-                versleutel($kind['allergieen']), versleutel(json_encode($extraKind, JSON_UNESCAPED_UNICODE)), nu(),
+                versleutel($kind['allergieen']), versleutel(json_encode($extraKind, JSON_UNESCAPED_UNICODE)),
+                array_key_exists($kind['abonnement'], ABONNEMENTEN) ? $kind['abonnement'] : '', implode(',', $kind['dagen']), $kind['startdatum'] !== '' ? $kind['startdatum'] : null, nu(),
             ]);
             // Opgegeven gezag; het team controleert dit bij de kennismaking
             koppel_verzorger(laatste_id(), $ouderId, 'ouder', true);

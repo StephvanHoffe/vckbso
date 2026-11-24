@@ -5028,68 +5028,81 @@ html:not(.js) .gif__knop {
   align-items: start;
 }
 
-/* De drie pilaren als getekende labels */
-.pilaren {
+/* Onze visie (document 2, feedback 2.0): twee blokken naast elkaar, de Schijf van 10 en een afsluiter */
+.visie-blokken {
   display: grid;
-  gap: var(--space-m);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  gap: var(--space-l);
+  margin-bottom: var(--space-2xl);
 }
 
-.pilaren li {
-  display: flex;
-  align-items: center;
-  gap: var(--space-m);
-  width: fit-content;
-  padding: var(--space-s) var(--space-xl) var(--space-s) var(--space-m);
-  border: var(--border-width) solid var(--color-dark);
-  border-radius: var(--radius-pill);
+@media (min-width: 48em) {
+  .visie-blokken {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.visie-blok {
+  padding: var(--space-l);
+  border: 4px solid var(--color-dark);
+  border-radius: var(--radius-l);
   background: var(--color-surface);
-  box-shadow: 6px 6px 0 var(--color-primary);
-  font-family: var(--font-heading);
+  box-shadow: 10px 10px 0 var(--color-primary);
+}
+
+.visie-blok h3,
+.visie-schijf h3,
+.visie-slot h3 {
   font-size: var(--step-2);
-  font-weight: var(--font-weight-heading);
 }
 
-.pilaren li:nth-child(2) {
-  margin-left: var(--space-xl);
+.visie-blok > :last-child {
+  margin-bottom: 0;
+}
+
+.visie-schijf {
+  margin-bottom: var(--space-2xl);
+}
+
+.visie-schijf__beeld {
+  margin: 0;
+  text-align: center;
+}
+
+.visie-schijf__beeld img {
+  width: min(100%, 26rem);
+  height: auto;
+}
+
+.visie-schijf__beeld figcaption {
+  margin-top: var(--space-xs);
+  color: var(--color-text-muted);
+  font-size: var(--step--1);
+}
+
+.visie-slot {
+  max-width: 42rem;
+  padding: var(--space-l);
+  border-radius: var(--radius-l);
   background: var(--color-primary);
-  box-shadow: 6px 6px 0 var(--color-dark);
+  color: var(--color-on-primary);
 }
 
-.pilaren li:nth-child(3) {
-  margin-left: var(--space-l);
-  background: var(--color-dark);
-  color: var(--color-on-dark);
+.visie-slot > :last-child {
+  margin-bottom: 0;
 }
 
-@media (max-width: 29.99em) {
-  .pilaren li {
-    gap: var(--space-s);
-    padding-right: var(--space-l);
-    font-size: var(--step-1);
-  }
-
-  .pilaren li:nth-child(2) {
-    margin-left: var(--space-m);
-  }
-
-  .pilaren li:nth-child(3) {
-    margin-left: var(--space-s);
-  }
+.visie-slot__zin {
+  font-family: var(--font-ui);
+  font-weight: 700;
 }
 
-.pilaren__doodle {
-  position: static;
-  flex: none;
-  --maat: 3.25rem;
-  aspect-ratio: 1;
-  color: var(--color-primary);
-}
-
-.pilaren li:nth-child(2) .pilaren__doodle {
-  color: var(--color-dark);
+/* Bronnen: klein en onopvallend onderaan het blok (zoals Sporty vroeg) */
+.visie-bronnen {
+  max-width: 65ch;
+  margin: var(--space-l) 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--step--1);
+  line-height: 1.4;
 }
 
 /* Onze droom: foto met een krabbel */
@@ -5610,6 +5623,21 @@ html:not(.js) .gif__knop {
 
 .middag-stap__tekst > :last-child {
   margin-bottom: 0;
+}
+
+/* De werkwijze van de coaches: een lichtoranje vak onder de tekst, zonder titel (document 4, feedback 2.0) */
+.middag-coach {
+  max-width: var(--measure);
+  margin-top: var(--space-m);
+  padding: var(--space-s) var(--space-m);
+  border-left: 6px solid var(--color-primary);
+  border-radius: var(--radius-m);
+  background: var(--color-primary-soft);
+  color: var(--color-text);
+}
+
+.middag-coach p {
+  margin: 0;
 }
 
 .middag-stap__media .frame__img {

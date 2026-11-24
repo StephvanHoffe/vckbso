@@ -26,6 +26,9 @@ function toon_dagoverzicht(string $datum, array $groepen, string $terug): void
     <p class="badge badge--gesloten">Gesloten</p>
 <?php endif; ?>
   </div>
+<?php if ($dag['open'] && !empty($dag['uitzondering']['hele_dag'])): ?>
+  <p class="note"><?= icoon('calendar') ?><span>Vakantie- of studiedag: de hele dag open.</span></p>
+<?php endif; ?>
 <?php if ($dag['uitzondering'] && $dag['uitzondering']['notitie'] !== ''): ?>
   <p class="note"><?= icoon('info') ?><span><?= e($dag['uitzondering']['notitie']) ?></span></p>
 <?php endif; ?>
@@ -143,10 +146,12 @@ function uitzondering_formulier(array $groep, string $datum, array $dag, string 
     }
     $u = $dag['uitzondering'];
     $id = 'uitz-' . (int) $groep['id'];
-    $html = '<details class="uitklap"><summary>' . icoon('gear') . 'Deze dag aanpassen (sluiten of andere groepsgrootte)</summary>'
+    $html = '<details class="uitklap"><summary>' . icoon('gear') . 'Deze dag aanpassen (sluiten, groepsgrootte of vakantiedag)</summary>'
         . '<form class="form" method="post" action="agenda-actie.php">' . csrf_veld()
         . '<input type="hidden" name="actie" value="uitzondering"><input type="hidden" name="groep" value="' . (int) $groep['id'] . '"><input type="hidden" name="datum" value="' . e($datum) . '"><input type="hidden" name="terug" value="' . e($terug) . '">'
         . '<div class="field"><div class="consent"><input id="' . $id . '-dicht" type="checkbox" name="gesloten" value="1"' . (!empty($u['gesloten']) ? ' checked' : '') . '><label for="' . $id . '-dicht">Groep is deze dag gesloten (bijvoorbeeld een feestdag)</label></div></div>'
+        . '<div class="field"><div class="consent"><input id="' . $id . '-hele" type="checkbox" name="hele_dag" value="1"' . (!empty($u['hele_dag']) ? ' checked' : '') . ' aria-describedby="' . $id . '-hele-uitleg"><label for="' . $id . '-hele">Vakantie- of studiedag (de hele dag open, 08.00–18.30 uur)</label></div>'
+        . '<p class="field__hint" id="' . $id . '-hele-uitleg">Bij Incidenteel rekent de factuur dan ' . e(uren_nl(factuur_tarieven()['uren_hele_dag'])) . ' uur in plaats van ' . e(uren_nl(factuur_tarieven()['uren_schooldag'])) . ' uur.</p></div>'
         . '<div class="form__row"><div class="field"><label for="' . $id . '-max">Maximaal aantal kinderen deze dag <span class="field__hint">(normaal ' . (int) $groep['max_kinderen'] . ')</span></label><input id="' . $id . '-max" name="max_kinderen" type="number" min="1" max="200" value="' . e((string) ($u['max_kinderen'] ?? '')) . '"></div>'
         . '<div class="field"><label for="' . $id . '-notitie">Notitie <span class="field__hint">(zien ouders ook)</span></label><input id="' . $id . '-notitie" name="notitie" maxlength="200" value="' . e($u['notitie'] ?? '') . '"></div></div>'
         . '<p class="field__hint" style="margin:0">Sluit je een dag waarop al kinderen komen? Die worden dan afgemeld en hun ouders krijgen een bericht.</p>'

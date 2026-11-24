@@ -16,7 +16,7 @@ const NL = new Set(("de het een en van voor met niet zijn ook bij naar dat wat w
   "school na tot uur dag dagen week bij meer over alle wordt worden kan kun kunt moet mag graag hier daar " +
   "deze die dit zo nog al als maar want omdat wanneer welke waar hoe heel lekker samen leuk sport sporten spelen " +
   "aanmelden inloggen versturen verstuur bekijk boek lees kies vul volgende vorige terug stap gegevens bericht").split(" ").filter((w) => !["school", "sport", "week", "over", "die", "al"].includes(w)));
-const TOEGESTAAN = /Sportpark Middenmeer|Mijn BSO|Geschillencommissie Kinderopvang|kinderopvangtoeslag|Watergraafsmeer|Voorlandpad|Amsterdam-Oost|Let's Play|Nederlands/g;
+const TOEGESTAAN = /Sportpark Middenmeer|Mijn BSO|Geschillencommissie Kinderopvang|kinderopvangtoeslag|Watergraafsmeer|Voorlandpad|Amsterdam-Oost|Let's Play|Schijf van 10|Nederlands/g;
 
 export function controleer(pagina) {
   const pad = join(ROOT, pagina);

@@ -138,7 +138,12 @@ for ($i = 1; $i <= 12; $i++) {
 pagina_begin('Facturen', 'facturen.php');
 pagina_kop('Facturen', 'Maak na afloop van een maand de facturen en start daarna de automatische incasso.');
 if (!factuur_instellingen_compleet()) {
-    echo '<p class="melding melding--fout">' . icoon('alert') . '<span>Het uurtarief of het aantal uren per middag is nog niet ingesteld. <a href="instellingen.php">Vul ze in bij Instellingen</a> voordat je facturen maakt.</span></p>';
+    echo '<p class="melding melding--fout">' . icoon('alert') . '<span>De tarieven of uren zijn nog niet compleet. <a href="instellingen.php">Vul ze in bij Instellingen</a> voordat je facturen maakt.</span></p>';
+}
+$zonderAbonnement = kinderen_zonder_abonnement($periode);
+if ($zonderAbonnement) {
+    $namen = array_map(fn ($k) => '<a href="kind.php?id=' . (int) $k['id'] . '">' . e(trim($k['voornaam'] . ' ' . $k['achternaam'])) . '</a>', $zonderAbonnement);
+    echo '<p class="melding">' . icoon('info') . '<span>Deze kinderen waren in ' . e(datum_nl($periode . '-01', 'MMMM y')) . ' bij Sporty, maar hebben nog geen abonnement en komen daarom niet op een factuur: ' . implode(', ', $namen) . '. Stel het abonnement in bij het kind.</span></p>';
 }
 ?>
 <div class="kolommen">
@@ -193,11 +198,13 @@ if (!factuur_instellingen_compleet()) {
   </section>
   <section class="panel" aria-labelledby="maken-titel">
     <h2 id="maken-titel">Facturen maken</h2>
-    <p>Voor elke ouder één factuur met de dagen dat de kinderen die maand ingeschreven stonden (komt of ziek). Op tijd afgemelde dagen tellen niet mee.</p>
+<?php $tarieven = factuur_tarieven(); ?>
+    <p>Voor elke ouder één factuur per maand. Het <strong>Sporty Abonnement</strong> is een vast bedrag: vaste dagen per week × <?= e(uren_nl($tarieven['abonnement_uren'])) ?> uur × het uurtarief. <strong>Incidenteel</strong> rekent per dag dat het kind er was (of ziek was). Afmelden is kosteloos tot <?= (int) $tarieven['kosteloos_uren'] ?> uur van tevoren; later afgemelde incidentele dagen tellen mee.</p>
     <dl class="gegevens">
-      <dt>Uurtarief</dt><dd><?= instelling('uurtarief_cent') !== '' ? e(geld((int) instelling('uurtarief_cent'))) : '<a href="instellingen.php">Nog instellen</a>' ?></dd>
-      <dt>Uren per middag</dt><dd><?= instelling('uren_per_middag') !== '' ? e(instelling('uren_per_middag')) : '<a href="instellingen.php">Nog instellen</a>' ?></dd>
+      <dt>Sporty Abonnement</dt><dd><?= e(geld($tarieven['abonnement_cent'])) ?> per uur, <?= e(uren_nl($tarieven['abonnement_uren'])) ?> uur per maand per vaste dag (<?= e(geld((int) round($tarieven['abonnement_uren'] * $tarieven['abonnement_cent']))) ?> per maand)</dd>
+      <dt>Incidenteel</dt><dd><?= e(geld($tarieven['incidenteel_cent'])) ?> per uur: <?= e(uren_nl($tarieven['uren_schooldag'])) ?> uur per schooldag, <?= e(uren_nl($tarieven['uren_hele_dag'])) ?> uur per vakantie- of studiedag</dd>
     </dl>
+    <p class="field__hint"><a href="instellingen.php">Tarieven aanpassen bij Instellingen</a></p>
     <form class="form" method="post" style="margin-top: var(--space-m)">
       <?= csrf_veld() ?>
       <input type="hidden" name="actie" value="maken">

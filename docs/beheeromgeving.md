@@ -9,7 +9,7 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | Aanmelden op de website en als klant in het systeem komen, met de kinderen eronder | `aanvraag.php` (formulier "Kom bij de club" op `aanmelden.html`), `ouder.php` | Sinds november 2026 vrijblijvend, in 7 stappen: gegevens kind, school, abonnement, dagen, gegevens ouder, partner en controleren. Er ontstaat een ouder met status "nieuw" (nog zonder wachtwoord) met de kinderen eronder; het team krijgt een e-mail en ziet de aanmelding bij Ouders. Na de kennismaking activeert het team het account; de ouder krijgt dan een link om een wachtwoord te kiezen en geeft daarna de machtiging. Zie [Aanmelden via de website](#aanmelden-via-de-website). |
 | Dagen die vol zitten, niet aan te vinken bij het aanmelden | `groepen.php` (blok "Dagen die vol zitten"), `aanvraag.php` | Het team vinkt bij Groepen aan welke weekdagen vol zitten. In het aanmeldformulier staan die dagen dan grijs met "(vol)" en zijn ze niet aan te vinken; ouders lezen dat ze in de opmerkingen om de wachtlijst kunnen vragen. Raakt een dag vol terwijl een ouder het formulier invult, dan weigert de server die dag met een duidelijke melding. Bestaande klanten merken er niets van: in de agenda geldt gewoon de maximale groepsgrootte. Elke wijziging staat in het logboek. |
 | Automatische incasso bij de aanmelding | `machtiging.php` | Direct na het aanmelden geeft de ouder een SEPA-machtiging op een beveiligde pagina van Stripe: via de eigen bank met iDEAL \| Wero (€ 0,01 die Stripe meteen terugbetaalt) of met het IBAN. Daarna kan elke factuur automatisch worden afgeschreven. Zie [Stripe koppelen](#stripe-koppelen). |
-| Facturen online terugvinden | `facturen.php`, `factuur.php` | Beheerder maakt per maand de facturen (op basis van de ingeschreven dagen) en start de incasso. Ouders zien, printen en (bij een mislukte incasso) betalen hun facturen online. |
+| Facturen online terugvinden | `facturen.php`, `factuur.php` | Beheerder maakt per maand achteraf de facturen en start de incasso: het Sporty Abonnement als vast bedrag per maand, Incidenteel per afgenomen dag (zie [Facturen](#facturen)). Ouders zien, printen en (bij een mislukte incasso) betalen hun facturen online. |
 | Kindvolgsysteem | `kind.php` | Per kind een dossier: gegevens, allergieën, ophaalpersonen, aanwezigheid (binnen en opgehaald), foto's en observaties per ontwikkelgebied. Een observatie kan alleen voor het team zijn, of gedeeld worden met de ouders. |
 | Verborgen notities per kind, alleen voor het team (november 2026) | `kind.php` (blok "Verborgen notities"), `kinderen.php` (kolom naast "Let op") | Voor opmerkingen die niet per se voor ouders zijn, zoals een kind dat niet goed met een ander kind kan. Iedereen van het team met toegang tot het kind leest en schrijft ze; ouders zien ze nergens in Mijn BSO en ook niet in de download van hun eigen gegevens. Versleuteld opgeslagen, met wie ze het laatst aanpaste; elke wijziging staat in het logboek (zonder de tekst). Let op: bij een formeel inzageverzoek (AVG) heeft een ouder wel recht op deze notities. Daarom staan ze in de export die het team bij Privacyverzoeken eerst controleert. Schrijf ze dus feitelijk en respectvol. Ze worden gewist met het dossier. |
 | Foto's sturen naar de ouders van een kind | `fotos.php` | Begeleider kiest foto's en de kinderen die erop staan. Alleen hun verzorgers (met het recht "foto's") zien de foto. Per kind kiest wie gezag heeft: ook groepsfoto's, alleen foto's waar het kind alleen op staat, of geen foto's (zie [Fototoestemming](#fototoestemming)). Kinderen met "geen foto's" of zonder ingevulde keuze zijn niet aan te vinken (en de server weigert ze); groepsfoto's kunnen alleen met toestemming van alle ouders. Locatiegegevens (EXIF) worden uit de foto gehaald. |
@@ -184,11 +184,27 @@ Bedragen voer je in zoals ze op de bon staan. Financiën houdt btw niet apart bi
 
 1. Ouder meldt zich aan via de website en geeft de machtiging af. Bij de aanmelding geeft de ouder aan of die het gezag heeft.
 2. Het team ziet de aanmelding op "Vandaag" en onder Ouders → Nieuwe aanmeldingen.
-3. Bij de kennismaking: gezag controleren (bijvoorbeeld uittreksel gezagsregister) en vastleggen in het dossier van elk kind, onder **Verzorgers en gezag**. Kind in een groep zetten.
+3. Bij de kennismaking: gezag controleren (bijvoorbeeld uittreksel gezagsregister) en vastleggen in het dossier van elk kind, onder **Verzorgers en gezag**. Kind in een groep zetten en het **abonnement** nalopen (Gegevens wijzigen → Abonnement: Sporty Abonnement met de vaste dagen, of Incidenteel, en de ingangsdatum). Wat de ouder in het aanmeldformulier koos, staat er al ingevuld.
 4. Op **Account activeren** klikken. De ouder krijgt een welkomstbericht.
 5. Eventueel een tweede verzorger toevoegen in het dossier van het kind (bijvoorbeeld de andere ouder), met de juiste rechten.
 6. De ouder kiest de dagen in de agenda.
 7. Na afloop van de maand: Facturen → maand kiezen → **Facturen maken** → controleren → **Incasso starten**.
+
+## Facturen
+
+Elke maand maakt de beheerder achteraf de facturen (Facturen → maand kiezen → **Facturen maken**), per ouder één factuur met een regel per kind. Hoe er gerekend wordt (antwoorden van Sporty, november 2026; code in `beheer/inc/facturen.php`, test in `tests/facturen.test.mjs`):
+
+| Abonnement (bij het kind) | Op de factuur |
+|---|---|
+| **Sporty Abonnement (52 weken)** | Een vast bedrag per maand: aantal vaste dagen per week × 27 uur × € 9,75 (1 dag € 263,25, 2 dagen € 526,50). Afgemeld of ziek maakt niet uit. Begint of stopt het abonnement halverwege de maand (ingangsdatum bij het kind, of "komt naar de BSO" uitgevinkt), dan naar rato van het aantal kalenderdagen. |
+| **Incidenteel** | Per afgenomen dag × € 12 per uur: 4,5 uur op een schooldag, 10,5 uur op een vakantie- of studiedag. Komt, ziek en minder dan 48 uur van tevoren afgemeld tellen mee; op tijd afgemeld niet. |
+| Nog niet ingesteld | Geen factuurregel. Bij Facturen staat dan een melding met de namen, zodat je het abonnement bij het kind kunt invullen. |
+
+- **Vakantie- of studiedag:** zet zo'n dag in de agenda (dagoverzicht van de groep → **Deze dag aanpassen** → "Vakantie- of studiedag"). Ouders zien in hun agenda "Vakantiedag, hele dag".
+- **Tarieven en uren** staan bij **Instellingen → Tarieven en afspraken** (uurtarieven, 27 uur per maand per vaste dag, 4,5 en 10,5 uur, kosteloos afmelden tot 48 uur). Ze staan bij een nieuwe installatie al goed (migratie 23).
+- Een nieuwe aanmelding (ouder met status "nieuw") krijgt nog geen factuur; eerst activeer je het account.
+- Een factuur annuleren zet de dagen van die maand weer open, zodat je na een correctie opnieuw een factuur kunt maken.
+- Sporty is vrijgesteld van btw; dat staat op de factuur.
 
 ## Bewaartermijnen
 
@@ -315,7 +331,7 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
    ```
    Kopieer de back-upmap daarnaast dagelijks naar een andere plek (in de EU), bijvoorbeeld met de back-updienst van de hosting.
 5. Ga naar `https://bsosporty.nl/beheer/`. Je komt op de installatiepagina: vul de installatiecode in, maak het eerste beheerdersaccount aan en stel tweestapsverificatie in. Maak daarna de `installatiecode` weer leeg.
-6. Vul de **Instellingen** in (KvK, LRK, IBAN, uurtarief, uren per middag, afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders) en maak de **groepen** aan.
+6. Vul de **Instellingen** in (KvK, LRK, IBAN, controleer de tarieven, afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders) en maak de **groepen** aan.
 7. Nodig de begeleiders uit onder **Team** en koppel ze aan hun groep(en).
 8. Stel onder **Koppelingen** het versturen van e-mail in (eigen mailserver, met een testmail) en koppel **Stripe** (zie hieronder). Zonder Stripe draait alles in demo-modus: er wordt niets echt afgeschreven; zonder e-mailinstelling worden e-mails niet verstuurd.
 9. Controleer **Instellingen → Beveiligingsstatus**: alles moet op "In orde" staan.
@@ -365,11 +381,9 @@ Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met b
 ## Nog te doen (TODO)
 
 **Van de klant**
-- [ ] Uurtarief en aantal uren per middag invullen (Instellingen). Nu leeg, dus facturen maken kan nog niet.
-- [ ] Factuurbeleid bevestigen: nu factureren we achteraf per maand, per ingeschreven dag. Ziekte telt mee, op tijd afmelden niet. Wil de klant vaste contracten per maand, vooraf factureren of te laat afmelden meerekenen? Dat moet dan worden aangepast in `beheer/inc/facturen.php`.
+- [ ] Twee aannames bij de facturen bevestigen (zie [Facturen](#facturen)): een abonnement dat halverwege de maand begint of stopt, rekenen we naar rato van het aantal kalenderdagen; en extra dagen bij een Sporty Abonnement (aangevraagd via WhatsApp of e-mail) worden niet automatisch gefactureerd.
 - [ ] KvK-, LRK- en IBAN-nummer invullen (Instellingen). Het LRK-nummer moet op de factuur staan voor de kinderopvangtoeslag.
-- [ ] Afmeldtijd bevestigen (nu 12:00 uur op de dag zelf).
-- [ ] Btw-regel op de factuur laten controleren door de boekhouder (nu: "Kinderopvang is vrijgesteld van btw").
+- [ ] Afmeldtijd in de agenda bevestigen (nu 12:00 uur op de dag zelf; kosteloos tot 48 uur van tevoren, bevestigd in november 2026).
 - [ ] Categorieën van Financiën afstemmen met de boekhouder (`beheer/inc/financien.php`), en bepalen of btw apart moet worden bijgehouden.
 - [ ] Per collega de rechten nalopen onder Team: wie mag Facturen, Financiën, Sollicitaties, Privacyverzoeken en Klanten beheren?
 - [ ] Werkafspraak voor het controleren van gezag: welk bewijs vraag je (uittreksel gezagsregister, geboorteakte, beschikking) en wie controleert het?

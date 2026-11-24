@@ -89,7 +89,7 @@ function interesse_aanmelden(string $naam, string $email, string $telefoon, stri
     } else {
         q('INSERT INTO interesse (naam, email, telefoon, kind_naam, adres, token_hash, token, bron, taal, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$naam, $email, $telefoon, $kindVersleuteld, $adresVersleuteld, interesse_hash($token), versleutel($token), $bron, taal(), nu()]);
     }
-    // TODO: tekst van de bevestigingsmail laten controleren door Sporty (aan te passen onder Instellingen → E-mails), en laten weten wat er in het Sporty-pakket zit
+    // De bevestigingsmail is akkoord (Sporty, november 2026); aan te passen onder Instellingen → E-mails. Het pakket gaat per post.
     stuur_mailtekst($email, 'op_de_hoogte_bevestigen', ['voornaam' => $voornaam, 'link' => interesse_link('bevestig', $token, taal()), 'dagen' => INTERESSE_ONBEVESTIGD_DAGEN]);
 }
 

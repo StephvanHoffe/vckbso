@@ -10,7 +10,7 @@ const inc = lees("beheer/inc/aanvraag.php");
 const script = lees("js/aanmelden.js");
 const form = html.match(/<form class="form aanmelden__form"[\s\S]*?<\/form>/)[0];
 const namen = new Set([...form.matchAll(/ name="([^"]+)"/g)].map((m) => m[1].replace(/kinderen\[0\]/, "kinderen[i]")));
-const sleutels = (constante) => [...inc.match(new RegExp(`const ${constante} = \\[([\\s\\S]*?)\\];`))[1].matchAll(/'([a-z0-9-]+)' =>/g)].map((m) => m[1]);
+const sleutels = (constante, bron = inc) => [...bron.match(new RegExp(`const ${constante} = \\[([\\s\\S]*?)\\];`))[1].matchAll(/'([a-z0-9-]+)' =>/g)].map((m) => m[1]);
 
 test("het formulier heeft 7 stappen, in volgorde, en Henny zegt bij elke stap iets", () => {
   const stappen = [...form.matchAll(/data-stap="(\d)"/g)].map((m) => +m[1]);
@@ -36,7 +36,9 @@ test("de keuzes in het formulier zijn de keuzes die de server accepteert", () =>
   const waarden = (naam) => [...form.matchAll(new RegExp(`name="${naam.replace(/[[\]]/g, "\\$&")}" value="([^"]+)"`, "g"))].map((m) => m[1]);
   assert.deepEqual(waarden("kinderen[0][geslacht]"), sleutels("AANVRAAG_GESLACHT_KIND"));
   assert.deepEqual(waarden("geslacht"), sleutels("AANVRAAG_GESLACHT_OUDER"));
-  assert.deepEqual(waarden("kinderen[0][abonnement]"), sleutels("AANVRAAG_ABONNEMENTEN"));
+  // De abonnementen zijn dezelfde als in de facturen (beheer/inc/facturen.php)
+  assert.match(inc, /const AANVRAAG_ABONNEMENTEN = ABONNEMENTEN;/);
+  assert.deepEqual(waarden("kinderen[0][abonnement]"), sleutels("ABONNEMENTEN", lees("beheer/inc/facturen.php")));
   assert.deepEqual(waarden("kinderen[0][dagen][]"), ["1", "2", "3", "4", "5"]);
   const gevonden = [...form.match(/<select id="gevonden"[\s\S]*?<\/select>/)[0].matchAll(/<option value="([a-z]+)">/g)].map((m) => m[1]);
   assert.deepEqual(gevonden, sleutels("AANVRAAG_GEVONDEN"));

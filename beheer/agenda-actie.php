@@ -91,9 +91,11 @@ if ($actie === 'uitzondering') {
     $max = invoer('max_kinderen');
     $max = ctype_digit($max) && (int) $max > 0 ? (int) $max : null;
     $notitie = mb_substr(invoer('notitie'), 0, 200);
-    q('INSERT INTO groep_uitzonderingen (groep_id, datum, gesloten, max_kinderen, notitie) VALUES (?, ?, ?, ?, ?)
-       ON CONFLICT(groep_id, datum) DO UPDATE SET gesloten = excluded.gesloten, max_kinderen = excluded.max_kinderen, notitie = excluded.notitie', [
-        $groep['id'], $datum, $gesloten, $max, $notitie,
+    // Vakantie- of studiedag: de hele dag open, en voor Incidenteel 10,5 uur in plaats van 4,5 (zie inc/facturen.php)
+    $heleDag = !$gesloten && invoer('hele_dag') === '1' ? 1 : 0;
+    q('INSERT INTO groep_uitzonderingen (groep_id, datum, gesloten, max_kinderen, notitie, hele_dag) VALUES (?, ?, ?, ?, ?, ?)
+       ON CONFLICT(groep_id, datum) DO UPDATE SET gesloten = excluded.gesloten, max_kinderen = excluded.max_kinderen, notitie = excluded.notitie, hele_dag = excluded.hele_dag', [
+        $groep['id'], $datum, $gesloten, $max, $notitie, $heleDag,
     ]);
     if ($gesloten) {
         $getroffen = rijen("SELECT i.*, k.voornaam, k.ouder_id FROM inschrijvingen i JOIN kinderen k ON k.id = i.kind_id WHERE i.groep_id = ? AND i.datum = ? AND i.status IN ('bevestigd', 'wachtlijst')", [$groep['id'], $datum]);
@@ -106,7 +108,7 @@ if ($actie === 'uitzondering') {
         vul_plek_vanuit_wachtlijst((int) $groep['id'], $datum);
         flash('succes', 'De dag is aangepast.');
     }
-    log_actie('Agenda: dag aangepast', $groep['naam'] . ' ' . $datum . ($gesloten ? ' gesloten' : ' max ' . ($max ?? '-')));
+    log_actie('Agenda: dag aangepast', $groep['naam'] . ' ' . $datum . ($gesloten ? ' gesloten' : ' max ' . ($max ?? '-') . ($heleDag ? ', vakantie- of studiedag' : '')));
     redirect($terug);
 }
 

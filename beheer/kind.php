@@ -59,6 +59,17 @@ if (is_post()) {
             if ($velden['groep_id'] !== null && (!groep($velden['groep_id']) || !team_mag_groep($velden['groep_id']))) {
                 $fouten['groep'] = 'Kies een van de groepen waar je toegang toe hebt.';
             }
+            // Abonnement voor de facturen (zie beheer/inc/facturen.php)
+            $velden['abonnement'] = array_key_exists(invoer('abonnement'), ABONNEMENTEN) ? invoer('abonnement') : '';
+            $vasteDagen = array_values(array_intersect([1, 2, 3, 4, 5], array_map('intval', (array) ($_POST['vaste_dagen'] ?? []))));
+            $velden['vaste_dagen'] = implode(',', $vasteDagen);
+            $velden['abonnement_vanaf'] = invoer('abonnement_vanaf') === '' ? null : invoer('abonnement_vanaf');
+            if ($velden['abonnement'] === 'sporty-52' && !$vasteDagen) {
+                $fouten['vaste_dagen'] = 'Kies de vaste dagen van het Sporty Abonnement.';
+            }
+            if ($velden['abonnement_vanaf'] !== null && !geldige_datum($velden['abonnement_vanaf'])) {
+                $fouten['abonnement_vanaf'] = 'Vul een geldige datum in.';
+            }
         }
         if (!$fouten) {
             $sets = implode(', ', array_map(fn ($v) => "$v = ?", array_keys($velden)));
@@ -267,6 +278,7 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
         <dt>School</dt><dd><?= e($kind['school'] ?: '-') ?></dd>
         <dt>Bijzonderheden</dt><dd><?= $kind['bijzonderheden'] !== '' ? '<span class="let-op">' . icoon('alert') . '<span>' . e($kind['bijzonderheden']) . '</span></span>' : 'Geen' ?></dd>
         <dt>Mag opgehaald worden door</dt><dd><?= e($kind['ophaalpersonen'] ?: 'Alleen de ouders') ?></dd>
+        <dt>Abonnement</dt><dd><?= e(abonnement_tekst($kind)) ?></dd>
         <dt>Foto's</dt><dd><?= ($fk = foto_keuze($kind)) !== null ? e(str_replace('{naam}', $kind['voornaam'], FOTO_KEUZES[$fk][0])) : '<span class="fotostatus fotostatus--open">' . icoon('camera') . 'Nog niet ingevuld</span><br><small class="muted">Tot die tijd delen we geen foto\'s van ' . e($kind['voornaam']) . '.</small>' ?></dd>
 <?php if ($team): ?>
         <dt>Ouder</dt><dd><a href="ouder.php?id=<?= (int) $ouder['id'] ?>"><?= e($ouder['naam']) ?></a><br><?php if (trim((string) $ouder['telefoon']) !== ''): ?><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $ouder['telefoon'])) ?>"><?= e($ouder['telefoon']) ?></a> · <?php endif; ?><a href="mailto:<?= e($ouder['email']) ?>"><?= e($ouder['email']) ?></a></dd>
@@ -280,7 +292,7 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
 <?php if ($magBeslissen && foto_keuze($kind) === null): ?>
       <p class="melding"><?= icoon('camera') ?><span>Mogen we foto's van <?= e($kind['voornaam']) ?> delen? Geef het aan bij <strong>Gegevens wijzigen</strong> hieronder. Tot die tijd delen we geen foto's van <?= e($kind['voornaam']) ?>.</span></p>
 <?php endif; ?>
-      <details class="uitklap" id="gegevens-wijzigen"<?= isset($fouten['voornaam']) || isset($fouten['geboortedatum']) || ($magBeslissen && foto_keuze($kind) === null) || get_str('open') === 'fotos' ? ' open' : '' ?>>
+      <details class="uitklap" id="gegevens-wijzigen"<?= isset($fouten['voornaam']) || isset($fouten['geboortedatum']) || isset($fouten['vaste_dagen']) || isset($fouten['abonnement_vanaf']) || ($magBeslissen && foto_keuze($kind) === null) || get_str('open') === 'fotos' ? ' open' : '' ?>>
         <summary><?= icoon('gear') ?>Gegevens wijzigen</summary>
         <form class="form" method="post" action="<?= e($terug) ?>">
           <?= csrf_veld() ?>
@@ -311,6 +323,28 @@ pagina_kop(kindnaam($kind), ($kind['groepnaam'] ? 'Groep ' . e($kind['groepnaam'
 <?php endif; ?>
 <?php endif; ?>
 <?php if ($beheerder): ?>
+          <fieldset class="field">
+            <legend class="legend-label">Abonnement <span class="field__hint">(voor de maandfacturen)</span></legend>
+            <div class="form__row">
+              <div class="field"><label for="abonnement">Soort</label><select id="abonnement" name="abonnement">
+                <option value="">Nog niet ingesteld</option>
+<?php foreach (ABONNEMENTEN as $code => $naam): ?>
+                <option value="<?= e($code) ?>"<?= $kind['abonnement'] === $code ? ' selected' : '' ?>><?= e($naam) ?></option>
+<?php endforeach; ?>
+              </select></div>
+              <div class="field"><label for="abonnement_vanaf">Ingangsdatum <span class="field__hint">(niet verplicht)</span></label><input id="abonnement_vanaf" name="abonnement_vanaf" type="date" value="<?= e((string) $kind['abonnement_vanaf']) ?>"<?= aria_fout($fouten, 'abonnement_vanaf') ?>><?= veldfout($fouten, 'abonnement_vanaf') ?></div>
+            </div>
+            <fieldset<?= isset($fouten['vaste_dagen']) ? ' aria-describedby="vaste_dagen-fout"' : '' ?>>
+              <legend class="legend-label">Vaste dagen <span class="field__hint">(nodig bij het Sporty Abonnement)</span></legend>
+              <div class="choices">
+<?php foreach ([1, 2, 3, 4, 5] as $dag): ?>
+                <label class="choice"><input type="checkbox" name="vaste_dagen[]" value="<?= $dag ?>"<?= in_array($dag, vaste_dagen($kind), true) ? ' checked' : '' ?>><?= e(ucfirst(WEEKDAGEN[$dag])) ?></label>
+<?php endforeach; ?>
+              </div>
+              <?= veldfout($fouten, 'vaste_dagen') ?>
+            </fieldset>
+            <p class="field__hint">Sporty Abonnement: elke maand een vast bedrag (vaste dagen × uren per maand × uurtarief, zie Instellingen). Incidenteel: per dag dat <?= e($kind['voornaam']) ?> er was.</p>
+          </fieldset>
           <div class="field"><div class="consent"><input id="actief" name="actief" type="checkbox" value="1"<?= $kind['actief'] ? ' checked' : '' ?>><label for="actief">Komt naar de BSO (uitvinken als het kind stopt; toekomstige dagen worden dan afgemeld)</label></div></div>
 <?php endif; ?>
           <div class="form__acties"><button class="btn" type="submit">Opslaan</button></div>

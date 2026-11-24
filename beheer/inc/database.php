@@ -635,6 +635,20 @@ function migreer(PDO $pdo): void
             ALTER TABLE interesse ADD COLUMN kind_naam TEXT NOT NULL DEFAULT '';
             ALTER TABLE interesse ADD COLUMN adres TEXT NOT NULL DEFAULT '';
             SQL,
+
+        // Facturen volgens de antwoorden van Sporty (november 2026): per kind het abonnement (Sporty Abonnement of
+        // Incidenteel), de vaste dagen en vanaf wanneer; per dag in de agenda of het een vakantie- of studiedag is
+        // (hele dag, 10,5 uur bij Incidenteel). Tarieven en uren als instellingen, aan te passen bij Instellingen.
+        23 => <<<'SQL'
+            ALTER TABLE kinderen ADD COLUMN abonnement TEXT NOT NULL DEFAULT '';
+            ALTER TABLE kinderen ADD COLUMN vaste_dagen TEXT NOT NULL DEFAULT '';
+            ALTER TABLE kinderen ADD COLUMN abonnement_vanaf TEXT;
+            ALTER TABLE groep_uitzonderingen ADD COLUMN hele_dag INTEGER NOT NULL DEFAULT 0;
+            INSERT OR IGNORE INTO instellingen (sleutel, waarde) VALUES
+                ('abonnement_uurtarief_cent', '975'), ('abonnement_uren_per_dag', '27'),
+                ('incidenteel_uurtarief_cent', '1200'), ('uren_schooldag', '4,5'), ('uren_hele_dag', '10,5'),
+                ('kosteloos_afmelden_uren', '48');
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

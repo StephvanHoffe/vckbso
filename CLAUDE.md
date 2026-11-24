@@ -102,7 +102,7 @@ De klant heeft alle teksten aangeleverd als Word-documenten, met per pagina een 
 - **Kernwaarden:** Plezier · Vriendschap · Groei (in plaats van Sport · Plezier · Ontwikkeling), met getekende iconen. Sport is het middel, geen doel; iedereen is welkom, ook wie niet goed kan sporten of liever knutselt.
 - **Kom bij de club (aanmeldformulier):** vrijblijvend, in 7 stappen met één onderwerp per scherm en Henny die over de voortgangsbalk meerent; voortgang onthouden en anoniem meten waar ouders afhaken. Na de kennismaking rondt het team de aanmelding af (account, wachtwoord, machtiging). De abonnementsstap is nog in overleg.
 - **Reviews:** aangeleverd door de klant; de namen volgen zodra de ouders toestemming hebben gegeven (tot die tijd "Ouder van een Sporty-kid").
-- **Nog aan te leveren door de klant** (staat als TODO in de code): e-mailadressen, algemene en privacyvoorwaarden, de tekst van de bevestigingsmail, het GGD-inspectierapport, de documenten 2 t/m 6 van feedback 2.0 (zie hieronder), de functie en het weetje van Anass, en foto's en video's (ook van het team).
+- **Nog aan te leveren door de klant** (staat als TODO in de code): de privacyverklaring en bewaartermijnen, het IBAN, de lijst met scholen (en hoe het ophalen per school gaat), de standaardtijden van de proefdag, de namen bij de reviews, het GGD-inspectierapport, document 6 van feedback 2.0 (het logo), de functie en het weetje van Anass, en foto's en video's (ook van het team). De bevestigingsmail van "Blijf op de hoogte" is akkoord (november 2026).
 
 ### Feedback van de klant (6 november 2026)
 
@@ -136,7 +136,9 @@ Een document met 17 verbeterpunten ("1_Feedback_2.0_verbeterpunten") en drie fot
 - **Gegevens:** telefoon 06 18 26 67 06, LRK-nummer 236315389, KvK-nummer 42064267, social media (Instagram `bso.sporty`, TikTok `@bso.sporty`, Facebook) en het logo van de Brancheorganisatie Kinderopvang in de footer.
 - **Team:** Henny helemaal in zijn vak (nieuwe uitsnede uit het mascotteblad, "Aaien mag!" bovenin) en Anass Boudinar (functie en weetje volgen).
 - **Foto's:** het clubhuis van buiten (brede foto op de locatiepagina), de speelkamer en de kantine zijn eigen foto's van Sporty (zie `assets/fotos/BRONNEN.md`). De chillruimte, de originele foto's (WeTransfer), de foto's van Tim en Anass en de eerder gedeelde foto's volgen.
-- **Nog te ontvangen bij dit document:** document 2 (Onze visie, met de Schijf van 10), 3 (Onze droom), 4 (Een middag bij Sporty, met een oranje vak per stap en de zin over de sportclub bij stap 5), 5 (Antwoorden op je vragen) en 6 (het logo).
+- **Documenten 2 t/m 5 (24 november 2026), verwerkt:** 2 "Onze visie" (Alles over Sporty: Let's play!, twee blokken, de Schijf van 10 met de afbeelding van Sporty en de bronnen), 3 "Onze droom" (aangepast), 4 "Een middag bij Sporty" (nieuwe stapteksten, per stap een oranje vak met wat de coaches doen, en bij stap 5 de zin over de sportvereniging) en 5 "Antwoorden op de vragen" (FAQ, voorwaarden, contact binnen 24 uur, kosteloos afmelden tot 48 uur via WhatsApp of e-mail, opzegtermijn 1 maand, betalen via incasso of zelf overmaken, Sporty is vrijgesteld van btw).
+- **Facturen in Mijn BSO (document 5):** het Sporty Abonnement is een vast bedrag per maand (vaste dagen × 27 uur × € 9,75), Incidenteel rekent per dag (4,5 of 10,5 uur × € 12) en telt dagen die minder dan 48 uur van tevoren zijn afgemeld mee. Het abonnement en de vaste dagen staan bij het kind; vakantie- en studiedagen zet het team in de agenda. Zie "Facturen" in `docs/beheeromgeving.md`. Aannames om te bevestigen: naar rato bij een start of stop halverwege de maand, en extra dagen bij een abonnement worden niet automatisch gefactureerd.
+- **Nog te ontvangen:** document 6 (het logo).
 
 ### Kleuren
 

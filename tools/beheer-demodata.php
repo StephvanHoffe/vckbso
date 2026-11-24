@@ -41,11 +41,7 @@ function demo_gebruiker(string $rol, string $naam, string $email, string $hash, 
 $beheerder = demo_gebruiker('beheerder', 'Demo Beheerder', 'beheerder@demo.bsosporty.nl', $hash);
 $begeleider = demo_gebruiker('medewerker', 'Demo Begeleider', 'begeleider@demo.bsosporty.nl', $hash);
 
-// Instellingen (voorbeeldwaarden, geen echte tarieven)
-if (instelling('uurtarief_cent') === '') {
-    instelling_zet('uurtarief_cent', '1000');
-    instelling_zet('uren_per_middag', '4');
-}
+// De tarieven (Sporty Abonnement en Incidenteel) staan al klaar: die zet de database bij het installeren (migratie 23)
 
 // Groepen
 if (!actieve_groepen()) {
@@ -89,12 +85,19 @@ foreach ($gezinnen as $i => [$ouderNaam, $kids]) {
 }
 // Eén nieuwe aanmelding die nog goedgekeurd moet worden
 $nieuw = demo_gebruiker('ouder', 'Lisa Bos', 'lisa.bos@demo.bsosporty.nl', $hash, ['status' => 'nieuw', 'mandaat' => 'demo']);
-q("INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, foto_toestemming, aangemaakt_op) VALUES (?, 'Mees', 'Bos', ?, 0, ?)", [$nieuw, date('Y-m-d', strtotime('-6 years')), nu()]);
+q("INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, foto_toestemming, abonnement, vaste_dagen, abonnement_vanaf, aangemaakt_op) VALUES (?, 'Mees', 'Bos', ?, 0, 'sporty-52', '2,4', ?, ?)", [$nieuw, date('Y-m-d', strtotime('-6 years')), date('Y-m-d', strtotime('first day of next month')), nu()]);
 koppel_verzorger(laatste_id(), $nieuw, 'ouder', true); // gezag opgegeven, nog te controleren
 
 // Inschrijvingen: vorige maand (voor facturen) tot drie weken vooruit
 $van = date('Y-m-01', strtotime('first day of last month'));
 $tot = date('Y-m-d', strtotime('+3 weeks'));
+// Abonnementen: de vaste dagen zijn de dagen hieronder; Daan komt incidenteel
+foreach ($kinderen as $n => $kind) {
+    $incidenteel = $kind['voornaam'] === 'Daan';
+    q('UPDATE kinderen SET abonnement = ?, vaste_dagen = ?, abonnement_vanaf = ? WHERE id = ?', [
+        $incidenteel ? 'incidenteel' : 'sporty-52', $incidenteel ? '' : implode(',', array_unique([min(($n % 5) + 1, (($n + 2) % 5) + 1), max(($n % 5) + 1, (($n + 2) % 5) + 1)])), $van, $kind['id'],
+    ]);
+}
 foreach ($kinderen as $n => $kind) {
     foreach (datums_tussen($van, $tot) as $datum) {
         if (in_array(weekdag($datum), [($n % 5) + 1, (($n + 2) % 5) + 1], true)) {

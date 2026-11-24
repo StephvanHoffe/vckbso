@@ -103,7 +103,8 @@ function agenda_ouder(array $ouder): void
     }
 
     pagina_begin('Agenda', 'agenda.php');
-    pagina_kop('Agenda', 'Kies de dagen waarop je kind komt, of meld je kind af. Afmelden kan tot ' . e(instelling('afmelden_tot', '12:00')) . ' uur op de dag zelf.');
+    // Kosteloos afmelden: tot 48 uur van tevoren (antwoorden van Sporty, november 2026); bij Incidenteel telt een latere afmelding mee op de factuur
+    pagina_kop('Agenda', 'Kies de dagen waarop je kind komt, of meld je kind af. Afmelden kan tot ' . e(instelling('afmelden_tot', '12:00')) . ' uur op de dag zelf; kosteloos tot ' . (int) factuur_tarieven()['kosteloos_uren'] . ' uur van tevoren.');
 
     if (!$kinderen) {
         echo '<div class="panel"><p class="leeg">Er zijn (nog) geen kinderen waarvoor jij dagen kunt kiezen. Is dit niet goed? Stuur ons een <a href="berichten.php">bericht</a>.</p></div>';
@@ -166,6 +167,9 @@ function agenda_ouder(array $ouder): void
         $open = groep_open_op($groep, $datum);
         $wijzigbaar = ouder_mag_wijzigen($datum);
         echo '<li class="' . $klassen . '"><span class="kalender__datum">' . e(datum_nl($datum, 'd MMM')) . '<small>' . e(WEEKDAGEN[$wd]) . '</small></span>';
+        if ($open && is_hele_dag((int) $groep['id'], $datum)) {
+            echo '<small class="muted">Vakantiedag, hele dag</small>';
+        }
 
         if ($inschrijving && $inschrijving['status'] !== 'afgemeld') {
             echo status_badge($inschrijving['status']);

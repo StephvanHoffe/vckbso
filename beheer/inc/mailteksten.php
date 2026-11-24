@@ -36,7 +36,7 @@ const MAILTEKSTEN = [
         'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kinderen' => ['Voornamen van de aangemelde kinderen', 'Noor en Daan']],
         'verplicht' => [],
         'onderwerp' => 'Je aanmelding bij Sporty is binnen!',
-        'tekst' => "Hoi {voornaam},\n\nWat leuk dat je {kinderen} hebt aangemeld bij Sporty! We hebben je aanmelding goed ontvangen. Aanmelden is vrijblijvend: je zit nog nergens aan vast.\n\nWe bekijken de mogelijkheden en nemen snel contact met je op om kennis te maken en je aanmelding af te ronden. Daarna krijg je een link om in te loggen in Mijn BSO.\n\nAlvast zin in? Kom gerust een keer langs op Sportpark Middenmeer, of boek een gratis proefdag.\n\nTot snel!\nTeam Sporty (en Henny: woef!)",
+        'tekst' => "Hoi {voornaam},\n\nWat leuk dat je {kinderen} hebt aangemeld bij Sporty! We hebben je aanmelding goed ontvangen. Aanmelden is vrijblijvend: je zit nog nergens aan vast.\n\nWe bekijken de mogelijkheden en nemen binnen 24 uur contact met je op om kennis te maken en je aanmelding af te ronden. Daarna krijg je een link om in te loggen in Mijn BSO.\n\nAlvast zin in? Kom gerust een keer langs op Sportpark Middenmeer, of boek een gratis proefdag.\n\nTot snel!\nTeam Sporty (en Henny: woef!)",
     ],
     'aanmelding_bestaand_account' => [
         'groep' => 'ouders',
@@ -261,7 +261,7 @@ const MAILTEKSTEN = [
         'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kinderen' => ['Voornamen van de aangemelde kinderen', 'Noor and Daan']],
         'verplicht' => [],
         'onderwerp' => 'Your Sporty sign-up is in!',
-        'tekst' => "Hi {voornaam},\n\nHow lovely that you've signed up {kinderen} at Sporty! We've received your sign-up. Signing up is free and without obligation: you're not committed to anything yet.\n\nWe'll look at the options and get in touch soon to meet you and complete your sign-up. After that you'll receive a link to log in to Mijn BSO, our parent portal (in Dutch).\n\nCan't wait? Feel free to drop by at Sportpark Middenmeer, or book a free trial day.\n\nSee you soon!\nTeam Sporty (and Henny: woof!)",
+        'tekst' => "Hi {voornaam},\n\nHow lovely that you've signed up {kinderen} at Sporty! We've received your sign-up. Signing up is free and without obligation: you're not committed to anything yet.\n\nWe'll look at the options and get in touch within 24 hours to meet you and complete your sign-up. After that you'll receive a link to log in to Mijn BSO, our parent portal (in Dutch).\n\nCan't wait? Feel free to drop by at Sportpark Middenmeer, or book a free trial day.\n\nSee you soon!\nTeam Sporty (and Henny: woof!)",
     ],
 
     'aanmelding_bestaand_account_en' => [
