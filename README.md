@@ -101,7 +101,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 **Gegevens van de klant**
 - [x] Adres: Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer), uit de teksten van november 2026.
-- [ ] Telefoonnummer en WhatsApp-nummer (nu staat het oude nummer er als tijdelijk gegeven; de WhatsApp-knoppen op Contact en in het aanmeldformulier gebruiken ook het tijdelijke nummer). Het e-mailadres is info@bsosporty.nl (13 november 2026).
+- [ ] Telefoonnummer (nu staat er een tijdelijk nummer). Het WhatsApp-nummer is +31 6 18266706 (24 november 2026): de zwevende WhatsApp-knop rechtsonder op elke pagina, de knop op Contact en de link in het aanmeldformulier. Het e-mailadres is info@bsosporty.nl (13 november 2026).
 - [ ] Wat er in het Sporty-kennismakingspakket zit en hoe ouders het krijgen (Blijf op de hoogte).
 - [ ] De teksten van de e-mails (bevestiging van een aanmelding, een proefdag en Blijf op de hoogte zijn nu voorlopige teksten). Sporty past alle e-mails zelf aan in Mijn BSO onder Instellingen → E-mails aanpassen.
 - [ ] Nieuwe hero-foto voor de homepage (Sporty stuurt die mee), en de foto's voor de nieuwe plekken `bewegen` (homepage) en `locatie-overzicht` (Locaties); zie `assets/fotos/BRONNEN.md`.

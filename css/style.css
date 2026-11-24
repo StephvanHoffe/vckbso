@@ -6791,12 +6791,125 @@ html:not(.js) .aanmelden__stap + .aanmelden__stap {
 
 /* ---------- 28. Print ---------- */
 
+/* ---------- Zwevende WhatsApp-knop (24 november 2026) ----------
+   Rechtsonder op elke pagina (staat in de voet: tools/site/voet.html). Rond, zwart met een oranje rand,
+   zodat hij op wit, oranje en zwart opvalt. Bij aanwijzen of focus schuift "App ons" uit.
+   Hij vliegt bij het laden in beeld, op de homepage pas na de intro; niet bij "minder beweging". */
+.whatsapp-knop {
+  position: fixed;
+  right: max(var(--space-s), env(safe-area-inset-right));
+  bottom: max(var(--space-s), env(safe-area-inset-bottom));
+  z-index: 40; /* onder de kop en het open menu (50) */
+  display: flex;
+  align-items: center;
+  height: 3.5rem;
+  padding-inline: calc(0.95rem - 3px);
+  border: 3px solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  background: var(--color-dark);
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.28);
+  color: var(--color-on-dark);
+  font-family: var(--font-ui);
+  font-size: var(--step--1);
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.site-footer .whatsapp-knop {
+  color: var(--color-on-dark);
+}
+
+.whatsapp-knop .icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  stroke-width: 2.2;
+}
+
+/* De tekst is er altijd voor schermlezers; zichtbaar pas bij aanwijzen of focus */
+.whatsapp-knop__tekst {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+}
+
+.whatsapp-knop:hover .whatsapp-knop__tekst,
+.whatsapp-knop:focus-visible .whatsapp-knop__tekst {
+  max-width: 12em;
+  margin-left: 0.5em;
+  opacity: 1;
+}
+
+.whatsapp-knop:hover {
+  background: var(--color-primary);
+  border-color: var(--color-dark);
+  color: var(--color-text);
+}
+
+.site-footer .whatsapp-knop:hover {
+  color: var(--color-text);
+}
+
+/* Zichtbare focus op elke achtergrond: een witte rand met een zwarte ring eromheen */
+.whatsapp-knop:focus-visible,
+.on-dark .whatsapp-knop:focus-visible {
+  outline: 3px solid var(--color-dark);
+  outline-offset: 3px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 0 0 3px var(--color-surface), 0 8px 22px rgb(0 0 0 / 0.28);
+}
+
+/* Onderaan de pagina: ruimte zodat de knop niets van de voet afdekt */
+.site-footer {
+  padding-bottom: calc(var(--space-l) + 4.5rem);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .whatsapp-knop {
+    animation: whatsapp-vliegt-in 900ms var(--ease-out) 1.2s both;
+    transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out), translate var(--duration-fast) var(--ease-out);
+  }
+
+  .met-intro .whatsapp-knop {
+    animation-delay: 3.6s;
+  }
+
+  .whatsapp-knop__tekst {
+    transition: max-width var(--duration) var(--ease-out), opacity var(--duration-fast) var(--ease-out), margin var(--duration) var(--ease-out);
+  }
+
+  .whatsapp-knop:hover {
+    translate: 0 -3px;
+  }
+}
+
+/* Een boogje van rechtsonder naar zijn plek, met een kleine stuiter bij de landing */
+@keyframes whatsapp-vliegt-in {
+  0% {
+    opacity: 0;
+    transform: translate(9rem, 6rem) rotate(40deg) scale(0.5);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(-0.6rem, -1.4rem) rotate(-12deg) scale(1.08);
+  }
+  78% {
+    transform: translate(0, 0.25rem) rotate(4deg) scale(0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media print {
   .site-header,
   .site-footer,
   .cta-section,
   .met-intro .intro[hidden],
-  .kaart {
+  .kaart,
+  .whatsapp-knop {
     display: none !important;
   }
 

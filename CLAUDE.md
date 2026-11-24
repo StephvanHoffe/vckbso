@@ -102,7 +102,7 @@ De klant heeft alle teksten aangeleverd als Word-documenten, met per pagina een 
 - **Kernwaarden:** Plezier · Vriendschap · Groei (in plaats van Sport · Plezier · Ontwikkeling), met getekende iconen. Sport is het middel, geen doel; iedereen is welkom, ook wie niet goed kan sporten of liever knutselt.
 - **Kom bij de club (aanmeldformulier):** vrijblijvend, in 7 stappen met één onderwerp per scherm en Henny die over de voortgangsbalk meerent; voortgang onthouden en anoniem meten waar ouders afhaken. Na de kennismaking rondt het team de aanmelding af (account, wachtwoord, machtiging). De abonnementsstap is nog in overleg.
 - **Reviews:** aangeleverd door de klant; de namen volgen zodra de ouders toestemming hebben gegeven (tot die tijd "Ouder van een Sporty-kid").
-- **Nog aan te leveren door de klant** (staat als TODO in de code): telefoonnummer, WhatsApp-nummer en e-mailadressen, LRK-nummer, algemene en privacyvoorwaarden, de tekst van de bevestigingsmail, het GGD-inspectierapport, de tijden van het middagprogramma, de abonnementsstap in het aanmeldformulier, en foto's en video's (ook van het team).
+- **Nog aan te leveren door de klant** (staat als TODO in de code): telefoonnummer (het WhatsApp-nummer is sinds 24 november 2026 bekend) en e-mailadressen, LRK-nummer, algemene en privacyvoorwaarden, de tekst van de bevestigingsmail, het GGD-inspectierapport, de tijden van het middagprogramma, de abonnementsstap in het aanmeldformulier, en foto's en video's (ook van het team).
 
 ### Feedback van de klant (6 november 2026)
 
@@ -286,6 +286,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 - Bedrijfsnaam: Sporty, ook statutair (bevestigd door de klant op 23 oktober 2026; eerder statutair: Je Dag in Beeld; tot 30 september 2026: BSO VCK)
 - E-mail: info@bsosporty.nl (als `mailto:`-link; gewijzigd op 13 november 2026, eerder info@sporty.nl en daarvoor info@vckbso.nl)
 - Telefoon: 0612345678 (als `tel:`-link)
+- WhatsApp: +31 6 18266706 (24 november 2026; als `https://wa.me/31618266706`-link): de zwevende WhatsApp-knop rechtsonder op elke pagina (in `tools/site/voet.html` en `voet.en.html`), de knop op Contact en de link in het aanmeldformulier. Het telefoonnummer volgt nog.
 
 - Adres: Sporty, Voorlandpad 17, 1098 TZ Amsterdam (clubhuis op Sportpark Middenmeer, Watergraafsmeer; teksten van november 2026)
 

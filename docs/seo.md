@@ -33,7 +33,7 @@ Deze gegevens en `sitemap.xml` worden gemaakt door `tools/structured-data.mjs` (
 
 Deze informatie is nodig om de site af te maken. Ze staat ook als TODO in de code.
 
-- [ ] **Het echte telefoonnummer en WhatsApp-nummer.** Nu staat overal het tijdelijke 06 12 34 56 78, ook in de gegevens voor Google. Naam, adres en telefoon moeten op de website, in het Google Bedrijfsprofiel en elders precies gelijk zijn.
+- [ ] **Het echte telefoonnummer.** Nu staat overal het tijdelijke 06 12 34 56 78, ook in de gegevens voor Google. (Het WhatsApp-nummer is binnen: +31 6 18266706, sinds 24 november 2026 in de zwevende WhatsApp-knop op elke pagina.) Naam, adres en telefoon moeten op de website, in het Google Bedrijfsprofiel en elders precies gelijk zijn.
 - [ ] **Hoe laat Sporty op schooldagen opengaat** (per dag als het verschilt, bijvoorbeeld op woensdag). Dan komen de openingstijden in de gegevens voor Google en in de veelgestelde vragen.
 - [ ] **De scholen waar jullie ophalen**, en per school: wie haalt op, hoe laat, lopend, op de fiets of met de bakfiets, en hoe lang de tocht is. Daarmee maken we een pagina "Ophalen van school" (ouders zoeken op de school van hun kind).
 - [ ] **Bereikbaarheid van het clubhuis**: tram of bus en halte, fietsen parkeren, auto parkeren, en hoe halen en brengen op het sportpark werkt.
