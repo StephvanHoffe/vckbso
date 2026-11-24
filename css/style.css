@@ -7014,6 +7014,15 @@ html:not(.js) .aanmelden__stap + .aanmelden__stap {
   box-shadow: 0 0 0 3px var(--color-surface), 0 8px 22px rgb(0 0 0 / 0.28);
 }
 
+/* De WhatsApp-knop op Contact: WhatsApp-groen zoals de zwevende knop, met zwarte tekst (9,5:1; wit op dit groen is
+   maar 2:1). Bij aanwijzen donkergroen met witte tekst (7,7:1). */
+.btn--whatsapp {
+  --btn-bg: var(--color-whatsapp);
+  --btn-fg: var(--color-text);
+  --btn-bg-hover: var(--color-whatsapp-dark);
+  --btn-fg-hover: var(--color-on-dark);
+}
+
 /* Onderaan de pagina: ruimte zodat de knop niets van de voet afdekt */
 .site-footer {
   padding-bottom: calc(var(--space-l) + 4.5rem);
