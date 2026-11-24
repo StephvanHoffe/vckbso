@@ -400,18 +400,32 @@
     });
   });
 
-  /* ---------- Juich-GIF's van het team (team.html): spelen in een lus met een pauzeknop, niet vanzelf bij "minder beweging" ---------- */
+  /* ---------- Juichfilmpjes van het team (team.html): spelen in een lus zolang ze in beeld zijn, met een pauzeknop,
+     en niet vanzelf bij "minder beweging". Het filmpje laadt pas als het in beeld komt (preload="none"). ---------- */
   document.querySelectorAll(".gif").forEach(function (gif) {
     var video = gif.querySelector("video");
     var knop = gif.querySelector(".gif__knop");
     if (!video || !knop) return;
+    var tekst = knop.querySelector(".gif__tekst") || knop;
+    var stil = reduceMotion; // de bezoeker wil het filmpje stil (of heeft "minder beweging" aan)
+    var inBeeld = !("IntersectionObserver" in window);
 
-    var zet = function (speelt) {
-      if (speelt) video.play().catch(function () {}); else video.pause();
-      knop.textContent = speelt ? t("Pauzeer", "Pause") : t("Speel af", "Play");
+    var bijwerken = function () {
+      if (!stil && inBeeld) video.play().catch(function () {}); else video.pause();
+      tekst.textContent = stil ? t("Speel af", "Play") : t("Pauzeer", "Pause");
     };
 
-    zet(!reduceMotion);
-    knop.addEventListener("click", function () { zet(video.paused); });
+    knop.addEventListener("click", function () {
+      stil = !stil;
+      if (!stil) inBeeld = true; // wie op afspelen klikt, ziet het filmpje
+      bijwerken();
+    });
+    if (!inBeeld) {
+      new IntersectionObserver(function (items) {
+        inBeeld = items[items.length - 1].isIntersecting;
+        bijwerken();
+      }, { threshold: 0.25 }).observe(gif);
+    }
+    bijwerken();
   });
 })();

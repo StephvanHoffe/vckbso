@@ -92,21 +92,18 @@
 <section class="section section--flush-top" aria-labelledby="team-titel">
   <div class="container">
     <h2 id="team-titel" class="visually-hidden">Wie is wie?</h2>
-    <!--
-      TODO: per teamlid een GIF (of liever een kort filmpje, dat laadt sneller) van een voetbaljuichmoment.
-      Vervang de stockfoto dan door een div met class "gif frame__img", met daarin een video-element (muted, loop, playsinline,
-      het filmpje uit assets/fotos/ en een aria-label zoals "NAAM viert een doelpunt") en een button met class "gif__knop" en de tekst "Speel af".
-      js/main.js speelt het filmpje dan af met een pauzeknop, en niet vanzelf bij "minder beweging". Zie ook assets/fotos/BRONNEN.md.
-    -->
-    <ul class="team-lijst team-lijst--3">
+    <!-- De juichmomenten van het team: een kort filmpje (WebM en MP4) met een foto als stilstaand beeld.
+         js/main.js speelt het af als het in beeld is, met een pauzeknop, en niet vanzelf bij "minder beweging".
+         Een filmpje of foto vervangen of een teamlid toevoegen: zie assets/fotos/BRONNEN.md (npm run filmpjes). -->
+    <ul class="team-lijst">
       <li class="team-lid reveal" style="--delay: 0ms;">
         <div class="frame team-lid__beeld">
-          <!-- TODO: GIF (liever een kort filmpje) van Sureyo met een voetbaljuichmoment; zie de uitleg hierboven en assets/fotos/BRONNEN.md -->
-          <div class="frame__img" data-foto="team-sureyo" style="--ratio: 4 / 5;">
-            <picture>
-            <source type="image/avif" srcset="assets/fotos/team-3-480.avif 480w, assets/fotos/team-3-800.avif 800w, assets/fotos/team-3-1200.avif 1200w, assets/fotos/team-3-1600.avif 1600w" sizes="(min-width: 64em) 22rem, (min-width: 40em) 45vw, 92vw">
-            <img src="assets/fotos/team-3-800.webp" srcset="assets/fotos/team-3-480.webp 480w, assets/fotos/team-3-800.webp 800w, assets/fotos/team-3-1200.webp 1200w, assets/fotos/team-3-1600.webp 1600w" sizes="(min-width: 64em) 22rem, (min-width: 40em) 45vw, 92vw" width="1600" height="2400" alt="Twee mensen geven elkaar een high five" loading="lazy" decoding="async">
-          </picture>
+          <div class="gif frame__img" style="--ratio: 4 / 5;">
+            <video muted loop playsinline preload="none" width="600" height="750" poster="assets/fotos/juich-sureyo-poster.webp" aria-label="Sureyo viert een doelpunt">
+              <source src="assets/fotos/juich-sureyo.webm" type="video/webm">
+              <source src="assets/fotos/juich-sureyo.mp4" type="video/mp4">
+            </video>
+            <button class="gif__knop" type="button"><span class="gif__tekst">Speel af</span><span class="visually-hidden">: filmpje van Sureyo</span></button>
           </div>
           <svg class="doodle doodle--vierkant team-lid__doodle" aria-hidden="true" focusable="false"><use href="#d-ster"></use></svg>
           <p class="notitie team-lid__notitie" aria-hidden="true">Dansen? Altijd!</p>
@@ -119,12 +116,13 @@
       </li>
       <li class="team-lid reveal" style="--delay: 120ms;">
         <div class="frame team-lid__beeld">
-          <!-- TODO: GIF (liever een kort filmpje) van Tim met een voetbaljuichmoment; zie de uitleg hierboven en assets/fotos/BRONNEN.md -->
-          <div class="frame__img" data-foto="team-tim" style="--ratio: 4 / 5;">
-            <picture>
-            <source type="image/avif" srcset="assets/fotos/team-1-480.avif 480w, assets/fotos/team-1-800.avif 800w, assets/fotos/team-1-1200.avif 1200w, assets/fotos/team-1-1600.avif 1600w" sizes="(min-width: 64em) 22rem, (min-width: 40em) 45vw, 92vw">
-            <img src="assets/fotos/team-1-800.webp" srcset="assets/fotos/team-1-480.webp 480w, assets/fotos/team-1-800.webp 800w, assets/fotos/team-1-1200.webp 1200w, assets/fotos/team-1-1600.webp 1600w" sizes="(min-width: 64em) 22rem, (min-width: 40em) 45vw, 92vw" width="1600" height="2400" alt="Een voetbal ligt in het net van het doel" loading="lazy" decoding="async">
-          </picture>
+          <!-- TODO: foto van Tim als bestand (nu een beeld uit zijn filmpje als stilstaand beeld; zie tools/filmpjes.mjs) -->
+          <div class="gif frame__img" style="--ratio: 4 / 5;">
+            <video muted loop playsinline preload="none" width="600" height="750" poster="assets/fotos/juich-tim-poster.webp" aria-label="Tim viert een doelpunt">
+              <source src="assets/fotos/juich-tim.webm" type="video/webm">
+              <source src="assets/fotos/juich-tim.mp4" type="video/mp4">
+            </video>
+            <button class="gif__knop" type="button"><span class="gif__tekst">Speel af</span><span class="visually-hidden">: filmpje van Tim</span></button>
           </div>
           <svg class="doodle doodle--vierkant team-lid__doodle" aria-hidden="true" focusable="false"><use href="#d-straal"></use></svg>
           <p class="notitie team-lid__notitie" aria-hidden="true">Potje padel?</p>
@@ -136,6 +134,24 @@
         </div>
       </li>
       <li class="team-lid reveal" style="--delay: 240ms;">
+        <div class="frame team-lid__beeld">
+          <!-- TODO: achternaam, functie en een leuk weetje van Anas (volgen van Sporty), en zijn foto als bestand (nu een beeld uit zijn filmpje) -->
+          <div class="gif frame__img" style="--ratio: 4 / 5;">
+            <video muted loop playsinline preload="none" width="600" height="750" poster="assets/fotos/juich-anas-poster.webp" aria-label="Anas viert een doelpunt">
+              <source src="assets/fotos/juich-anas.webm" type="video/webm">
+              <source src="assets/fotos/juich-anas.mp4" type="video/mp4">
+            </video>
+            <button class="gif__knop" type="button"><span class="gif__tekst">Speel af</span><span class="visually-hidden">: filmpje van Anas</span></button>
+          </div>
+          <svg class="doodle doodle--vierkant team-lid__doodle" aria-hidden="true" focusable="false"><use href="#d-kroon"></use></svg>
+          <p class="notitie team-lid__notitie" aria-hidden="true">Goal!</p>
+        </div>
+        <div class="team-lid__body">
+          <h3>Anas</h3>
+          <p class="team-lid__functie">Sporty coach</p>
+        </div>
+      </li>
+      <li class="team-lid reveal" style="--delay: 360ms;">
         <div class="frame team-lid__beeld">
           <div class="frame__img henny-vak" style="--ratio: 4 / 5;">
             <img src="assets/img/henny/henny-rent-360.webp" srcset="assets/img/henny/henny-rent-180.webp 180w, assets/img/henny/henny-rent-360.webp 360w" sizes="(min-width: 64em) 14rem, 60vw" width="360" height="478" alt="Henny de hond rent vrolijk met zijn tong uit zijn bek" loading="lazy" decoding="async">

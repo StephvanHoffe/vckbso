@@ -63,7 +63,7 @@
     <section class="panel" aria-labelledby="gegevens-titel">
       <h2 id="gegevens-titel">Gegevens</h2>
       <dl class="gegevens">
-        <dt>Geboortedatum</dt><dd>4 oktober 2018</dd>
+        <dt>Geboortedatum</dt><dd>15 oktober 2018</dd>
         <dt>School</dt><dd>-</dd>
         <dt>Bijzonderheden</dt><dd>Geen</dd>
         <dt>Mag opgehaald worden door</dt><dd>Alleen de ouders</dd>
@@ -79,7 +79,7 @@
             <div class="field"><label for="achternaam">Achternaam</label><input id="achternaam" name="achternaam" value="Mulder"></div>
           </div>
           <div class="form__row">
-            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2018-10-04"></div>
+            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2018-10-15"></div>
             <div class="field"><label for="groep">Groep</label><select id="groep" name="groep"><option value="">Nog geen groep</option><option value="1" selected>De Bengels</option><option value="2">De Kanjers</option></select></div>
           </div>
           <div class="field"><label for="school">Basisschool</label><input id="school" name="school" value=""></div>
@@ -100,7 +100,7 @@
         <div class="field">
           <label for="team_notities">Notities over Lieke</label>
           <textarea id="team_notities" name="team_notities" rows="5" maxlength="4000" placeholder="Bijvoorbeeld: speelt liever niet samen met ..., heeft extra begeleiding nodig bij ...">Vindt drukte aan het begin van de middag lastig. Even samen een rustige plek zoeken helpt. Botst soms met een ander kind bij tikspellen: in een ander team zetten.</textarea>
-          <p class="field__hint">Laatst aangepast 13 november 2026 om 18:24 door Demo Begeleider.</p>
+          <p class="field__hint">Laatst aangepast 24 november 2026 om 12:19 door Demo Begeleider.</p>
         </div>
         <div class="form__acties"><button class="btn" type="submit">Notities opslaan</button></div>
       </form>
@@ -114,7 +114,7 @@
             <div class="kindrij__naam">Kees Mulder <span class="badge">Ouder</span> <span class="badge">Contracthouder</span>              <span class="badge badge--geldig">Gezag gecontroleerd</span></div>
             <div class="kindrij__info">
               <span>Rechten: dagen kiezen en afmelden, gegevens en gedeelde observaties inzien, foto&#039;s ontvangen, berichten over het kind</span>
-<span>Vastgelegd op 13 november 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
+<span>Vastgelegd op 24 november 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
           </div>
           <details class="uitklap">
             <summary>Gezag en rechten van Kees Mulder</summary>
@@ -185,7 +185,7 @@
         <form class="form" method="post" action="#">
           <input type="hidden" name="csrf" value="voorbeeld">          <input type="hidden" name="actie" value="observatie">
           <div class="form__row">
-            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-11-13" required value="2026-11-13"></div>
+            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-11-24" required value="2026-11-24"></div>
             <div class="field"><label for="obs_gebied">Ontwikkelgebied</label><select id="obs_gebied" name="gebied">
               <option value="sociaal">Sociaal-emotioneel</option>
               <option value="motoriek">Sport en bewegen</option>
@@ -208,12 +208,12 @@
     <section class="panel" aria-labelledby="komend-titel">
       <h2 id="komend-titel">Binnenkort</h2>
       <ul class="kindlijst">
-        <li class="kindrij"><span>Maandag 16 november</span><span class="badge badge--bevestigd">Komt</span></li>
-        <li class="kindrij"><span>Woensdag 18 november</span><span class="badge badge--bevestigd">Komt</span></li>
-        <li class="kindrij"><span>Maandag 23 november</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Woensdag 25 november</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Maandag 30 november</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Woensdag 2 december</span><span class="badge badge--bevestigd">Komt</span></li>
+        <li class="kindrij"><span>Maandag 7 december</span><span class="badge badge--bevestigd">Komt</span></li>
+        <li class="kindrij"><span>Woensdag 9 december</span><span class="badge badge--bevestigd">Komt</span></li>
+        <li class="kindrij"><span>Maandag 14 december</span><span class="badge badge--bevestigd">Komt</span></li>
       </ul>
     </section>
     <section class="panel" aria-labelledby="geweest-titel">
@@ -222,6 +222,9 @@
         <table>
           <thead><tr><th scope="col">Dag</th><th scope="col">Status</th><th scope="col">Binnen</th><th scope="col">Opgehaald</th></tr></thead>
           <tbody>
+            <tr><td>ma 23 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
+            <tr><td>wo 18 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
+            <tr><td>ma 16 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 11 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>ma 9 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 4 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
@@ -229,16 +232,13 @@
             <tr><td>wo 28 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>ma 26 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>wo 21 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
-            <tr><td>ma 19 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
-            <tr><td>wo 14 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
-            <tr><td>ma 12 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
           </tbody>
         </table>
       </div>
     </section>
     <section class="panel" aria-labelledby="fotos-titel">
       <div class="panel__kop"><h2 id="fotos-titel">Foto's</h2><a href="beheerder-fotos.html">Foto's delen</a></div>
-      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=4&amp;weergave=1"><img src="fotos/foto-4-klein.jpg" alt="Balspelletje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Balspelletje</p><p class="muted">vandaag 18:24 · Lieke</p></div></li></ul>
+      <ul class="fotogrid"><li class="fotokaart"><a href="#" data-vb-niet="foto.php?id=4&amp;weergave=1"><img src="fotos/foto-4-klein.jpg" alt="Balspelletje" loading="lazy" width="480" height="360"></a><div class="fotokaart__tekst"><p>Balspelletje</p><p class="muted">vandaag 12:19 · Lieke</p></div></li></ul>
     </section>
   </div>
 </div>

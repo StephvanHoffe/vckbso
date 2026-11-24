@@ -3263,21 +3263,32 @@ ol.grid {
 }
 
 
-/* Klaar voor de GIF's: een filmpje dat in een lus speelt, met een knop om te pauzeren */
+/* De juichfilmpjes: een filmpje dat in een lus speelt, met een knop om te pauzeren (js/main.js) */
 .gif {
   position: relative;
 }
 
 .gif video {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+/* Zonder JavaScript speelt er niets af: dan ook geen knop */
+html:not(.js) .gif__knop {
+  display: none;
+}
+
+.gif__knop:hover {
+  background: var(--color-primary);
+}
+
+/* Linksboven: rechtsboven staat een getekend element, onderaan de handgeschreven krabbel */
 .gif__knop {
   position: absolute;
-  right: var(--space-xs);
-  bottom: var(--space-xs);
+  top: var(--space-xs);
+  left: var(--space-xs);
   min-height: 2.75rem;
   padding: 0.4rem 0.9rem;
   border: var(--border-width) solid var(--color-dark);

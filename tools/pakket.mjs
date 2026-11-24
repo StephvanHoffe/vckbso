@@ -17,6 +17,7 @@ const BESTANDEN = [".htaccess", "favicon.ico", "site.webmanifest", "robots.txt",
 const MAPPEN = ["css", "js", "assets", "en", "locaties", "beheer"];
 const UITSLUITEN = [
   /\.md$/, // interne notities, zoals assets/fotos/BRONNEN.md
+  /^assets\/fotos\/bron\//, // de bronbestanden van foto's en filmpjes; de site gebruikt alleen de omgezette versies
   /(^|\/)\.DS_Store$/,
   /^beheer\/config\.php$/, // de echte configuratie maak je op de server zelf
   /^beheer\/data\/(?!\.htaccess$|index\.html$)/, // nooit gegevens meesturen

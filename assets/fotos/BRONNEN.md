@@ -38,9 +38,9 @@ In de HTML staat bij elke foto `data-foto="…"` (de plek) en een opmerking "Sto
 | `basketbal.jpg` | [Kids Playing Basketball with Their Coach](https://www.pexels.com/photo/kids-playing-basketball-with-their-coach-8336951/) | RDNE Stock project | Pauzebegeleiding (`pauze`) |
 | `handen.jpg` | [Group of Children having an Activity Together](https://www.pexels.com/photo/group-of-children-having-an-activity-together-8813502/) | Kampus Production | Alles over Sporty (`visie`) |
 | `team.jpg` | [A Group of People Standing Outdoors](https://www.pexels.com/photo/a-group-of-people-standing-outdoors-9353488/) | PNW Production | Nu niet gebruikt (bewaard voor later) |
-| `team-1.jpg` | [Close-up of a Soccer Ball in the Goal](https://www.pexels.com/photo/close-up-of-a-soccer-ball-in-the-goal-19436350/) | Florian Thomschke | Team (`team-tim`) |
+| `team-1.jpg` | [Close-up of a Soccer Ball in the Goal](https://www.pexels.com/photo/close-up-of-a-soccer-ball-in-the-goal-19436350/) | Florian Thomschke | Nu niet gebruikt (Team heeft sinds 24 november 2026 eigen filmpjes) |
 | `team-2.jpg` | [Basketball team stacking hands together](https://www.pexels.com/photo/basketball-team-stacking-hands-together-3755440/) | Andrea Piacquadio | Nu niet gebruikt (bewaard voor later) |
-| `team-3.jpg` | [A Team Raising Their Hands and Doing a High Five](https://www.pexels.com/photo/a-team-raising-their-hands-and-doing-a-high-five-9480122/) | Monstera Production | Team (`team-sureyo`) |
+| `team-3.jpg` | [A Team Raising Their Hands and Doing a High Five](https://www.pexels.com/photo/a-team-raising-their-hands-and-doing-a-high-five-9480122/) | Monstera Production | Nu niet gebruikt (Team heeft sinds 24 november 2026 eigen filmpjes) |
 | `vragen.jpg` | [Children Raising Their Hands in a Classroom](https://www.pexels.com/photo/children-raising-their-hands-in-a-classroom-8613117/) | Yan Krukau | Nu niet gebruikt (bewaard voor later) |
 | `bewegen.jpg` | [Children Playing Soccer on Grass Field Outdoors](https://www.pexels.com/photo/children-playing-soccer-on-grass-field-outdoors-33618632/) | Jeffry Surianto | Home, brede foto onder de weetjes (`bewegen`) |
 | `sportpark.jpg` | [Top View of Soccer Field](https://www.pexels.com/photo/top-view-of-soccer-field-20559783/) (Hoogeveen, niet Sportpark Middenmeer) | Matthias Groeneveld | Locaties, algemene foto van de locatie (`locatie-overzicht`) |
@@ -63,7 +63,7 @@ Lever foto's liefst **minimaal 1600 px breed** aan. De website snijdt ze zelf bi
 | `community-1` t/m `community-4` (Welkom bij de club) | De erepoort, kinderen die samen de Sporty-regels maken, een Sporty-special en ouders bij een Sporty-evenement. |
 | `middag`, `middag-1` t/m `middag-5` (Een middag bij Sporty) | Per stap van de middag een foto (later een kort filmpje): ophalen (met hesjes), samen eten, de groepsactiviteit, vrij spelen en het ophalen aan het eind. |
 | `locatie`, `ruimte-1` t/m `ruimte-3` (Locaties) | Het clubhuis op Sportpark Middenmeer, de chillruimte, de speelkamer en de kantine. |
-| `team-sureyo`, `team-tim` (Team) | Per teamlid een GIF of kort filmpje van een voetbaljuichmoment (zie hieronder). |
+| Team | Klaar (24 november 2026): een juichfilmpje van Sureyo, Tim en Anas, met de foto van Sureyo als stilstaand beeld. Nog nodig: de foto's van Tim en Anas als bestand (zie hieronder). |
 | `coach` (Word Sporty coach) | Het team in actie, of een coach met kinderen. |
 | `welkom` (Contact) | Een warm welkom: kinderen en een coach bij de ingang of op het veld. |
 | `hero`, `rennen` (Engelse startpagina) | Zoals `held` en `club` hierboven. |
@@ -77,9 +77,23 @@ Getekende elementen (sterren, pijlen, kroontjes, hartjes) en handgeschreven krab
 3. Pas in de HTML de `alt`-tekst aan (zoek op de bestandsnaam, bijvoorbeeld `kring-800.webp`), en de `width` en `height` als de verhouding anders is. Haal de opmerking "Stockfoto (Pexels)" weg.
 4. Werk de tabel "Gebruikte foto's" hierboven bij.
 
-## GIF's van het team
+## Juichfilmpjes van het team
 
-Lever de juichmomenten liefst aan als kort filmpje (MP4, een paar seconden): dat is veel kleiner dan een GIF en laadt sneller. Op de teampagina staat in een opmerking welke code je gebruikt; `js/main.js` speelt het filmpje dan in een lus af met een pauzeknop, en niet vanzelf als iemand "minder beweging" heeft ingesteld.
+Op de teampagina staat per coach een kort filmpje van een voetbaljuichmoment (aangeleverd op 24 november 2026), met een foto als stilstaand beeld. `js/main.js` speelt het filmpje in een lus af zolang het in beeld is, met een pauzeknop, en niet vanzelf als iemand "minder beweging" heeft ingesteld. Het filmpje laadt pas als het in beeld komt.
+
+| Teamlid | Filmpje | Stilstaand beeld |
+|---|---|---|
+| Sureyo | `juich-sureyo` | Zijn foto (`bron/filmpjes/team-sureyo.jpg`) |
+| Tim | `juich-tim` | Voorlopig een beeld uit zijn filmpje (TODO: zijn foto als bestand) |
+| Anas | `juich-anas` | Voorlopig een beeld uit zijn filmpje (TODO: zijn foto als bestand) |
+
+**Een filmpje of foto toevoegen of vervangen**
+1. Zet het filmpje (MOV of MP4, staand, een paar seconden) of de foto in `assets/fotos/bron/filmpjes/`.
+2. Zet een regel in `FILMPJES` in `tools/filmpjes.mjs`: de naam, het bronbestand, waar de uitsnede komt (`boven`) en het stilstaande beeld (een foto, eventueel met een uitsnede, of een seconde uit het filmpje).
+3. Draai `npm run filmpjes` (vereist ffmpeg en `npm install`). Het script maakt in `assets/fotos/` een WebM, een MP4 en een poster, 4:5, zonder geluid en zonder metadata (dus ook zonder de locatie die een telefoon in een filmpje zet).
+4. Nieuw teamlid: kopieer op `team.html` en `en/team.html` een kaart (`<li class="team-lid">`) en pas naam, functie, tekst en de bestandsnamen aan.
+
+De bronbestanden in `assets/fotos/bron/filmpjes/` zijn al bijgesneden tot 4:5 (1080 × 1350) en zonder geluid opgeslagen; de originele filmpjes van de telefoon heeft Sporty zelf. De map `assets/fotos/bron/` gaat niet mee in het uploadpakket.
 
 ## Privacy bij foto's van kinderen
 

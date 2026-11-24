@@ -71,6 +71,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `assets/fotos/` | Foto's in AVIF en WebP (nu nog stockfoto's van Pexels), met de bronbestanden in `bron/` (`npm run fotos`). Fotografen, licentie en welke eigen foto waar komt staan in [`BRONNEN.md`](assets/fotos/BRONNEN.md). |
 | `assets/img/` | Favicon, app-iconen en de deelafbeeldingen (`og-image.jpg`, Engels `og-image-en.jpg`) |
 | `tools/fotos.mjs` | Hulpscript om beelden om te zetten (`npm run fotos`). Niet nodig om de site te draaien. |
+| `tools/filmpjes.mjs` | Zet korte filmpjes om (de juichmomenten op de teampagina): WebM, MP4 en een stilstaand beeld (`npm run filmpjes`, vereist ffmpeg). Zie [`BRONNEN.md`](assets/fotos/BRONNEN.md#juichfilmpjes-van-het-team). |
 | `tools/structured-data.mjs` | Zet de schema.org-gegevens (JSON-LD) in de pagina's, met kruimelpad en veelgestelde vragen uit de zichtbare HTML (`npm run seo`) |
 | `tools/logo/` | Maakt de favicon, de app-iconen en de intro op de homepage (`npm run logo`) op basis van de officiële logo's in `assets/img/` |
 | `tools/og-image.mjs` | Maakt de deelafbeeldingen `assets/img/og-image.jpg` en `og-image-en.jpg` opnieuw (`npm run og-image`, vereist Playwright) |
@@ -116,13 +117,12 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Rekentool: de tabel van 2027 toevoegen zodra die bekend is (zie [Rekentool](#rekentool-kinderopvangtoeslag)). Let op: in 2026 is de maximale uurprijs voor de bso € 9,98; het deel boven die prijs krijgen ouders niet vergoed.
 - [ ] Opzegtermijn en betaalwijze in de algemene voorwaarden.
 - [x] Leeftijd: 4 t/m 12 jaar (teksten van november 2026; eerder 5 t/m 13 jaar).
-- [x] Team: Sureyo Macrander, Tim van Eldonk en Henny de hond (Team). Nog nodig: een GIF (of kort filmpje) per teamlid.
+- [x] Team: Sureyo Macrander, Tim van Eldonk, Anas en Henny de hond, met een juichfilmpje per coach (24 november 2026). Nog nodig: de achternaam, functie en een weetje van Anas, en de foto's van Tim en Anas als bestand.
 - [ ] Namen bij de reviews, zodra de ouders toestemming hebben gegeven (nu: "Ouder van een Sporty-kid").
 - [ ] Algemene voorwaarden en privacyvoorwaarden (Voorwaarden, Privacy) en de klachtenregeling als pdf.
 
 **Beeld**
 - [ ] De tijdelijke stockfoto's (Pexels) vervangen door eigen foto's van het team, de kinderen (met toestemming van de ouders) en de locatie, met nieuwe alt-teksten. Zie [`assets/fotos/BRONNEN.md`](assets/fotos/BRONNEN.md) voor de lijst.
-- [ ] GIF's (of korte filmpjes) van de teamleden die een doelpunt vieren (Team).
 
 **Techniek**
 - [ ] Formulierendienst instellen (bijvoorbeeld Formspree of Basin) en de endpoint-URL in `contact.html` invullen. Berichten moeten naar info@bsosporty.nl gaan. Tot die tijd opent het contactformulier het e-mailprogramma van de bezoeker, met alle ingevulde gegevens als nette samenvatting.
