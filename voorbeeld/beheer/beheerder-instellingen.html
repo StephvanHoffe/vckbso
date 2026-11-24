@@ -102,19 +102,36 @@
       </div>
     </section>
     <section class="panel" aria-labelledby="tarief-titel">
-      <h2 id="tarief-titel">Tarief en afspraken</h2>
+      <h2 id="tarief-titel">Tarieven en afspraken</h2>
       <div class="form">
-        <!-- Tarieven van Sporty (feedback 2.0, november 2026): Sporty Abonnement (52 weken) € 9,75 per uur, gemiddeld
-             27 uur per maand per vaste dag; Incidenteel € 12 per uur (4,5 uur per schooldag, 10,5 uur per vakantie- of studiedag).
-             TODO: de facturen rekenen nu per afgenomen middag (uurtarief x uren per middag). Met Sporty afstemmen of de
-             facturen van het abonnement het vaste maandbedrag (27 uur per vaste dag) moeten gebruiken. -->
+        <!-- Tarieven van Sporty (antwoorden van november 2026). Hoe de facturen rekenen: zie beheer/inc/facturen.php -->
+        <p class="field__hint">Elke maand maakt Mijn BSO achteraf de facturen. Het <strong>Sporty Abonnement</strong> is een vast bedrag per maand: vaste dagen per week × uren per maand × uurtarief. <strong>Incidenteel</strong> rekent per afgenomen dag: een schooldag of een vakantie- of studiedag (die zet je in de agenda bij "Deze dag aanpassen").</p>
+        <h3>Sporty Abonnement (52 weken)</h3>
         <div class="field field--klein">
-          <label for="uurtarief">Uurtarief in euro</label>
-          <input id="uurtarief" name="uurtarief" inputmode="decimal" placeholder="bijv. 9,75" value="10,00">
+          <label for="abonnement_uurtarief">Uurtarief in euro</label>
+          <input id="abonnement_uurtarief" name="abonnement_uurtarief" inputmode="decimal" placeholder="9,75" value="9,75">
                   </div>
         <div class="field field--klein">
-          <label for="uren_per_middag">Uren per middag</label>
-          <input id="uren_per_middag" name="uren_per_middag" inputmode="decimal" placeholder="bijv. 4,5" value="4">
+          <label for="abonnement_uren_per_dag">Uren per maand per vaste dag per week</label>
+          <input id="abonnement_uren_per_dag" name="abonnement_uren_per_dag" inputmode="decimal" placeholder="27" value="27">
+                  </div>
+        <h3>Incidenteel</h3>
+        <div class="field field--klein">
+          <label for="incidenteel_uurtarief">Uurtarief in euro</label>
+          <input id="incidenteel_uurtarief" name="incidenteel_uurtarief" inputmode="decimal" placeholder="12" value="12,00">
+                  </div>
+        <div class="field field--klein">
+          <label for="uren_schooldag">Uren per schooldag</label>
+          <input id="uren_schooldag" name="uren_schooldag" inputmode="decimal" placeholder="4,5" value="4,5">
+                  </div>
+        <div class="field field--klein">
+          <label for="uren_hele_dag">Uren per vakantie- of studiedag</label>
+          <input id="uren_hele_dag" name="uren_hele_dag" inputmode="decimal" placeholder="10,5" value="10,5">
+                  </div>
+        <h3>Afmelden en betalen</h3>
+        <div class="field field--klein">
+          <label for="kosteloos_afmelden_uren">Kosteloos afmelden tot <span class="field__hint">(uren van tevoren; later afgemelde incidentele dagen worden gerekend)</span></label>
+          <input id="kosteloos_afmelden_uren" name="kosteloos_afmelden_uren" type="number" min="0" max="168" value="48">
                   </div>
         <div class="field field--klein">
           <label for="afmelden_tot">Ouders kunnen afmelden tot <span class="field__hint">(op de dag zelf)</span></label>
@@ -175,7 +192,7 @@
         <label for="bevestig_wachtwoord">Je eigen wachtwoord <span class="field__hint">(alleen nodig als je een bewaartermijn korter maakt)</span></label>
         <input id="bevestig_wachtwoord" name="bevestig_wachtwoord" type="password" autocomplete="current-password" style="max-width: 20rem">
               </div>
-      <p class="muted">Laatst uitgevoerd: vandaag 19:27.</p>
+      <p class="muted">Laatst uitgevoerd: vandaag 20:50.</p>
     </section>
     <section class="panel" aria-labelledby="mfa-titel">
       <h2 id="mfa-titel">Tweestapsverificatie</h2>

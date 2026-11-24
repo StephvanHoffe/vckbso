@@ -2015,3 +2015,13 @@ code {
   padding-left: 1.3em;
   line-height: 1.5;
 }
+
+/* Op de hoogte: links bij de binnenkort-pagina (coming soon) */
+.link-lijst {
+  margin: 0 0 var(--space-m);
+  padding-left: 1.2em;
+}
+
+.link-lijst li + li {
+  margin-top: 0.35em;
+}
