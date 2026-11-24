@@ -63,12 +63,13 @@
   <p class="muted">1 aanmelding wacht nog op bevestiging. Wordt een aanmelding niet binnen 14 dagen bevestigd, dan wissen we de gegevens vanzelf.</p>
   <div class="tabel">
     <table>
-      <thead><tr><th scope="col">Naam</th><th scope="col">Contact</th><th scope="col">Aangemeld</th><th scope="col">Status</th><th scope="col">Kennismakingspakket</th><th scope="col"><span class="visually-hidden">Verwijderen</span></th></tr></thead>
+      <thead><tr><th scope="col">Naam</th><th scope="col">Contact</th><th scope="col">Adres voor het pakket</th><th scope="col">Aangemeld</th><th scope="col">Status</th><th scope="col">Kennismakingspakket</th><th scope="col"><span class="visually-hidden">Verwijderen</span></th></tr></thead>
       <tbody>
         <tr>
           <th scope="row">Demo Moeder</th>
           <td><a href="mailto:interesse1@demo.bsosporty.nl">interesse1@demo.bsosporty.nl</a><br><a href="tel:0600000001">06 00 00 00 01</a></td>
-          <td>19 november 2026</td>
+          <td><span class="muted">Gewist na het versturen</span></td>
+          <td>19 november 2026<br><span class="muted">via pagina blijf op de hoogte</span></td>
           <td><span class="badge badge--actief">Bevestigd</span></td>
           <td>
             <form class="inline-form" method="post"><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="pakket"><input type="hidden" name="id" value="1">
@@ -79,18 +80,20 @@
         <tr>
           <th scope="row">Demo Vader</th>
           <td><a href="mailto:interesse2@demo.bsosporty.nl">interesse2@demo.bsosporty.nl</a></td>
-          <td>19 november 2026</td>
+          <td><span class="muted">Niet opgegeven</span></td>
+          <td>19 november 2026<br><span class="muted">via pagina blijf op de hoogte</span></td>
           <td><span class="badge badge--actief">Bevestigd</span></td>
           <td>
             <form class="inline-form" method="post"><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="pakket"><input type="hidden" name="id" value="2">
-              <button class="btn btn--secondary btn--mini" type="submit">Pakket gegeven<span class="visually-hidden"> aan Demo Vader</span></button>            </form>
+              <button class="btn btn--secondary btn--mini" type="submit">Pakket verstuurd<span class="visually-hidden"> aan Demo Vader</span></button>            </form>
           </td>
           <td><form class="inline-form" method="post" data-bevestig="De gegevens van Demo Vader wissen? Deze persoon krijgt dan geen updates meer."><input type="hidden" name="csrf" value="voorbeeld"><input type="hidden" name="actie" value="verwijderen"><input type="hidden" name="id" value="2"><button class="link-button" type="submit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-trash"></use></svg>Wissen<span class="visually-hidden"> Demo Vader</span></button></form></td>
         </tr>
         <tr>
           <th scope="row">Demo Ouder</th>
           <td><a href="mailto:interesse3@demo.bsosporty.nl">interesse3@demo.bsosporty.nl</a></td>
-          <td>19 november 2026</td>
+          <td><span class="muted">Niet opgegeven</span></td>
+          <td>19 november 2026<br><span class="muted">via pagina blijf op de hoogte</span></td>
           <td><span class="badge badge--nieuw">Wacht op bevestiging</span></td>
           <td>
             <span class="muted">Na bevestiging</span>
@@ -112,10 +115,10 @@
     <div class="form__acties"><button class="btn" type="submit"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>Update versturen</button></div>
   </form>
 </section>
-<p class="note"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg><span>We bewaren de gegevens 24 maanden na het aanmelden (in te stellen bij Instellingen → Bewaartermijnen), of korter als iemand zich afmeldt.</span></p>
+<p class="note"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-clock"></use></svg><span>We bewaren de gegevens 24 maanden na het aanmelden (in te stellen bij Instellingen → Bewaartermijnen), of korter als iemand zich afmeldt. Het adres wissen we 30 dagen nadat het pakket is verstuurd.</span></p>
 </main>
 <footer class="app-footer">
-  <p>Sporty · 06 12 34 56 78 · <a href="mailto:info@bsosporty.nl">info@bsosporty.nl</a> · <a href="../../privacy.html">Privacyverklaring</a></p>
+  <p>Sporty · 06 18 26 67 06 · <a href="mailto:info@bsosporty.nl">info@bsosporty.nl</a> · <a href="../../privacy.html">Privacyverklaring</a></p>
 </footer>
 </body>
 </html>

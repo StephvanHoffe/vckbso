@@ -107,10 +107,13 @@ pagina_kop('Instellingen', 'Gegevens voor de facturen, het tarief, afmelden, bev
     <section class="panel" aria-labelledby="tarief-titel">
       <h2 id="tarief-titel">Tarief en afspraken</h2>
       <div class="form">
-        <!-- TODO: het echte uurtarief en de uren per middag van de klant invullen -->
+        <!-- Tarieven van Sporty (feedback 2.0, november 2026): Sporty Abonnement (52 weken) € 9,75 per uur, gemiddeld
+             27 uur per maand per vaste dag; Incidenteel € 12 per uur (4,5 uur per schooldag, 10,5 uur per vakantie- of studiedag).
+             TODO: de facturen rekenen nu per afgenomen middag (uurtarief x uren per middag). Met Sporty afstemmen of de
+             facturen van het abonnement het vaste maandbedrag (27 uur per vaste dag) moeten gebruiken. -->
         <div class="field field--klein">
           <label for="uurtarief">Uurtarief in euro</label>
-          <input id="uurtarief" name="uurtarief" inputmode="decimal" placeholder="bijv. 10,25" value="<?= e($waarden['uurtarief']) ?>"<?= aria_fout($fouten, 'uurtarief') ?>>
+          <input id="uurtarief" name="uurtarief" inputmode="decimal" placeholder="bijv. 9,75" value="<?= e($waarden['uurtarief']) ?>"<?= aria_fout($fouten, 'uurtarief') ?>>
           <?= veldfout($fouten, 'uurtarief') ?>
         </div>
         <div class="field field--klein">

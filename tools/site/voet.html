@@ -10,16 +10,17 @@
         <li><span aria-hidden="true"><svg class="icon" focusable="false"><use href="#i-groei"></use></svg></span>Groei</li>
       </ul>
       <h2>Volg ons</h2>
-      <!-- TODO: links naar de social media-kanalen toevoegen, bijvoorbeeld:
-      <ul class="footer-social"><li><a href="https://www.instagram.com/GEBRUIKERSNAAM/">Instagram</a></li><li><a href="https://www.facebook.com/PAGINA/">Facebook</a></li></ul> -->
-      <p>Onze social media-kanalen volgen binnenkort.</p>
+      <ul class="footer-social">
+        <li><a href="https://www.instagram.com/bso.sporty/" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-instagram"></use></svg>Instagram</a></li>
+        <li><a href="https://www.tiktok.com/@bso.sporty" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-tiktok"></use></svg>TikTok</a></li>
+        <li><a href="https://www.facebook.com/profile.php?id=61596047927666" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-facebook"></use></svg>Facebook</a></li>
+      </ul>
     </div>
     <div>
       <h2>Contact</h2>
       <ul class="footer-contact">
         <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-pin"></use></svg><span>Voorlandpad 17<br>1098 TZ Amsterdam</span></li>
-        <!-- TODO: telefoonnummer volgt van de klant (ook in tools/site/voet.en.html); het WhatsApp-nummer staat in de zwevende knop onderaan -->
-        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"></use></svg><a href="tel:+31612345678">06&nbsp;12&nbsp;34&nbsp;56&nbsp;78</a></li>
+        <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-phone"></use></svg><a href="tel:+31618266706">06&nbsp;18&nbsp;26&nbsp;67&nbsp;06</a></li>
         <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg><a href="mailto:info@bsosporty.nl">info@bsosporty.nl</a></li>
         <li><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-route"></use></svg><a href="{{P}}locaties/sportpark-middenmeer.html">Ons clubhuis op Sportpark Middenmeer</a></li>
       </ul>
@@ -51,8 +52,12 @@
     </div>
   </div>
   <div class="container site-footer__bottom">
-    <!-- TODO: KvK-nummer en LRK-nummer invullen; het GGD-inspectierapport (pdf) als download toevoegen zodra het er is (ook in tools/site/voet.en.html) -->
-    <p>© 2026 Sporty · KvK-nummer: volgt · LRK-nummer: volgt · Aangesloten bij de <a href="https://www.degeschillencommissie.nl/" rel="noopener">Geschillencommissie Kinderopvang</a></p>
+    <!-- TODO: het GGD-inspectierapport (pdf) als download toevoegen zodra het er is (ook in tools/site/voet.en.html) -->
+    <div class="footer-keurmerk">
+      <img src="{{P}}assets/img/brancheorganisatie-kinderopvang.webp" alt="" width="64" height="64" loading="lazy">
+      <p>Aangesloten bij de Brancheorganisatie Kinderopvang<br>LRK-nummer: 236315389</p>
+    </div>
+    <p>© 2026 Sporty · KvK-nummer: 42064267 · Aangesloten bij de <a href="https://www.degeschillencommissie.nl/" rel="noopener">Geschillencommissie Kinderopvang</a></p>
     <ul>
       <li><a href="{{P}}klachtenregeling.html">Klachtenregeling</a></li>
       <li><a href="{{P}}privacy.html">Privacyverklaring</a></li>
@@ -62,3 +67,86 @@
   <!-- Zwevende WhatsApp-knop rechtsonder op elke pagina (24 november 2026); het nummer staat ook in contact.html en aanmelden.html -->
   <a class="whatsapp-knop" href="https://wa.me/31618266706?text=Hoi%20Sporty!%20" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"></use></svg><span class="whatsapp-knop__tekst">App ons</span><span class="visually-hidden"> via WhatsApp (opent WhatsApp)</span></a>
 </footer>
+<!-- pop-up -->
+<!-- Pop-up "Blijf op de hoogte" (feedback 2.0, november 2026): verschijnt één keer na ongeveer 10 seconden op de site (js/pop-up.js).
+     Niet op Kom bij de club, Blijf op de hoogte, de privacyverklaring en de 404-pagina (tools/kop-en-voet.mjs). Velden zoals op blijf-op-de-hoogte.html. -->
+<dialog class="pop-up" data-pop-up aria-labelledby="pop-up-titel">
+  <div class="pop-up__binnen">
+    <button class="pop-up__sluit" type="button" data-pop-up-sluit><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"></use></svg><span class="visually-hidden">Sluiten</span></button>
+    <div class="pop-up__kop">
+      <img class="pop-up__henny" src="{{P}}assets/img/henny/henny-zit-320.webp" alt="" width="320" height="406" loading="lazy" decoding="async">
+      <div>
+        <h2 class="pop-up__titel" id="pop-up-titel">Benieuwd naar <span class="hl">Sporty?</span></h2>
+        <p class="pop-up__tekst">Laat je gegevens achter, blijf op de hoogte en ontvang een gratis Sporty-pakket!</p>
+      </div>
+    </div>
+    <form class="form pop-up__form" action="{{P}}beheer/op-de-hoogte.php" method="post" data-form data-pop-up-form data-success="Bijna klaar! We hebben je een e-mail gestuurd. Klik op de link in die e-mail om je aanmelding te bevestigen. Niets gezien? Kijk ook even in je spam." data-geen-server="Aanmelden lukt hier nu even niet. Stuur ons een mailtje via info@bsosporty.nl, dan zetten we je op de lijst." novalidate>
+      <input type="hidden" name="bron" value="pop-up">
+      <p class="muted">Velden met een * zijn verplicht.</p>
+      <div class="field">
+        <label for="pu-naam">Jouw naam *</label>
+        <input id="pu-naam" name="naam" type="text" autocomplete="name" required aria-describedby="pu-naam-fout" data-msg-required="Vul je naam in.">
+        <p class="field__error" id="pu-naam-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+      </div>
+      <div class="field">
+        <label for="pu-kind-naam">Naam van je kind <span class="field__hint">(niet verplicht)</span></label>
+        <input id="pu-kind-naam" name="kind_naam" type="text" autocomplete="off" maxlength="80" aria-describedby="pu-kind-naam-fout">
+        <p class="field__error" id="pu-kind-naam-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+      </div>
+      <div class="field">
+        <label for="pu-email">E-mailadres *</label>
+        <input id="pu-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="pu-email-fout" data-msg-required="Vul je e-mailadres in, dan sturen we je een bevestiging." data-msg-type="Dit lijkt geen geldig e-mailadres. Controleer het even, bijvoorbeeld naam@voorbeeld.nl.">
+        <p class="field__error" id="pu-email-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+      </div>
+      <div class="field">
+        <label for="pu-telefoon">Telefoonnummer <span class="field__hint">(niet verplicht)</span></label>
+        <input id="pu-telefoon" name="telefoon" type="tel" autocomplete="tel" inputmode="tel" pattern="[0-9 +\(\)\-]{10,20}" aria-describedby="pu-telefoon-fout" data-msg-pattern="Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78, of laat het leeg.">
+        <p class="field__error" id="pu-telefoon-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+      </div>
+      <fieldset class="field adres-velden" aria-describedby="pu-adres-uitleg">
+        <legend class="legend-label">Huisadres *</legend>
+        <p class="field__hint" id="pu-adres-uitleg">Zodat we je het Sporty-pakket kunnen toesturen.</p>
+        <div class="field">
+          <label for="pu-straat">Straat en huisnummer</label>
+          <input id="pu-straat" name="straat" type="text" autocomplete="address-line1" maxlength="120" required aria-describedby="pu-straat-fout" data-msg-required="Vul je straat en huisnummer in, dan sturen we het pakket daarheen.">
+          <p class="field__error" id="pu-straat-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+        </div>
+        <div class="adres-velden__rij">
+          <div class="field">
+            <label for="pu-postcode">Postcode</label>
+            <input id="pu-postcode" name="postcode" type="text" autocomplete="postal-code" maxlength="10" required pattern="[1-9][0-9]{3} ?[a-zA-Z]{2}" aria-describedby="pu-postcode-fout" data-msg-required="Vul je postcode in." data-msg-pattern="Vul een geldige postcode in, bijvoorbeeld 1098 TZ.">
+            <p class="field__error" id="pu-postcode-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+          </div>
+          <div class="field">
+            <label for="pu-plaats">Plaats</label>
+            <input id="pu-plaats" name="plaats" type="text" autocomplete="address-level2" maxlength="80" required aria-describedby="pu-plaats-fout" data-msg-required="Vul je woonplaats in.">
+            <p class="field__error" id="pu-plaats-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+          </div>
+        </div>
+      </fieldset>
+      <div class="field">
+        <div class="consent">
+          <input id="pu-toestemming" name="toestemming" type="checkbox" value="ja" required aria-describedby="pu-toestemming-fout" data-msg-required="Vink aan dat we je op de hoogte mogen houden.">
+          <label for="pu-toestemming">Ja, Sporty mag me per e-mail op de hoogte houden en mijn adres gebruiken om het pakket te sturen. Ik kan me altijd weer afmelden. Lees meer in de <a href="{{P}}privacy.html#op-de-hoogte">privacyverklaring</a>. *</label>
+        </div>
+        <p class="field__error" id="pu-toestemming-fout" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg><span data-error-text></span></p>
+      </div>
+      <div class="hp" aria-hidden="true">
+        <label for="pu-website">Laat dit veld leeg</label>
+        <input id="pu-website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+      <div class="pop-up__knoppen">
+        <button class="btn" type="submit">Ja, stuur mij het pakket!<svg class="icon icon--arrow" aria-hidden="true" focusable="false"><use href="#i-arrow"></use></svg></button>
+        <button class="link-button" type="button" data-pop-up-sluit>Nee, dank je</button>
+      </div>
+      <div class="form-status" data-form-status role="status" aria-live="polite"></div>
+    </form>
+    <div class="pop-up__klaar" data-pop-up-klaar tabindex="-1" hidden>
+      <h2 class="pop-up__titel">Woef, bijna <span class="hl">klaar!</span></h2>
+      <p>We hebben je een e-mail gestuurd. Klik op de link in die e-mail om je aanmelding te bevestigen. Niets gezien? Kijk ook even in je spam.</p>
+      <button class="btn" type="button" data-pop-up-sluit>Sluiten</button>
+    </div>
+  </div>
+</dialog>
+<script src="{{P}}js/pop-up.js" defer></script>
+<!-- /pop-up -->

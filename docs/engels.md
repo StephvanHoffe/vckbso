@@ -21,6 +21,9 @@ Brits Engels (favourite, practise, colour), in dezelfde toon als de Nederlandse 
 | (Boek een) gratis proefdag | (Book a) free trial day |
 | Blijf op de hoogte | Stay in the loop |
 | Sporty-kennismakingspakket | Sporty welcome goodies (het cadeautje bij Blijf op de hoogte) |
+| Sporty-pakket (in de pop-up) | Sporty goodies |
+| Incidenteel (abonnement) | Flexible (incidenteel) |
+| Sportvereniging | sports club |
 | welkomstpakket (bij het abonnement) | welcome pack |
 | Alles over Sporty / Visie en droom | About Sporty / Our vision and dream |
 | Abonnement en kosten | Membership and costs |
@@ -52,4 +55,4 @@ Brits Engels (favourite, practise, colour), in dezelfde toon als de Nederlandse 
 | Sportpark Middenmeer, Watergraafsmeer, Amsterdam-Oost | Sportpark Middenmeer, Watergraafsmeer, Amsterdam East |
 | Ouder van een Sporty-kid | Parent of a Sporty kid |
 
-Notatie: tijden als 18:30, datums als Monday 4 January 2027, bedragen als €12.50, telefoon als +31 6 12 34 56 78 (de link blijft `tel:+31612345678`).
+Notatie: tijden als 18:30, datums als Monday 4 January 2027, bedragen als €12.50, telefoon als +31 6 18 26 67 06 (de link blijft `tel:+31618266706`).

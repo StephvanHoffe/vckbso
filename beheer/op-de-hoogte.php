@@ -3,7 +3,8 @@
  * Blijf op de hoogte (openbaar): aanmelden via het formulier op blijf-op-de-hoogte.html, en de links in de
  * e-mails om te bevestigen en af te melden.
  *
- * POST met naam, email, telefoon en toestemming: aanmelden. Antwoord als JSON voor de website met
+ * POST met naam, email, telefoon, kind_naam, straat, postcode, plaats, toestemming en bron (website of pop-up):
+ * aanmelden. Het huisadres is verplicht (daar sturen we het Sporty-pakket naartoe), de naam van het kind niet. Antwoord als JSON voor de website met
  * JavaScript ({"ok": true} of {"ok": false, "fouten": {...}}), of zonder JavaScript een eenvoudige pagina.
  * GET ?bevestig=code of ?afmelden=code: een pagina met één knop. Pas de klik (POST) bevestigt of meldt af,
  * zodat een virusscanner die links in e-mails vooraf opent niets kan aanzetten of uitzetten.
@@ -76,7 +77,7 @@ foreach (['bevestig', 'afmelden'] as $soort) {
         // Melding voor het team, zonder persoonsgegevens
         mail_team_tekst('team_op_de_hoogte', ['link' => app_url('interesse.php')]);
     }
-    op_de_hoogte_pagina(t('Gelukt, je blijft op de hoogte!', "Done, you're in the loop!"), e(t('Bedankt! Je staat op onze lijst en we laten je weten hoe je je Sporty-kennismakingspakket krijgt. Afmelden kan altijd, met de link onder elke e-mail.', "Thanks! You're on our list and we'll let you know how you'll receive your Sporty welcome goodies. You can unsubscribe any time, with the link at the bottom of every email.")), true);
+    op_de_hoogte_pagina(t('Gelukt, je blijft op de hoogte!', "Done, you're in the loop!"), e(t('Bedankt! Je staat op onze lijst en we sturen je Sporty-pakket naar het adres dat je hebt ingevuld. Afmelden kan altijd, met de link onder elke e-mail.', "Thanks! You're on our list and we'll send your Sporty goodies to the address you filled in. You can unsubscribe any time, with the link at the bottom of every email.")), true);
 }
 
 /* ---------- Aanmelden via het formulier op de website ---------- */
@@ -104,6 +105,13 @@ if (recente_pogingen('interesse:' . ip_adres()) >= MAX_INTERESSE_PER_KWARTIER ||
 $naam = mb_substr(invoer('naam'), 0, 120);
 $email = mb_substr(invoer('email'), 0, 200);
 $telefoon = mb_substr(invoer('telefoon'), 0, 30);
+$pakket = [
+    'kind_naam' => mb_substr(invoer('kind_naam'), 0, 80),
+    'straat' => mb_substr(invoer('straat'), 0, 120),
+    'postcode' => mb_substr(invoer('postcode'), 0, 10),
+    'plaats' => mb_substr(invoer('plaats'), 0, 80),
+];
+$bron = invoer('bron') === 'pop-up' ? 'pop-up' : 'website';
 $fouten = [];
 if (!geldige_naam($naam)) {
     $fouten['naam'] = $naam === '' ? t('Vul je naam in.', 'Fill in your name.') : t('Vul je naam in (zonder links of e-mailadressen).', 'Fill in your name (without links or email addresses).');
@@ -113,6 +121,20 @@ if (!geldig_email($email)) {
 }
 if ($telefoon !== '' && !geldig_telefoon($telefoon)) {
     $fouten['telefoon'] = t('Vul een geldig telefoonnummer in, bijvoorbeeld 06 12 34 56 78, of laat het leeg.', 'Fill in a valid phone number, for example +31 6 12 34 56 78, or leave it empty.');
+}
+if ($pakket['kind_naam'] !== '' && !geldige_naam($pakket['kind_naam'], 80)) {
+    $fouten['kind_naam'] = t('Vul de voornaam van je kind in (zonder links of e-mailadressen), of laat het leeg.', "Fill in your child's first name (without links or email addresses), or leave it empty.");
+}
+if (!geldige_naam($pakket['straat'])) {
+    $fouten['straat'] = t('Vul je straat en huisnummer in, dan sturen we het pakket daarheen.', "Fill in your street and house number, and we'll send the goodies there.");
+}
+if (!geldige_postcode($pakket['postcode'])) {
+    $fouten['postcode'] = $pakket['postcode'] === '' ? t('Vul je postcode in.', 'Fill in your postcode.') : t('Vul een geldige postcode in, bijvoorbeeld 1098 TZ.', 'Fill in a valid Dutch postcode, for example 1098 TZ.');
+} else {
+    $pakket['postcode'] = normaliseer_postcode($pakket['postcode']);
+}
+if (!geldige_naam($pakket['plaats'], 80)) {
+    $fouten['plaats'] = t('Vul je woonplaats in.', 'Fill in your town or city.');
 }
 if (invoer('toestemming') === '') {
     $fouten['toestemming'] = t('Vink aan dat we je op de hoogte mogen houden.', 'Tick the box to let us keep you in the loop.');
@@ -127,7 +149,7 @@ if (te_veel_mails_naar($email)) {
 }
 
 try {
-    interesse_aanmelden($naam, $email, $telefoon);
+    interesse_aanmelden($naam, $email, $telefoon, $bron, $pakket);
 } catch (Throwable $fout) {
     error_log('Blijf op de hoogte: ' . $fout->getMessage());
     op_de_hoogte_antwoord($alsJson, 500, [], t('Aanmelden is niet gelukt. Probeer het nog eens, of mail ons.', "Signing up didn't work. Please try again, or email us."));

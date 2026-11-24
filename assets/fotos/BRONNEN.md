@@ -6,7 +6,7 @@ Alle foto's op de site zijn **tijdelijke stockfoto's van [Pexels](https://www.pe
 
 Bij de plekken voor het team (Team, en de foto bij "Onze droom" op Alles over Sporty) staan bewust foto's waarop niemand herkenbaar is: handen, een bal in het doel, een groep van achteren. Een herkenbaar gezicht onder de naam van een teamlid zou ouders misleiden, en dat mag ook niet volgens de Pexels-licentie.
 
-Wel van de klant zelf: de officiële logo's (`assets/img/sporty-*.svg`) en Henny de hond (`assets/img/henny/`).
+Wel van de klant zelf: de officiële logo's (`assets/img/sporty-*.svg`), Henny de hond (`assets/img/henny/`), de juichfilmpjes van het team (zie onder) en sinds 24 november 2026 drie foto's van de locatie (zie "Eigen foto's van Sporty").
 
 ### Licentie
 
@@ -31,8 +31,8 @@ In de HTML staat bij elke foto `data-foto="…"` (de plek) en een opmerking "Sto
 | `plezier.jpg` | [Kids Having Fun at the Park](https://www.pexels.com/photo/kids-having-fun-at-the-park-8033873/) | RDNE Stock project | Abonnement en kosten (`abonnement`); Welkom bij de club (`community-3`) |
 | `voetbal.jpg` | [Young Soccer Player Kicking Ball on Green Field](https://www.pexels.com/photo/person-field-playing-school-972513/) | Markus Spiske | Locaties (`locatie`) |
 | `aandacht.jpg` | [Kids Playing with Teacher in the Classroom](https://www.pexels.com/photo/kids-playing-with-teacher-in-the-classroom-8363102/) | RDNE Stock project | Nu niet gebruikt (bewaard voor later) |
-| `gezellig.jpg` | [Students Eating Their Snacks at the School Canteen](https://www.pexels.com/photo/students-eating-their-snacks-at-the-school-canteen-8617514/) | Yan Krukau | Een middag bij Sporty (`middag-2`); Locaties (`ruimte-3`) |
-| `binnen.jpg` | [Women Kneeling on the Floor with Children in a Room](https://www.pexels.com/photo/women-kneeling-on-the-floor-with-children-in-a-room-8441839/) | Pavel Danilyuk | Locaties (`ruimte-2`) |
+| `gezellig.jpg` | [Students Eating Their Snacks at the School Canteen](https://www.pexels.com/photo/students-eating-their-snacks-at-the-school-canteen-8617514/) | Yan Krukau | Een middag bij Sporty (`middag-2`) |
+| `binnen.jpg` | [Women Kneeling on the Floor with Children in a Room](https://www.pexels.com/photo/women-kneeling-on-the-floor-with-children-in-a-room-8441839/) | Pavel Danilyuk | Nu niet gebruikt (de speelkamer heeft sinds 24 november 2026 een eigen foto) |
 | `luisteren.jpg` | [A Woman Talking to her Child at a Park](https://www.pexels.com/photo/a-woman-talking-to-her-child-at-a-park-7880785/) (liggend uitgesneden) | Barbara Olsen | Welkom bij de club (`community-4`); Locaties (`ruimte-1`) |
 | `team-eigenaar.jpg` | [Group of Friends Embracing on Scenic Cliffside](https://www.pexels.com/photo/people-friends-hiking-cliff-7625042/) | PNW Production | Alles over Sporty (`tim-en-sureyo`) |
 | `basketbal.jpg` | [Kids Playing Basketball with Their Coach](https://www.pexels.com/photo/kids-playing-basketball-with-their-coach-8336951/) | RDNE Stock project | Pauzebegeleiding (`pauze`) |
@@ -43,10 +43,22 @@ In de HTML staat bij elke foto `data-foto="…"` (de plek) en een opmerking "Sto
 | `team-3.jpg` | [A Team Raising Their Hands and Doing a High Five](https://www.pexels.com/photo/a-team-raising-their-hands-and-doing-a-high-five-9480122/) | Monstera Production | Nu niet gebruikt (Team heeft sinds 24 november 2026 eigen filmpjes) |
 | `vragen.jpg` | [Children Raising Their Hands in a Classroom](https://www.pexels.com/photo/children-raising-their-hands-in-a-classroom-8613117/) | Yan Krukau | Nu niet gebruikt (bewaard voor later) |
 | `bewegen.jpg` | [Children Playing Soccer on Grass Field Outdoors](https://www.pexels.com/photo/children-playing-soccer-on-grass-field-outdoors-33618632/) | Jeffry Surianto | Home, brede foto onder de weetjes (`bewegen`) |
-| `sportpark.jpg` | [Top View of Soccer Field](https://www.pexels.com/photo/top-view-of-soccer-field-20559783/) (Hoogeveen, niet Sportpark Middenmeer) | Matthias Groeneveld | Locaties, algemene foto van de locatie (`locatie-overzicht`) |
+| `sportpark.jpg` | [Top View of Soccer Field](https://www.pexels.com/photo/top-view-of-soccer-field-20559783/) (Hoogeveen, niet Sportpark Middenmeer) | Matthias Groeneveld | Nu niet gebruikt (de locatie heeft sinds 24 november 2026 een eigen foto) |
 | `welkom.jpg` | [Father and Children Running in a Park](https://www.pexels.com/photo/father-and-children-running-in-a-park-4543646/) | Elina Fairytale | Welkom bij de club (`community-1`); Een middag bij Sporty (`middag-5`); Contact (`welkom`) |
 
 De bestanden in `bron/` zijn 1600 px breed. De website gebruikt de AVIF- en WebP-versies in `assets/fotos/` (480, 800, 1200 en 1600 px) die `npm run fotos` daarvan maakt.
+
+### Eigen foto's van Sporty
+
+Aangeleverd door Sporty op 24 november 2026 (bij "Feedback 2.0"), bijgesneden tot 4:3 en opnieuw opgeslagen zonder metadata (dus zonder de locatie of het toestel). In de HTML staat erbij: "Eigen foto van Sporty".
+
+| Bestand in `bron/` | Wat staat erop | Waar op de site (`data-foto`) |
+|---|---|---|
+| `clubhuis.jpg` | Het blauwe clubhuis van buiten, met twee Sporty-vlaggen en een picknicktafel (1086 px breed) | Locaties, algemene foto van de locatie (`locatie-overzicht`) |
+| `speelkamer.jpg` | De speelkamer met het oranje Sporty-tafelkleed, bouwblokken en knutselspullen (1086 px breed) | Locaties (`ruimte-2`, Speelkamer) |
+| `kantine.jpg` | De kantine met tafels, tafelvoetbal, de bar en uitzicht op de velden (2016 px breed) | Locaties (`ruimte-3`, Kantine) |
+
+De foto's van het clubhuis en de speelkamer zijn 1086 px breed: op een groot scherm net iets minder scherp. TODO: de originele foto's (via WeTransfer, liefst 1600 px of breder) en een foto van de chillruimte (`ruimte-1`). De 1200-versie van deze twee is daarom 1086 px breed en er is geen 1600-versie.
 
 ## Eigen foto's: wat komt waar?
 
@@ -56,14 +68,14 @@ Lever foto's liefst **minimaal 1600 px breed** aan. De website snijdt ze zelf bi
 |---|---|
 | `held` (Home) | Een brede, liggende foto van de Sporty-kids in actie, buiten. De tekst staat linksonder, dus daar liefst wat rustige ruimte (gras, lucht). Sporty stuurt hier een nieuwe foto voor (feedback november 2026). |
 | `bewegen` (Home, onder de weetjes) | Een brede foto over de hele breedte: kinderen die buiten sporten of rennen. Wordt breed uitgesneden (21 : 9), dus liefst een liggende foto met de actie in het midden. |
-| `locatie-overzicht` (Locaties) | Een algemene foto van hoe de locatie eruitziet: het clubhuis en de sportvelden van Sportpark Middenmeer. Ook breed uitgesneden. |
+| `locatie-overzicht` (Locaties) | Klaar (24 november 2026): het clubhuis van buiten. Een grotere versie van dezelfde foto (via WeTransfer) maakt hem op een groot scherm scherper. |
 | `visie`, `club`, `proefdag` | Kinderen die samen iets doen: een kring, handen op elkaar, samen lachen. |
 | `tim-en-sureyo` (Alles over Sporty, Onze droom) | Tim en Sureyo samen. |
 | `abonnement`, `vakantie`, `pauze` | Sporten en spelen: buiten, op het schoolplein, in de vakantie. |
 | `community-1` t/m `community-4` (Welkom bij de club) | De erepoort, kinderen die samen de Sporty-regels maken, een Sporty-special en ouders bij een Sporty-evenement. |
 | `middag`, `middag-1` t/m `middag-5` (Een middag bij Sporty) | Per stap van de middag een foto (later een kort filmpje): ophalen (met hesjes), samen eten, de groepsactiviteit, vrij spelen en het ophalen aan het eind. |
-| `locatie`, `ruimte-1` t/m `ruimte-3` (Locaties) | Het clubhuis op Sportpark Middenmeer, de chillruimte, de speelkamer en de kantine. |
-| Team | Klaar (24 november 2026): een juichfilmpje van Sureyo, Tim en Anas, met de foto van Sureyo als stilstaand beeld. Nog nodig: de foto's van Tim en Anas als bestand (zie hieronder). |
+| `locatie`, `ruimte-1` (Locaties) | Kinderen die op het sportpark spelen (bovenaan de pagina), en de chillruimte. De speelkamer, de kantine en het clubhuis van buiten zijn klaar (24 november 2026). |
+| Team | Klaar (24 november 2026): een juichfilmpje van Sureyo, Tim en Anass, met de foto van Sureyo als stilstaand beeld. Nog nodig: de foto's van Tim en Anass als bestand (zie hieronder). |
 | `coach` (Word Sporty coach) | Het team in actie, of een coach met kinderen. |
 | `welkom` (Contact) | Een warm welkom: kinderen en een coach bij de ingang of op het veld. |
 | `hero`, `rennen` (Engelse startpagina) | Zoals `held` en `club` hierboven. |
@@ -85,7 +97,7 @@ Op de teampagina staat per coach een kort filmpje van een voetbaljuichmoment (aa
 |---|---|---|
 | Sureyo | `juich-sureyo` | Zijn foto (`bron/filmpjes/team-sureyo.jpg`) |
 | Tim | `juich-tim` | Voorlopig een beeld uit zijn filmpje (TODO: zijn foto als bestand) |
-| Anas | `juich-anas` | Voorlopig een beeld uit zijn filmpje (TODO: zijn foto als bestand) |
+| Anass Boudinar | `juich-anas` | Voorlopig een beeld uit zijn filmpje (TODO: zijn foto als bestand) |
 
 **Een filmpje of foto toevoegen of vervangen**
 1. Zet het filmpje (MOV of MP4, staand, een paar seconden) of de foto in `assets/fotos/bron/filmpjes/`.

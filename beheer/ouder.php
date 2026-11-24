@@ -164,11 +164,10 @@ pagina_kop($ouder['naam'], status_badge($ouder['status']) . ' ' . status_badge($
     <dt>Voorletters en geslacht</dt><dd><?= e(($k['voorletters'] ?? '') ?: '-') ?>, <?= e(mb_strtolower(AANVRAAG_GESLACHT_KIND[$k['geslacht'] ?? ''] ?? '-')) ?></dd>
     <dt>School</dt><dd><?= e($kind['school']) ?><?= ($k['school_plaats'] ?? '') !== '' ? ' (' . e($k['school_plaats']) . ')' : '' ?><?= ($k['groep_klas'] ?? '') !== '' ? ', ' . e($k['groep_klas']) : '' ?></dd>
     <dt>Abonnement</dt><dd><?= e(AANVRAAG_ABONNEMENTEN[$k['abonnement'] ?? ''] ?? '-') ?></dd>
-    <dt>Dagen</dt><dd><?= e(implode(', ', array_map(fn ($d) => WEEKDAGEN[(int) $d] ?? '', $k['dagen'] ?? [])) ?: '-') ?><?= ($k['toelichting'] ?? '') !== '' ? '<br><span class="muted">' . e($k['toelichting']) . '</span>' : '' ?></dd>
+    <dt>Dagen</dt><dd><?= e(implode(', ', array_map(fn ($d) => WEEKDAGEN[(int) $d] ?? '', $k['dagen'] ?? [])) ?: (($k['abonnement'] ?? '') === 'incidenteel' ? 'Geen vaste dagen (incidenteel)' : '-')) ?><?= ($k['toelichting'] ?? '') !== '' ? '<br><span class="muted">' . e($k['toelichting']) . '</span>' : '' ?></dd>
     <dt>Gewenste start</dt><dd><?= e(($k['startdatum'] ?? '') !== '' ? datum_nl($k['startdatum']) : 'Zo snel mogelijk') ?></dd>
-<?php if (($k['sportclub'] ?? '') !== ''): // alleen bij aanmeldingen van vóór november 2026 ?>
-    <dt>Sportclub</dt><dd><?= e($k['sportclub']) ?></dd>
-<?php endif; ?>
+<?php $sportclub = (string) (($k['sportvereniging'] ?? '') ?: ($k['sportclub'] ?? '')); // 'sportclub': aanmeldingen van vóór november 2026 ?>
+    <dt>Sportvereniging</dt><dd><?= $sportclub !== '' ? e($sportclub) . '<br><span class="muted">Breng het kind na Sporty naar de sportclub als dat is afgesproken.</span>' : 'Niet opgegeven' ?></dd>
   </dl>
 <?php endforeach; ?>
 </details>

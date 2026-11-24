@@ -303,7 +303,7 @@ function migreer(PDO $pdo): void
                 ('lrk', ''),
                 ('iban', ''),
                 ('email', 'info@vckbso.nl'),
-                ('telefoon', '06 12 34 56 78'),
+                ('telefoon', '06 18 26 67 06'),
                 ('uurtarief_cent', ''),
                 ('uren_per_middag', ''),
                 ('afmelden_tot', '12:00'),
@@ -619,6 +619,21 @@ function migreer(PDO $pdo): void
             ALTER TABLE interesse ADD COLUMN taal TEXT NOT NULL DEFAULT 'nl';
             ALTER TABLE proefdag_boekingen ADD COLUMN taal TEXT NOT NULL DEFAULT 'nl';
             ALTER TABLE sollicitaties ADD COLUMN taal TEXT NOT NULL DEFAULT 'nl';
+            SQL,
+
+        // Het echte telefoonnummer, KvK- en LRK-nummer van Sporty (feedback 2.0, november 2026), voor de voet van
+        // Mijn BSO en de facturen; alleen als ze nog niet (anders) zijn ingevuld
+        21 => <<<'SQL'
+            UPDATE instellingen SET waarde = '06 18 26 67 06' WHERE sleutel = 'telefoon' AND waarde = '06 12 34 56 78';
+            UPDATE instellingen SET waarde = '42064267' WHERE sleutel = 'kvk' AND waarde = '';
+            UPDATE instellingen SET waarde = '236315389' WHERE sleutel = 'lrk' AND waarde = '';
+            SQL,
+
+        // Blijf op de hoogte met pop-up (feedback 2.0, november 2026): de naam van het kind en het huisadres om het
+        // Sporty-pakket op te sturen. Allebei versleuteld (versleutel()); het adres als JSON met straat, postcode en plaats.
+        22 => <<<'SQL'
+            ALTER TABLE interesse ADD COLUMN kind_naam TEXT NOT NULL DEFAULT '';
+            ALTER TABLE interesse ADD COLUMN adres TEXT NOT NULL DEFAULT '';
             SQL,
     ];
 

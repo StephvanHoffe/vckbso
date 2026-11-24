@@ -102,7 +102,7 @@ De klant heeft alle teksten aangeleverd als Word-documenten, met per pagina een 
 - **Kernwaarden:** Plezier · Vriendschap · Groei (in plaats van Sport · Plezier · Ontwikkeling), met getekende iconen. Sport is het middel, geen doel; iedereen is welkom, ook wie niet goed kan sporten of liever knutselt.
 - **Kom bij de club (aanmeldformulier):** vrijblijvend, in 7 stappen met één onderwerp per scherm en Henny die over de voortgangsbalk meerent; voortgang onthouden en anoniem meten waar ouders afhaken. Na de kennismaking rondt het team de aanmelding af (account, wachtwoord, machtiging). De abonnementsstap is nog in overleg.
 - **Reviews:** aangeleverd door de klant; de namen volgen zodra de ouders toestemming hebben gegeven (tot die tijd "Ouder van een Sporty-kid").
-- **Nog aan te leveren door de klant** (staat als TODO in de code): telefoonnummer (het WhatsApp-nummer is sinds 24 november 2026 bekend) en e-mailadressen, LRK-nummer, algemene en privacyvoorwaarden, de tekst van de bevestigingsmail, het GGD-inspectierapport, de tijden van het middagprogramma, de abonnementsstap in het aanmeldformulier, en foto's en video's (ook van het team).
+- **Nog aan te leveren door de klant** (staat als TODO in de code): e-mailadressen, algemene en privacyvoorwaarden, de tekst van de bevestigingsmail, het GGD-inspectierapport, de documenten 2 t/m 6 van feedback 2.0 (zie hieronder), de functie en het weetje van Anass, en foto's en video's (ook van het team).
 
 ### Feedback van de klant (6 november 2026)
 
@@ -118,12 +118,25 @@ Twee documenten met feedback (website en aanmeldformulier). Wat daaruit volgt:
 - **Aanmeldformulier:** voorletters, groep of klas en startdatum (standaard vandaag, maar niet vóór 4 januari 2027) verplicht; sportclub en plaats weg; stap 2 "Op welke school zit ...? Noteer hier de school."; maandag, woensdag en vrijdag tot 12 juli 2027 niet aan te klikken, met de uitleg van de klant eronder.
 - **Blijf op de hoogte (nieuw):** geen pop-up (advies), maar een blok op de homepage en een link in de footer naar `blijf-op-de-hoogte.html`. Naam, e-mail en (niet verplicht) telefoon, met toestemming, dubbele bevestiging per e-mail en een afmeldlink. In Mijn BSO onder "Op de hoogte".
 - **Verborgen notities (nieuw, Mijn BSO):** per kind notities die alleen het team ziet, met een kolom naast "Let op" bij Kinderen. Niet zichtbaar voor ouders; wel onderdeel van een formeel inzageverzoek (AVG).
-- **WhatsApp:** knop op Contact en een link in het aanmeldformulier (nu met het tijdelijke nummer).
+- **WhatsApp:** knop op Contact, een link in het aanmeldformulier en (sinds 24 november 2026) een zwevende knop op elke pagina; nummer 06 18 26 67 06.
 - **E-mails aanpassen (nieuw, Mijn BSO):** alle e-mails die het platform verstuurt, zijn aan te passen onder Instellingen → E-mails aanpassen, met invulvelden, een voorbeeld, een testmail en terug naar de standaardtekst. Nieuwe e-mails altijd via `stuur_mailtekst()` of `mail_team_tekst()` en `beheer/inc/mailteksten.php`.
 - **Fototoestemming per kind (nieuw, Mijn BSO):** wie gezag heeft kiest per kind: ook groepsfoto's, alleen foto's waar het kind alleen op staat, of geen foto's. Zonder toestemming (of nog niet ingevuld) is het kind bij Foto's niet aan te vinken en weigert de server het. Controleer altijd met `mag_op_foto()`.
 - **Betalen via Stripe (nieuw):** de klant wil Stripe in plaats van Mollie, voor de machtiging (iDEAL | Wero of IBAN), de incasso's en los betalen. Code in `beheer/inc/stripe.php`, webhook `beheer/stripe-webhook.php`; zie "Stripe koppelen" in `docs/beheeromgeving.md`.
 - **Koppelingen (nieuw, Mijn BSO):** een eigen menuonderdeel waar de klant alle koppelingen beheert: de Stripe-sleutels en betaalmethoden, en het versturen van e-mail (eigen mailserver via SMTP). Geheimen versleuteld en daarna alleen gemaskeerd zichtbaar; wijzigen vraagt om het eigen wachtwoord. Lees koppelingen altijd met `koppeling()` (`beheer/inc/koppelingen.php`), niet met `cfg()`.
 - **Hosting (november 2026):** alles bij Vimexx, op een Managed VPS (DirectAdmin): de website en Mijn BSO samen, de gegevens buiten `public_html`. Het uploadpakket maak je met `npm run pakket`; het stappenplan staat in `docs/live-zetten-vimexx.md`. Vercel blijft alleen het voorbeeld.
+
+### Feedback 2.0 (24 november 2026)
+
+Een document met 17 verbeterpunten ("1_Feedback_2.0_verbeterpunten") en drie foto's van de locatie. Wat daaruit volgt:
+
+- **Teksten:** de kernwaarden heten "Drie elementen die altijd meedoen"; in de quiz "spelletje" in plaats van "potje"; de thema's op Een middag bij Sporty zijn vaardigheden ("Elke 8 weken staat er een nieuw thema centraal, bijvoorbeeld samenwerken. …"); bij elke stap van de middag de tijd (14.00–15.15, 15.30–16.15, 16.15–17.15, 17.15–18.15, ophalen uiterlijk 18.30 uur) en bij stap 5 op de homepage in het oranje "Wij brengen je kind ook naar de sportclub!".
+- **Tarief:** het Sporty Abonnement (52 weken) kost **€ 9,75 per uur**, met **27 uur per maand per vaste dag** (1 dag € 263,25, 2 dagen € 526,50, 3 dagen € 789,75 per maand vóór toeslag). Tweede abonnement **Incidenteel**: € 12 per uur, 4,5 uur per schooldag, 10,5 uur per vakantie- of studiedag, aanvragen via WhatsApp (Optie 1 en Optie 2 op Abonnement en kosten). De rekentool rekent met de officiële toeslagtabel en maximale uurprijzen van **2027** (Staatsblad 2026, 308 en 391; `js/rekentool/toeslag-2027.js`).
+- **Aanmeldformulier:** in de abonnementsstap ook "Incidenteel" (dan zijn vaste dagen niet verplicht), en bij de school de vraag "Sportvereniging van je kind" (niet verplicht), zodat het team weet of het kind na Sporty naar de sportclub moet.
+- **Pop-up "Blijf op de hoogte":** na ongeveer 10 seconden op de site, met naam ouder, naam kind (niet verplicht), e-mail, telefoon (niet verplicht) en huisadres ("Zodat we je het Sporty-pakket kunnen toesturen."), toestemming, privacyverklaring en afmelden via de dubbele bevestiging. Eén keer per 30 dagen, nooit meer na aanmelden, niet tijdens de intro of terwijl iemand typt, en niet op Kom bij de club, Blijf op de hoogte, de privacyverklaring en 404 (`js/pop-up.js`, de pop-up staat na de footer in `tools/site/voet.html`). Kind en adres staan versleuteld in Mijn BSO; het adres wordt 30 dagen na het versturen van het pakket gewist.
+- **Gegevens:** telefoon 06 18 26 67 06, LRK-nummer 236315389, KvK-nummer 42064267, social media (Instagram `bso.sporty`, TikTok `@bso.sporty`, Facebook) en het logo van de Brancheorganisatie Kinderopvang in de footer.
+- **Team:** Henny helemaal in zijn vak (nieuwe uitsnede uit het mascotteblad, "Aaien mag!" bovenin) en Anass Boudinar (functie en weetje volgen).
+- **Foto's:** het clubhuis van buiten (brede foto op de locatiepagina), de speelkamer en de kantine zijn eigen foto's van Sporty (zie `assets/fotos/BRONNEN.md`). De chillruimte, de originele foto's (WeTransfer), de foto's van Tim en Anass en de eerder gedeelde foto's volgen.
+- **Nog te ontvangen bij dit document:** document 2 (Onze visie, met de Schijf van 10), 3 (Onze droom), 4 (Een middag bij Sporty, met een oranje vak per stap en de zin over de sportclub bij stap 5), 5 (Antwoorden op je vragen) en 6 (het logo).
 
 ### Kleuren
 
@@ -285,8 +298,8 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 
 - Bedrijfsnaam: Sporty, ook statutair (bevestigd door de klant op 23 oktober 2026; eerder statutair: Je Dag in Beeld; tot 30 september 2026: BSO VCK)
 - E-mail: info@bsosporty.nl (als `mailto:`-link; gewijzigd op 13 november 2026, eerder info@sporty.nl en daarvoor info@vckbso.nl)
-- Telefoon: 0612345678 (als `tel:`-link)
-- WhatsApp: +31 6 18266706 (24 november 2026; als `https://wa.me/31618266706`-link): de zwevende WhatsApp-knop rechtsonder op elke pagina (in `tools/site/voet.html` en `voet.en.html`), de knop op Contact en de link in het aanmeldformulier. Het telefoonnummer volgt nog.
+- Telefoon: 06 18 26 67 06 (als `tel:`-link `tel:+31618266706`; feedback 2.0, november 2026; eerder het tijdelijke 0612345678). Hetzelfde nummer als WhatsApp.
+- WhatsApp: +31 6 18266706 (24 november 2026; als `https://wa.me/31618266706`-link): de zwevende WhatsApp-knop rechtsonder op elke pagina (in `tools/site/voet.html` en `voet.en.html`), de knop op Contact en de link in het aanmeldformulier.
 
 - Adres: Sporty, Voorlandpad 17, 1098 TZ Amsterdam (clubhuis op Sportpark Middenmeer, Watergraafsmeer; teksten van november 2026)
 

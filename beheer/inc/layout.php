@@ -104,7 +104,7 @@ function pagina_einde(): void
     ?>
 </main>
 <footer class="app-footer">
-  <p>Sporty · <?= e(instelling('telefoon', '06 12 34 56 78')) ?> · <a href="mailto:<?= e(instelling('email', 'info@bsosporty.nl')) ?>"><?= e(instelling('email', 'info@bsosporty.nl')) ?></a> · <a href="<?= e(website_pagina('privacy.html', 'privacy.html')) ?>"><?= e(t('Privacyverklaring', 'Privacy statement')) ?></a></p>
+  <p>Sporty · <?= e(instelling('telefoon', '06 18 26 67 06')) ?> · <a href="mailto:<?= e(instelling('email', 'info@bsosporty.nl')) ?>"><?= e(instelling('email', 'info@bsosporty.nl')) ?></a> · <a href="<?= e(website_pagina('privacy.html', 'privacy.html')) ?>"><?= e(t('Privacyverklaring', 'Privacy statement')) ?></a></p>
 </footer>
 </body>
 </html>

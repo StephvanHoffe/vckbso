@@ -31,11 +31,10 @@ export const SITE = "https://bsosporty.nl";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 // Gegevens van de BSO. Houd deze gelijk aan wat op de website staat.
-// TODO: sameAs met de links naar social media en het Google Bedrijfsprofiel toevoegen zodra die er zijn.
-// TODO: openingstijden (openingHoursSpecification) toevoegen zodra Sporty laat weten hoe laat de BSO op schooldagen
-// opengaat (nu: "na school" tot 18.30 uur; in vakanties en op studiedagen 08.00–18.30 uur). Denk aan de open dagen:
-// tot 12 juli 2027 dinsdag en donderdag, daarna maandag t/m vrijdag (validFrom/validThrough).
-// TODO: telephone is nog het tijdelijke nummer; vervangen zodra Sporty het echte nummer heeft (ook op de website).
+// TODO: het Google Bedrijfsprofiel aan sameAs toevoegen zodra het er is.
+// Openingstijden op schooldagen: vanaf het ophalen van school (14.00 uur, zie Een middag bij Sporty) tot 18.30 uur;
+// tot 12 juli 2027 op dinsdag en donderdag, daarna maandag t/m vrijdag (beheer/inc/openingsdagen.php).
+// Vakantie- en studiedagen (08.00–18.30 uur) vallen op wisselende datums en staan er daarom niet in.
 export const BSO = {
   "@type": "ChildCare",
   "@id": `${SITE}/#sporty`,
@@ -46,13 +45,24 @@ export const BSO = {
   url: `${SITE}/`,
   image: `${SITE}/assets/img/og-image.jpg`,
   logo: `${SITE}/assets/img/sporty-logo-512.png`,
-  telephone: "+31612345678",
+  telephone: "+31618266706",
   email: "info@bsosporty.nl",
   address: { "@type": "PostalAddress", streetAddress: "Voorlandpad 17", postalCode: "1098 TZ", addressLocality: "Amsterdam", addressCountry: "NL" },
   // Dezelfde plek als de kaart op de locatiepagina (tools/kaart.mjs)
   geo: { "@type": "GeoCoordinates", latitude: 52.3481547, longitude: 4.9535974 },
   hasMap: "https://www.google.com/maps/search/?api=1&query=Sporty%2C+Voorlandpad+17%2C+1098+TZ+Amsterdam",
-  priceRange: "€ 10,31 per uur",
+  priceRange: "€ 9,75 – € 12 per uur",
+  // Feedback 2.0 (november 2026): LRK, KvK, social media en de brancheorganisatie
+  identifier: [
+    { "@type": "PropertyValue", propertyID: "LRK", name: "Landelijk Register Kinderopvang", value: "236315389" },
+    { "@type": "PropertyValue", propertyID: "KvK", name: "Kamer van Koophandel", value: "42064267" },
+  ],
+  sameAs: ["https://www.instagram.com/bso.sporty/", "https://www.tiktok.com/@bso.sporty", "https://www.facebook.com/profile.php?id=61596047927666"],
+  memberOf: { "@type": "Organization", name: "Brancheorganisatie Kinderopvang" },
+  openingHoursSpecification: [
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Tuesday", "Thursday"], opens: "14:00", closes: "18:30", validFrom: "2027-01-04", validThrough: "2027-07-11" },
+    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "14:00", closes: "18:30", validFrom: "2027-07-12" },
+  ],
   areaServed: [
     { "@type": "Place", name: "Watergraafsmeer, Amsterdam" },
     { "@type": "Place", name: "Amsterdam-Oost" },
@@ -62,7 +72,7 @@ export const BSO = {
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer service",
-    telephone: "+31612345678",
+    telephone: "+31618266706",
     email: "info@bsosporty.nl",
     availableLanguage: ["nl", "en"],
     hoursAvailable: { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "09:00", closes: "13:30" },
@@ -74,7 +84,7 @@ const BSO_EN = {
   ...BSO,
   description: "Active after-school care (BSO) at Sportpark Middenmeer in Amsterdam East, for all children aged 4 to 12. A club full of fun, friendship and growth.",
   image: `${SITE}/assets/img/og-image-en.jpg`,
-  priceRange: "€10.31 per hour",
+  priceRange: "€9.75–€12 per hour",
 };
 
 const WEBSITE = {

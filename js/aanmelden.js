@@ -28,7 +28,7 @@
   var WOLKJES = EN ? [
     "No worries, you're not committing to anything yet!",
     "Which school does your little star go to?",
-    "One membership, everything included. Nice and easy!",
+    "Fixed days or now and then? Both are a win!",
     "Which days shall we play sports together?",
     "Your little star is almost signed up, on to the next step!",
     "Nearly there, the goal is in sight!",
@@ -36,7 +36,7 @@
   ] : [
     "Geen zorgen, je zit nog nergens aan vast!",
     "Op welke school zit je kleine topper?",
-    "Eén abonnement, alles erin. Lekker makkelijk!",
+    "Vaste dagen of af en toe? Allebei goed!",
     "Welke dagen gaan we samen sporten?",
     "Je hebt je kleine topper bijna aangemeld, door naar de volgende stap!",
     "Nog even en we zijn bij het doel!",
@@ -125,6 +125,27 @@
 
   var kindBlokken = function () { return [].slice.call(kinderenLijst.querySelectorAll("[data-kind]")); };
 
+  var dagenTekst = function (aantal) {
+    return aantal ? aantal + (aantal === 1 ? t(" dag", " day") : t(" dagen", " days")) + t(" per week", " a week") : "";
+  };
+
+  // Incidenteel (feedback 2.0): dan zijn vaste dagen niet verplicht
+  var isIncidenteel = function (i) {
+    var gekozen = form.querySelector('input[name="kinderen[' + i + '][abonnement]"]:checked');
+    return Boolean(gekozen && gekozen.value === "incidenteel");
+  };
+  var werkIncidenteelBij = function () {
+    form.querySelectorAll("[data-minstens-een]").forEach(function (groep) {
+      var deel = groep.closest("[data-kind]");
+      var los = isIncidenteel(deel ? deel.getAttribute("data-kind") : 0);
+      var ster = groep.querySelector("[data-dagen-ster]");
+      var uitleg = groep.querySelector("[data-dagen-incidenteel]");
+      if (ster) ster.hidden = los;
+      if (uitleg) uitleg.hidden = !los;
+      if (los) zetFout(groep.querySelector('input[type="checkbox"]'), "");
+    });
+  };
+
   var kindNaam = function (i) {
     var veld = document.getElementById("k" + i + "-voornaam");
     var naam = veld ? veld.value.trim() : "";
@@ -197,6 +218,7 @@
     form.querySelectorAll("[data-min-today]").forEach(function (el) { el.min = vandaag; });
     vulStandaardStart();
     werkNamenBij();
+    werkIncidenteelBij();
   };
 
   // Een kind weghalen: de gegevens van de kinderen erna schuiven een plek op
@@ -218,6 +240,7 @@
     vul(data.velden);
     vulStandaardStart();
     werkNamenBij();
+    werkIncidenteelBij();
     bewaar();
   };
 
@@ -247,7 +270,9 @@
     var groep = veld.closest("[data-minstens-een]");
     if (groep) {
       var vakjes = groep.querySelectorAll('input[type="checkbox"]');
-      if (![].some.call(vakjes, function (v) { return v.checked; })) tekst = vakjes[0].getAttribute("data-msg-required") || t("Kies minstens één.", "Choose at least one.");
+      var deel = groep.closest("[data-kind]");
+      var verplicht = !isIncidenteel(deel ? deel.getAttribute("data-kind") : 0);
+      if (verplicht && ![].some.call(vakjes, function (v) { return v.checked; })) tekst = vakjes[0].getAttribute("data-msg-required") || t("Kies minstens één.", "Choose at least one.");
       zetFout(vakjes[0], tekst);
       return !tekst;
     }
@@ -376,10 +401,13 @@
         [t("Groep of klas", "School year (groep) or class"), w(k + "[groep_klas]")],
         [t("Goed om te weten", "Good to know"), w(k + "[allergieen]")]
       ] });
-      blokken.push({ titel: t("School van ", "School of ") + kindNaam(i), stap: 1, regels: [[t("School", "School"), w(k + "[school]")]] });
+      blokken.push({ titel: t("School van ", "School of ") + kindNaam(i), stap: 1, regels: [
+        [t("School", "School"), w(k + "[school]")],
+        [t("Sportvereniging", "Sports club"), w(k + "[sportvereniging]")]
+      ] });
       blokken.push({ titel: t("Abonnement en dagen van ", "Membership and days for ") + kindNaam(i), stap: 3, regels: [
         [t("Abonnement", "Membership"), labelVan(k + "[abonnement]", data[k + "[abonnement]"])],
-        [t("Dagen", "Days"), dagen.length ? dagen.length + (dagen.length === 1 ? t(" dag", " day") : t(" dagen", " days")) + t(" per week: ", " a week: ") + dagen.join(", ") : ""],
+        [t("Dagen", "Days"), dagen.length ? dagenTekst(dagen.length) + ": " + dagen.join(", ") : (isIncidenteel(i) ? t("Geen vaste dagen (incidenteel)", "No fixed days (flexible)") : "")],
         [t("Toelichting", "Notes"), w(k + "[toelichting]")]
       ] });
     });
@@ -466,10 +494,11 @@
   form.addEventListener("change", function (event) {
     var el = event.target;
     if (el.name === "partner") partnerBlok.hidden = !partnerJa();
+    if (/\[abonnement\]$/.test(el.name)) werkIncidenteelBij();
     if (el.closest("[data-minstens-een]")) {
       var groep = el.closest("[data-minstens-een]");
       var aantal = groep.querySelectorAll("input:checked").length;
-      groep.querySelector("[data-dagen-aantal]").textContent = aantal ? aantal + (aantal === 1 ? " dag" : " dagen") + " per week" : "";
+      groep.querySelector("[data-dagen-aantal]").textContent = dagenTekst(aantal);
       if (groep.querySelector('[aria-invalid="true"]')) valideer(el);
     } else if (el.type === "radio" || el.type === "checkbox") {
       var eerste = el.type === "radio" ? form.querySelector('input[name="' + el.name + '"]') : el;
@@ -585,9 +614,10 @@
     vulStandaardStart();
     partnerBlok.hidden = !partnerJa();
     werkNamenBij();
+    werkIncidenteelBij();
     form.querySelectorAll("[data-minstens-een]").forEach(function (groep) {
       var aantal = groep.querySelectorAll("input:checked").length;
-      groep.querySelector("[data-dagen-aantal]").textContent = aantal ? aantal + (aantal === 1 ? " dag" : " dagen") + " per week" : "";
+      groep.querySelector("[data-dagen-aantal]").textContent = dagenTekst(aantal);
     });
     bewaardMelding.hidden = false;
     startStap = Math.min(bewaard.stap || 0, stappen.length - 1);

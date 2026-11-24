@@ -36,6 +36,12 @@ export const PAGINAS = {
   "404.html": "",
 };
 
+/**
+ * Pagina's zonder de pop-up "Blijf op de hoogte" (feedback 2.0): daar meld je je al aan of lees je erover.
+ * De pop-up staat in voet.html na de footer, tussen <!-- pop-up --> en <!-- /pop-up -->; op deze pagina's laten we dat stuk weg.
+ */
+export const GEEN_POP_UP = new Set(["aanmelden.html", "blijf-op-de-hoogte.html", "privacy.html", "404.html"]);
+
 /** Hoofdpagina's per menu-item: daar is het item "page", op de onderliggende pagina's "true". */
 const HOOFD = { home: "index.html", alles: "alles-over-sporty.html", middag: "een-middag-bij-sporty.html", locaties: "locaties/sportpark-middenmeer.html", team: "team.html", coach: "word-sporty-coach.html", contact: "contact.html", club: "aanmelden.html" };
 
@@ -75,7 +81,12 @@ export function metOnderdelen(html, pagina) {
   let uit = vervang(html, '<svg xmlns="http://www.w3.org/2000/svg" hidden>', "</svg>\n", SPRITE, "iconen");
   const engels = Boolean(NEDERLANDS[pagina]);
   uit = vervang(uit, '<header class="site-header">', "</header>\n", vul(engels ? KOP_EN : KOP, pagina), "kop");
-  uit = vervang(uit, '<footer class="site-footer on-dark">', "</footer>\n", vul(engels ? VOET_EN : VOET, pagina), "voet");
+  // De pop-up staat direct na de footer (niet erin, anders krijgt hij de stijl van de donkere footer)
+  const POP_UP = /<!-- pop-up -->\n[\s\S]*?<!-- \/pop-up -->\n/;
+  const sjabloon = engels ? VOET_EN : VOET;
+  const popUp = GEEN_POP_UP.has(NEDERLANDS[pagina] ?? pagina) ? "" : sjabloon.match(POP_UP)[0];
+  uit = uit.replace(POP_UP, "");
+  uit = vervang(uit, '<footer class="site-footer on-dark">', "</footer>\n", vul(sjabloon.replace(POP_UP, "") + popUp, pagina), "voet");
   return uit;
 }
 

@@ -62,7 +62,7 @@ De website staat als voorbeeld op Vercel: https://sporty-sigma.vercel.app. Verce
 | `css/style.css` | Alle opmaak, mobile-first |
 | `js/main.js` | Menu, in beeld komen bij scrollen, kaart na klik, formuliercontrole van het contact- en sollicitatieformulier (ook soort en grootte van het cv) |
 | `js/quiz.js` | De Sporty-quiz op de homepage ("Past jouw kind bij Sporty?", in het Engels "Is your child a Sporty kid?"). De vragen, Henny's reacties, de knopteksten en de uitslagen staan per taal in `index.html` en `en/index.html` (sectie `#quiz`) en zijn daar aan te passen; elk antwoord hoort bij een van vier types (Stuiterbal, Teamcaptain, Spelbedenker, Chillkampioen). De laatste vraag is de leeftijd (4 t/m 12 jaar). De eerste drie vragen komen van Sporty. Er wordt niets opgeslagen of verstuurd. |
-| `js/rekentool/` | Rekentool kinderopvangtoeslag op de pagina Abonnement en kosten: officiële bedragen per jaar (`toeslag-2026.js`), de tarieven van Sporty (`instellingen.js`), de berekening (`berekening.js`) en het formulier (`rekentool.js`). Zie [Rekentool](#rekentool-kinderopvangtoeslag). |
+| `js/rekentool/` | Rekentool kinderopvangtoeslag op de pagina Abonnement en kosten: officiële bedragen per jaar (`toeslag-2027.js`; `toeslag-2026.js` voor de rekenvoorbeelden uit de brochure in de tests), de tarieven van Sporty (`instellingen.js`), de berekening (`berekening.js`) en het formulier (`rekentool.js`). Zie [Rekentool](#rekentool-kinderopvangtoeslag). |
 | `tests/` | Automatische tests (`npm test`): de rekentool, met de tabel uit de brochure van Dienst Toeslagen als tweede bron, de SEO-basis van alle pagina's, de quiz op de homepage en de Engelse website |
 | `assets/fonts/` | Poppins en Caveat Brush (alleen hoofdletters), lokaal gehost, OFL-licentie |
 | `design/moodboard-sporty.jpg` | Het moodboard van de klant (eerste huisstijl, 8 oktober 2026) |
@@ -90,9 +90,10 @@ Header, footer en de iconenset staan in elke pagina, zodat elke pagina gewone HT
 Op de pagina Abonnement en kosten (`abonnement-en-kosten.html#rekentool`) rekenen ouders uit wat ze per maand betalen na aftrek van de kinderopvangtoeslag. De berekening gebeurt in de browser; er wordt niets verstuurd of opgeslagen.
 
 - **Hoe er gerekend wordt:** precies volgens de 7 stappen uit de brochure [Berekening kinderopvangtoeslag 2026](https://download.belastingdienst.nl/toeslagen/docs/berekening_kinderopvangtoeslag_tg0801z61fd.pdf) van Dienst Toeslagen: maximale uurprijs, maximaal 230 uur per kind per maand, het 1e kind is het kind met de meeste uren (bij gelijke uren de hoogste kosten), percentage uit de tabel bij het gezamenlijke toetsingsinkomen. Bedragen worden per stap op centen afgerond, zoals in de rekenvoorbeelden van de brochure. Er wordt alleen met hele getallen gerekend (centen), dus zonder afrondingsfouten.
-- **Gecontroleerd met `npm test`:** de tabel is vergeleken met twee officiële bronnen (rijksoverheid.nl en de brochure), de 4 officiële rekenvoorbeelden komen tot op de cent uit, elke grens van alle 69 inkomensschijven is getest, en 20.000 willekeurige situaties geven dezelfde uitkomst als een tweede, apart geschreven berekening.
+- **Welk jaar:** 2027, het jaar waarin Sporty opent (`js/rekentool/toeslag-2027.js`): maximale uurprijzen uit Staatsblad 2026, 308 (bso € 10,31) en de tabel uit Staatsblad 2026, 391 (opgehaald op 24 november 2026; de brochure van 2027 was toen nog niet verschenen, de rekenwijze is dezelfde).
+- **Gecontroleerd met `npm test`:** de tabel van 2026 is vergeleken met twee officiële bronnen (rijksoverheid.nl en de brochure), de tabel van 2027 met de tekst van het Staatsblad (`tests/bronnen/staatsblad-2026-391-tabel.txt`), de 4 officiële rekenvoorbeelden uit de brochure 2026 komen tot op de cent uit, elke grens van alle 69 inkomensschijven is getest, 20.000 willekeurige situaties geven dezelfde uitkomst als een tweede, apart geschreven berekening, en de maandbedragen van Sporty kloppen (1, 2 en 3 dagen: € 263,25, € 526,50 en € 789,75 vóór toeslag).
 - **Wat de rekentool niet weet:** de uitkomst is een schatting. De Belastingdienst stelt de toeslag vast, en die hangt ook af van het aantal maanden dat jij en je partner werken. Dat staat ook bij de rekentool.
-- **Tarieven van Sporty invullen:** in `js/rekentool/instellingen.js` (uurtarief, schoolweken, vakantieweken, uren per dag). Draai daarna `npm test`: de test meldt ontbrekende of ongeldige gegevens. Zolang er geen tarieven zijn, vult de bezoeker zelf een uurprijs en het aantal uren in.
+- **Tarieven van Sporty invullen:** in `js/rekentool/instellingen.js` (nu het Sporty Abonnement: € 9,75 per uur en 27 uur per maand per vaste dag; het incidentele tarief zit bewust niet in de rekentool). Draai daarna `npm test`: de test meldt ontbrekende of ongeldige gegevens. Zolang er geen tarieven zijn, vult de bezoeker zelf een uurprijs en het aantal uren in.
 - **Elk jaar in januari bijwerken:** maak `js/rekentool/toeslag-<jaar>.js` met de nieuwe tabel en maximale uurprijzen (bron: rijksoverheid.nl, "Bedragen kinderopvangtoeslag"), zet de nieuwe brochuretabel in `tests/bronnen/`, pas `jaar` aan in `instellingen.js`, zet het nieuwe bestand in `abonnement-en-kosten.html` en draai `npm test`. Het kabinet wil de toeslag vanaf 2029 vervangen door een nieuw stelsel; dan moet de rekentool opnieuw worden bekeken.
 
 ## Nog te doen (TODO)
@@ -101,23 +102,24 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 
 **Gegevens van de klant**
 - [x] Adres: Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer), uit de teksten van november 2026.
-- [ ] Telefoonnummer (nu staat er een tijdelijk nummer). Het WhatsApp-nummer is +31 6 18266706 (24 november 2026): de zwevende WhatsApp-knop rechtsonder op elke pagina, de knop op Contact en de link in het aanmeldformulier. Het e-mailadres is info@bsosporty.nl (13 november 2026).
-- [ ] Wat er in het Sporty-kennismakingspakket zit en hoe ouders het krijgen (Blijf op de hoogte).
+- [x] Telefoonnummer 06 18 26 67 06 (feedback 2.0, november 2026), hetzelfde nummer als WhatsApp: de zwevende WhatsApp-knop rechtsonder op elke pagina, de knop op Contact en de link in het aanmeldformulier. Het e-mailadres is info@bsosporty.nl (13 november 2026).
+- [ ] Wat er in het Sporty-kennismakingspakket zit (Blijf op de hoogte). Ouders vullen sinds feedback 2.0 hun adres in, dus het pakket gaat per post.
 - [ ] De teksten van de e-mails (bevestiging van een aanmelding, een proefdag en Blijf op de hoogte zijn nu voorlopige teksten). Sporty past alle e-mails zelf aan in Mijn BSO onder Instellingen → E-mails aanpassen.
-- [ ] Nieuwe hero-foto voor de homepage (Sporty stuurt die mee), en de foto's voor de nieuwe plekken `bewegen` (homepage) en `locatie-overzicht` (Locaties); zie `assets/fotos/BRONNEN.md`.
-- [ ] LRK-nummer (footer, Abonnement en kosten, veelgestelde vragen) en het GGD-inspectierapport (footer).
-- [ ] De tijden van het middagprogramma (homepage en Een middag bij Sporty; ook voor de openingstijden in de schema.org-gegevens).
+- [ ] Nieuwe hero-foto voor de homepage (Sporty stuurt die mee) en de foto voor `bewegen` (homepage); zie `assets/fotos/BRONNEN.md`. Het clubhuis (`locatie-overzicht`), de speelkamer en de kantine zijn eigen foto's sinds 24 november 2026; de chillruimte en de originele foto's via WeTransfer volgen.
+- [x] LRK-nummer 236315389 (footer, Abonnement en kosten, veelgestelde vragen, schema.org). Nog nodig: het GGD-inspectierapport (footer).
+- [x] De tijden van het middagprogramma (feedback 2.0): op de homepage en bij Een middag bij Sporty, en de openingstijden vanaf 14.00 uur in de schema.org-gegevens. TODO: bevestigen dat Sporty ook op woensdag om 14.00 uur opengaat.
 - [ ] Antwoorden op de veelgestelde vragen die nog openstaan (staan als TODO in `contact.html`).
 - [ ] De mailbox info@bsosporty.nl aanmaken en testen vóór de livegang. Zie [Live zetten](#live-zetten).
 - [ ] Vectorbestanden (SVG of PDF) van de logo's van de ontwerper. De logo's op de site zijn met de computer omgezet uit de aangeleverde afbeeldingen (`design/logo/`); vervang `assets/img/sporty-logo*.svg` en `sporty-woordmerk*.svg` door de bestanden van de ontwerper en draai `npm run logo`.
-- [ ] KvK-nummer (footer).
-- [ ] Links naar social media (footer).
+- [x] KvK-nummer 42064267 (footer).
+- [x] Links naar social media: Instagram, TikTok en Facebook (footer en schema.org).
 - [x] Openingstijden: op schooldagen na school tot 18.30 uur, in vakanties en op studiedagen 08.00–18.30 uur, telefonisch ma t/m vr 9.00–13.30 uur.
-- [x] Uurtarief en wat erbij zit: het Sporty Abonnement (52 weken) à € 10,31 per uur, met een vast gemiddelde van 27,5 uur per maand per dag (Abonnement en kosten, rekentool).
-- [ ] Rekentool: de tabel van 2027 toevoegen zodra die bekend is (zie [Rekentool](#rekentool-kinderopvangtoeslag)). Let op: in 2026 is de maximale uurprijs voor de bso € 9,98; het deel boven die prijs krijgen ouders niet vergoed.
+- [x] Uurtarief en wat erbij zit (feedback 2.0): het Sporty Abonnement (52 weken) à € 9,75 per uur, met een vast gemiddelde van 27 uur per maand per dag, en Incidenteel à € 12 per uur (Abonnement en kosten, rekentool, aanmeldformulier).
+- [x] Rekentool: rekent met de officiële tabel en maximale uurprijzen van 2027 (Staatsblad 2026, 308 en 391). De maximale uurprijs voor de bso is in 2027 € 10,31, dus ouders krijgen toeslag over het hele uurtarief van Sporty.
+- [ ] Mijn BSO maakt de facturen nu per afgenomen middag (uurtarief × uren per middag). Met Sporty afstemmen of de facturen van het abonnement het vaste maandbedrag (27 uur per vaste dag) moeten gebruiken.
 - [ ] Opzegtermijn en betaalwijze in de algemene voorwaarden.
 - [x] Leeftijd: 4 t/m 12 jaar (teksten van november 2026; eerder 5 t/m 13 jaar).
-- [x] Team: Sureyo Macrander, Tim van Eldonk, Anas en Henny de hond, met een juichfilmpje per coach (24 november 2026). Nog nodig: de achternaam, functie en een weetje van Anas, en de foto's van Tim en Anas als bestand.
+- [x] Team: Sureyo Macrander, Tim van Eldonk, Anass Boudinar en Henny de hond, met een juichfilmpje per coach (24 november 2026). Nog nodig: de functie en het weetje van Anass ("Met Anass kijken we geen voetbal, want hij is voor [.....]."), en de foto's van Tim en Anass als bestand.
 - [ ] Namen bij de reviews, zodra de ouders toestemming hebben gegeven (nu: "Ouder van een Sporty-kid").
 - [ ] Algemene voorwaarden en privacyvoorwaarden (Voorwaarden, Privacy) en de klachtenregeling als pdf.
 

@@ -2,6 +2,9 @@
 /*
  * Blijf op de hoogte (november 2026): ouders die interesse hebben laten op de website hun naam, e-mailadres
  * en eventueel telefoonnummer achter (blijf-op-de-hoogte.html) en krijgen een Sporty-kennismakingspakket.
+ * Sinds feedback 2.0 (november 2026) ook via een pop-up op elke pagina (js/pop-up.js), met de naam van het
+ * kind (niet verplicht) en het huisadres om het Sporty-pakket op te sturen. Die twee staan versleuteld in de
+ * database; het adres wissen we INTERESSE_ADRES_NA_PAKKET_DAGEN dagen nadat het pakket is verstuurd.
  *
  * Met dubbele bevestiging: pas na een klik op de link in de e-mail staat iemand op de lijst. Zo kan niemand
  * een ander aanmelden. Afmelden kan altijd, met de link onder elke e-mail; de gegevens worden dan gewist.
@@ -13,6 +16,10 @@ declare(strict_types=1);
 /** Niet bevestigd: na zoveel dagen gewist. */
 const INTERESSE_ONBEVESTIGD_DAGEN = 14;
 const MAX_INTERESSE_PER_KWARTIER = 5;
+/** Het adres is alleen nodig voor het pakket: zoveel dagen nadat het is verstuurd, wissen we het. */
+const INTERESSE_ADRES_NA_PAKKET_DAGEN = 30;
+/** Waar iemand zich aanmeldde: de pagina Blijf op de hoogte of de pop-up. */
+const INTERESSE_BRONNEN = ['website' => 'Pagina Blijf op de hoogte', 'pop-up' => 'Pop-up'];
 
 /** Een nieuwe geheime code voor de links in de e-mails (bevestigen en afmelden). */
 function interesse_token(): string
@@ -45,12 +52,31 @@ function interesse_afmeldlink(array $rij): string
     return interesse_link('afmelden', ontsleutel((string) $rij['token']), (string) ($rij['taal'] ?? 'nl'));
 }
 
+/** Het huisadres van een aanmelding (ontsleuteld): ['straat' => …, 'postcode' => …, 'plaats' => …], of een lege lijst. */
+function interesse_adres(array $rij): array
+{
+    $json = json_decode(ontsleutel((string) ($rij['adres'] ?? '')) ?: 'null', true);
+    return is_array($json) ? array_map('strval', array_intersect_key($json, array_flip(['straat', 'postcode', 'plaats']))) : [];
+}
+
+/** Het adres op één regel, bijvoorbeeld "Voorlandpad 17, 1098 TZ Amsterdam". */
+function interesse_adres_tekst(array $rij): string
+{
+    $a = interesse_adres($rij);
+    return $a ? trim(($a['straat'] ?? '') . ', ' . trim(($a['postcode'] ?? '') . ' ' . ($a['plaats'] ?? '')), ', ') : '';
+}
+
 /**
  * Meldt iemand aan (of opnieuw, met een nieuwe link) en stuurt de bevestigingsmail.
  * Staat het adres al bevestigd op de lijst, dan krijgt die persoon alleen een korte mail.
+ * $pakket: de naam van het kind en het huisadres (straat, postcode, plaats) voor het Sporty-pakket.
  */
-function interesse_aanmelden(string $naam, string $email, string $telefoon, string $bron = 'website'): void
+function interesse_aanmelden(string $naam, string $email, string $telefoon, string $bron = 'website', array $pakket = []): void
 {
+    $kindNaam = (string) ($pakket['kind_naam'] ?? '');
+    $adres = array_filter(['straat' => (string) ($pakket['straat'] ?? ''), 'postcode' => (string) ($pakket['postcode'] ?? ''), 'plaats' => (string) ($pakket['plaats'] ?? '')], fn ($v) => $v !== '');
+    $adresVersleuteld = $adres ? versleutel(json_encode($adres, JSON_UNESCAPED_UNICODE)) : '';
+    $kindVersleuteld = $kindNaam !== '' ? versleutel($kindNaam) : '';
     $voornaam = explode(' ', trim($naam))[0];
     $bestaand = rij('SELECT * FROM interesse WHERE lower(email) = lower(?)', [$email]);
     if ($bestaand && $bestaand['bevestigd_op']) {
@@ -59,11 +85,11 @@ function interesse_aanmelden(string $naam, string $email, string $telefoon, stri
     }
     $token = interesse_token();
     if ($bestaand) {
-        q('UPDATE interesse SET naam = ?, telefoon = ?, token_hash = ?, token = ?, taal = ?, aangemaakt_op = ? WHERE id = ?', [$naam, $telefoon, interesse_hash($token), versleutel($token), taal(), nu(), $bestaand['id']]);
+        q('UPDATE interesse SET naam = ?, telefoon = ?, kind_naam = ?, adres = ?, bron = ?, token_hash = ?, token = ?, taal = ?, aangemaakt_op = ? WHERE id = ?', [$naam, $telefoon, $kindVersleuteld, $adresVersleuteld, $bron, interesse_hash($token), versleutel($token), taal(), nu(), $bestaand['id']]);
     } else {
-        q('INSERT INTO interesse (naam, email, telefoon, token_hash, token, bron, taal, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [$naam, $email, $telefoon, interesse_hash($token), versleutel($token), $bron, taal(), nu()]);
+        q('INSERT INTO interesse (naam, email, telefoon, kind_naam, adres, token_hash, token, bron, taal, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [$naam, $email, $telefoon, $kindVersleuteld, $adresVersleuteld, interesse_hash($token), versleutel($token), $bron, taal(), nu()]);
     }
-    // TODO: tekst van de bevestigingsmail laten controleren door Sporty (aan te passen onder Instellingen → E-mails), en laten weten wat er in het kennismakingspakket zit en hoe ouders het krijgen
+    // TODO: tekst van de bevestigingsmail laten controleren door Sporty (aan te passen onder Instellingen → E-mails), en laten weten wat er in het Sporty-pakket zit
     stuur_mailtekst($email, 'op_de_hoogte_bevestigen', ['voornaam' => $voornaam, 'link' => interesse_link('bevestig', $token, taal()), 'dagen' => INTERESSE_ONBEVESTIGD_DAGEN]);
 }
 

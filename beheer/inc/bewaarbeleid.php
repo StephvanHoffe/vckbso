@@ -22,7 +22,7 @@ const BEWAARTERMIJNEN = [
     'bewaar_aanmeldingen_maanden' => ['Aanmeldingen die niet tot plaatsing leidden', 'maanden', 'na aanmelden'],
     'bewaar_account_maanden' => ['Account en contactgegevens van gestopte klanten', 'maanden', 'na vertrek; naam en adres blijven bij de facturen'],
     'bewaar_financieel_jaren' => ['Financiële administratie: facturen, betalingen, de opvangdagen waarop ze zijn gebaseerd, en de boekingen en bonnetjes onder Financiën', 'jaar', 'fiscale bewaarplicht'],
-    'bewaar_interesse_maanden' => ['Blijf op de hoogte: naam, e-mail en telefoon van ouders met interesse', 'maanden', 'na aanmelden (afmelden kan altijd eerder; wie de aanmelding niet bevestigt: na 14 dagen)'],
+    'bewaar_interesse_maanden' => ['Blijf op de hoogte: naam, e-mail, telefoon, naam van het kind en adres van ouders met interesse', 'maanden', 'na aanmelden (afmelden kan altijd eerder; wie de aanmelding niet bevestigt: na 14 dagen; het adres 30 dagen nadat het pakket is verstuurd)'],
     'bewaar_logboek_maanden' => ['Logboek: inzage, wijzigingen, exports en inloggen', 'maanden', ''],
 ];
 
@@ -129,6 +129,8 @@ function voer_bewaarbeleid_uit(): array
     $telling['op_de_hoogte'] = q('DELETE FROM interesse WHERE (bevestigd_op IS NULL AND aangemaakt_op < ?) OR aangemaakt_op < ?', [
         date('Y-m-d H:i:s', strtotime('-' . INTERESSE_ONBEVESTIGD_DAGEN . ' days')), grens(max(1, bewaartermijn('bewaar_interesse_maanden'))),
     ])->rowCount();
+    // Het adres is alleen nodig voor het Sporty-pakket: wissen zodra het pakket een tijdje verstuurd is
+    q("UPDATE interesse SET adres = '' WHERE adres != '' AND pakket_op IS NOT NULL AND pakket_op < ?", [date('Y-m-d H:i:s', strtotime('-' . INTERESSE_ADRES_NA_PAKKET_DAGEN . ' days'))]);
 
     // 8c. Anonieme telling van het aanmeldformulier: een jaar
     q('DELETE FROM aanvraag_stappen WHERE datum < ?', [date('Y-m-d', strtotime('-1 year'))]);

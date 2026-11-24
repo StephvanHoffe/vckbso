@@ -130,7 +130,7 @@ const MAILTEKSTEN = [
         'velden' => ['voornaam' => ['Voornaam', 'Fatima'], 'link' => ['Link om de aanmelding te bevestigen', 'https://…/op-de-hoogte.php?bevestig=…'], 'dagen' => ['Na hoeveel dagen we niet-bevestigde aanmeldingen wissen', '14']],
         'verplicht' => ['link'],
         'onderwerp' => 'Bevestig je aanmelding bij Sporty',
-        'tekst' => "Hoi {voornaam},\n\nLeuk dat je op de hoogte wilt blijven van Sporty! Bevestig je aanmelding met deze link:\n{link}\n\nDaarna houden we je op de hoogte van het laatste nieuws, en krijg je een Sporty-kennismakingspakket. We laten je weten hoe je het pakket krijgt.\n\nHeb je je niet zelf aangemeld? Dan hoef je niets te doen. Zonder bevestiging wissen we je gegevens binnen {dagen} dagen.\n\nTot snel!\nTeam Sporty (en Henny: woef!)",
+        'tekst' => "Hoi {voornaam},\n\nLeuk dat je op de hoogte wilt blijven van Sporty! Bevestig je aanmelding met deze link:\n{link}\n\nDaarna houden we je op de hoogte van het laatste nieuws, en sturen we je een gratis Sporty-pakket op het adres dat je hebt ingevuld.\n\nHeb je je niet zelf aangemeld? Dan hoef je niets te doen. Zonder bevestiging wissen we je gegevens binnen {dagen} dagen.\n\nTot snel!\nTeam Sporty (en Henny: woef!)",
     ],
     'op_de_hoogte_al_op_lijst' => [
         'groep' => 'ouders',
@@ -204,7 +204,7 @@ const MAILTEKSTEN = [
         'velden' => ['link' => ['Link naar "Op de hoogte" in Mijn BSO', 'https://…/interesse.php']],
         'verplicht' => ['link'],
         'onderwerp' => 'Nieuwe aanmelding: Blijf op de hoogte',
-        'tekst' => "Er heeft zich iemand aangemeld om op de hoogte te blijven. Vergeet het kennismakingspakket niet!\n\nBekijk de lijst in de beheeromgeving:\n{link}",
+        'tekst' => "Er heeft zich iemand aangemeld om op de hoogte te blijven. Vergeet het Sporty-pakket niet: het adres staat erbij.\n\nBekijk de lijst in de beheeromgeving:\n{link}",
     ],
     'team_bericht' => [
         'groep' => 'team',
@@ -291,7 +291,7 @@ const MAILTEKSTEN = [
         'velden' => ['voornaam' => ['Voornaam', 'Fatima'], 'link' => ['Link om de aanmelding te bevestigen', 'https://…/op-de-hoogte.php?bevestig=…'], 'dagen' => ['Na hoeveel dagen we niet-bevestigde aanmeldingen wissen', '14']],
         'verplicht' => ['link'],
         'onderwerp' => 'Confirm your Sporty sign-up',
-        'tekst' => "Hi {voornaam},\n\nGreat that you want to stay in the loop with Sporty! Please confirm your sign-up with this link:\n{link}\n\nAfter that we'll keep you posted on the latest news, and you'll get some Sporty welcome goodies. We'll let you know how you'll receive them.\n\nDidn't sign up yourself? Then there's nothing you need to do. Without confirmation we'll delete your details within {dagen} days.\n\nSee you soon!\nTeam Sporty (and Henny: woof!)",
+        'tekst' => "Hi {voornaam},\n\nGreat that you want to stay in the loop with Sporty! Please confirm your sign-up with this link:\n{link}\n\nAfter that we'll keep you posted on the latest news, and we'll send some free Sporty goodies to the address you filled in.\n\nDidn't sign up yourself? Then there's nothing you need to do. Without confirmation we'll delete your details within {dagen} days.\n\nSee you soon!\nTeam Sporty (and Henny: woof!)",
     ],
 
     'op_de_hoogte_al_op_lijst_en' => [

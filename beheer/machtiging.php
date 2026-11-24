@@ -83,7 +83,7 @@ pagina_kop('Automatische incasso', 'Zo hoef jij nergens meer aan te denken: je f
     <div class="henny-baan henny-baan--vast is-klaar" style="--voortgang: 1;">
       <p class="tekstwolk henny-baan__wolk">Goal! Alles is geregeld. Tot snel bij Sporty!</p>
       <div class="henny-baan__spoor" aria-hidden="true">
-        <img class="henny-baan__henny" src="../assets/img/henny/henny-rent-180.webp" srcset="../assets/img/henny/henny-rent-180.webp 180w, ../assets/img/henny/henny-rent-360.webp 360w" sizes="3rem" width="180" height="239" alt="">
+        <img class="henny-baan__henny" src="../assets/img/henny/henny-rent-180.webp" srcset="../assets/img/henny/henny-rent-180.webp 180w, ../assets/img/henny/henny-rent-360.webp 360w" sizes="3rem" width="180" height="198" alt="">
         <svg class="henny-baan__doel" viewBox="0 0 44 30" focusable="false"><path d="M3 29V3h38v26"/><path d="M3 3l6 6h26l6-6M9 9v20M35 9v20M15.5 9v20M22 9v20M28.5 9v20M9 15.5h26M9 22h26"/></svg>
       </div>
     </div>
@@ -100,7 +100,7 @@ pagina_kop('Automatische incasso', 'Zo hoef jij nergens meer aan te denken: je f
     <div class="henny-baan henny-baan--vast" style="--voortgang: 0.86;">
       <p class="tekstwolk henny-baan__wolk">Bijna bij het doel! Nog één stap: de machtiging voor de automatische incasso.</p>
       <div class="henny-baan__spoor" aria-hidden="true">
-        <img class="henny-baan__henny" src="../assets/img/henny/henny-rent-180.webp" srcset="../assets/img/henny/henny-rent-180.webp 180w, ../assets/img/henny/henny-rent-360.webp 360w" sizes="3rem" width="180" height="239" alt="">
+        <img class="henny-baan__henny" src="../assets/img/henny/henny-rent-180.webp" srcset="../assets/img/henny/henny-rent-180.webp 180w, ../assets/img/henny/henny-rent-360.webp 360w" sizes="3rem" width="180" height="198" alt="">
         <svg class="henny-baan__doel" viewBox="0 0 44 30" focusable="false"><path d="M3 29V3h38v26"/><path d="M3 3l6 6h26l6-6M9 9v20M35 9v20M15.5 9v20M22 9v20M28.5 9v20M9 15.5h26M9 22h26"/></svg>
       </div>
     </div>

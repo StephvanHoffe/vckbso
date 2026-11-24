@@ -85,15 +85,15 @@
                   </div>
         <div class="field">
           <label for="telefoon">Telefoonnummer</label>
-          <input id="telefoon" name="telefoon" value="06 12 34 56 78">
+          <input id="telefoon" name="telefoon" value="06 18 26 67 06">
                   </div>
         <div class="field">
           <label for="kvk">KvK-nummer</label>
-          <input id="kvk" name="kvk" value="">
+          <input id="kvk" name="kvk" value="42064267">
                   </div>
         <div class="field">
           <label for="lrk">LRK-nummer</label>
-          <input id="lrk" name="lrk" value="">
+          <input id="lrk" name="lrk" value="236315389">
                   </div>
         <div class="field">
           <label for="iban">IBAN van de BSO</label>
@@ -104,10 +104,13 @@
     <section class="panel" aria-labelledby="tarief-titel">
       <h2 id="tarief-titel">Tarief en afspraken</h2>
       <div class="form">
-        <!-- TODO: het echte uurtarief en de uren per middag van de klant invullen -->
+        <!-- Tarieven van Sporty (feedback 2.0, november 2026): Sporty Abonnement (52 weken) € 9,75 per uur, gemiddeld
+             27 uur per maand per vaste dag; Incidenteel € 12 per uur (4,5 uur per schooldag, 10,5 uur per vakantie- of studiedag).
+             TODO: de facturen rekenen nu per afgenomen middag (uurtarief x uren per middag). Met Sporty afstemmen of de
+             facturen van het abonnement het vaste maandbedrag (27 uur per vaste dag) moeten gebruiken. -->
         <div class="field field--klein">
           <label for="uurtarief">Uurtarief in euro</label>
-          <input id="uurtarief" name="uurtarief" inputmode="decimal" placeholder="bijv. 10,25" value="10,00">
+          <input id="uurtarief" name="uurtarief" inputmode="decimal" placeholder="bijv. 9,75" value="10,00">
                   </div>
         <div class="field field--klein">
           <label for="uren_per_middag">Uren per middag</label>
@@ -160,7 +163,7 @@
           <input id="bewaar_financieel_jaren" name="bewaar_financieel_jaren" type="number" min="7" max="240" style="max-width: 8rem" value="7">
                   </div>
         <div class="field">
-          <label for="bewaar_interesse_maanden">Blijf op de hoogte: naam, e-mail en telefoon van ouders met interesse <span class="field__hint">(maanden, na aanmelden (afmelden kan altijd eerder; wie de aanmelding niet bevestigt: na 14 dagen))</span></label>
+          <label for="bewaar_interesse_maanden">Blijf op de hoogte: naam, e-mail, telefoon, naam van het kind en adres van ouders met interesse <span class="field__hint">(maanden, na aanmelden (afmelden kan altijd eerder; wie de aanmelding niet bevestigt: na 14 dagen; het adres 30 dagen nadat het pakket is verstuurd))</span></label>
           <input id="bewaar_interesse_maanden" name="bewaar_interesse_maanden" type="number" min="1" max="240" style="max-width: 8rem" value="24">
                   </div>
         <div class="field">
@@ -172,7 +175,7 @@
         <label for="bevestig_wachtwoord">Je eigen wachtwoord <span class="field__hint">(alleen nodig als je een bewaartermijn korter maakt)</span></label>
         <input id="bevestig_wachtwoord" name="bevestig_wachtwoord" type="password" autocomplete="current-password" style="max-width: 20rem">
               </div>
-      <p class="muted">Laatst uitgevoerd: vandaag 18:47.</p>
+      <p class="muted">Laatst uitgevoerd: vandaag 19:27.</p>
     </section>
     <section class="panel" aria-labelledby="mfa-titel">
       <h2 id="mfa-titel">Tweestapsverificatie</h2>
@@ -187,7 +190,7 @@
 </form>
 </main>
 <footer class="app-footer">
-  <p>Sporty · 06 12 34 56 78 · <a href="mailto:info@bsosporty.nl">info@bsosporty.nl</a> · <a href="../../privacy.html">Privacyverklaring</a></p>
+  <p>Sporty · 06 18 26 67 06 · <a href="mailto:info@bsosporty.nl">info@bsosporty.nl</a> · <a href="../../privacy.html">Privacyverklaring</a></p>
 </footer>
 </body>
 </html>

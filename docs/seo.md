@@ -33,13 +33,13 @@ Deze gegevens en `sitemap.xml` worden gemaakt door `tools/structured-data.mjs` (
 
 Deze informatie is nodig om de site af te maken. Ze staat ook als TODO in de code.
 
-- [ ] **Het echte telefoonnummer.** Nu staat overal het tijdelijke 06 12 34 56 78, ook in de gegevens voor Google. (Het WhatsApp-nummer is binnen: +31 6 18266706, sinds 24 november 2026 in de zwevende WhatsApp-knop op elke pagina.) Naam, adres en telefoon moeten op de website, in het Google Bedrijfsprofiel en elders precies gelijk zijn.
-- [ ] **Hoe laat Sporty op schooldagen opengaat** (per dag als het verschilt, bijvoorbeeld op woensdag). Dan komen de openingstijden in de gegevens voor Google en in de veelgestelde vragen.
+- [x] **Het echte telefoonnummer:** 06 18 26 67 06 (feedback 2.0), hetzelfde als WhatsApp, overal op de site en in de gegevens voor Google. Naam, adres en telefoon moeten op de website, in het Google Bedrijfsprofiel en elders precies gelijk zijn.
+- [x] **Hoe laat Sporty op schooldagen opengaat:** vanaf 14.00 uur (de tijden van de middag, feedback 2.0), in de gegevens voor Google met de open dagen tot en vanaf 12 juli 2027. TODO: bevestigen dat dat ook op woensdag zo is.
 - [ ] **De scholen waar jullie ophalen**, en per school: wie haalt op, hoe laat, lopend, op de fiets of met de bakfiets, en hoe lang de tocht is. Daarmee maken we een pagina "Ophalen van school" (ouders zoeken op de school van hun kind).
 - [ ] **Bereikbaarheid van het clubhuis**: tram of bus en halte, fietsen parkeren, auto parkeren, en hoe halen en brengen op het sportpark werkt.
-- [ ] **Eigen foto's**: het clubhuis van buiten en binnen (chillruimte, speelkamer, kantine), de sportvelden, het team, en kinderen in actie (alleen met toestemming van de ouders). Die gaan op de site en in het Google Bedrijfsprofiel.
-- [ ] **LRK-nummer en KvK-nummer**, zodra ze er zijn.
-- [ ] **Links naar social media** (Instagram, Facebook of andere kanalen), als die er zijn.
+- [ ] **Eigen foto's**: binnen sinds 24 november 2026: het clubhuis van buiten, de speelkamer en de kantine. Nog nodig: de chillruimte, de sportvelden, het team, en kinderen in actie (alleen met toestemming van de ouders). Die gaan op de site en in het Google Bedrijfsprofiel.
+- [x] **LRK-nummer en KvK-nummer:** 236315389 en 42064267 (feedback 2.0), in de footer en in de gegevens voor Google.
+- [x] **Links naar social media:** Instagram, TikTok en Facebook, in de footer en in de gegevens voor Google (`sameAs`).
 - [ ] **Herkomst van de reviews op de homepage.** Sporty is nog niet open; leg vast van wie de ervaringen komen (bijvoorbeeld proefdagen of eerder werk van het team) en of de namen erbij mogen. Anders kunnen ze beter weg tot na de opening.
 - [ ] **Akkoord op de nieuwe teksten**: het label "Sportieve BSO in de Watergraafsmeer, Amsterdam-Oost" boven "Let's play", "Nieuw in de Watergraafsmeer: open vanaf 4 januari 2027", het blok "In het kort" op de locatiepagina, de labels boven de paginakoppen en de nieuwe deelafbeelding.
 - [ ] Optioneel: **is er nog plek?** Zo ja, dan mag "nog plek, geen wachtlijst" op de site: daar zoeken veel ouders in Amsterdam op. **Spreken de coaches Engels?** Dan noemen we dat op de Engelse site ("English-speaking after-school care").

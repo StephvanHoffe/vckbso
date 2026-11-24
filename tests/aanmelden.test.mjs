@@ -68,10 +68,10 @@ test("de open dagen in het formulier zijn dezelfde als in de beheeromgeving", ()
   assert.match(form, /data-dagen-beperkt>Van 4 januari tot de zomervakantie zijn we open op dinsdag en donderdag/);
 });
 
-test("voorletters, startdatum en groep van het kind zijn verplicht; sportclub en plaats zijn weg", () => {
+test("voorletters, startdatum en groep van het kind zijn verplicht; de oude velden sportclub en plaats zijn weg", () => {
   for (const id of ["k0-voorletters", "k0-startdatum", "k0-groep"]) assert.match(form, new RegExp(`<input id="${id}"[^>]*\\srequired`), id);
-  assert.doesNotMatch(form, /sportclub|school_plaats/);
-  assert.doesNotMatch(inc, /sportclub|school_plaats/);
+  assert.doesNotMatch(form, /\[sportclub\]|school_plaats/);
+  assert.doesNotMatch(inc, /'sportclub'|school_plaats/);
   assert.match(form, /Op welke school <span data-zit>zit<\/span> <span data-kindnamen>je kind<\/span>\? Noteer hier de school\./);
 });
 
@@ -81,4 +81,26 @@ test("het Engelse formulier (en/join-the-club.html) stuurt dezelfde velden en ke
   assert.deepEqual(velden(en), velden(form));
   assert.match(en, /<form[^>]*>\s*<input type="hidden" name="taal" value="en">/);
   assert.match(en, /action="\.\.\/beheer\/aanvraag\.php"/);
+});
+
+test("feedback 2.0: Incidenteel als tweede abonnement, dan zijn vaste dagen niet verplicht", () => {
+  assert.match(form, /name="kinderen\[0\]\[abonnement\]" value="incidenteel"/);
+  assert.match(form, /Uurtarief € 9,75;/);
+  assert.match(form, /Uurtarief € 12;/);
+  assert.doesNotMatch(form, /10,31/);
+  // De server: geen dag nodig bij Incidenteel, wel bij het Sporty Abonnement
+  assert.match(inc, /if \(!\$kind\['dagen'\] && \$kind\['abonnement'\] !== 'incidenteel'\)/);
+  // Het script: de controle van de dagen kijkt naar het abonnement van dat kind
+  assert.match(script, /var verplicht = !isIncidenteel\(/);
+  assert.match(form, /data-dagen-incidenteel hidden>Je koos Incidenteel/);
+});
+
+test("feedback 2.0: de sportvereniging van het kind is een vraag die niet verplicht is (stap 2)", () => {
+  const stap2 = form.match(/data-stap="2"[\s\S]*?<\/section>/)[0];
+  const veld = stap2.match(/<input id="k0-sportvereniging" name="kinderen\[0\]\[sportvereniging\]"[^>]*>/);
+  assert.ok(veld, "het veld sportvereniging staat in stap 2");
+  assert.doesNotMatch(veld[0], /\srequired/);
+  assert.match(stap2, /Zo weten we of we je kind na Sporty naar de sportclub moeten brengen\./);
+  assert.match(inc, /'sportvereniging' => \$tekst\(\$k\['sportvereniging'\] \?\? '', 120\)/);
+  assert.match(script, /k \+ "\[sportvereniging\]"/);
 });

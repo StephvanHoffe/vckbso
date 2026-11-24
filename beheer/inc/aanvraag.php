@@ -21,8 +21,8 @@ const AANVRAAG_GEVONDEN = [
     'anderen' => 'Via anderen die al bij Sporty zitten',
     'buurt' => 'Ik heb Sporty in de buurt gezien',
 ];
-// TODO: abonnementen bevestigen met Sporty (de abonnementsstap is nog in overleg); nu is er één abonnement
-const AANVRAAG_ABONNEMENTEN = ['sporty-52' => 'Sporty Abonnement (52 weken)'];
+// De abonnementen (feedback 2.0, november 2026): het Sporty Abonnement en Incidenteel (dan zijn vaste dagen niet verplicht)
+const AANVRAAG_ABONNEMENTEN = ['sporty-52' => 'Sporty Abonnement (52 weken)', 'incidenteel' => 'Incidenteel'];
 
 /** Stappen van het formulier (1 t/m 7) en 8 = verstuurd, voor de anonieme telling. */
 const AANVRAAG_STAPPEN = [1 => 'Gegevens kind', 2 => 'School', 3 => 'Abonnement', 4 => 'Dagen', 5 => 'Gegevens ouder', 6 => 'Partner', 7 => 'Controleren', 8 => 'Verstuurd'];
@@ -50,6 +50,7 @@ function lees_aanvraag(array $post): array
             'startdatum' => $tekst($k['startdatum'] ?? '', 10),
             'groep_klas' => $tekst($k['groep_klas'] ?? '', 40),
             'school' => $tekst($k['school'] ?? '', 120),
+            'sportvereniging' => $tekst($k['sportvereniging'] ?? '', 120),
             'abonnement' => (string) ($k['abonnement'] ?? ''),
             'dagen' => array_values(array_intersect([1, 2, 3, 4, 5], array_map('intval', (array) ($k['dagen'] ?? [])))),
             'toelichting' => $tekst($k['toelichting'] ?? '', 500),
@@ -85,9 +86,9 @@ function lees_aanvraag(array $post): array
         if (!array_key_exists($kind['abonnement'], AANVRAAG_ABONNEMENTEN)) {
             $kind['abonnement'] = array_key_first(AANVRAAG_ABONNEMENTEN);
         }
-        if (!$kind['dagen']) {
+        if (!$kind['dagen'] && $kind['abonnement'] !== 'incidenteel') {
             $fouten[$veld('dagen') . '[]'] = t("Kies minstens één dag voor {$wie}.", "Choose at least one day for {$wie}.");
-        } elseif (array_diff($kind['dagen'], open_weekdagen())) {
+        } elseif ($kind['dagen'] && array_diff($kind['dagen'], open_weekdagen())) {
             $fouten[$veld('dagen') . '[]'] = t('Tot de zomervakantie zijn we alleen open op ' . weekdagen_tekst(open_weekdagen()) . '. Wil je een andere dag? Zet het bij de toelichting.', 'Until the summer holiday we are only open on ' . weekdagen_tekst(open_weekdagen()) . '. Would you like a different day? Mention it in the notes.');
         }
         $kinderen[] = $kind;
@@ -211,7 +212,7 @@ function bewaar_aanvraag(array $aanvraag): int
         ]);
         $ouderId = laatste_id();
         foreach ($aanvraag['kinderen'] as $kind) {
-            $extraKind = array_intersect_key($kind, array_flip(['voorletters', 'geslacht', 'startdatum', 'groep_klas', 'abonnement', 'dagen', 'toelichting']));
+            $extraKind = array_intersect_key($kind, array_flip(['voorletters', 'geslacht', 'startdatum', 'groep_klas', 'sportvereniging', 'abonnement', 'dagen', 'toelichting']));
             q('INSERT INTO kinderen (ouder_id, voornaam, achternaam, geboortedatum, school, bijzonderheden, foto_toestemming, aanvraag, aangemaakt_op) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?)', [
                 $ouderId, $kind['voornaam'], trim($kind['tussenvoegsel'] . ' ' . $kind['achternaam']), $kind['geboortedatum'], $kind['school'],
                 versleutel($kind['allergieen']), versleutel(json_encode($extraKind, JSON_UNESCAPED_UNICODE)), nu(),

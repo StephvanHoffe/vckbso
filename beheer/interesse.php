@@ -3,7 +3,8 @@
  * Op de hoogte: ouders die zich via de website hebben aangemeld om op de hoogte te blijven (met het
  * Sporty-kennismakingspakket). Voor teamleden met het recht "Op de hoogte".
  * Bijhouden wie het pakket heeft gekregen, iedereen een update sturen (met een afmeldlink per persoon),
- * een CSV maken (komt in het logboek) en iemand verwijderen.
+ * een CSV maken (komt in het logboek) en iemand verwijderen. Met de naam van het kind en het adres voor het
+ * pakket (feedback 2.0); het adres wordt INTERESSE_ADRES_NA_PAKKET_DAGEN dagen na het versturen gewist.
  */
 require __DIR__ . '/inc/bootstrap.php';
 
@@ -15,9 +16,14 @@ if (get_str('export') === 'csv') {
     $veilig = fn (string $tekst): string => preg_match('/^[=+\-@\t\r]/', $tekst) ? "'" . $tekst : $tekst;
     $uit = fopen('php://temp', 'w+');
     fwrite($uit, "\xEF\xBB\xBF");
-    fputcsv($uit, ['naam', 'e-mail', 'telefoon', 'aangemeld', 'bevestigd', 'kennismakingspakket'], ';');
+    fputcsv($uit, ['naam', 'naam kind', 'e-mail', 'telefoon', 'straat en huisnummer', 'postcode', 'plaats', 'via', 'aangemeld', 'bevestigd', 'kennismakingspakket'], ';');
     foreach (rijen('SELECT * FROM interesse WHERE bevestigd_op IS NOT NULL ORDER BY aangemaakt_op') as $r) {
-        fputcsv($uit, [$veilig($r['naam']), $veilig($r['email']), $veilig($r['telefoon']), substr($r['aangemaakt_op'], 0, 10), substr((string) $r['bevestigd_op'], 0, 10), $r['pakket_op'] ? substr($r['pakket_op'], 0, 10) : ''], ';');
+        $adres = interesse_adres($r);
+        fputcsv($uit, [
+            $veilig($r['naam']), $veilig(ontsleutel((string) $r['kind_naam'])), $veilig($r['email']), $veilig($r['telefoon']),
+            $veilig($adres['straat'] ?? ''), $veilig($adres['postcode'] ?? ''), $veilig($adres['plaats'] ?? ''), INTERESSE_BRONNEN[$r['bron']] ?? $r['bron'],
+            substr($r['aangemaakt_op'], 0, 10), substr((string) $r['bevestigd_op'], 0, 10), $r['pakket_op'] ? substr($r['pakket_op'], 0, 10) : '',
+        ], ';');
     }
     rewind($uit);
     $csv = stream_get_contents($uit);
@@ -33,7 +39,7 @@ if (is_post()) {
     if ($actie === 'pakket' && $rij) {
         q('UPDATE interesse SET pakket_op = ? WHERE id = ?', [$rij['pakket_op'] ? null : nu(), $rij['id']]);
         log_actie($rij['pakket_op'] ? 'Kennismakingspakket: toch nog niet gegeven' : 'Kennismakingspakket gegeven', '', null, 'wijziging', 'interesse:' . $rij['id']);
-        flash('succes', $rij['pakket_op'] ? 'Aangepast: ' . $rij['naam'] . ' heeft het pakket nog niet.' : 'Genoteerd: ' . $rij['naam'] . ' heeft het kennismakingspakket.');
+        flash('succes', $rij['pakket_op'] ? 'Aangepast: ' . $rij['naam'] . ' heeft het pakket nog niet.' : 'Genoteerd: het pakket voor ' . $rij['naam'] . ' is verstuurd. Het adres wissen we over ' . INTERESSE_ADRES_NA_PAKKET_DAGEN . ' dagen.');
         redirect('interesse.php');
     }
     if ($actie === 'verwijderen' && $rij) {
@@ -88,22 +94,23 @@ pagina_kop('Op de hoogte', 'Ouders die via de website op de hoogte willen blijve
   <p class="muted"><?= $wachten ?> <?= $wachten === 1 ? 'aanmelding wacht' : 'aanmeldingen wachten' ?> nog op bevestiging. Wordt een aanmelding niet binnen <?= INTERESSE_ONBEVESTIGD_DAGEN ?> dagen bevestigd, dan wissen we de gegevens vanzelf.</p>
 <?php endif; ?>
 <?php if (!$lijst): ?>
-  <p class="leeg">Nog niemand. Op de homepage en in de footer van de website staat de knop "Blijf op de hoogte!".</p>
+  <p class="leeg">Nog niemand. Op de website verschijnt na 10 seconden een pop-up, en op de homepage en in de footer staat de knop "Blijf op de hoogte!".</p>
 <?php else: ?>
   <div class="tabel">
     <table>
-      <thead><tr><th scope="col">Naam</th><th scope="col">Contact</th><th scope="col">Aangemeld</th><th scope="col">Status</th><th scope="col">Kennismakingspakket</th><th scope="col"><span class="visually-hidden">Verwijderen</span></th></tr></thead>
+      <thead><tr><th scope="col">Naam</th><th scope="col">Contact</th><th scope="col">Adres voor het pakket</th><th scope="col">Aangemeld</th><th scope="col">Status</th><th scope="col">Kennismakingspakket</th><th scope="col"><span class="visually-hidden">Verwijderen</span></th></tr></thead>
       <tbody>
 <?php foreach ($lijst as $r): ?>
         <tr>
-          <th scope="row"><?= e($r['naam']) ?><?php if (($r['taal'] ?? 'nl') === 'en'): ?> <span class="badge badge--nieuw" title="Aangemeld via de Engelse website">Engels</span><?php endif; ?></th>
+          <th scope="row"><?= e($r['naam']) ?><?php if (($r['taal'] ?? 'nl') === 'en'): ?> <span class="badge badge--nieuw" title="Aangemeld via de Engelse website">Engels</span><?php endif; ?><?php $kind = ontsleutel((string) $r['kind_naam']); if ($kind !== ''): ?><br><span class="muted">Kind: <?= e($kind) ?></span><?php endif; ?></th>
           <td><a href="mailto:<?= e($r['email']) ?>"><?= e($r['email']) ?></a><?php if ($r['telefoon'] !== ''): ?><br><a href="tel:<?= e(preg_replace('/[^0-9+]/', '', $r['telefoon'])) ?>"><?= e($r['telefoon']) ?></a><?php endif; ?></td>
-          <td><?= e(datum_nl($r['aangemaakt_op'])) ?></td>
+          <td><?php $adres = interesse_adres_tekst($r); ?><?= $adres !== '' ? e($adres) : '<span class="muted">' . ($r['pakket_op'] ? 'Gewist na het versturen' : 'Niet opgegeven') . '</span>' ?></td>
+          <td><?= e(datum_nl($r['aangemaakt_op'])) ?><br><span class="muted">via <?= e(mb_strtolower(INTERESSE_BRONNEN[$r['bron']] ?? $r['bron'])) ?></span></td>
           <td><?= $r['bevestigd_op'] ? '<span class="badge badge--actief">Bevestigd</span>' : '<span class="badge badge--nieuw">Wacht op bevestiging</span>' ?></td>
           <td>
 <?php if ($r['bevestigd_op']): ?>
             <form class="inline-form" method="post"><?= csrf_veld() ?><input type="hidden" name="actie" value="pakket"><input type="hidden" name="id" value="<?= (int) $r['id'] ?>">
-              <?= $r['pakket_op'] ? icoon('check') . ' Gekregen op ' . e(datum_nl($r['pakket_op'])) . ' <button class="link-button" type="submit">Ongedaan maken<span class="visually-hidden"> voor ' . e($r['naam']) . '</span></button>' : '<button class="btn btn--secondary btn--mini" type="submit">Pakket gegeven<span class="visually-hidden"> aan ' . e($r['naam']) . '</span></button>' ?>
+              <?= $r['pakket_op'] ? icoon('check') . ' Gekregen op ' . e(datum_nl($r['pakket_op'])) . ' <button class="link-button" type="submit">Ongedaan maken<span class="visually-hidden"> voor ' . e($r['naam']) . '</span></button>' : '<button class="btn btn--secondary btn--mini" type="submit">Pakket verstuurd<span class="visually-hidden"> aan ' . e($r['naam']) . '</span></button>' ?>
             </form>
 <?php else: ?>
             <span class="muted">Na bevestiging</span>
@@ -132,5 +139,5 @@ pagina_kop('Op de hoogte', 'Ouders die via de website op de hoogte willen blijve
     <div class="form__acties"><button class="btn" type="submit"<?= $bevestigd ? '' : ' disabled' ?>><?= icoon('send') ?>Update versturen</button></div>
   </form>
 </section>
-<p class="note"><?= icoon('clock') ?><span>We bewaren de gegevens <?= bewaartermijn('bewaar_interesse_maanden') ?> maanden na het aanmelden (in te stellen bij Instellingen → Bewaartermijnen), of korter als iemand zich afmeldt.</span></p>
+<p class="note"><?= icoon('clock') ?><span>We bewaren de gegevens <?= bewaartermijn('bewaar_interesse_maanden') ?> maanden na het aanmelden (in te stellen bij Instellingen → Bewaartermijnen), of korter als iemand zich afmeldt. Het adres wissen we <?= INTERESSE_ADRES_NA_PAKKET_DAGEN ?> dagen nadat het pakket is verstuurd.</span></p>
 <?php pagina_einde();

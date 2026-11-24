@@ -6,11 +6,13 @@ import vm from "node:vm";
 
 const hier = (pad) => new URL(pad, import.meta.url);
 const context = vm.createContext({});
-for (const bestand of ["../js/rekentool/toeslag-2026.js", "../js/rekentool/instellingen.js", "../js/rekentool/berekening.js"]) {
+for (const bestand of ["../js/rekentool/toeslag-2026.js", "../js/rekentool/toeslag-2027.js", "../js/rekentool/instellingen.js", "../js/rekentool/berekening.js"]) {
   vm.runInContext(readFileSync(hier(bestand), "utf8"), context, { filename: bestand });
 }
 const R = context.VCKRekentool;
 const JAAR = context.VCKToeslag[2026];
+// 2027: het jaar waarin Sporty opent (Staatsblad 2026, 308 en 391)
+const JAAR_2027 = context.VCKToeslag[2027];
 const INSTELLINGEN = context.VCKRekentoolInstellingen;
 
 // Tweede, onafhankelijke bron: de tabel uit de brochure van Dienst Toeslagen
@@ -22,6 +24,18 @@ const BROCHURE = readFileSync(hier("./bronnen/brochure-2026-tabel.txt"), "utf8")
     const euro = (t) => Number(t.replace(/\./g, ""));
     const procent = (t) => Math.round(Number(t.replace(",", ".")) * 100);
     return { van: euro(getallen[0]), tot: euro(getallen[1]), eerste: procent(getallen[2]), volgend: procent(getallen[3]) };
+  });
+
+// Tweede bron voor 2027: de tabel zoals die in Staatsblad 2026, 391 staat (tekst van de pdf)
+const STAATSBLAD_2027 = readFileSync(hier("./bronnen/staatsblad-2026-391-tabel.txt"), "utf8")
+  .split("\n")
+  .filter((regel) => regel.startsWith("€"))
+  .map((regel) => {
+    const getallen = regel.match(/\d[\d.]*(?:,\d+)?/g);
+    const euro = (t) => Number(t.replace(/\./g, ""));
+    const procent = (t) => Math.round(Number(t.replace(",", ".")) * 100);
+    const open = regel.includes("en hoger");
+    return { van: euro(getallen[0]), tot: open ? null : euro(getallen[1]), eerste: procent(getallen[open ? 1 : 2]), volgend: procent(getallen[open ? 2 : 3]) };
   });
 
 const kind = (soort, uurtarief, uren) => ({ soort, uurtarief, uren });
@@ -50,13 +64,35 @@ test("maximale uurprijzen en uren 2026", () => {
 });
 
 test("percentages dalen nooit bij een hoger inkomen en het volgende kind krijgt nooit minder dan het 1e", () => {
-  JAAR.tabel.forEach(([, , eerste, volgend], i) => {
-    assert.ok(volgend >= eerste, `rij ${i + 1}`);
-    if (i > 0) {
-      assert.ok(eerste <= JAAR.tabel[i - 1][2], `1e kind rij ${i + 1}`);
-      assert.ok(volgend <= JAAR.tabel[i - 1][3], `volgend kind rij ${i + 1}`);
-    }
+  for (const jaar of [JAAR, JAAR_2027]) {
+    jaar.tabel.forEach(([, , eerste, volgend], i) => {
+      assert.ok(volgend >= eerste, `${jaar.jaar} rij ${i + 1}`);
+      if (i > 0) {
+        assert.ok(eerste <= jaar.tabel[i - 1][2], `${jaar.jaar} 1e kind rij ${i + 1}`);
+        assert.ok(volgend <= jaar.tabel[i - 1][3], `${jaar.jaar} volgend kind rij ${i + 1}`);
+      }
+    });
+  }
+});
+
+test("2027: de tabel is compleet en gelijk aan Staatsblad 2026, 391", () => {
+  assert.equal(R.controleerJaar(JAAR_2027), true);
+  assert.equal(JAAR_2027.jaar, 2027);
+  assert.equal(STAATSBLAD_2027.length, 69);
+  assert.equal(JAAR_2027.tabel.length, STAATSBLAD_2027.length);
+  STAATSBLAD_2027.forEach((b, i) => {
+    assert.deepEqual([...JAAR_2027.tabel[i]], [b.van, b.tot, b.eerste, b.volgend], `rij ${i + 1}`);
   });
+  // Steekproeven uit het besluit: 96% voor het 1e kind tot en met € 71.903, de vaste voet is 39,1%
+  const rij = R.vindRij(JAAR_2027, 71903);
+  assert.deepEqual([rij.eerste, rij.volgend], [9600, 9600]);
+  assert.equal(R.vindRij(JAAR_2027, 71904).eerste, 9560);
+  assert.equal(JAAR_2027.tabel[68][2], 3910);
+});
+
+test("2027: maximale uurprijzen (Staatsblad 2026, 308) en uren", () => {
+  assert.deepEqual({ ...JAAR_2027.maxUurprijs }, { dagopvang: 1160, bso: 1031, gastouder: 877 });
+  assert.equal(JAAR_2027.maxUrenPerMaand, 230);
 });
 
 /* ---------- Officiële rekenvoorbeelden uit de brochure 2026 ---------- */
@@ -209,10 +245,10 @@ test("uren per maand: 52 weken met vakantieopvang", () => {
 });
 
 test("uren per maand: vast gemiddelde per dag (Sporty Abonnement)", () => {
-  const vorm = { naam: "Abonnement", soort: "bso", uurtarief: 10.31, urenPerMaandPerDag: 27.5 };
+  const vorm = { naam: "Abonnement", soort: "bso", uurtarief: 9.75, urenPerMaandPerDag: 27 };
   assert.deepEqual([...R.controleerOpvangvorm(vorm)], []);
-  assert.equal(R.urenPerMaand(vorm, ["ma"]), 2750);
-  assert.equal(R.urenPerMaand(vorm, ["ma", "wo", "vr"]), 8250);
+  assert.equal(R.urenPerMaand(vorm, ["ma"]), 2700);
+  assert.equal(R.urenPerMaand(vorm, ["ma", "wo", "vr"]), 8100);
   assert.deepEqual([...R.dagenVan(vorm)], ["ma", "di", "wo", "do", "vr"]);
   assert.ok(R.controleerOpvangvorm({ ...vorm, urenPerMaandPerDag: 0 }).length > 0);
 });
@@ -223,8 +259,27 @@ test("een onvolledige opvangvorm wordt herkend", () => {
   assert.ok(R.controleerOpvangvorm({ naam: "x", soort: "bso", uurtarief: 10, schoolweken: 40, vakantieweken: 12, urenSchooldag: { ma: 3 } }).length > 0);
 });
 
+test("Sporty Abonnement: de maandbedragen van Sporty kloppen (feedback 2.0: € 9,75 per uur, 27 uur per maand per dag)", () => {
+  const vorm = INSTELLINGEN.opvangvormen.find((v) => v.naam === "Sporty Abonnement (52 weken)");
+  assert.ok(vorm, "het Sporty Abonnement staat niet in instellingen.js");
+  assert.equal(Math.round(vorm.uurtarief * 100), 975);
+  // Vóór toeslag: 1 dag € 263,25, 2 dagen € 526,50, 3 dagen € 789,75 per maand
+  for (const [dagen, bedrag] of [[["di"], 26325], [["di", "do"], 52650], [["ma", "di", "do"], 78975]]) {
+    const r = R.bereken({ inkomen: 60000, werkt: true, kinderen: [kind("bso", 975, R.urenPerMaand(vorm, dagen))] }, context.VCKToeslag[INSTELLINGEN.jaar]);
+    assert.equal(r.totaalKosten, bedrag, `${dagen.length} dag(en) per week`);
+    // Het uurtarief ligt onder de maximale uurprijs: toeslag over het hele bedrag
+    assert.equal(r.kinderen[0].opvangkosten, bedrag);
+  }
+});
+
 test("de opvangvormen in instellingen.js zijn volledig ingevuld", () => {
   assert.equal(INSTELLINGEN.jaar in context.VCKToeslag, true, "er is geen toeslagtabel voor het ingestelde jaar");
+  // Sporty opent op 4 januari 2027: de tool rekent minstens met 2027
+  assert.ok(INSTELLINGEN.jaar >= 2027, "de rekentool rekent nog met een jaar vóór de opening");
+  // Het script van dat jaar staat op beide pagina's met de rekentool
+  for (const pagina of ["../abonnement-en-kosten.html", "../en/membership-and-costs.html"]) {
+    assert.match(readFileSync(hier(pagina), "utf8"), new RegExp(`js/rekentool/toeslag-${INSTELLINGEN.jaar}\\.js`), pagina);
+  }
   for (const vorm of INSTELLINGEN.opvangvormen) assert.deepEqual([...R.controleerOpvangvorm(vorm)], [], vorm.naam);
 });
 
