@@ -333,7 +333,7 @@ Cron-regels per organisatie: voeg `--organisatie=naam` toe, bijvoorbeeld `php be
    ```
    Kopieer de back-upmap daarnaast dagelijks naar een andere plek (in de EU), bijvoorbeeld met de back-updienst van de hosting.
 5. Ga naar `https://mijn.bsosporty.nl/beheer/`. Je komt op de installatiepagina: vul de installatiecode in, maak het eerste beheerdersaccount aan en stel tweestapsverificatie in. Maak daarna de `installatiecode` weer leeg.
-6. Vul de **Instellingen** in (KvK, LRK, IBAN, controleer de tarieven, afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders) en maak de **groepen** aan.
+6. Vul bij de **Instellingen** het IBAN in (de naam op de rekening, BSO Sporty, staat al klaar) en controleer de rest (KvK en LRK staan al ingevuld; controleer de tarieven, afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders) en maak de **groepen** aan.
 7. Nodig de begeleiders uit onder **Team** en koppel ze aan hun groep(en).
 8. Stel onder **Koppelingen** het versturen van e-mail in (eigen mailserver, met een testmail) en koppel **Stripe** (zie hieronder). Zonder Stripe draait alles in demo-modus: er wordt niets echt afgeschreven; zonder e-mailinstelling worden e-mails niet verstuurd.
 9. Controleer **Instellingen → Beveiligingsstatus**: alles moet op "In orde" staan.
@@ -384,7 +384,7 @@ Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met b
 
 **Van de klant**
 - [ ] Twee aannames bij de facturen bevestigen (zie [Facturen](#facturen)): een abonnement dat halverwege de maand begint of stopt, rekenen we naar rato van het aantal kalenderdagen; en extra dagen bij een Sporty Abonnement (aangevraagd via WhatsApp of e-mail) worden niet automatisch gefactureerd.
-- [ ] KvK-, LRK- en IBAN-nummer invullen (Instellingen). Het LRK-nummer moet op de factuur staan voor de kinderopvangtoeslag.
+- [ ] IBAN invullen en KvK- en LRK-nummer controleren (Instellingen; het IBAN staat bewust niet in de code, t.n.v. BSO Sporty staat al klaar). Het LRK-nummer moet op de factuur staan voor de kinderopvangtoeslag.
 - [ ] Afmeldtijd in de agenda bevestigen (nu 12:00 uur op de dag zelf; kosteloos tot 48 uur van tevoren, bevestigd in november 2026).
 - [ ] Categorieën van Financiën afstemmen met de boekhouder (`beheer/inc/financien.php`), en bepalen of btw apart moet worden bijgehouden.
 - [ ] Per collega de rechten nalopen onder Team: wie mag Facturen, Financiën, Sollicitaties, Privacyverzoeken en Klanten beheren?

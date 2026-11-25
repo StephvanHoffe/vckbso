@@ -74,6 +74,14 @@ echo json_encode([
     'zonder_abonnement' => $zonder,
     'facturen' => $facturen,
     'gefactureerd' => array_map('intval', array_column(rijen('SELECT gefactureerd FROM inschrijvingen WHERE kind_id = ? ORDER BY datum', [$daan]), 'gefactureerd')),
+    'iban' => [
+        'instelling' => instelling('iban'),
+        'naam' => instelling('iban_naam'),
+        // Het test-IBAN van Stripe (openbaar), niet dat van Sporty
+        'geldig' => geldig_iban('NL39RABO0300065264'),
+        'omgedraaid' => geldig_iban('NL39 RABO 0300 0652 46'),
+        'opmaak' => iban_opmaak('nl39rabo0300065264'),
+    ],
     'te_laat' => [
         'precies 48 uur' => te_laat_afgemeld(['datum' => '2027-03-18', 'gewijzigd_op' => '2027-03-16 14:00:00'], false, 48),
         'net te laat' => te_laat_afgemeld(['datum' => '2027-03-18', 'gewijzigd_op' => '2027-03-16 14:00:01'], false, 48),

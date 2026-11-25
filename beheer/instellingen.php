@@ -14,6 +14,7 @@ $velden = [
     'kvk' => 'KvK-nummer',
     'lrk' => 'LRK-nummer',
     'iban' => 'IBAN van de BSO',
+    'iban_naam' => 'Naam op de rekening (t.n.v.)',
 ];
 $fouten = [];
 $waarden = [];
@@ -52,6 +53,13 @@ if (is_post()) {
     }
     if (!ctype_digit($waarden['betaaltermijn_dagen']) || (int) $waarden['betaaltermijn_dagen'] > 60) {
         $fouten['betaaltermijn_dagen'] = 'Vul een aantal dagen in (0 tot 60).';
+    }
+    if ($waarden['iban'] !== '') {
+        if (geldig_iban($waarden['iban'])) {
+            $waarden['iban'] = iban_opmaak($waarden['iban']);
+        } else {
+            $fouten['iban'] = 'Dit IBAN klopt niet. Kijk of je geen cijfer of letter hebt overgeslagen of omgedraaid.';
+        }
     }
     if ($waarden['email'] !== '' && !geldig_email($waarden['email'])) {
         $fouten['email'] = 'Vul een geldig e-mailadres in.';

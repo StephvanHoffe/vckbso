@@ -656,6 +656,12 @@ function migreer(PDO $pdo): void
             ALTER TABLE interesse ADD COLUMN live_mail INTEGER NOT NULL DEFAULT 0;
             ALTER TABLE interesse ADD COLUMN live_gemaild_op TEXT;
             SQL,
+
+        // De naam waarop de rekening van Sporty staat (25 november 2026), voor de facturen. Die naam ("BSO Sporty")
+        // wijkt af van de statutaire naam ("Sporty"); ouders die zelf overmaken, krijgen bij hun bank anders een
+        // melding dat de naam niet helemaal klopt. Het IBAN zelf staat bewust niet in de code: Sporty vult het in
+        // bij Instellingen, dan staat het alleen in de database van Mijn BSO.
+        25 => "INSERT OR IGNORE INTO instellingen (sleutel, waarde) VALUES ('iban_naam', 'BSO Sporty');",
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

@@ -62,7 +62,7 @@ echo '<a class="terug-link niet-printen" href="facturen.php' . (is_team($gebruik
       <?= e(instelling('email')) ?> · <?= e(instelling('telefoon')) ?><br>
       KvK: <?= e(instelling('kvk') ?: 'volgt') ?><br>
       LRK: <?= e(instelling('lrk') ?: 'volgt') ?>
-<?php if (instelling('iban') !== ''): ?><br>IBAN: <?= e(instelling('iban')) ?><?php endif; ?>
+<?php if (instelling('iban') !== ''): ?><br>IBAN: <?= e(instelling('iban')) ?><?php if (instelling('iban_naam') !== ''): ?> t.n.v. <?= e(instelling('iban_naam')) ?><?php endif; ?><?php endif; ?>
     </address>
   </div>
   <dl class="gegevens" style="margin-bottom: var(--space-l)">
@@ -92,7 +92,7 @@ echo '<a class="terug-link niet-printen" href="facturen.php' . (is_team($gebruik
   <p>Dit bedrag wordt binnenkort automatisch afgeschreven van rekening <?= e($factuur['mandaat_rekening']) ?>.</p>
 <?php elseif (in_array($factuur['status'], ['open', 'mislukt'], true)): ?>
   <p><?= $factuur['status'] === 'mislukt' ? 'Het automatisch afschrijven is niet gelukt.' : 'Er is (nog) geen machtiging voor automatische incasso.' ?>
-<?php if (instelling('iban') !== ''): ?> Je kunt het bedrag overmaken naar <?= e(instelling('iban')) ?> t.n.v. <?= e(instelling('statutaire_naam')) ?>, onder vermelding van <?= e($factuur['nummer']) ?>.<?php endif; ?></p>
+<?php if (instelling('iban') !== ''): ?> Je kunt het bedrag overmaken naar <?= e(instelling('iban')) ?> t.n.v. <?= e(instelling('iban_naam') ?: instelling('statutaire_naam')) ?>, onder vermelding van <?= e($factuur['nummer']) ?>.<?php endif; ?></p>
 <?php endif; ?>
 <?php if ($factuur['notitie'] !== '' && is_team($gebruiker)): ?>
   <p class="muted"><?= e($factuur['notitie']) ?></p>

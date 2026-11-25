@@ -30,6 +30,13 @@ test("facturen: abonnement vast per maand, incidenteel per dag, te laat afmelden
     encoding: "utf8",
   }));
 
+  assert.deepEqual(uit.iban, {
+    instelling: "",
+    naam: "BSO Sporty",
+    geldig: true,
+    omgedraaid: false,
+    opmaak: "NL39 RABO 0300 0652 64",
+  }, "het IBAN staat niet in de code (Sporty vult het in bij Instellingen), de naam op de rekening wel; een omgedraaid cijfer wordt herkend");
   assert.equal(uit.aantal, 3, "drie ouders krijgen een factuur (niet de nieuwe aanmelding en niet zonder abonnement)");
   assert.equal(uit.nogmaals, 0, "een tweede keer maakt geen dubbele facturen");
   assert.deepEqual(uit.zonder_abonnement, ["Bram"]);

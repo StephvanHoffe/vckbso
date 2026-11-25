@@ -337,6 +337,28 @@ function geldig_telefoon(string $telefoon): bool
     return (bool) preg_match('/^[0-9 +()\-]{10,20}$/', $telefoon);
 }
 
+/** Een IBAN met een kloppend controlegetal (modulo 97, ISO 13616). Spaties mogen. */
+function geldig_iban(string $iban): bool
+{
+    $iban = strtoupper((string) preg_replace('/\s+/', '', $iban));
+    if (!preg_match('/^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/', $iban)) {
+        return false;
+    }
+    $rest = 0;
+    foreach (str_split(substr($iban, 4) . substr($iban, 0, 4)) as $teken) {
+        foreach (str_split(ctype_digit($teken) ? $teken : (string) (ord($teken) - 55)) as $cijfer) {
+            $rest = ($rest * 10 + (int) $cijfer) % 97;
+        }
+    }
+    return $rest === 1;
+}
+
+/** Een IBAN in groepjes van vier, zoals op een bankpas: NL39 RABO 0300 0652 64. */
+function iban_opmaak(string $iban): string
+{
+    return trim(chunk_split(strtoupper((string) preg_replace('/\s+/', '', $iban)), 4, ' '));
+}
+
 function geldige_postcode(string $postcode): bool
 {
     return (bool) preg_match('/^[1-9][0-9]{3} ?[A-Za-z]{2}$/', $postcode);

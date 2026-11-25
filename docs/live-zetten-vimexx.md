@@ -93,7 +93,7 @@ Vervang hieronder `GEBRUIKER` door de gebruikersnaam in DirectAdmin. Getest op d
 
 - [ ] Ga naar `https://mijn.bsosporty.nl/beheer/`, vul de installatiecode in, maak het eerste beheerdersaccount en stel tweestapsverificatie in.
 - [ ] Maak `installatiecode` in `mijnbso-config.php` daarna weer leeg.
-- [ ] **Instellingen:** KvK, LRK, IBAN, controleer de tarieven (Sporty Abonnement en Incidenteel), afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders. Maak de **groepen** aan en nodig het team uit onder **Team**.
+- [ ] **Instellingen:** vul het IBAN in (de naam op de rekening, BSO Sporty, staat al klaar; het nummer staat bewust niet in de code), controleer KvK en LRK, en controleer de tarieven (Sporty Abonnement en Incidenteel), afmeldtijd, bewaartermijnen, tweestapsverificatie voor ouders. Maak de **groepen** aan en nodig het team uit onder **Team**.
 - [ ] **Koppelingen → E-mail versturen:** de eigen mailserver bij Vimexx (SMTP met info@bsosporty.nl, poort 587 met STARTTLS, server `web0097.zxcs.nl`: de naam van de server bij Vimexx, die bij het certificaat past; Mijn BSO controleert het certificaat streng, en `mail.bsosporty.nl` heeft mogelijk geen eigen certificaat), en stuur een testmail.
 - [ ] **Koppelingen → Stripe:** eerst de testsleutel en een testwebhook naar `https://mijn.bsosporty.nl/beheer/stripe-webhook.php`; als alles werkt de live-sleutel. Zie "Stripe koppelen" in `docs/beheeromgeving.md`.
 - [ ] **Koppelingen → Externe back-up:** objectopslag bij een andere partij in de EU, met object lock. Zie "Externe back-up" in `docs/beheeromgeving.md`.
