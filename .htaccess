@@ -7,11 +7,17 @@ ErrorDocument 404 /404.html
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Altijd via een beveiligde verbinding (https)
-  # (Geen X-Forwarded-Proto: die kop kan iedereen meesturen. Staat de site ooit achter een proxy of CDN,
-  # stel dat dan daar in, en zet in Mijn BSO 'achter_proxy' => true in de config.)
+  # Altijd via een beveiligde verbinding (https).
+  # Bij Vimexx handelt een server vóór Apache de https-verbinding af (gezien op 25 november 2026): Apache ziet dan zelf
+  # "http" en hoort via X-Forwarded-Proto (of X-Forwarded-SSL, of de variabele HTTPS) dat de bezoeker https gebruikt.
+  # Zonder die controles stuurde https steeds naar zichzelf door ("te veel doorverwijzingen"). Iemand die zelf zo'n
+  # kop meestuurt over gewone http, slaat alleen zijn eigen doorverwijzing over.
   RewriteCond %{HTTPS} !=on
+  RewriteCond %{ENV:HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !^https [NC]
+  RewriteCond %{HTTP:X-Forwarded-SSL} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+  # (Mijn BSO vertrouwt X-Forwarded-Proto alleen met 'achter_proxy' => true in de config.)
 
   # www.domein.nl -> domein.nl (het adres zonder www is het hoofdadres, zoals in sitemap.xml)
   RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
@@ -72,8 +78,8 @@ ErrorDocument 404 /404.html
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
-  # Alleen na een geslaagde https-verbinding: de browser onthoudt een jaar lang dat de site https gebruikt
-  Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on'"
+  # De browser onthoudt een jaar lang dat de site alleen via https gaat (over gewone http negeren browsers deze kop)
+  Header always set Strict-Transport-Security "max-age=31536000"
 
   # Content-Security-Policy voor de website (Mijn BSO in beheer/ stuurt zijn eigen, strengere beleid mee).
   # Alleen scripts van de site zelf, plus de twee kleine scripts in de pagina's (via hun vingerafdruk).

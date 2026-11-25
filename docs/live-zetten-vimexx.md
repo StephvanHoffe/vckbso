@@ -73,11 +73,12 @@ Vervang hieronder `GEBRUIKER` door de gebruikersnaam in DirectAdmin. Getest op d
       'data_dir' => '/home/GEBRUIKER/beheer-data',
       'sleutel' => 'EERSTE-SLEUTEL',
       'ontwikkelmodus' => false,
+      'achter_proxy' => true,  // Vimexx: een server vóór Apache handelt https af (anders: te veel doorverwijzingen)
       'installatiecode' => 'EEN-LANGE-WILLEKEURIGE-CODE',
       'backup' => ['map' => '/home/GEBRUIKER/beheer-backups', 'sleutel' => 'TWEEDE-SLEUTEL', 'bewaardagen' => 30],
   ];
   ```
-  `website_url` vertelt Mijn BSO dat de website op Vercel staat: links gaan daarheen, de formulieren van de website worden toegelaten, en "Website live zetten" werkt via de middleware. Stripe, e-mail en de externe back-up vul je hier níet in; dat doe je in Mijn BSO onder Koppelingen (stap 6). Laat `achter_proxy` weg.
+  `website_url` vertelt Mijn BSO dat de website op Vercel staat: links gaan daarheen, de formulieren van de website worden toegelaten, en "Website live zetten" werkt via de middleware. Stripe, e-mail en de externe back-up vul je hier níet in; dat doe je in Mijn BSO onder Koppelingen (stap 6). `achter_proxy` is nodig bij Vimexx (25 november 2026): daar handelt een server vóór Apache de https-verbinding af, zodat Apache en PHP zelf "http" zien. Zonder deze regel, en zonder de regel met `X-Forwarded-Proto` in de `.htaccess` van het pakket, krijg je "te veel doorverwijzingen".
 
 ## 5. Geplande taken (cronjobs) in DirectAdmin
 

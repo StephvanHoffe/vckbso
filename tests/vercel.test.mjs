@@ -161,7 +161,9 @@ test("pakket voor mijn.bsosporty.nl: Mijn BSO en de opmaak, niet de website", ()
   assert.ok(!bestanden.some((p) => p.endsWith(".html") && !p.startsWith("beheer/")), "geen pagina's van de website");
   assert.ok(!bestanden.some((p) => /^beheer\/(config\.php|data\/.+\.sqlite)/.test(p)), "geen configuratie of gegevens");
   const ht = lees("tools/mijnbso/.htaccess");
-  assert.match(ht, /RewriteRule \^\$ \/beheer\/ \[R=302,L\]/);
+  assert.match(ht, /RewriteRule \^\$ https:\/\/%\{HTTP_HOST\}\/beheer\/ \[R=302,L\]/);
+  // Achter de https-server van Vimexx: geen doorverwijzingslus als X-Forwarded-Proto https zegt
+  assert.match(ht, /RewriteCond %\{HTTP:X-Forwarded-Proto\} !\^https \[NC\]\n(?:.*\n)?\s*RewriteRule \^ https:/);
   assert.match(lees("tools/mijnbso/robots.txt"), /Disallow: \//);
 });
 

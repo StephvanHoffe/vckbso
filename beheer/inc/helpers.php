@@ -475,9 +475,16 @@ function ip_adres(): string
 
 function is_https(): bool
 {
-    // X-Forwarded-Proto kan iedereen meesturen: alleen vertrouwen achter een eigen proxy (config: achter_proxy)
-    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (cfg('achter_proxy') === true && ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+    // X-Forwarded-Proto kan iedereen meesturen: alleen vertrouwen achter een eigen proxy (config: achter_proxy).
+    // Bij Vimexx staat er zo'n server vóór Apache die https afhandelt (25 november 2026).
+    if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+        return true;
+    }
+    if (cfg('achter_proxy') !== true) {
+        return false;
+    }
+    $proto = strtolower(trim(explode(',', (string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
+    return $proto === 'https' || strtolower((string) ($_SERVER['HTTP_X_FORWARDED_SSL'] ?? '')) === 'on';
 }
 
 /** Absolute URL van de beheeromgeving, zonder / aan het eind. */

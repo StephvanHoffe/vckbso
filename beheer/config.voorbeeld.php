@@ -32,6 +32,10 @@ return [
     // Alleen om lokaal te testen: zonder sleutel starten (sleutel in de datamap).
     'ontwikkelmodus' => false,
 
+    // Staat er een server vóór Apache die https afhandelt (zoals bij Vimexx)? Dan ziet PHP zelf geen https, en
+    // vertrouwt Mijn BSO de kop X-Forwarded-Proto van die server. Zonder deze regel: "te veel doorverwijzingen".
+    'achter_proxy' => true,
+
     // Eenmalige code om de eerste beheerder aan te maken via installeren.php.
     // Kies iets lang en willekeurigs. Na de installatie weer leegmaken.
     'installatiecode' => '',

@@ -7,12 +7,19 @@ Options -Indexes
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
-  # Altijd via een beveiligde verbinding (https)
+  # Altijd via een beveiligde verbinding (https).
+  # Bij Vimexx handelt een server vóór Apache de https-verbinding af (gezien op 25 november 2026): Apache ziet dan zelf
+  # "http" en hoort via X-Forwarded-Proto (of X-Forwarded-SSL, of de variabele HTTPS) dat de bezoeker https gebruikt.
+  # Zonder die controles stuurde https steeds naar zichzelf door ("te veel doorverwijzingen"). Iemand die zelf zo'n
+  # kop meestuurt over gewone http, slaat alleen zijn eigen doorverwijzing over.
   RewriteCond %{HTTPS} !=on
+  RewriteCond %{ENV:HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !^https [NC]
+  RewriteCond %{HTTP:X-Forwarded-SSL} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-  # mijn.bsosporty.nl zonder pad gaat naar Mijn BSO
-  RewriteRule ^$ /beheer/ [R=302,L]
+  # mijn.bsosporty.nl zonder pad gaat naar Mijn BSO (meteen naar https: Apache zelf denkt dat het http is)
+  RewriteRule ^$ https://%{HTTP_HOST}/beheer/ [R=302,L]
 
   # Verborgen bestanden (zoals .user.ini) nooit tonen; de map voor certificaten wel
   RewriteRule (^|/)\.(?!well-known/) - [F]
@@ -22,7 +29,8 @@ Options -Indexes
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "same-origin"
   Header always set X-Frame-Options "DENY"
-  Header always set Strict-Transport-Security "max-age=31536000" "expr=%{HTTPS} == 'on'"
+  # De browser onthoudt een jaar lang dat Mijn BSO alleen via https gaat (over gewone http negeren browsers deze kop)
+  Header always set Strict-Transport-Security "max-age=31536000"
   # Mijn BSO hoort niet in zoekmachines
   Header always set X-Robots-Tag "noindex, nofollow"
 </IfModule>
