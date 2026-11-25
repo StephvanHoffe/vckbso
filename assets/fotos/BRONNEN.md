@@ -1,6 +1,6 @@
 # Beeld: bronnen en fotolijst
 
-## Huidige stand (24 november 2026)
+## Huidige stand (25 november 2026)
 
 **Alle foto's op de website zijn eigen foto's van Sporty.** De tijdelijke stockfoto's van Pexels (oktober en november 2026) zijn op 24 november 2026 vervangen en uit de site gehaald, op verzoek van de klant ("bij voorkeur geen neppe foto's meer"). Alleen de momentopname van Mijn BSO gebruikt nog vier stockfoto's (zie onderaan); die staan niet op de website.
 
@@ -39,8 +39,7 @@ Wel van de klant zelf: de officiële logo's (`assets/img/sporty-*.svg`), Henny d
 | `clubhuis.jpg` | (feedback 2.0, 1086 px) | Het blauwe clubhuis van buiten, met twee Sporty-vlaggen en een picknicktafel | Locaties, algemene foto van de locatie (`locatie-overzicht`) |
 | `speelkamer.jpg` | (feedback 2.0, 1086 px) | De speelkamer met het oranje Sporty-tafelkleed, bouwblokken en knutselspullen | Locaties (`ruimte-2`, Speelkamer) |
 | `kantine.jpg` | (feedback 2.0, 2016 px) | De kantine met tafels, tafelvoetbal, de bar en uitzicht op de velden | Locaties (`ruimte-3`, Kantine) |
-
-De chillruimte (`ruimte-1` op Locaties) heeft nog geen foto. Daar staat tot die tijd Henny op een oranje vlak met de krabbel "Foto volgt!", geen stockfoto. TODO: een foto van de chillruimte.
+| `chillruimte.jpg` | (in de chat, 25 november 2026, 1088 px, staand, 4:3 uitgesneden) | De chillruimte: een groene muur met het oranje Sporty-doek, een oranje zitzak, een oranje bank en een dartbord | Locaties (`ruimte-1`, Chillruimte) |
 
 Nu niet gebruikt (lijken op een gekozen foto): Foto 5, 8 en 9 (een coach in de kantine), 12, 13, 14, 17, 18 en 19 (schoten op doel), 24 (de coach zet pionnen neer), 27, 28, 29 en 30 (het spel bij het doel en een rennende jongen), 32 (een spattende ballon) en 37 en 38 (de emmer water). Het filmpje "Sporty 2.MP4" staat op de homepage (zie "Het filmpje op de homepage" hieronder); het beeld van de bakfiets komt eruit.
 
@@ -48,10 +47,9 @@ Nu niet gebruikt (lijken op een gekozen foto): Foto 5, 8 en 9 (een coach in de k
 
 | Plek (`data-foto`) | Wat moet erop staan |
 |---|---|
-| `ruimte-1` (Locaties) | De chillruimte. |
 | `tim-en-sureyo` (Alles over Sporty) | Tim en Sureyo samen. |
 | `community-1`, `community-4` (Welkom bij de club) | De erepoort, en ouders bij een Sporty-evenement. |
-| `locatie-overzicht`, `ruimte-2` (Locaties) | Grotere versies van het clubhuis en de speelkamer (nu 1086 px). |
+| `locatie-overzicht`, `ruimte-1`, `ruimte-2` (Locaties) | Grotere versies van het clubhuis, de chillruimte en de speelkamer (nu 1086 tot 1088 px). |
 | Team | De foto's van Tim en Anass als bestand (zie hieronder). |
 
 Getekende elementen (sterren, pijlen, kroontjes, hartjes) en handgeschreven krabbels staan óp de beelden, net als in het voorbeeld "Team Sporty" van de klant.

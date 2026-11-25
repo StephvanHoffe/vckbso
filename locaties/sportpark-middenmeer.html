@@ -118,10 +118,12 @@
     </div>
     <ul class="grid grid--3">
       <li class="card foto-card reveal" style="--delay: 0ms;">
-        <!-- TODO: een foto van de chillruimte (zie assets/fotos/BRONNEN.md). Tot die tijd Henny, geen stockfoto. -->
-        <div class="foto-card__img foto-card__img--henny" data-foto="ruimte-1">
-          <img src="../assets/img/henny/henny-zit-320.webp" srcset="../assets/img/henny/henny-zit-320.webp 320w, ../assets/img/henny/henny-zit-640.webp 640w" sizes="10rem" width="320" height="406" alt="Henny de hond, de clubmascotte van Sporty, zit lekker uit te rusten" loading="lazy" decoding="async">
-          <p class="notitie foto-card__notitie" aria-hidden="true">Foto volgt!</p>
+        <!-- Eigen foto van Sporty (25 november 2026), zie assets/fotos/BRONNEN.md -->
+        <div class="foto-card__img" data-foto="ruimte-1">
+          <picture>
+            <source type="image/avif" srcset="../assets/fotos/chillruimte-480.avif 480w, ../assets/fotos/chillruimte-800.avif 800w, ../assets/fotos/chillruimte-1200.avif 1088w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw">
+            <img src="../assets/fotos/chillruimte-800.webp" srcset="../assets/fotos/chillruimte-480.webp 480w, ../assets/fotos/chillruimte-800.webp 800w, ../assets/fotos/chillruimte-1200.webp 1088w" sizes="(min-width: 64em) 30vw, (min-width: 48em) 50vw, 92vw" width="1088" height="816" alt="De chillruimte, met een groene muur met een groot oranje Sporty-doek, een oranje zitzak, een oranje bank en een dartbord" loading="lazy" decoding="async">
+          </picture>
         </div>
         <div class="foto-card__body">
           <h3>Chillruimte</h3>

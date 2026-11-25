@@ -37,7 +37,7 @@ Deze informatie is nodig om de site af te maken. Ze staat ook als TODO in de cod
 - [x] **Hoe laat Sporty op schooldagen opengaat:** vanaf 14.00 uur (de tijden van de middag, feedback 2.0), in de gegevens voor Google met de open dagen tot en vanaf 12 juli 2027. TODO: bevestigen dat dat ook op woensdag zo is.
 - [ ] **De scholen waar jullie ophalen**, en per school: wie haalt op, hoe laat, lopend, op de fiets of met de bakfiets, en hoe lang de tocht is. Daarmee maken we een pagina "Ophalen van school" (ouders zoeken op de school van hun kind).
 - [ ] **Bereikbaarheid van het clubhuis**: tram of bus en halte, fietsen parkeren, auto parkeren, en hoe halen en brengen op het sportpark werkt.
-- [ ] **Eigen foto's**: binnen sinds 24 november 2026: het clubhuis van buiten, de speelkamer en de kantine. Nog nodig: de chillruimte, de sportvelden, het team, en kinderen in actie (alleen met toestemming van de ouders). Die gaan op de site en in het Google Bedrijfsprofiel.
+- [ ] **Eigen foto's**: binnen sinds 24 november 2026: het clubhuis van buiten, de speelkamer, de kantine en (25 november 2026) de chillruimte. Nog nodig: de sportvelden, het team, en kinderen in actie (alleen met toestemming van de ouders). Die gaan op de site en in het Google Bedrijfsprofiel.
 - [x] **LRK-nummer en KvK-nummer:** 236315389 en 42064267 (feedback 2.0), in de footer en in de gegevens voor Google.
 - [x] **Links naar social media:** Instagram, TikTok en Facebook, in de footer en in de gegevens voor Google (`sameAs`).
 - [ ] **Herkomst van de reviews op de homepage.** Sporty is nog niet open; leg vast van wie de ervaringen komen (bijvoorbeeld proefdagen of eerder werk van het team) en of de namen erbij mogen. Anders kunnen ze beter weg tot na de opening.

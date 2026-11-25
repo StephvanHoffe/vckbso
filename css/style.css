@@ -2465,27 +2465,6 @@ ol.grid {
   object-fit: cover;
 }
 
-/* Nog geen foto van deze ruimte: Henny op een oranje vlak, met een krabbel (geen stockfoto) */
-.foto-card__img--henny {
-  position: relative;
-  display: grid;
-  place-items: end center;
-  background-color: var(--color-primary);
-}
-
-.foto-card__img.foto-card__img--henny img {
-  width: auto;
-  height: 82%;
-  object-fit: contain;
-}
-
-.foto-card__notitie {
-  top: var(--space-s);
-  left: var(--space-m);
-  --notitie-kleur: var(--color-text);
-  rotate: -6deg;
-}
-
 .foto-card__body {
   padding: var(--space-m) var(--space-l) var(--space-l);
 }

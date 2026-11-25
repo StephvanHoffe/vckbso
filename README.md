@@ -114,7 +114,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [x] Telefoonnummer 06 18 26 67 06 (feedback 2.0, november 2026), hetzelfde nummer als WhatsApp: de zwevende WhatsApp-knop rechtsonder op elke pagina, de knop op Contact en de link in het aanmeldformulier. Het e-mailadres is info@bsosporty.nl (13 november 2026).
 - [ ] Wat er in het Sporty-kennismakingspakket zit (Blijf op de hoogte). Ouders vullen sinds feedback 2.0 hun adres in, dus het pakket gaat per post.
 - [ ] De teksten van de e-mails (bevestiging van een aanmelding, een proefdag en Blijf op de hoogte zijn nu voorlopige teksten). Sporty past alle e-mails zelf aan in Mijn BSO onder Instellingen → E-mails aanpassen.
-- [ ] Nieuwe hero-foto voor de homepage (Sporty stuurt die mee) en de foto voor `bewegen` (homepage); zie `assets/fotos/BRONNEN.md`. Het clubhuis (`locatie-overzicht`), de speelkamer en de kantine zijn eigen foto's sinds 24 november 2026; de chillruimte en de originele foto's via WeTransfer volgen.
+- [ ] Nieuwe hero-foto voor de homepage (Sporty stuurt die mee) en de foto voor `bewegen` (homepage); zie `assets/fotos/BRONNEN.md`. Het clubhuis (`locatie-overzicht`), de speelkamer en de kantine zijn eigen foto's sinds 24 november 2026, de chillruimte sinds 25 november 2026.
 - [x] LRK-nummer 236315389 (footer, Abonnement en kosten, veelgestelde vragen, schema.org). Nog nodig: het GGD-inspectierapport (footer).
 - [x] De tijden van het middagprogramma (feedback 2.0): op de homepage en bij Een middag bij Sporty, en de openingstijden vanaf 14.00 uur in de schema.org-gegevens. TODO: bevestigen dat Sporty ook op woensdag om 14.00 uur opengaat.
 - [ ] Antwoorden op de veelgestelde vragen die nog openstaan (staan als TODO in `contact.html`).
