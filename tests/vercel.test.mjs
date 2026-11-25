@@ -37,7 +37,7 @@ test("middleware: alleen op het domein, en niet voor de bestanden van de pagina,
   for (const pad of ["/", "/en/", "/contact.html", "/en/team.html", "/binnenkort.html", "/sitemap.xml", "/locaties/sportpark-middenmeer.html"]) {
     assert.ok(matcher.test(pad), `${pad} hoort langs de middleware te gaan`);
   }
-  for (const pad of ["/css/style.css", "/js/main.js", "/assets/img/favicon.svg", "/design/tokens.css", "/beheer/", "/beheer/inloggen.php", "/beheer", "/voorbeeld/", "/favicon.ico", "/robots.txt", "/site.webmanifest"]) {
+  for (const pad of ["/css/style.css", "/js/main.js", "/assets/img/favicon.svg", "/design/tokens.css", "/beheer/", "/beheer/inloggen.php", "/beheer", "/voorbeeld/", "/favicon.ico", "/robots.txt", "/site.webmanifest", "/googled009bd1a8c28802f.html"]) {
     assert.ok(!matcher.test(pad), `${pad} hoort niet langs de middleware te gaan`);
   }
   assert.equal(STATUS_URL, `${MIJN}/beheer/website-status.php`);

@@ -43,7 +43,7 @@ ErrorDocument 404 /404.html
   RewriteRule ^en/(?!$|coming-soon\.html$|privacy\.html$) /en/ [R=302,L]
   RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan -f
   RewriteCond %{HTTP_COOKIE} !(^|;\s*)sporty_voorproef=1(;|$)
-  RewriteRule ^(?!$|en(/|$)|beheer(/|$)|css/|js/|assets/|design/|\.well-known/|(binnenkort|privacy|404)\.html$|favicon\.ico$|site\.webmanifest$|robots\.txt$) / [R=302,L]
+  RewriteRule ^(?!$|en(/|$)|beheer(/|$)|css/|js/|assets/|design/|\.well-known/|(binnenkort|privacy|404)\.html$|favicon\.ico$|site\.webmanifest$|robots\.txt$|google[0-9a-f]+\.html$) / [R=302,L]
 
   # Na de livegang stuurt de binnenkort-pagina zelf door naar de homepage
   RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan !-f

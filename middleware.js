@@ -15,7 +15,8 @@
  * - Het team ziet de echte website vooraf met het cookie sporty_voorproef (Mijn BSO → Op de hoogte → "Bekijk de
  *   echte website alvast", beheer/voorproef.php).
  * - Mijn BSO (/beheer/…) en /voorbeeld/ regelt vercel.json; de bestanden die de pagina nodig heeft (css, js, assets)
- *   slaan we over.
+ *   slaan we over, net als het bestand waarmee Google het domein controleert (googled009bd1a8c28802f.html, 25 november
+ *   2026): dat moet altijd bereikbaar zijn, ook tijdens de binnenkort-pagina. Niet weghalen.
  * Dezelfde regels staan in .htaccess, voor als alles op één server staat. Test: tests/middleware.test.mjs.
  */
 import { next, rewrite } from "@vercel/functions";
@@ -28,7 +29,7 @@ const OPNIEUW_NA_FOUT_MS = 10_000;
 const TIMEOUT_MS = 2_000;
 
 export const config = {
-  matcher: ["/((?!css/|js/|assets/|design/|beheer|voorbeeld|favicon\\.ico|site\\.webmanifest|robots\\.txt).*)"],
+  matcher: ["/((?!css/|js/|assets/|design/|beheer|voorbeeld|favicon\\.ico|site\\.webmanifest|robots\\.txt|google[0-9a-f]+\\.html).*)"],
 };
 
 let bekend = { live: null, tot: 0 };
