@@ -85,7 +85,7 @@ for ($d = strtotime('+1 day'); count($opendagen) < 6; $d = strtotime('+1 day', $
     }
 }
 foreach ($opendagen as $i => $dag) {
-    q('INSERT INTO proefdag_momenten (datum, begin, eind, plekken, aangemaakt_op) VALUES (?, ?, ?, ?, ?)', [$dag, '15:00', '16:30', $i === 3 ? 4 : 3, nu()]);
+    q('INSERT INTO proefdag_momenten (datum, begin, eind, plekken, aangemaakt_op) VALUES (?, ?, ?, ?, ?)', [$dag, '15:30', '18:30', $i === 3 ? 4 : 3, nu()]);
 }
 $eerste = rij('SELECT * FROM proefdag_momenten ORDER BY datum LIMIT 1');
 foreach ([['Demo Ouder', 'proefdag@demo.bsosporty.nl', 'Mila', '6', 'Mila is een beetje verlegen, maar dol op tikkertje.'], ['Demo Vader', 'proefdag2@demo.bsosporty.nl', 'Daan', '9', '']] as [$naam, $email, $kind, $leeftijd, $opmerking]) {

@@ -162,10 +162,12 @@ $toonMoment = function (array $moment, array $lijst, bool $voorbij): void {
       <div class="field"><label for="plekken">Plekken</label><input id="plekken" name="plekken" type="number" min="1" max="50" required value="3"></div>
     </div>
     <div class="form__row">
-      <!-- TODO: standaardtijden aanpassen zodra de tijden van het middagprogramma bekend zijn -->
-      <div class="field"><label for="begin">Van</label><input id="begin" name="begin" type="time" required value="15:00"></div>
-      <div class="field"><label for="eind">Tot</label><input id="eind" name="eind" type="time" required value="16:30"></div>
+      <!-- Vaste tijden voor een proefdag zijn er niet (Sporty, 25 november 2026): het gaat in overleg en kinderen zijn altijd welkom.
+           Standaard staat de middag in het clubhuis klaar, zoals op Een middag bij Sporty (vanaf 15.30 uur, ophalen uiterlijk 18.30 uur). -->
+      <div class="field"><label for="begin">Van</label><input id="begin" name="begin" type="time" required value="15:30" aria-describedby="tijd-uitleg"></div>
+      <div class="field"><label for="eind">Tot</label><input id="eind" name="eind" type="time" required value="18:30" aria-describedby="tijd-uitleg"></div>
     </div>
+    <p class="field__hint" id="tijd-uitleg">Vaste tijden zijn er niet: kinderen zijn altijd welkom. Standaard staat de middag in het clubhuis klaar; past een ouder een andere tijd beter, dan spreek je dat samen af.</p>
     <div class="field">
       <label for="herhaal">Herhalen</label>
       <select id="herhaal" name="herhaal">

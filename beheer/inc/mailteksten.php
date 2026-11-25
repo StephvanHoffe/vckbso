@@ -108,7 +108,7 @@ const MAILTEKSTEN = [
         'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kind' => ['Voornaam van het kind', 'Noor'], 'wanneer' => ['Dag en tijd van de proefdag', 'dinsdag 10 november, 15:00–16:30 uur'], 'adres' => ['Adres van het clubhuis', 'Sporty, Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer)']],
         'verplicht' => ['wanneer'],
         'onderwerp' => 'Je proefdag bij Sporty staat gepland!',
-        'tekst' => "Hoi {voornaam},\n\nWat leuk dat jullie komen kennismaken! Je gratis proefdag staat gepland op {wanneer}.\n\nWaar: {adres}\n\nWe laten je het clubhuis zien, je maakt kennis met de coaches en je kunt al je vragen stellen. Neem {kind} vooral mee: zin om mee te doen? Dan kan dat meteen, met een spelletje.\n\nKun je toch niet? Laat het ons dan even weten door op deze mail te reageren of ons te bellen.\n\nTot dan!\nTeam Sporty (en Henny, die al staat te kwispelen)",
+        'tekst' => "Hoi {voornaam},\n\nWat leuk dat jullie komen kennismaken! Je gratis proefdag staat gepland op {wanneer}.\n\nWaar: {adres}\n\nWe laten je het clubhuis zien, je maakt kennis met de coaches en je kunt al je vragen stellen. Neem {kind} vooral mee: zin om mee te doen? Dan kan dat meteen, met een spelletje.\n\nVaste tijden hebben we niet: {kind} is altijd welkom! Kun je toch niet, of past een andere tijd beter? Laat het ons dan even weten door op deze mail te reageren of ons te bellen.\n\nTot dan!\nTeam Sporty (en Henny, die al staat te kwispelen)",
     ],
     'sollicitatie_ontvangen' => [
         'groep' => 'ouders',
@@ -290,7 +290,7 @@ const MAILTEKSTEN = [
         'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kind' => ['Voornaam van het kind', 'Noor'], 'wanneer' => ['Dag en tijd van de proefdag', 'Tuesday 10 November, 15:00–16:30'], 'adres' => ['Adres van het clubhuis', 'Sporty, Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer)']],
         'verplicht' => ['wanneer'],
         'onderwerp' => 'Your Sporty trial day is booked!',
-        'tekst' => "Hi {voornaam},\n\nHow lovely that you're coming to meet us! Your free trial day is booked for {wanneer}.\n\nWhere: {adres}\n\nWe'll show you around the clubhouse, you'll meet the coaches and you can ask all your questions. Do bring {kind}: fancy joining in? Then they can jump straight into a game.\n\nCan't make it after all? Just let us know by replying to this email or giving us a call.\n\nSee you then!\nTeam Sporty (and Henny, who's already wagging his tail)",
+        'tekst' => "Hi {voornaam},\n\nHow lovely that you're coming to meet us! Your free trial day is booked for {wanneer}.\n\nWhere: {adres}\n\nWe'll show you around the clubhouse, you'll meet the coaches and you can ask all your questions. Do bring {kind}: fancy joining in? Then they can jump straight into a game.\n\nWe don't have fixed times: {kind} is always welcome! Can't make it after all, or would another time suit you better? Just let us know by replying to this email or giving us a call.\n\nSee you then!\nTeam Sporty (and Henny, who's already wagging his tail)",
     ],
 
     'op_de_hoogte_bevestigen_en' => [
