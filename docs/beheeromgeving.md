@@ -393,7 +393,7 @@ Open daarna `http://localhost:8000/beheer/`. Met de demogegevens log je in met b
 **Privacy (AVG)**
 - [ ] DPIA uitvoeren: het systeem verwerkt gegevens van kinderen, waaronder gezondheidsgegevens (allergieën, ziekte) en foto's.
 - [ ] Bewaartermijnen laten bevestigen door de klant en een privacyjurist. De standaardwaarden hierboven zijn een voorstel, geen juridisch advies.
-- [ ] Verwerkersovereenkomsten met de hostingpartij, de back-upopslag en Stripe (Stripe heeft een standaard verwerkersovereenkomst in het dashboard).
+- [ ] Verwerkersovereenkomsten met de hostingpartij, de back-upopslag en Stripe (Stripe heeft een standaard verwerkersovereenkomst in het dashboard). Vimexx: de standaardovereenkomst komt vanzelf tot stand met het hostingcontract (ontvangen op 25 november 2026); die noemt alleen niet-bijzondere persoonsgegevens, dus vraag Vimexx te bevestigen dat ook gezondheidsgegevens (allergieën, medicijnen) eronder vallen. Zie `docs/live-zetten-vimexx.md`, stap 2.
 - [ ] Toestemmingsformulier voor foto's op website en social media (los van de toestemming voor groepsfoto's in Mijn BSO).
 - [ ] Procedure voor een datalek vastleggen (melden bij de Autoriteit Persoonsgegevens binnen 72 uur).
 

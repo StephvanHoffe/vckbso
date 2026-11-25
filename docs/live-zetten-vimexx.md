@@ -38,6 +38,8 @@ Vervang hieronder `GEBRUIKER` door de gebruikersnaam in DirectAdmin. Getest op d
 
 ## 2. Subdomein mijn.bsosporty.nl (Vimexx, DirectAdmin)
 
+- [x] **Verwerkersovereenkomst Vimexx** (ontvangen op 25 november 2026): de standaardovereenkomst van Vimexx (https://www.vimexx.nl/storage/Verwerkersovereenkomst-Vimexx-14-05-2018.pdf, versie van 22 september 2020). Die komt vanzelf tot stand met het hostingcontract; ondertekenen hoeft niet. Bewaar een kopie bij de administratie. Wat erin staat: gegevens blijven binnen de EU (art. 4), Vimexx meldt een datalek "binnen een redelijke termijn" en Sporty meldt het zelf binnen 72 uur bij de Autoriteit Persoonsgegevens (art. 7), en na het opzeggen heb je 30 dagen om je gegevens op te halen (art. 12).
+- [ ] **Let op, bijzondere persoonsgegevens:** artikel 3 noemt alleen "niet bijzondere persoonsgegevens". Mijn BSO bewaart ook allergieën en medicijnen van kinderen (gezondheidsgegevens; versleuteld, maar de sleutel staat op dezelfde server). Vraag Vimexx schriftelijk te bevestigen dat de overeenkomst ook voor die gegevens geldt, en neem het mee in de controle van de privacyverklaring.
 - [ ] **Vraag Vimexx** (als dat nog niet bekend is): PHP 8.2 of hoger met de extensies `pdo_sqlite`, `sodium`, `gd`, `intl`, `mbstring`, `curl` (liefst ook `exif`); cronjobs; het pad naar PHP voor cronjobs (bijvoorbeeld `/usr/local/bin/php`); SSH; tweestapsverificatie op het klantaccount; hoe vaak ze back-ups maken; de verwerkersovereenkomst.
 - [ ] Zet **tweestapsverificatie** aan op het klantaccount van Vimexx en in DirectAdmin.
 - [ ] DirectAdmin → **Subdomeinen** → maak `mijn` aan bij bsosporty.nl. De map wordt `domains/bsosporty.nl/public_html/mijn`.
