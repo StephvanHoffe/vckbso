@@ -9,7 +9,7 @@ Sinds november 2026 staat Sporty op twee plekken:
 
 De gegevens van ouders en kinderen staan alleen bij Vimexx, buiten de openbare map. Vercel heeft alleen de pagina's van de website. De formulieren op de website (aanmelden, proefdag, Blijf op de hoogte, solliciteren) sturen hun gegevens rechtstreeks naar Mijn BSO op mijn.bsosporty.nl.
 
-Vervang hieronder `GEBRUIKER` door de gebruikersnaam in DirectAdmin. Getest op dezelfde soort opzet: Apache met PHP 8.3 via PHP-FPM, met Mijn BSO in een subdomeinmap zoals DirectAdmin die maakt (`public_html/mijn`). Ook getest: de formulieren van "bsosporty.nl" naar "mijn.bsosporty.nl" in de browser, met de beveiliging die browsers daarvoor gebruiken (CORS).
+Vervang hieronder `GEBRUIKER` door de gebruikersnaam in DirectAdmin. Getest op dezelfde soort opzet: Apache met PHP 8.3 via PHP-FPM, met Mijn BSO in een subdomeinmap zoals DirectAdmin die maakt (`public_html/mijn`). Sinds 25 november 2026 staat mijn.bsosporty.nl als eigen domein in DirectAdmin (map `domains/mijn.bsosporty.nl/public_html`); Mijn BSO vindt de configuratie in beide gevallen naast de `public_html` waar het in staat. Ook getest: de formulieren van "bsosporty.nl" naar "mijn.bsosporty.nl" in de browser, met de beveiliging die browsers daarvoor gebruiken (CORS).
 
 ## Hoe het werkt
 
@@ -36,22 +36,23 @@ Vervang hieronder `GEBRUIKER` door de gebruikersnaam in DirectAdmin. Getest op d
 - [ ] **DNS** (bij Vimexx, in DirectAdmin → DNS-beheer): `@` (A) → `216.150.1.1` en `www` (CNAME) → het adres dat Vercel noemt (`…vercel-dns-017.com.`). Vercel zet "Invalid Configuration" vanzelf op groen zodra de wijziging overal bekend is (meestal binnen een paar uur; klik dan op Refresh).
 - [ ] **Verwerkersovereenkomst:** Vercel heeft een standaard verwerkersovereenkomst (Data Processing Addendum); Vercel ziet de IP-adressen van bezoekers van de website.
 
-## 2. Subdomein mijn.bsosporty.nl (Vimexx, DirectAdmin)
+## 2. mijn.bsosporty.nl als eigen domein (Vimexx, DirectAdmin)
 
 - [x] **Verwerkersovereenkomst Vimexx** (ontvangen op 25 november 2026): de standaardovereenkomst van Vimexx (https://www.vimexx.nl/storage/Verwerkersovereenkomst-Vimexx-14-05-2018.pdf, versie van 22 september 2020). Die komt vanzelf tot stand met het hostingcontract; ondertekenen hoeft niet. Bewaar een kopie bij de administratie. Wat erin staat: gegevens blijven binnen de EU (art. 4), Vimexx meldt een datalek "binnen een redelijke termijn" en Sporty meldt het zelf binnen 72 uur bij de Autoriteit Persoonsgegevens (art. 7), en na het opzeggen heb je 30 dagen om je gegevens op te halen (art. 12).
 - [ ] **Let op, bijzondere persoonsgegevens:** artikel 3 noemt alleen "niet bijzondere persoonsgegevens". Mijn BSO bewaart ook allergieën en medicijnen van kinderen (gezondheidsgegevens; versleuteld, maar de sleutel staat op dezelfde server). Vraag Vimexx schriftelijk te bevestigen dat de overeenkomst ook voor die gegevens geldt, en neem het mee in de controle van de privacyverklaring.
 - [ ] **Vraag Vimexx** (als dat nog niet bekend is): PHP 8.2 of hoger met de extensies `pdo_sqlite`, `sodium`, `gd`, `intl`, `mbstring`, `curl` (liefst ook `exif`); cronjobs; het pad naar PHP voor cronjobs (bijvoorbeeld `/usr/local/bin/php`); SSH; tweestapsverificatie op het klantaccount; hoe vaak ze back-ups maken; de verwerkersovereenkomst.
 - [ ] Zet **tweestapsverificatie** aan op het klantaccount van Vimexx en in DirectAdmin.
-- [ ] DirectAdmin → **Subdomeinen** → maak `mijn` aan bij bsosporty.nl. De map wordt `domains/bsosporty.nl/public_html/mijn`.
-- [ ] DirectAdmin → **DNS-beheer**: controleer dat er een record `mijn` (A) staat met het IP-adres van de server (hetzelfde als `ftp` en `mail`, bijvoorbeeld 185.104.29.40). Staat het er niet, voeg het dan toe. De mailrecords (MX, SPF, `x._domainkey`, `_dmarc`, `mail`, `smtp`, `pop`) laat je zoals ze zijn.
-- [ ] Kies **PHP 8.2 of hoger** voor het domein (getest met 8.3).
-- [ ] **Certificaat:** DirectAdmin → SSL-certificaten → Let's Encrypt. Vink **alleen `mijn.bsosporty.nl` aan**, niet `bsosporty.nl` of `www`: die wijzen naar Vercel, en dan mislukt de aanvraag. Doe dit zodra het `mijn`-record overal bekend is (`https://mijn.bsosporty.nl` geeft dan geen foutmelding over het adres meer).
+- [ ] Voeg **mijn.bsosporty.nl als eigen domein** toe, volgens de handleiding van Vimexx "[Subdomein als volwaardig domein toevoegen](https://www.vimexx.nl/help/subdomein-als-volwaardig-domein-toevoegen)" (25 november 2026). Als gewoon subdomein van bsosporty.nl lukte het certificaat niet: DirectAdmin nam bsosporty.nl mee in de aanvraag, en dat wijst naar Vercel. Stond `mijn` al als subdomein? Verwijder het eerst onder Subdomeinbeheer (de bestanden mogen blijven staan). Daarna: Domeininstellingen → Voeg een domein toe → `mijn.bsosporty.nl`. De map wordt `domains/mijn.bsosporty.nl/public_html`.
+- [ ] DirectAdmin → **DNS-beheer van bsosporty.nl** (niet van mijn.bsosporty.nl): vier records, naar de server van Vimexx (dezelfde adressen als `ftp` en `mail`; op 25 november 2026 stonden ze er al): `mijn` A `185.104.29.40`, `mijn` AAAA `2a06:2ec0:1::97`, `www.mijn` A `185.104.29.40`, `www.mijn` AAAA `2a06:2ec0:1::97`. Neem **niet** het adres van `@` over: dat wijst naar Vercel (216.150.1.1). De mailrecords (MX, SPF, `x._domainkey`, `_dmarc`, `mail`, `smtp`, `pop`) laat je zoals ze zijn.
+- [ ] Kies **PHP 8.2 of hoger** voor het domein mijn.bsosporty.nl (getest met 8.3).
+- [ ] **Certificaat:** DirectAdmin → SSL-certificaten, domein **mijn.bsosporty.nl** → Let's Encrypt, met `mijn.bsosporty.nl` en `www.mijn.bsosporty.nl` (andere namen zoals `mail.mijn.bsosporty.nl` uit). Doe dit zodra de records overal bekend zijn (2 à 4 uur), en vóór het uploaden: de `.htaccess` van het pakket stuurt alles naar https.
 
 ## 3. Mijn BSO uploaden
 
 - [ ] De ontwikkelaar maakt het pakket: `npm run pakket -- --mijnbso` geeft `pakket/mijn-bso.zip`. Daarin zit alleen Mijn BSO (`beheer/`) met de opmaak die het gebruikt (css, lettertypen, logo's), een eigen `.htaccess` (https, en `mijn.bsosporty.nl` zonder pad gaat naar `/beheer/`) en een `robots.txt` (niet in zoekmachines). Geen gegevens en geen echte configuratie.
-- [ ] Verwijder in `domains/bsosporty.nl/public_html/mijn` de standaardpagina van DirectAdmin (`index.html`), als die er staat.
-- [ ] Upload de zip naar `domains/bsosporty.nl/public_html/mijn` en pak hem daar uit (Bestandsbeheer → uitpakken).
+- [ ] Verwijder in `domains/mijn.bsosporty.nl/public_html` de standaardpagina van DirectAdmin (`index.html`), als die er staat.
+- [ ] Upload de zip naar `domains/mijn.bsosporty.nl/public_html` en pak hem daar uit (Bestandsbeheer → uitpakken).
+- [ ] Stond Mijn BSO eerder in `domains/bsosporty.nl/public_html/mijn`? Verwijder die map als de nieuwe werkt, zodat Mijn BSO maar op één plek staat.
 - [ ] Let op dat de verborgen bestanden `.htaccess` (in de map zelf en in `beheer/`) en `beheer/.user.ini` erbij staan.
 
 ## 4. Mappen, sleutels en configuratie
@@ -64,7 +65,7 @@ Vervang hieronder `GEBRUIKER` door de gebruikersnaam in DirectAdmin. Getest op d
   php -r "echo base64_encode(random_bytes(32)), PHP_EOL;"
   ```
   Bewaar ze **meteen** in een wachtwoordkluis, met een tweede kopie op een veilige plek. Zonder deze sleutels zijn de gegevens en back-ups onbruikbaar, ook voor Sporty zelf. De eerste sleutel verander je daarna nooit meer.
-- [ ] Kopieer `public_html/mijn/beheer/config.voorbeeld.php` naar `/home/GEBRUIKER/domains/bsosporty.nl/mijnbso-config.php`, dus **naast** `public_html` en niet erin, en vul in. Mijn BSO zoekt de configuratie daar (ook vanuit de subdomeinmap). Zet de rechten op 600:
+- [ ] Kopieer `public_html/beheer/config.voorbeeld.php` naar `/home/GEBRUIKER/domains/mijn.bsosporty.nl/mijnbso-config.php`, dus **naast** `public_html` en niet erin, en vul in. Mijn BSO zoekt de configuratie daar. (Stond hij al in `domains/bsosporty.nl` voor het oude subdomein? Verplaats hem, met dezelfde sleutels.) Zet de rechten op 600:
   ```php
   return [
       'app_url' => 'https://mijn.bsosporty.nl/beheer',
@@ -82,8 +83,8 @@ Vervang hieronder `GEBRUIKER` door de gebruikersnaam in DirectAdmin. Getest op d
 
 - [ ] Voeg twee dagelijkse taken toe (pas het pad naar PHP aan als Vimexx een ander noemt):
   ```cron
-  15 3 * * * /usr/local/bin/php /home/GEBRUIKER/domains/bsosporty.nl/public_html/mijn/beheer/cli/onderhoud.php
-  45 3 * * * /usr/local/bin/php /home/GEBRUIKER/domains/bsosporty.nl/public_html/mijn/beheer/cli/backup.php
+  15 3 * * * /usr/local/bin/php /home/GEBRUIKER/domains/mijn.bsosporty.nl/public_html/beheer/cli/onderhoud.php
+  45 3 * * * /usr/local/bin/php /home/GEBRUIKER/domains/mijn.bsosporty.nl/public_html/beheer/cli/backup.php
   ```
   Het onderhoud wist gegevens volgens de bewaartermijnen (en stuurt na de livegang de mail aan wie zich op de binnenkort-pagina later nog bevestigde); de back-up maakt elke nacht een versleutelde kopie en ruimt kopieën ouder dan 30 dagen op.
 
@@ -111,7 +112,7 @@ Vervang hieronder `GEBRUIKER` door de gebruikersnaam in DirectAdmin. Getest op d
 
 - **Live gaan:** Mijn BSO → Op de hoogte → **Website live zetten**. Controleer na een minuut dat `https://bsosporty.nl/` de homepage toont, en meld de sitemap aan bij Google Search Console (zie `docs/seo.md`). Laat de ontwikkelaar daarna `STANDAARD` in `middleware.js` op `"live"` zetten.
 - **Een nieuwe versie van de website:** de ontwikkelaar pusht naar de branch die Vercel live zet; Vercel zet hem vanzelf online.
-- **Een nieuwe versie van Mijn BSO:** maak een nieuw pakket (`npm run pakket -- --mijnbso`) en pak het uit over `public_html/mijn` heen. `mijnbso-config.php` en de gegevens blijven staan, want die staan buiten `public_html`.
+- **Een nieuwe versie van Mijn BSO:** maak een nieuw pakket (`npm run pakket -- --mijnbso`) en pak het uit over `domains/mijn.bsosporty.nl/public_html` heen. `mijnbso-config.php` en de gegevens blijven staan, want die staan buiten `public_html`.
 - **Terugzetten oefenen:** zet minstens één keer per jaar een back-up terug op een testomgeving (zie "Back-ups en herstel" in `docs/beheeromgeving.md`), ook eentje uit de externe opslag.
 
 ## Alternatief: alles op één server bij Vimexx

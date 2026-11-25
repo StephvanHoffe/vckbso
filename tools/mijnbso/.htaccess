@@ -1,5 +1,5 @@
 # Mijn BSO op mijn.bsosporty.nl (Vimexx, DirectAdmin; november 2026). De website zelf staat op Vercel (bsosporty.nl).
-# Dit bestand hoort in de hoofdmap van het subdomein (public_html/mijn). Gemaakt door npm run pakket -- --mijnbso;
+# Dit bestand hoort in de hoofdmap van mijn.bsosporty.nl (domains/mijn.bsosporty.nl/public_html). Gemaakt door npm run pakket -- --mijnbso;
 # zie docs/live-zetten-vimexx.md. Mijn BSO zelf staat in beheer/ (met een eigen, strengere .htaccess).
 
 Options -Indexes

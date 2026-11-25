@@ -2,7 +2,8 @@
 // voorbeeld, tools, tests, documentatie, ontwerpbestanden of gegevens.
 //
 //   npm run pakket -- --mijnbso       -> pakket/mijn-bso.zip: alleen Mijn BSO, voor mijn.bsosporty.nl (de website
-//                                        staat op Vercel; sinds november 2026). Uitpakken in public_html/mijn.
+//                                        staat op Vercel; sinds november 2026). Uitpakken in de public_html van
+//                                        mijn.bsosporty.nl (een eigen domein in DirectAdmin).
 //
 // Of alles op één server (de website en Mijn BSO samen, zonder Vercel):
 //   npm run pakket                    -> pakket/sporty-website.zip (uitpakken in public_html)
@@ -105,7 +106,7 @@ function maakMijnBsoPakket() {
   writeFileSync(join(uitMap, "mijn-bso-bestanden.txt"), alles.join("\n") + "\n");
   const mb = (statSync(zip).size / 1024 / 1024).toFixed(1);
   console.log(`Klaar: ${relative(ROOT, zip)} (${alles.length} bestanden, ${mb} MB).`);
-  console.log("Pak het uit in de map van het subdomein (public_html/mijn) en volg docs/live-zetten-vimexx.md.");
+  console.log("Pak het uit in domains/mijn.bsosporty.nl/public_html en volg docs/live-zetten-vimexx.md.");
 }
 
 function maakPakket({ binnenkort = false } = {}) {

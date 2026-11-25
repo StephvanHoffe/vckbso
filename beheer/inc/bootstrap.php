@@ -36,8 +36,8 @@ $standaardConfig = [
 ];
 // Waar staat de configuratie (met de sleutels)? Bij voorkeur buiten de openbare webmap: naast public_html
 // als mijnbso-config.php (zie docs/live-zetten-vimexx.md). Anders beheer/config.php, dat .htaccess afschermt.
-// Staat Mijn BSO dieper in public_html (een subdomein, zoals mijn.bsosporty.nl in public_html/mijn/beheer), dan naast
-// die public_html.
+// Staat Mijn BSO dieper in public_html (een gewoon subdomein, zoals public_html/mijn/beheer), dan naast die public_html.
+// Als eigen domein (domains/mijn.bsosporty.nl/public_html/beheer) is dat domains/mijn.bsosporty.nl/mijnbso-config.php.
 $beheerPad = (string) realpath(BEHEER_DIR);
 $webmapPos = strpos($beheerPad, '/public_html/');
 $buitenWebmap = ($webmapPos !== false ? substr($beheerPad, 0, $webmapPos) : dirname($beheerPad, 2)) . '/mijnbso-config.php';
