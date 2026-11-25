@@ -25,7 +25,8 @@ ErrorDocument 404 /404.html
   # ---------- Binnenkort-pagina (coming soon, november 2026) ----------
   # Zolang het bestand binnenkort.aan in deze map staat, zien bezoekers op het hoofdadres binnenkort.html (en op /en/
   # de Engelse versie) en gaan alle andere pagina's daar tijdelijk (302) naartoe. Mijn BSO (beheer/), de bestanden die
-  # de pagina gebruikt en de privacyverklaring blijven gewoon bereikbaar.
+  # de pagina gebruikt en de privacyverklaring blijven gewoon bereikbaar. /sitemap.xml noemt dan alleen de binnenkort-pagina
+  # (sitemap-binnenkort.xml), zodat Google Search Console hem al kan lezen.
   # Live zetten: Mijn BSO -> Op de hoogte -> "Website live zetten". Dat haalt binnenkort.aan weg en mailt iedereen die
   # zich op de binnenkort-pagina aanmeldde. Het team bekijkt de echte website vooraf via Mijn BSO (cookie sporty_voorproef;
   # dat is gemak, geen beveiliging). Zie docs/live-zetten-vimexx.md.
@@ -37,13 +38,13 @@ ErrorDocument 404 /404.html
   RewriteRule ^en/$ en/coming-soon.html [L]
   RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan -f
   RewriteCond %{HTTP_COOKIE} !(^|;\s*)sporty_voorproef=1(;|$)
-  RewriteRule ^sitemap\.xml$ - [R=404,L]
+  RewriteRule ^sitemap\.xml$ sitemap-binnenkort.xml [L]
   RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan -f
   RewriteCond %{HTTP_COOKIE} !(^|;\s*)sporty_voorproef=1(;|$)
   RewriteRule ^en/(?!$|coming-soon\.html$|privacy\.html$) /en/ [R=302,L]
   RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan -f
   RewriteCond %{HTTP_COOKIE} !(^|;\s*)sporty_voorproef=1(;|$)
-  RewriteRule ^(?!$|en(/|$)|beheer(/|$)|css/|js/|assets/|design/|\.well-known/|(binnenkort|privacy|404)\.html$|favicon\.ico$|site\.webmanifest$|robots\.txt$|google[0-9a-f]+\.html$) / [R=302,L]
+  RewriteRule ^(?!$|en(/|$)|beheer(/|$)|css/|js/|assets/|design/|\.well-known/|(binnenkort|privacy|404)\.html$|favicon\.ico$|site\.webmanifest$|robots\.txt$|sitemap-binnenkort\.xml$|google[0-9a-f]+\.html$) / [R=302,L]
 
   # Na de livegang stuurt de binnenkort-pagina zelf door naar de homepage
   RewriteCond %{DOCUMENT_ROOT}/binnenkort.aan !-f

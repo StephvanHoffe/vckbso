@@ -56,7 +56,8 @@ test("middleware: zolang de website niet live is, de binnenkort-pagina", async (
   for (const pad of ["/binnenkort.html", "/en/coming-soon.html", "/privacy.html", "/en/privacy.html", "/404.html"]) {
     assert.ok(doorgelaten(await vraag(pad)), `${pad} hoort bereikbaar te blijven`);
   }
-  assert.equal((await vraag("/sitemap.xml")).status, 404, "geen sitemap zolang de website niet live is");
+  assert.equal(herschreven(await vraag("/sitemap.xml")), "https://bsosporty.nl/sitemap-binnenkort.xml", "zolang de website niet live is: een sitemap met alleen de binnenkort-pagina");
+  assert.ok(doorgelaten(await vraag("/sitemap-binnenkort.xml")));
   // Het team kijkt alvast met het cookie uit Mijn BSO
   assert.ok(doorgelaten(await vraag("/contact.html", { cookie: "iets=1; sporty_voorproef=1" })));
   assert.deepEqual(doorverwijzing(await vraag("/contact.html", { cookie: "sporty_voorproef=10" })), [302, "https://bsosporty.nl/"]);

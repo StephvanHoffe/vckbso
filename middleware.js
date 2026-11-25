@@ -3,7 +3,9 @@
  *
  * De website staat op Vercel, Mijn BSO bij Vimexx op mijn.bsosporty.nl. Zolang de website niet live is, zien
  * bezoekers van bsosporty.nl alleen de binnenkort-pagina (binnenkort.html; Engels en/coming-soon.html), waar ze hun
- * gegevens achterlaten. Andere pagina's sturen daar tijdelijk (302) naartoe, en er is nog geen sitemap.
+ * gegevens achterlaten. Andere pagina's sturen daar tijdelijk (302) naartoe, en /sitemap.xml noemt alleen de
+ * binnenkort-pagina (sitemap-binnenkort.xml), zodat Google Search Console hem nu al kan lezen. Na de livegang geldt
+ * vanzelf de volledige sitemap.xml.
  *
  * Of de website live is, zegt Mijn BSO (website-status.php). De knop "Website live zetten" (Mijn BSO → Op de hoogte)
  * zet hem live en mailt iedereen die zich op de binnenkort-pagina aanmeldde. We vragen de status hooguit eens per
@@ -56,7 +58,7 @@ export function voorTest(ophalen) {
 }
 
 /** Pagina's die ook tijdens de binnenkort-pagina bereikbaar zijn (de pagina zelf, de privacyverklaring, de foutpagina). */
-const OOK_BINNENKORT = new Set(["/binnenkort.html", "/en/coming-soon.html", "/privacy.html", "/en/privacy.html", "/404.html"]);
+const OOK_BINNENKORT = new Set(["/binnenkort.html", "/en/coming-soon.html", "/privacy.html", "/en/privacy.html", "/404.html", "/sitemap-binnenkort.xml"]);
 
 export default async function middleware(request) {
   const url = new URL(request.url);
@@ -74,8 +76,7 @@ export default async function middleware(request) {
   if (pad === "/") return rewrite(new URL("/binnenkort.html", url));
   if (pad === "/en/") return rewrite(new URL("/en/coming-soon.html", url));
   if (OOK_BINNENKORT.has(pad)) return next();
-  if (pad === "/sitemap.xml") {
-    return new Response("Nog geen sitemap: de website is nog niet live.\n", { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8" } });
-  }
+  // De sitemap noemt nu alleen de binnenkort-pagina (/ en /en/); na de livegang de hele website
+  if (pad === "/sitemap.xml") return rewrite(new URL("/sitemap-binnenkort.xml", url));
   return Response.redirect(new URL(pad === "/en" || pad.startsWith("/en/") ? "/en/" : "/", url), 302);
 }

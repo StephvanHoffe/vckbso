@@ -34,9 +34,9 @@ test(".htaccess: met binnenkort.aan ziet een bezoeker alleen de binnenkort-pagin
   for (const pad of ["en/contact.html", "en/locations/sportpark-middenmeer.html"]) {
     assert.deepEqual(binnenkortRegel(pad), ["/en/", "R=302,L"], pad);
   }
-  assert.deepEqual(binnenkortRegel("sitemap.xml"), ["-", "R=404,L"], "geen sitemap zolang de website niet live is");
+  assert.deepEqual(binnenkortRegel("sitemap.xml"), ["sitemap-binnenkort.xml", "L"], "zolang de website niet live is: een sitemap met alleen de binnenkort-pagina");
   // Mijn BSO, de bestanden van de pagina en de privacyverklaring blijven bereikbaar
-  for (const pad of ["beheer", "beheer/", "beheer/inloggen.php", "beheer/op-de-hoogte.php", "css/style.css", "js/main.js", "privacy.html", "en/privacy.html", "robots.txt", "404.html", ...paginas]) {
+  for (const pad of ["beheer", "beheer/", "beheer/inloggen.php", "beheer/op-de-hoogte.php", "css/style.css", "js/main.js", "privacy.html", "en/privacy.html", "robots.txt", "404.html", "sitemap-binnenkort.xml", ...paginas]) {
     assert.equal(binnenkortRegel(pad), null, `${pad} hoort bereikbaar te blijven`);
   }
   // Het team kan met het cookie uit Mijn BSO de echte website zien
@@ -115,4 +115,16 @@ test("Mijn BSO: live zetten haalt binnenkort.aan weg en mailt wie zich op de bin
   assert.equal(uit.later_aan, true);
   assert.equal(uit.weer_aan, true, "terug naar de binnenkort-pagina kan ook");
   assert.deepEqual(uit.pip_wacht_nu, ["pip@test.invalid"], "wie al op de lijst stond en zich via de binnenkort-pagina aanmeldt, krijgt de mail ook");
+});
+
+test("sitemap-binnenkort.xml noemt precies de binnenkort-pagina's, en die zijn indexeerbaar", () => {
+  const xml = lees("sitemap-binnenkort.xml");
+  assert.match(xml, /^<\?xml version="1.0" encoding="UTF-8"\?>\n/);
+  const adressen = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+  assert.deepEqual(adressen, ["https://bsosporty.nl/", "https://bsosporty.nl/en/"]);
+  for (const [pagina, adres] of [["binnenkort.html", "https://bsosporty.nl/"], ["en/coming-soon.html", "https://bsosporty.nl/en/"]]) {
+    const html = lees(pagina);
+    assert.match(html, new RegExp(`<link rel="canonical" href="${adres}">`), `${pagina}: canonical ${adres}`);
+    assert.doesNotMatch(html, /<meta name="robots" content="[^"]*noindex/, `${pagina} staat in de sitemap en mag geen noindex hebben`);
+  }
 });

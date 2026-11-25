@@ -22,7 +22,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 // Wat er online moet. Mappen worden helemaal meegenomen, behalve wat onder UITSLUITEN valt.
-const BESTANDEN = [".htaccess", "favicon.ico", "site.webmanifest", "robots.txt", "sitemap.xml", "design/tokens.css"];
+const BESTANDEN = [".htaccess", "favicon.ico", "site.webmanifest", "robots.txt", "sitemap.xml", "sitemap-binnenkort.xml", "design/tokens.css"];
 const MAPPEN = ["css", "js", "assets", "en", "locaties", "beheer"];
 const UITSLUITEN = [
   /\.md$/, // interne notities, zoals assets/fotos/BRONNEN.md
