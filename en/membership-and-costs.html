@@ -115,8 +115,8 @@
     <!-- De berekening staat in js/rekentool/berekening.js, het tarief van Sporty in js/rekentool/instellingen.js. Tests: npm test -->
     <div class="rekentool" data-rekentool>
       <p class="rekentool__zonder-js" data-rt-zonder-js>The cost calculator needs JavaScript. Is it switched off in your browser? Then do a <a href="https://www.belastingdienst.nl/wps/wcm/connect/nl/toeslagen/content/hulpmiddel-proefberekening-toeslagen" rel="noopener" hreflang="nl">trial calculation with the Benefits Agency (in Dutch)</a>.</p>
+      <p class="rekentool__melding" data-rt-geen-tarief hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><span>The cost calculator isn’t available right now. Want to work it out anyway? Then do a <a data-rt-proef href="https://www.belastingdienst.nl/wps/wcm/connect/nl/toeslagen/content/hulpmiddel-proefberekening-toeslagen" rel="noopener" hreflang="nl">trial calculation with the Benefits Agency (in Dutch)</a>.</span></p>
       <form class="form rekentool__form" data-rt-form hidden novalidate aria-label="Childcare benefit cost calculator">
-        <p class="rekentool__melding" data-rt-geen-tarief hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><span>Sporty’s rates are coming soon. Until then, fill in the hourly rate and the number of hours of your childcare yourself.</span></p>
         <fieldset>
           <legend class="legend-label">Do you work? And your benefit partner (toeslagpartner), if you have one?</legend>
           <div class="choices">
@@ -134,34 +134,21 @@
         <div class="repeat-list" data-rt-kinderen></div>
         <div class="rekentool__toevoegen">
           <button type="button" class="btn btn--secondary btn--small" data-rt-toevoegen><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>Add another child</button>
-          <p class="field__hint rekentool__hint">Do you also have a child at another type of childcare, like a day nursery? Add them too: it can decide which child counts as your 1st child, and so how much benefit you get.</p>
+          <p class="field__hint rekentool__hint">Is a brother or sister coming to Sporty too? Add them, and we’ll work out the benefit for your children together.</p>
         </div>
       </form>
       <template id="rt-kind-sjabloon">
         <fieldset class="repeat-item rekentool__kind" data-rt-kind>
           <legend class="legend-label" data-rt-kind-titel>Child 1</legend>
           <div class="field">
-            <label for="rt-KIND-opvang">Type of childcare</label>
+            <label for="rt-KIND-opvang">Membership</label>
             <select id="rt-KIND-opvang" data-rt-opvang></select>
           </div>
-          <fieldset data-rt-dagen-blok hidden>
+          <fieldset data-rt-dagen-blok>
             <legend class="legend-label">Which days?</legend>
             <div class="choices" data-rt-dagen></div>
             <p class="field__hint rekentool__hint" data-rt-dagen-uitleg></p>
           </fieldset>
-          <div class="form__row" data-rt-eigen-blok>
-            <div class="field">
-              <label for="rt-KIND-uurprijs">Hourly rate</label>
-              <div class="rekentool__euro"><span aria-hidden="true">€</span><input id="rt-KIND-uurprijs" type="text" data-rt-uurprijs inputmode="decimal" autocomplete="off" aria-describedby="rt-KIND-uurprijs-fout"></div>
-              <p class="field__error" id="rt-KIND-uurprijs-fout" data-rt-uurprijs-fout hidden></p>
-            </div>
-            <div class="field">
-              <label for="rt-KIND-uren">Hours per month</label>
-              <input id="rt-KIND-uren" type="text" data-rt-uren inputmode="decimal" autocomplete="off" aria-describedby="rt-KIND-uren-uitleg rt-KIND-uren-fout">
-              <p class="field__error" id="rt-KIND-uren-fout" data-rt-uren-fout hidden></p>
-            </div>
-            <p class="field__hint rekentool__hint rekentool__breed" id="rt-KIND-uren-uitleg">You’ll find the hourly rate and the hours per month in your contract. Only know the hours per week? Then calculate: hours per week × weeks per year ÷ 12.</p>
-          </div>
           <p class="rekentool__uren" data-rt-uren-uitkomst></p>
           <button type="button" class="link-button" data-rt-verwijder hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg><span>Remove <span data-rt-verwijder-wie>child 2</span></span></button>
         </fieldset>
@@ -368,7 +355,7 @@
   <a class="whatsapp-knop" href="https://wa.me/31618266706?text=Hi%20Sporty!%20" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"></use></svg><span class="whatsapp-knop__tekst">Message us</span><span class="visually-hidden"> on WhatsApp (opens WhatsApp)</span></a>
 </footer>
 <!-- pop-up -->
-<!-- Pop-up "Blijf op de hoogte" (feedback 2.0, november 2026): verschijnt één keer na ongeveer 10 seconden op de site (js/pop-up.js).
+<!-- Pop-up "Blijf op de hoogte" (feedback 2.0, november 2026): verschijnt één keer na ongeveer 30 seconden op de site (js/pop-up.js).
      Niet op Kom bij de club, Blijf op de hoogte, de privacyverklaring en de 404-pagina (tools/kop-en-voet.mjs). Velden zoals op stay-in-the-loop.html. -->
 <dialog class="pop-up" data-pop-up aria-labelledby="pop-up-titel">
   <div class="pop-up__binnen">

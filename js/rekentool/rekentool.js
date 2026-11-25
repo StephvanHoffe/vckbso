@@ -1,6 +1,8 @@
 /*
  * Rekentool kinderopvangtoeslag op de prijzenpagina: het formulier en de uitkomst.
  * De berekening zelf staat in berekening.js (en is getest in tests/rekentool.test.mjs).
+ * Alleen de abonnementen van Sporty (instellingen.js): andere opvang (dagopvang, gastouderopvang) kun je
+ * sinds 25 november 2026 niet meer kiezen, op verzoek van de klant ("niet echt relevant voor mijn ouders").
  */
 (function () {
   "use strict";
@@ -19,9 +21,6 @@
   const DAGNAMEN = EN
     ? { ma: "Monday", di: "Tuesday", wo: "Wednesday", do: "Thursday", vr: "Friday" }
     : { ma: "Maandag", di: "Dinsdag", wo: "Woensdag", do: "Donderdag", vr: "Vrijdag" };
-  const SOORTNAMEN = EN
-    ? { bso: "After-school care (BSO)", dagopvang: "Day care (kinderdagverblijf)", gastouder: "Childminder (gastouderopvang)" }
-    : { bso: "Buitenschoolse opvang", dagopvang: "Dagopvang (kinderdagverblijf)", gastouder: "Gastouderopvang" };
   const SOORTKORT = EN
     ? { bso: "after-school care", dagopvang: "day care", gastouder: "childminders" }
     : { bso: "bso", dagopvang: "dagopvang", gastouder: "gastouderopvang" };
@@ -61,31 +60,32 @@
   basis.querySelectorAll("[data-rt-jaar]").forEach((el) => { el.textContent = String(jaar.jaar); });
   basis.querySelectorAll("[data-rt-proef]").forEach((el) => { el.href = PROEFBEREKENING; });
   basis.querySelector("[data-rt-zonder-js]").hidden = true;
-  basis.querySelector("[data-rt-geen-tarief]").hidden = vormen.length > 0;
+  // Zonder (geldig) tarief van Sporty valt er niets uit te rekenen: dan alleen de verwijzing naar Dienst Toeslagen
+  if (!vormen.length) {
+    basis.querySelector("[data-rt-geen-tarief]").hidden = false;
+    return;
+  }
   form.hidden = false;
   uitkomst.hidden = false;
 
   /* ---------- Kinderen ---------- */
 
+  // Eén abonnement? Dan valt er niets te kiezen: de keuzelijst verdwijnt en de naam staat bij de dagen
+  const kiezen = vormen.length > 1;
+
   function opvangOpties(select) {
-    const optie = (waarde, tekst) => {
+    vormen.forEach((vorm, i) => {
       const o = document.createElement("option");
-      o.value = waarde;
-      o.textContent = tekst;
-      return o;
-    };
-    if (vormen.length) {
-      const vck = document.createElement("optgroup");
-      vck.label = "Sporty";
-      vormen.forEach((vorm, i) => vck.append(optie("vck:" + i, naamVan(vorm))));
-      const elders = document.createElement("optgroup");
-      elders.label = t("Andere opvang (bijvoorbeeld voor een broertje of zusje)", "Other childcare (for example for a brother or sister)");
-      R.SOORTEN.forEach((soort) => elders.append(optie("eigen:" + soort, SOORTNAMEN[soort])));
-      select.append(vck, elders);
-    } else {
-      R.SOORTEN.forEach((soort) => select.append(optie("eigen:" + soort, SOORTNAMEN[soort])));
-    }
+      o.value = String(i);
+      o.textContent = naamVan(vorm);
+      select.append(o);
+    });
+    select.closest(".field").hidden = !kiezen;
   }
+
+  const vormVan = (kindEl) => vormen[Number(kindEl.querySelector("[data-rt-opvang]").value)];
+  // Het eerste veld van een kind (voor de focus): de keuzelijst, of bij één abonnement de eerste dag
+  const eersteVeld = (kindEl) => (kiezen ? kindEl.querySelector("[data-rt-opvang]") : kindEl.querySelector("[data-rt-dagen] input"));
 
   function dagKeuzes(kindEl, vorm) {
     const houder = kindEl.querySelector("[data-rt-dagen]");
@@ -105,22 +105,19 @@
       houder.append(label);
     });
     const uitleg = kindEl.querySelector("[data-rt-dagen-uitleg]");
+    const naam = kiezen ? "" : naamVan(vorm) + ". ";
     if (vast) {
-      uitleg.textContent = t("Per vaste dag per week gemiddeld ", "For each fixed day a week, on average ") + R.honderdsten(R.leesUren(vorm.urenPerMaandPerDag)) + t(" uur per maand, het hele jaar door. Uurtarief ", " hours a month, all year round. Hourly rate ") + R.euro(R.leesCenten(vorm.uurtarief)) + ".";
+      uitleg.textContent = naam + t("Per vaste dag per week gemiddeld ", "For each fixed day a week, on average ") + R.honderdsten(R.leesUren(vorm.urenPerMaandPerDag)) + t(" uur per maand, het hele jaar door. Uurtarief ", " hours a month, all year round. Hourly rate ") + R.euro(R.leesCenten(vorm.uurtarief)) + ".";
       return;
     }
     const delen = [];
     if (vorm.schoolweken) delen.push(vorm.schoolweken + t(" schoolweken", " school weeks"));
     if (vorm.vakantieweken) delen.push(vorm.vakantieweken + t(" vakantieweken van ", " holiday weeks of ") + R.honderdsten(vakantie) + t(" uur per dag", " hours a day"));
-    uitleg.textContent = t("Per jaar: ", "Per year: ") + delen.join(t(" en ", " and ")) + t(". Uurtarief ", ". Hourly rate ") + R.euro(R.leesCenten(vorm.uurtarief)) + ".";
+    uitleg.textContent = naam + t("Per jaar: ", "Per year: ") + delen.join(t(" en ", " and ")) + t(". Uurtarief ", ". Hourly rate ") + R.euro(R.leesCenten(vorm.uurtarief)) + ".";
   }
 
   function wisselOpvang(kindEl) {
-    const waarde = kindEl.querySelector("[data-rt-opvang]").value;
-    const vck = waarde.startsWith("vck:");
-    kindEl.querySelector("[data-rt-dagen-blok]").hidden = !vck;
-    kindEl.querySelector("[data-rt-eigen-blok]").hidden = vck;
-    if (vck) dagKeuzes(kindEl, vormen[Number(waarde.slice(4))]);
+    dagKeuzes(kindEl, vormVan(kindEl));
   }
 
   function nummerKinderen() {
@@ -148,12 +145,12 @@
       kindEl.remove();
       nummerKinderen();
       reken();
-      (volgende ? volgende.querySelector("[data-rt-opvang]") : knopToevoegen).focus();
+      (volgende ? eersteVeld(volgende) : knopToevoegen).focus();
     });
     lijst.append(kindEl);
     wisselOpvang(kindEl);
     nummerKinderen();
-    if (focus) select.focus();
+    if (focus) eersteVeld(kindEl).focus();
   }
 
   knopToevoegen.addEventListener("click", () => { voegKindToe(true); reken(); });
@@ -183,29 +180,12 @@
     const kinderen = [];
     lijst.querySelectorAll("[data-rt-kind]").forEach((kindEl, i) => {
       const naam = t("kind ", "child ") + (i + 1);
-      const waarde = kindEl.querySelector("[data-rt-opvang]").value;
-      if (waarde.startsWith("vck:")) {
-        const vorm = vormen[Number(waarde.slice(4))];
-        const dagen = Array.from(kindEl.querySelectorAll("[data-rt-dagen] input:checked"), (el) => el.value);
-        const uren = dagen.length ? R.urenPerMaand(vorm, dagen) : null;
-        kindEl.querySelector("[data-rt-uren-uitkomst]").textContent = dagen.length ? t("Samen ", "Together ") + R.honderdsten(uren) + t(" uur per maand.", " hours a month.") : "";
-        if (!dagen.length) ontbreekt.push(t("de dagen van ", "the days for ") + naam);
-        else kinderen.push({ naam, omschrijving: naamVan(vorm), soort: vorm.soort, uurtarief: R.leesCenten(vorm.uurtarief), uren });
-      } else {
-        const soort = waarde.slice(6);
-        const prijsVeld = kindEl.querySelector("[data-rt-uurprijs]");
-        const urenVeld = kindEl.querySelector("[data-rt-uren]");
-        const prijs = R.leesCenten(invoerTekst(prijsVeld.value));
-        const uren = R.leesUren(invoerTekst(urenVeld.value));
-        const prijsGoed = prijs !== null && prijs > 0 && prijs <= 10000;
-        const urenGoed = uren !== null && uren > 0 && uren <= 74400;
-        mogelijkeFout(prijsVeld, kindEl.querySelector("[data-rt-uurprijs-fout]"), prijsGoed, t("Vul de uurprijs in euro in, bijvoorbeeld 9,50.", "Enter the hourly rate in euros, for example 9.50."));
-        mogelijkeFout(urenVeld, kindEl.querySelector("[data-rt-uren-fout]"), urenGoed, t("Vul het aantal uren per maand in, bijvoorbeeld 45 (hoogstens 744).", "Enter the number of hours a month, for example 45 (744 at most)."));
-        kindEl.querySelector("[data-rt-uren-uitkomst]").textContent = "";
-        if (!prijsGoed) ontbreekt.push(t("de uurprijs van ", "the hourly rate for ") + naam);
-        if (!urenGoed) ontbreekt.push(t("de uren van ", "the hours for ") + naam);
-        if (prijsGoed && urenGoed) kinderen.push({ naam, omschrijving: SOORTNAMEN[soort], soort, uurtarief: prijs, uren });
-      }
+      const vorm = vormVan(kindEl);
+      const dagen = Array.from(kindEl.querySelectorAll("[data-rt-dagen] input:checked"), (el) => el.value);
+      const uren = dagen.length ? R.urenPerMaand(vorm, dagen) : null;
+      kindEl.querySelector("[data-rt-uren-uitkomst]").textContent = dagen.length ? t("Samen ", "Together ") + R.honderdsten(uren) + t(" uur per maand.", " hours a month.") : "";
+      if (!dagen.length) ontbreekt.push(t("de dagen van ", "the days for ") + naam);
+      else kinderen.push({ naam, omschrijving: naamVan(vorm), soort: vorm.soort, uurtarief: R.leesCenten(vorm.uurtarief), uren });
     });
     const werkt = form.querySelector("input[name='rt-werkt']:checked").value === "ja";
     return { inkomen, werkt, kinderen, ontbreekt };

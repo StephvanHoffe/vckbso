@@ -114,8 +114,8 @@
     <!-- De berekening staat in js/rekentool/berekening.js, het tarief van Sporty in js/rekentool/instellingen.js. Tests: npm test -->
     <div class="rekentool" data-rekentool>
       <p class="rekentool__zonder-js" data-rt-zonder-js>De rekentool werkt met JavaScript. Staat dat uit in je browser? Maak dan een <a href="https://www.belastingdienst.nl/wps/wcm/connect/nl/toeslagen/content/hulpmiddel-proefberekening-toeslagen" rel="noopener">proefberekening bij Dienst Toeslagen</a>.</p>
+      <p class="rekentool__melding" data-rt-geen-tarief hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><span>De rekentool is even niet beschikbaar. Wil je toch rekenen? Maak dan een <a data-rt-proef href="https://www.belastingdienst.nl/wps/wcm/connect/nl/toeslagen/content/hulpmiddel-proefberekening-toeslagen" rel="noopener">proefberekening bij Dienst Toeslagen</a>.</span></p>
       <form class="form rekentool__form" data-rt-form hidden novalidate aria-label="Rekentool kinderopvangtoeslag">
-        <p class="rekentool__melding" data-rt-geen-tarief hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><span>De tarieven van Sporty volgen binnenkort. Tot die tijd vul je zelf de uurprijs en het aantal uren van je opvang in.</span></p>
         <fieldset>
           <legend class="legend-label">Werk jij? En je toeslagpartner, als je die hebt?</legend>
           <div class="choices">
@@ -133,34 +133,21 @@
         <div class="repeat-list" data-rt-kinderen></div>
         <div class="rekentool__toevoegen">
           <button type="button" class="btn btn--secondary btn--small" data-rt-toevoegen><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-plus"></use></svg>Nog een kind</button>
-          <p class="field__hint rekentool__hint">Heb je ook een kind op een andere opvang, zoals een kinderdagverblijf? Voeg het toe: dat kan bepalen welk kind het 1e kind is, en dus hoeveel toeslag je krijgt.</p>
+          <p class="field__hint rekentool__hint">Komt er ook een broertje of zusje naar Sporty? Voeg het toe, dan rekenen we de toeslag voor je kinderen samen uit.</p>
         </div>
       </form>
       <template id="rt-kind-sjabloon">
         <fieldset class="repeat-item rekentool__kind" data-rt-kind>
           <legend class="legend-label" data-rt-kind-titel>Kind 1</legend>
           <div class="field">
-            <label for="rt-KIND-opvang">Soort opvang</label>
+            <label for="rt-KIND-opvang">Abonnement</label>
             <select id="rt-KIND-opvang" data-rt-opvang></select>
           </div>
-          <fieldset data-rt-dagen-blok hidden>
+          <fieldset data-rt-dagen-blok>
             <legend class="legend-label">Welke dagen?</legend>
             <div class="choices" data-rt-dagen></div>
             <p class="field__hint rekentool__hint" data-rt-dagen-uitleg></p>
           </fieldset>
-          <div class="form__row" data-rt-eigen-blok>
-            <div class="field">
-              <label for="rt-KIND-uurprijs">Uurprijs</label>
-              <div class="rekentool__euro"><span aria-hidden="true">€</span><input id="rt-KIND-uurprijs" type="text" data-rt-uurprijs inputmode="decimal" autocomplete="off" aria-describedby="rt-KIND-uurprijs-fout"></div>
-              <p class="field__error" id="rt-KIND-uurprijs-fout" data-rt-uurprijs-fout hidden></p>
-            </div>
-            <div class="field">
-              <label for="rt-KIND-uren">Uren per maand</label>
-              <input id="rt-KIND-uren" type="text" data-rt-uren inputmode="decimal" autocomplete="off" aria-describedby="rt-KIND-uren-uitleg rt-KIND-uren-fout">
-              <p class="field__error" id="rt-KIND-uren-fout" data-rt-uren-fout hidden></p>
-            </div>
-            <p class="field__hint rekentool__hint rekentool__breed" id="rt-KIND-uren-uitleg">De uurprijs en de uren per maand staan in je contract. Weet je alleen de uren per week? Reken dan: uren per week × weken per jaar ÷ 12.</p>
-          </div>
           <p class="rekentool__uren" data-rt-uren-uitkomst></p>
           <button type="button" class="link-button" data-rt-verwijder hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-minus"></use></svg><span>Verwijder <span data-rt-verwijder-wie>kind 2</span></span></button>
         </fieldset>
@@ -367,7 +354,7 @@
   <a class="whatsapp-knop" href="https://wa.me/31618266706?text=Hoi%20Sporty!%20" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-whatsapp"></use></svg><span class="whatsapp-knop__tekst">App ons</span><span class="visually-hidden"> via WhatsApp (opent WhatsApp)</span></a>
 </footer>
 <!-- pop-up -->
-<!-- Pop-up "Blijf op de hoogte" (feedback 2.0, november 2026): verschijnt één keer na ongeveer 10 seconden op de site (js/pop-up.js).
+<!-- Pop-up "Blijf op de hoogte" (feedback 2.0, november 2026): verschijnt één keer na ongeveer 30 seconden op de site (js/pop-up.js).
      Niet op Kom bij de club, Blijf op de hoogte, de privacyverklaring en de 404-pagina (tools/kop-en-voet.mjs). Velden zoals op blijf-op-de-hoogte.html. -->
 <dialog class="pop-up" data-pop-up aria-labelledby="pop-up-titel">
   <div class="pop-up__binnen">

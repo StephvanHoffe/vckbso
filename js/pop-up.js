@@ -1,6 +1,7 @@
 /*
  * Pop-up "Blijf op de hoogte" (feedback 2.0, november 2026).
- * Verschijnt één keer als iemand ongeveer 10 seconden op de site is (opgeteld over de pagina's van dit bezoek).
+ * Verschijnt één keer als iemand ongeveer 30 seconden op de site is (opgeteld over de pagina's van dit bezoek).
+ * Eerst 10 seconden; op 25 november 2026 op verzoek van de klant 30 seconden ("hij komt wel erg snel").
  * - Weggeklikt? Dan pas na OPNIEUW_NA_DAGEN dagen weer. Aangemeld? Dan nooit meer.
  * - Niet tijdens de intro op de homepage, niet als het menu open is, niet terwijl iemand een veld invult en niet tijdens een filmpje met geluid.
  * - Zonder opslag in de browser (bijvoorbeeld een privévenster dat dat blokkeert) verschijnt hij niet,
@@ -16,7 +17,7 @@
 
   var SLEUTEL = "sporty-pop-up"; // localStorage: { getoond: tijdstip, aangemeld: true }
   var START = "sporty-pop-up-start"; // sessionStorage: begin van dit bezoek
-  var WACHT = 10000; // ongeveer 10 seconden op de site
+  var WACHT = 30000; // ongeveer 30 seconden op de site
   var OPNIEUW_NA_DAGEN = 30;
   var DAG = 24 * 60 * 60 * 1000;
 

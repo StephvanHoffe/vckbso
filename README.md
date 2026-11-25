@@ -128,7 +128,7 @@ Alles wat nog niet bekend was, staat als `<!-- TODO: ... -->` in de code. Zoek o
 - [ ] Mijn BSO maakt de facturen nu per afgenomen middag (uurtarief × uren per middag). Met Sporty afstemmen of de facturen van het abonnement het vaste maandbedrag (27 uur per vaste dag) moeten gebruiken.
 - [ ] Opzegtermijn en betaalwijze in de algemene voorwaarden.
 - [x] Leeftijd: 4 t/m 12 jaar (teksten van november 2026; eerder 5 t/m 13 jaar).
-- [x] Team: Sureyo Macrander, Tim van Eldonk, Anass Boudinar en Henny de hond, met een juichfilmpje per coach (24 november 2026). Nog nodig: de functie en het weetje van Anass ("Met Anass kijken we geen voetbal, want hij is voor [.....]."), en de foto's van Tim en Anass als bestand.
+- [x] Team: Sureyo Macrander, Tim van Eldonk, Anass Boudinar en Henny de hond, met een juichfilmpje per coach (24 november 2026). Het weetje van Anass kwam op 25 november 2026. Nog nodig: de functie van Anass en de foto's van Tim en Anass als bestand.
 - [ ] Namen bij de reviews, zodra de ouders toestemming hebben gegeven (nu: "Ouder van een Sporty-kid").
 - [ ] Algemene voorwaarden en privacyvoorwaarden (Voorwaarden, Privacy) en de klachtenregeling als pdf.
 

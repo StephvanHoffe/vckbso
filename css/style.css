@@ -2983,10 +2983,6 @@ ol.grid {
   font-weight: var(--font-weight-body);
 }
 
-.rekentool__breed {
-  grid-column: 1 / -1;
-}
-
 .rekentool__uren {
   margin: 0;
   font-weight: var(--font-weight-strong);
