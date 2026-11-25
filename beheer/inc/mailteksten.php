@@ -32,11 +32,11 @@ const MAILTEKSTEN = [
     'aanmelding_ontvangen' => [
         'groep' => 'ouders',
         'naam' => 'Aanmelding ontvangen',
-        'wanneer' => 'Direct nadat een ouder het aanmeldformulier "Kom bij de club" op de website heeft verstuurd.',
-        'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kinderen' => ['Voornamen van de aangemelde kinderen', 'Noor en Daan']],
-        'verplicht' => [],
+        'wanneer' => 'Direct nadat een ouder het aanmeldformulier "Kom bij de club" op de website heeft verstuurd, met een link om meteen een wachtwoord voor Mijn BSO te kiezen.',
+        'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kinderen' => ['Voornamen van de aangemelde kinderen', 'Noor en Daan'], 'link' => ['Link om meteen een wachtwoord voor Mijn BSO te kiezen (een week geldig)', 'https://…/wachtwoord-instellen.php?…']],
+        'verplicht' => ['link'],
         'onderwerp' => 'Je aanmelding bij Sporty is binnen!',
-        'tekst' => "Hoi {voornaam},\n\nWat leuk dat je {kinderen} hebt aangemeld bij Sporty! We hebben je aanmelding goed ontvangen. Aanmelden is vrijblijvend: je zit nog nergens aan vast.\n\nWe bekijken de mogelijkheden en nemen binnen 24 uur contact met je op om kennis te maken en je aanmelding af te ronden. Daarna krijg je een link om in te loggen in Mijn BSO.\n\nAlvast zin in? Kom gerust een keer langs op Sportpark Middenmeer, of boek een gratis proefdag.\n\nTot snel!\nTeam Sporty (en Henny: woef!)",
+        'tekst' => "Hoi {voornaam},\n\nWat leuk dat je {kinderen} hebt aangemeld bij Sporty! We hebben je aanmelding goed ontvangen. Aanmelden is vrijblijvend: je zit nog nergens aan vast.\n\nMaak meteen je wachtwoord aan voor Mijn BSO, onze omgeving voor ouders. Daar zie je hoe het verder gaat, en straks kies je er zelf de dagen voor je kind. Kies je wachtwoord via deze link (een week geldig):\n{link}\n\nWe bekijken de mogelijkheden en nemen binnen 24 uur contact met je op om kennis te maken en je aanmelding af te ronden.\n\nAlvast zin in? Kom gerust een keer langs op Sportpark Middenmeer, of boek een gratis proefdag.\n\nTot snel!\nTeam Sporty (en Henny: woef!)",
     ],
     'aanmelding_bestaand_account' => [
         'groep' => 'ouders',
@@ -266,11 +266,11 @@ const MAILTEKSTEN = [
     'aanmelding_ontvangen_en' => [
         'groep' => 'engels',
         'naam' => 'Aanmelding ontvangen (Engels)',
-        'wanneer' => 'Direct nadat een ouder het aanmeldformulier op de Engelse website ("Join the club") heeft verstuurd.',
-        'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kinderen' => ['Voornamen van de aangemelde kinderen', 'Noor and Daan']],
-        'verplicht' => [],
+        'wanneer' => 'Direct nadat een ouder het aanmeldformulier op de Engelse website ("Join the club") heeft verstuurd, met een link om meteen een wachtwoord voor Mijn BSO te kiezen.',
+        'velden' => ['voornaam' => ['Voornaam van de ouder', 'Sam'], 'kinderen' => ['Voornamen van de aangemelde kinderen', 'Noor and Daan'], 'link' => ['Link om meteen een wachtwoord voor Mijn BSO te kiezen (een week geldig)', 'https://…/wachtwoord-instellen.php?…']],
+        'verplicht' => ['link'],
         'onderwerp' => 'Your Sporty sign-up is in!',
-        'tekst' => "Hi {voornaam},\n\nHow lovely that you've signed up {kinderen} at Sporty! We've received your sign-up. Signing up is free and without obligation: you're not committed to anything yet.\n\nWe'll look at the options and get in touch within 24 hours to meet you and complete your sign-up. After that you'll receive a link to log in to Mijn BSO, our parent portal (in Dutch).\n\nCan't wait? Feel free to drop by at Sportpark Middenmeer, or book a free trial day.\n\nSee you soon!\nTeam Sporty (and Henny: woof!)",
+        'tekst' => "Hi {voornaam},\n\nHow lovely that you've signed up {kinderen} at Sporty! We've received your sign-up. Signing up is free and without obligation: you're not committed to anything yet.\n\nCreate your password for Mijn BSO, our parent portal (in Dutch), straight away. That's where you'll see what happens next, and later you'll pick your child's days there yourself. Choose your password using this link (valid for a week):\n{link}\n\nWe'll look at the options and get in touch within 24 hours to meet you and complete your sign-up.\n\nCan't wait? Feel free to drop by at Sportpark Middenmeer, or book a free trial day.\n\nSee you soon!\nTeam Sporty (and Henny: woof!)",
     ],
 
     'aanmelding_bestaand_account_en' => [
@@ -397,14 +397,24 @@ function mailtekst_vul(string $tekst, array $waarden): string
     return strtr($tekst, $vervang);
 }
 
-/** [onderwerp, tekst] van een e-mail, met de invulvelden ingevuld. */
+/**
+ * [onderwerp, tekst] van een e-mail, met de invulvelden ingevuld. Ontbreekt een verplicht veld in een
+ * aangepaste tekst (bijvoorbeeld een tekst van vóór het veld verplicht werd), dan komt de waarde er onderaan
+ * bij: zo krijgt een ouder altijd de link om een wachtwoord te kiezen.
+ */
 function mailtekst(string $sleutel, array $waarden = []): array
 {
     $standaard = MAILTEKSTEN[$sleutel] ?? throw new InvalidArgumentException("Onbekende e-mail: {$sleutel}");
     $eigen = mailtekst_eigen($sleutel);
+    $tekst = (string) ($eigen['tekst'] ?? $standaard['tekst']);
+    foreach ($standaard['verplicht'] as $veld) {
+        if (isset($waarden[$veld]) && !str_contains($tekst, '{' . $veld . '}')) {
+            $tekst = rtrim($tekst) . "\n\n{" . $veld . '}';
+        }
+    }
     return [
         mailtekst_vul((string) ($eigen['onderwerp'] ?? $standaard['onderwerp'] ?? ''), $waarden),
-        mailtekst_vul((string) ($eigen['tekst'] ?? $standaard['tekst']), $waarden),
+        mailtekst_vul($tekst, $waarden),
     ];
 }
 
@@ -457,13 +467,14 @@ function mailtekst_in_taal(string $sleutel): string
 /** Stuurt een e-mail met de (eventueel aangepaste) tekst, in de taal van de bezoeker. */
 function stuur_mailtekst(string $aan, string $sleutel, array $waarden = []): bool
 {
-    [$onderwerp, $tekst] = mailtekst(mailtekst_in_taal($sleutel), $waarden);
-    return stuur_mail($aan, $onderwerp, $tekst, taal());
+    $sleutel = mailtekst_in_taal($sleutel);
+    [$onderwerp, $tekst] = mailtekst($sleutel, $waarden);
+    return stuur_mail($aan, $onderwerp, $tekst, taal(), $sleutel);
 }
 
 /** Stuurt een melding met de (eventueel aangepaste) tekst naar het teamadres. */
 function mail_team_tekst(string $sleutel, array $waarden = []): void
 {
     [$onderwerp, $tekst] = mailtekst($sleutel, $waarden);
-    mail_team($onderwerp, $tekst);
+    mail_team($onderwerp, $tekst, $sleutel);
 }

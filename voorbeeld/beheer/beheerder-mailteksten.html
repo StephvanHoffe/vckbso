@@ -41,7 +41,7 @@
       <li><a href="beheerder-agenda.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-calendar"></use></svg>Agenda</a></li>
       <li><a href="beheerder-kinderen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-smile"></use></svg>Kinderen</a></li>
       <li><a href="beheerder-ouders.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-users"></use></svg>Ouders</a></li>
-      <li><a href="beheerder-berichten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chat"></use></svg>Berichten</a></li>
+      <li><a href="beheerder-berichten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-chat"></use></svg>Berichten <span class="teller">2<span class="visually-hidden"> ongelezen</span></span></a></li>
       <li><a href="beheerder-fotos.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-camera"></use></svg>Foto&#039;s</a></li>
       <li><a href="beheerder-groepen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-grid"></use></svg>Groepen</a></li>
       <li><a href="beheerder-facturen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-euro"></use></svg>Facturen</a></li>
@@ -51,89 +51,104 @@
       <li><a href="beheerder-interesse.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>Op de hoogte <span class="teller">1<span class="visually-hidden"> wachten op hun pakket</span></span></a></li>
       <li><a href="beheerder-sollicitaties.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"></use></svg>Sollicitaties <span class="teller">1<span class="visually-hidden"> nieuw</span></span></a></li>
       <li><a href="beheerder-verzoeken.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken <span class="teller">1<span class="visually-hidden"> open</span></span></a></li>
+      <li><a href="beheerder-mailteksten.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>E-mails</a></li>
       <li><a href="beheerder-koppelingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Koppelingen</a></li>
-      <li><a href="beheerder-instellingen.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
+      <li><a href="beheerder-instellingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
     </ul>
   </nav>
 </header>
 <main id="inhoud" class="app-main">
   <p class="demo-balk"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>Demo-modus: Stripe is nog niet gekoppeld, er wordt niets echt afgeschreven. <a href="beheerder-koppelingen.html">Stripe koppelen</a></p>
-<a class="terug-link" href="beheerder-instellingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>Instellingen</a><div class="pagina-kop"><div><h1>E-mails</h1><p class="lead">Alle e-mails die Mijn BSO verstuurt. Pas de tekst aan zodat hij klinkt zoals jullie dat willen; de standaardtekst kun je altijd terugzetten.</p></div></div><section class="panel" aria-labelledby="groep-ouders" style="margin-bottom: var(--space-l)">
+<div class="pagina-kop"><div><h1>E-mails</h1><p class="lead">Alle e-mails die Mijn BSO verstuurt. Klik op een e-mail om de tekst te lezen, een voorbeeld te bekijken of hem aan te passen; de standaardtekst kun je altijd terugzetten. Onder Verzonden e-mails zie je wat er is verstuurd, en wat niet lukte.</p></div><div class="btn-group"><a class="btn btn--small" href="beheerder-verzonden-emails.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>Verzonden e-mails</a></div></div><section class="panel" aria-labelledby="groep-ouders" style="margin-bottom: var(--space-l)">
   <h2 id="groep-ouders">Aan ouders, sollicitanten en andere bezoekers</h2>
   <p class="muted">Deze e-mails gaan naar ouders en andere mensen buiten het team.</p>
   <div class="tabel">
     <table>
-      <thead><tr><th scope="col">E-mail</th><th scope="col">Wanneer</th><th scope="col">Tekst</th></tr></thead>
+      <thead><tr><th scope="col">E-mail</th><th scope="col">Wanneer</th><th scope="col">Tekst</th><th scope="col">Laatste 30 dagen</th></tr></thead>
       <tbody>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-aanmelding-ontvangen.html">Aanmelding ontvangen</a></th>
-          <td>Direct nadat een ouder het aanmeldformulier &quot;Kom bij de club&quot; op de website heeft verstuurd.</td>
+          <td>Direct nadat een ouder het aanmeldformulier &quot;Kom bij de club&quot; op de website heeft verstuurd, met een link om meteen een wachtwoord voor Mijn BSO te kiezen.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><a href="#" data-vb-niet="verzonden-emails.php?soort=aanmelding_ontvangen">1 verstuurd</a></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-aanmelding-bestaand-account.html">Aanmelding met een bekend e-mailadres</a></th>
           <td>Als iemand het aanmeldformulier verstuurt met een e-mailadres dat al in Mijn BSO staat. De aanmelding wordt dan niet opnieuw opgeslagen; op de website ziet iedereen hetzelfde antwoord, zodat niemand kan uitproberen wie er klant is.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-account-klaar.html">Welkom: account staat klaar (met wachtwoordlink)</a></th>
           <td>Als het team een nieuwe aanmelding activeert en de ouder nog geen wachtwoord heeft (aangemeld via de website).</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-account-actief.html">Welkom: account is actief</a></th>
           <td>Als het team een ouder activeert die al een wachtwoord heeft.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-verzorger-uitnodiging.html">Uitnodiging voor een extra verzorger</a></th>
           <td>Als het team bij een kind een nieuwe verzorger koppelt (bijvoorbeeld de andere ouder of een opa of oma).</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-wachtwoord-vergeten.html">Wachtwoord vergeten</a></th>
           <td>Als iemand (ouder of teamlid) bij het inloggen op &quot;Wachtwoord vergeten&quot; klikt.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><a href="#" data-vb-niet="verzonden-emails.php?soort=wachtwoord_vergeten">1 verstuurd</a><br><small class="let-op"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg>1 niet verstuurd</small></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-nieuw-bericht.html">Nieuw bericht van het team</a></th>
           <td>Als het team in Mijn BSO een bericht aan een ouder stuurt. Het bericht zelf staat niet in de e-mail.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><a href="#" data-vb-niet="verzonden-emails.php?soort=nieuw_bericht">1 verstuurd</a></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-privacyverzoek-reactie.html">Reactie op een privacyverzoek</a></th>
           <td>Als het team een privacyverzoek van een ouder heeft afgehandeld.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-proefdag-bevestiging.html">Proefdag geboekt</a></th>
           <td>Direct nadat een ouder op de website een proefdag heeft geboekt.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><a href="#" data-vb-niet="verzonden-emails.php?soort=proefdag_bevestiging">1 verstuurd</a></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-sollicitatie-ontvangen.html">Sollicitatie ontvangen</a></th>
           <td>Direct nadat iemand via Word Sporty coach heeft gesolliciteerd.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-op-de-hoogte-bevestigen.html">Blijf op de hoogte: aanmelding bevestigen</a></th>
           <td>Direct nadat iemand zich op de website heeft aangemeld om op de hoogte te blijven.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><a href="#" data-vb-niet="verzonden-emails.php?soort=op_de_hoogte_bevestigen">1 verstuurd</a><br><small class="let-op"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-alert"></use></svg>1 niet verstuurd</small></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-op-de-hoogte-al-op-lijst.html">Blijf op de hoogte: staat al op de lijst</a></th>
           <td>Als iemand zich opnieuw aanmeldt terwijl het e-mailadres al bevestigd op de lijst staat.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-op-de-hoogte-update.html">Blijf op de hoogte: update van het team</a></th>
           <td>Als het team onder &quot;Op de hoogte&quot; een update verstuurt. Onderwerp en bericht schrijf je daar per keer; hier pas je aan wat eromheen staat.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-website-live.html">Binnenkort-pagina: de website is live</a></th>
           <td>Automatisch, als je de website live zet (Op de hoogte → Website live zetten), aan iedereen die zich op de binnenkort-pagina aanmeldde en dat heeft bevestigd. Wie zich later nog bevestigt, krijgt hem meteen.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
       </tbody>
     </table>
@@ -144,62 +159,73 @@
   <p class="muted">Meldingen voor het team en uitnodigingen voor collega&#039;s. De meldingen gaan naar het teamadres onder Koppelingen.</p>
   <div class="tabel">
     <table>
-      <thead><tr><th scope="col">E-mail</th><th scope="col">Wanneer</th><th scope="col">Tekst</th></tr></thead>
+      <thead><tr><th scope="col">E-mail</th><th scope="col">Wanneer</th><th scope="col">Tekst</th><th scope="col">Laatste 30 dagen</th></tr></thead>
       <tbody>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-medewerker-uitnodiging.html">Uitnodiging voor een collega</a></th>
           <td>Als je onder Team een nieuwe collega uitnodigt.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-medewerker-nieuwe-link.html">Nieuwe wachtwoordlink voor een collega</a></th>
           <td>Als je onder Team voor een collega een nieuwe link maakt om (opnieuw) een wachtwoord te kiezen.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-team-aanmelding.html">Melding: nieuwe aanmelding</a></th>
           <td>Als een ouder het aanmeldformulier op de website heeft verstuurd.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><a href="#" data-vb-niet="verzonden-emails.php?soort=team_aanmelding">1 verstuurd</a></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-team-proefdag.html">Melding: proefdag geboekt</a></th>
           <td>Als een ouder op de website een proefdag heeft geboekt.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><a href="#" data-vb-niet="verzonden-emails.php?soort=team_proefdag">1 verstuurd</a></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-team-sollicitatie.html">Melding: nieuwe sollicitatie</a></th>
           <td>Als iemand via Word Sporty coach heeft gesolliciteerd.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-team-op-de-hoogte.html">Melding: aanmelding Blijf op de hoogte</a></th>
           <td>Als iemand de aanmelding voor Blijf op de hoogte heeft bevestigd.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><a href="#" data-vb-niet="verzonden-emails.php?soort=team_op_de_hoogte">1 verstuurd</a></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-team-bericht.html">Melding: nieuw bericht van een ouder</a></th>
           <td>Als een ouder in Mijn BSO een bericht stuurt. Het bericht zelf staat niet in de e-mail.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-team-ziekmelding.html">Melding: ziekmelding</a></th>
           <td>Als een ouder in Mijn BSO een kind ziek meldt.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-team-backup-mislukt.html">Melding: externe back-up mislukt</a></th>
           <td>Als de nachtelijke back-up niet naar de externe opslag kon worden gestuurd (zie Koppelingen).</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-team-opzegging.html">Melding: opzegging</a></th>
           <td>Als een ouder in Mijn BSO de opvang opzegt.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-team-privacyverzoek.html">Melding: nieuw privacyverzoek</a></th>
           <td>Als een ouder in Mijn BSO een privacyverzoek indient.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
       </tbody>
     </table>
@@ -210,52 +236,61 @@
   <p class="muted">Bevestigingen voor wie een formulier op de Engelse website invult. Mijn BSO kiest ze vanzelf; pas je hierboven een Nederlandse tekst aan, pas dan de Engelse ook aan.</p>
   <div class="tabel">
     <table>
-      <thead><tr><th scope="col">E-mail</th><th scope="col">Wanneer</th><th scope="col">Tekst</th></tr></thead>
+      <thead><tr><th scope="col">E-mail</th><th scope="col">Wanneer</th><th scope="col">Tekst</th><th scope="col">Laatste 30 dagen</th></tr></thead>
       <tbody>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-aanmelding-ontvangen-en.html">Aanmelding ontvangen (Engels)</a></th>
-          <td>Direct nadat een ouder het aanmeldformulier op de Engelse website (&quot;Join the club&quot;) heeft verstuurd.</td>
+          <td>Direct nadat een ouder het aanmeldformulier op de Engelse website (&quot;Join the club&quot;) heeft verstuurd, met een link om meteen een wachtwoord voor Mijn BSO te kiezen.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-aanmelding-bestaand-account-en.html">Aanmelding met een bekend e-mailadres (Engels)</a></th>
           <td>Als iemand het Engelse aanmeldformulier verstuurt met een e-mailadres dat al in Mijn BSO staat.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-proefdag-bevestiging-en.html">Proefdag geboekt (Engels)</a></th>
           <td>Direct nadat een ouder op de Engelse website een proefdag heeft geboekt.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-op-de-hoogte-bevestigen-en.html">Blijf op de hoogte: aanmelding bevestigen (Engels)</a></th>
           <td>Direct nadat iemand zich op de Engelse website heeft aangemeld om op de hoogte te blijven (&quot;Stay in the loop&quot;).</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-op-de-hoogte-al-op-lijst-en.html">Blijf op de hoogte: staat al op de lijst (Engels)</a></th>
           <td>Als iemand zich op de Engelse website opnieuw aanmeldt terwijl het e-mailadres al bevestigd op de lijst staat.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-sollicitatie-ontvangen-en.html">Sollicitatie ontvangen (Engels)</a></th>
           <td>Direct nadat iemand via de Engelse pagina &quot;Become a Sporty coach&quot; heeft gesolliciteerd.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-op-de-hoogte-update-en.html">Blijf op de hoogte: update van het team (Engels)</a></th>
           <td>Als het team een update verstuurt, voor wie zich op de Engelse website aanmeldde. Onderwerp en bericht zijn dezelfde als voor iedereen; hier pas je aan wat eromheen staat.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-website-live-en.html">Binnenkort-pagina: de website is live (Engels)</a></th>
           <td>Als je de website live zet, voor wie zich op de Engelse binnenkort-pagina (&quot;Coming soon&quot;) aanmeldde.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-ondertekening-en.html">Ondertekening (Engels)</a></th>
           <td>Onder elke Engelse e-mail.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Niet verstuurd</span></td>
         </tr>
       </tbody>
     </table>
@@ -266,12 +301,13 @@
   <p class="muted">Deze tekst staat onderaan elke e-mail die Mijn BSO verstuurt.</p>
   <div class="tabel">
     <table>
-      <thead><tr><th scope="col">E-mail</th><th scope="col">Wanneer</th><th scope="col">Tekst</th></tr></thead>
+      <thead><tr><th scope="col">E-mail</th><th scope="col">Wanneer</th><th scope="col">Tekst</th><th scope="col">Laatste 30 dagen</th></tr></thead>
       <tbody>
         <tr>
           <th scope="row"><a href="beheerder-mailteksten-sleutel-ondertekening.html">Ondertekening</a></th>
           <td>Onder elke e-mail die Mijn BSO verstuurt.</td>
           <td><span class="badge">Standaard</span></td>
+          <td><span class="muted">Onder elke e-mail</span></td>
         </tr>
       </tbody>
     </table>

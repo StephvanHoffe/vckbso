@@ -26,6 +26,7 @@ const ONDERDELEN = [
     'interesse' => ['interesse.php', 'Op de hoogte', 'mail', 'Ouders die op de hoogte willen blijven (met het kennismakingspakket), en hun een update sturen'],
     'sollicitaties' => ['sollicitaties.php', 'Sollicitaties', 'briefcase', "Sollicitaties (cv en motivatie) van de website"],
     'verzoeken' => ['verzoeken.php', 'Privacyverzoeken', 'shield', 'Privacyverzoeken van ouders afhandelen'],
+    'emails' => ['mailteksten.php', 'E-mails', 'send', 'Alle e-mails die Mijn BSO verstuurt: de teksten aanpassen en zien wat er is verstuurd (en wat niet lukte)'],
     'koppelingen' => ['koppelingen.php', 'Koppelingen', 'link', 'Stripe en e-mail koppelen, met sleutels en wachtwoorden (alleen voor wie dat echt nodig heeft)'],
     'instellingen' => ['instellingen.php', 'Instellingen', 'gear', 'Instellingen, logboek en beveiligingsstatus'],
 ];

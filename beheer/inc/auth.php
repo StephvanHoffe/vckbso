@@ -268,13 +268,13 @@ function log_uit(): void
 function controleer_wachtwoord(string $wachtwoord, string $herhaling): ?string
 {
     if (mb_strlen($wachtwoord) < MIN_WACHTWOORD_LENGTE) {
-        return 'Kies een wachtwoord van minstens ' . MIN_WACHTWOORD_LENGTE . ' tekens. Een zin van een paar woorden is makkelijk te onthouden.';
+        return t('Kies een wachtwoord van minstens ' . MIN_WACHTWOORD_LENGTE . ' tekens. Een zin van een paar woorden is makkelijk te onthouden.', 'Choose a password of at least ' . MIN_WACHTWOORD_LENGTE . ' characters. A sentence of a few words is easy to remember.');
     }
     if (mb_strlen($wachtwoord) > 200) {
-        return 'Dit wachtwoord is te lang.';
+        return t('Dit wachtwoord is te lang.', 'This password is too long.');
     }
     if ($wachtwoord !== $herhaling) {
-        return 'De twee wachtwoorden zijn niet hetzelfde.';
+        return t('De twee wachtwoorden zijn niet hetzelfde.', "The two passwords don't match.");
     }
     return null;
 }

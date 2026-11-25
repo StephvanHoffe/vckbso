@@ -172,7 +172,7 @@ if (is_post()) {
             }
             if ($actie === 'mail_test') {
                 // Een technische test, geen e-mail van het platform: daarom niet onder E-mails aanpassen
-                $gelukt = stuur_mail((string) $gebruiker['email'], 'Testmail van Mijn BSO', "Hoi " . explode(' ', (string) $gebruiker['naam'])[0] . ",\n\nDit is een testmail vanaf de pagina Koppelingen in Mijn BSO. Komt hij aan? Dan werkt het versturen van e-mail.");
+                $gelukt = stuur_mail((string) $gebruiker['email'], 'Testmail van Mijn BSO', "Hoi " . explode(' ', (string) $gebruiker['naam'])[0] . ",\n\nDit is een testmail vanaf de pagina Koppelingen in Mijn BSO. Komt hij aan? Dan werkt het versturen van e-mail.", 'nl', 'test');
                 log_actie('Testmail verstuurd', 'Koppelingen, ' . mail_methode() . ($gelukt ? '' : ', mislukt'));
                 if (!$gelukt) {
                     flash('fout', ($gewijzigd ? 'De instellingen zijn opgeslagen, maar de' : 'De') . ' testmail kon niet worden verstuurd. ' . mail_laatste_fout());
@@ -386,7 +386,7 @@ pagina_kop('Koppelingen', 'Hier koppel je Mijn BSO aan andere diensten. Sleutels
 
   <section class="panel" id="email" aria-labelledby="email-titel">
     <div class="panel__kop"><h2 id="email-titel"><?= icoon('mail') ?>E-mail versturen</h2><?= $mailStatus ?></div>
-    <p class="muted">Hoe Mijn BSO e-mails verstuurt, zoals de bevestiging van een aanmelding, een nieuw wachtwoord of een melding voor het team. De teksten pas je aan onder <?= link_als('instellingen', 'mailteksten.php', 'E-mails aanpassen') ?>.</p>
+    <p class="muted">Hoe Mijn BSO e-mails verstuurt, zoals de bevestiging van een aanmelding, een nieuw wachtwoord of een melding voor het team. De teksten pas je aan en wat er is verstuurd zie je onder <?= link_als('emails', 'mailteksten.php', 'E-mails') ?>.</p>
     <form class="form koppeling__mail" method="post" action="koppelingen.php#email">
       <?= csrf_veld() ?>
       <?= $keuzes('methode', [

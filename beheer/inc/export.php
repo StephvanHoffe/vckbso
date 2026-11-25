@@ -115,6 +115,7 @@ function export_gebruiker(int $gebruikerId): array
         ], rijen('SELECT * FROM facturen WHERE ouder_id = ? ORDER BY datum', [$gebruikerId])),
         'privacyverzoeken' => rijen('SELECT soort, status, aangemaakt_op AS ingediend_op, afgehandeld_op FROM avg_verzoeken WHERE gebruiker_id = ? ORDER BY id', [$gebruikerId]),
         'logboek' => rijen("SELECT aangemaakt_op AS wanneer, soort, actie FROM logboek WHERE onderwerp = ? ORDER BY id", ['gebruiker:' . $gebruikerId]),
+        'verzonden_emails' => rijen('SELECT tijd AS wanneer, onderwerp, status FROM mail_log WHERE lower(aan) = lower(?) ORDER BY id', [$g['email']]),
     ];
 }
 

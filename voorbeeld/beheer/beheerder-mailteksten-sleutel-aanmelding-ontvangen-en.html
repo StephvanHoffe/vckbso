@@ -51,14 +51,15 @@
       <li><a href="beheerder-interesse.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>Op de hoogte <span class="teller">1<span class="visually-hidden"> wachten op hun pakket</span></span></a></li>
       <li><a href="beheerder-sollicitaties.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"></use></svg>Sollicitaties <span class="teller">1<span class="visually-hidden"> nieuw</span></span></a></li>
       <li><a href="beheerder-verzoeken.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken <span class="teller">1<span class="visually-hidden"> open</span></span></a></li>
+      <li><a href="beheerder-mailteksten.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>E-mails</a></li>
       <li><a href="beheerder-koppelingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Koppelingen</a></li>
-      <li><a href="beheerder-instellingen.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
+      <li><a href="beheerder-instellingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
     </ul>
   </nav>
 </header>
 <main id="inhoud" class="app-main">
   <p class="demo-balk"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>Demo-modus: Stripe is nog niet gekoppeld, er wordt niets echt afgeschreven. <a href="beheerder-koppelingen.html">Stripe koppelen</a></p>
-<a class="terug-link" href="beheerder-mailteksten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>Alle e-mails</a><div class="pagina-kop"><div><h1>Aanmelding ontvangen (Engels)</h1><p class="lead">Direct nadat een ouder het aanmeldformulier op de Engelse website (&quot;Join the club&quot;) heeft verstuurd.</p></div></div><div class="kolommen">
+<a class="terug-link" href="beheerder-mailteksten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-back"></use></svg>Alle e-mails</a><div class="pagina-kop"><div><h1>Aanmelding ontvangen (Engels)</h1><p class="lead">Direct nadat een ouder het aanmeldformulier op de Engelse website (&quot;Join the club&quot;) heeft verstuurd, met een link om meteen een wachtwoord voor Mijn BSO te kiezen.</p></div></div><div class="kolommen">
   <section class="panel" aria-labelledby="tekst-titel">
     <div class="panel__kop"><h2 id="tekst-titel">Tekst</h2><span class="badge">Standaardtekst</span></div>
     <form class="form" method="post" action="#">
@@ -69,7 +70,10 @@
 
 How lovely that you&#039;ve signed up {kinderen} at Sporty! We&#039;ve received your sign-up. Signing up is free and without obligation: you&#039;re not committed to anything yet.
 
-We&#039;ll look at the options and get in touch within 24 hours to meet you and complete your sign-up. After that you&#039;ll receive a link to log in to Mijn BSO, our parent portal (in Dutch).
+Create your password for Mijn BSO, our parent portal (in Dutch), straight away. That&#039;s where you&#039;ll see what happens next, and later you&#039;ll pick your child&#039;s days there yourself. Choose your password using this link (valid for a week):
+{link}
+
+We&#039;ll look at the options and get in touch within 24 hours to meet you and complete your sign-up.
 
 Can&#039;t wait? Feel free to drop by at Sportpark Middenmeer, or book a free trial day.
 
@@ -93,7 +97,13 @@ Team Sporty (and Henny: woof!)</textarea>
         <dd>Voornaam van de ouder<br><span class="muted">Bijvoorbeeld: Sam</span></dd>
         <dt><code>{kinderen}</code></dt>
         <dd>Voornamen van de aangemelde kinderen<br><span class="muted">Bijvoorbeeld: Noor and Daan</span></dd>
+        <dt><code>{link}</code> *</dt>
+        <dd>Link om meteen een wachtwoord voor Mijn BSO te kiezen (een week geldig)<br><span class="muted">Bijvoorbeeld: https://…/wachtwoord-instellen.php?…</span></dd>
       </dl>
+    </section>
+    <section class="panel" aria-labelledby="laatst-titel">
+      <div class="panel__kop"><h2 id="laatst-titel">Laatst verstuurd</h2></div>
+      <p class="leeg">Deze e-mail is de laatste 3 maanden niet verstuurd.</p>
     </section>
     <p class="note"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg><span>Zet in e-mails geen gevoelige gegevens over kinderen, zoals allergieën of gezondheid. Een e-mail kan in verkeerde handen komen; zulke informatie staat veilig in Mijn BSO.</span></p>
   </div>

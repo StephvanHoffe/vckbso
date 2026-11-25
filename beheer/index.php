@@ -29,7 +29,7 @@ if (is_ouder($gebruiker)) {
 <section class="panel" aria-labelledby="stappen-titel">
   <h2 id="stappen-titel">Zo gaat het verder</h2>
   <ol class="mini-steps">
-    <li><span><strong>Aanmelding ontvangen</strong> <?= status_badge('bevestigd') ?><br><span class="muted">Je account is aangemaakt.</span></span></li>
+    <li><span><strong>Aanmelding ontvangen</strong> <span class="badge badge--bevestigd">Ontvangen</span><br><span class="muted">Je account is aangemaakt.</span></span></li>
     <li><span><strong>Automatische incasso</strong> <?= status_badge($gebruiker['mandaat_status']) ?><br><?= $machtigingOk ? '<span class="muted">Geregeld, je hoeft er niets meer voor te doen.</span>' : '<a href="machtiging.php">Geef nu je machtiging af</a>' ?></span></li>
     <li><span><strong>Kennismaken</strong><?= $gebruiker['status'] === 'actief' ? ' ' . status_badge('bevestigd') : '' ?><br><span class="muted"><?= $gebruiker['status'] === 'actief' ? 'Gedaan, welkom bij Sporty!' : 'We nemen snel contact met je op voor een kennismaking. Neem dan een bewijs van gezag mee, bijvoorbeeld een uittreksel uit het gezagsregister.' ?></span></span></li>
     <li><span><strong>Dagen kiezen</strong><br><span class="muted">Daarna kies je in de <a href="agenda.php">agenda</a> zelf de dagen.</span></span></li>
@@ -127,6 +127,7 @@ pagina_begin('Vandaag', 'index.php');
 pagina_kop("Hoi {$voornaam}!", 'Vandaag is het ' . e(datum_nl($datum, 'EEEE d MMMM')) . '.',
     (team_mag('agenda', $gebruiker) ? '<a class="btn btn--secondary btn--small" href="agenda.php">' . icoon('calendar') . 'Weekoverzicht</a>' : '')
     . (team_mag('fotos', $gebruiker) ? '<a class="btn btn--small" href="fotos.php">' . icoon('camera') . "Foto's delen</a>" : ''));
+echo mail_waarschuwing_html($gebruiker);
 ?>
 <ul class="tegels">
   <li><<?= team_mag('agenda', $gebruiker) ? 'a class="tegel" href="agenda.php?datum=' . e($datum) . '"' : 'span class="tegel"' ?> style="--tegel-bg: var(--color-mint-soft)"><span class="tegel__getal"><?= $totaal ?></span><span class="tegel__label">kinderen vandaag</span></<?= team_mag('agenda', $gebruiker) ? 'a' : 'span' ?>></li>

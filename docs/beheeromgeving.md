@@ -21,7 +21,7 @@ De beheeromgeving is een eigen webapplicatie naast de statische website. Ouders 
 | Blijf op de hoogte, met een kennismakingspakket (november 2026) | `op-de-hoogte.php` (formulier op `blijf-op-de-hoogte.html` en de pop-up op de website), `interesse.php` (menu "Op de hoogte") | Ouders laten hun naam, e-mail, huisadres en eventueel telefoonnummer en de naam van hun kind achter (sinds feedback 2.0 ook via een pop-up na 10 seconden; kind en adres versleuteld, migratie 22; het adres wordt 30 dagen na het versturen van het pakket gewist; de lijst laat zien of iemand via de pagina of de pop-up kwam) en bevestigen dat met de link in een e-mail (dubbele bevestiging: zo kan niemand een ander aanmelden). Pas dan staan ze op de lijst en krijgt het team een e-mail. Het team vinkt aan wie het kennismakingspakket heeft gekregen (het tellertje in het menu laat zien hoeveel er nog wachten), stuurt iedereen een update (elk een eigen e-mail met een persoonlijke afmeldlink) en kan de lijst als CSV downloaden. Afmelden wist de gegevens meteen; niet bevestigd na 14 dagen weg, verder na de bewaartermijn (standaard 24 maanden). Links in e-mails openen eerst een pagina met een knop, zodat een virusscanner die links vooraf opent niets bevestigt of afmeldt. |
 | Binnenkort-pagina en livegang (coming soon, november 2026) | `inc/binnenkort.php`, `interesse.php` (bovenaan bij "Op de hoogte"), `voorproef.php`, `cli/onderhoud.php` | Zolang `binnenkort.aan` in de webmap staat, zien bezoekers alleen `binnenkort.html` (en `en/coming-soon.html`), met hetzelfde formulier als Blijf op de hoogte (bron "binnenkort", migratie 24). **Website live zetten** (recht Instellingen) haalt het bestand weg en mailt automatisch iedereen die zich daar aanmeldde en dat bevestigde (mailtekst "Binnenkort-pagina: de website is live", NL en EN). Wie later bevestigt, krijgt de mail meteen; mislukte mails stuurt het dagelijkse onderhoud opnieuw; niemand krijgt hem twee keer. "Bekijk de echte website alvast" zet een cookie zodat het team de site vooraf ziet. Terug naar de binnenkort-pagina kan ook. Zie `docs/live-zetten-vimexx.md`. |
 | Koppelingen beheren (november 2026) | `koppelingen.php` (Koppelingen) | Stripe (sleutels, betaalmethoden, of de webhook binnenkomt) en het versturen van e-mail (eigen mailserver via SMTP, de mailfunctie van de server of testmodus) instellen in Mijn BSO, met een testknop. Sleutels en wachtwoorden worden versleuteld opgeslagen. Zie [Koppelingen](#koppelingen). |
-| Alle e-mails zelf aanpassen (november 2026) | `mailteksten.php` (Instellingen → E-mails aanpassen), standaardteksten in `inc/mailteksten.php` | Zie [E-mails aanpassen](#e-mails-aanpassen). |
+| Alle e-mails zelf aanpassen en zien wat er is verstuurd (november 2026) | `mailteksten.php` en `verzonden-emails.php` (E-mails), standaardteksten in `inc/mailteksten.php` | Zie [E-mails](#e-mails-aanpassen). |
 | Collega's aanmaken en per persoon rechten geven | `medewerkers.php` (Team) | Per collega staat elk menuonderdeel aan of uit, plus de groepen en twee extra rechten. Zie [Rechten per persoon](#rechten-per-persoon). |
 
 ## De verplichte eisen en hoe ze zijn ingevuld
@@ -60,6 +60,7 @@ Onder **Team** zet je per collega elk menuonderdeel aan of uit. Een onderdeel da
 | Proefdagen | Momenten klaarzetten voor een gratis proefdag en de boekingen van ouders |
 | Sollicitaties | Sollicitaties (cv en motivatie) van de website (Word Sporty coach) |
 | Privacyverzoeken | Privacyverzoeken van ouders afhandelen |
+| E-mails | De teksten van alle e-mails aanpassen, en zien wat er is verstuurd (en wat niet lukte) |
 | Koppelingen | Stripe en e-mail koppelen, met sleutels en wachtwoorden. Geef dit alleen aan wie het echt nodig heeft. |
 | Instellingen | Instellingen, logboek en beveiligingsstatus |
 
@@ -99,8 +100,8 @@ Ouders melden hun kind vrijblijvend aan op de pagina **Kom bij de club** (`aanme
 6. **Partner:** ja of nee, en zo ja naam en contactgegevens.
 7. **Controleren** met een overzicht en een potloodje per blok, drie vinkjes en de knop "Verstuur vrijblijvend".
 
-- **Wat er gebeurt:** `aanvraag.php` controleert alles opnieuw en maakt een ouder met status "nieuw" (zonder wachtwoord) met de kinderen eronder. Gegevens die alleen in het formulier staan (voorletters, geslacht, groep, startdatum en dagen per kind, partner, hoe gevonden) staan versleuteld in de kolom `aanvraag` en zijn te zien bij de ouder onder "Gegevens uit het aanmeldformulier". Allergieën komen in de bijzonderheden van het kind. De ouder krijgt een bevestiging per e-mail (voorlopige tekst, TODO), het team een melding zonder persoonsgegevens.
-- **Afronden:** na de kennismaking controleert het team het gezag, zet de kinderen in een groep en activeert het account. De ouder krijgt dan een link om een wachtwoord te kiezen (een week geldig); daarna vraagt Mijn BSO om de machtiging voor automatische incasso. De partner nodig je eventueel uit als verzorger in het dossier van het kind.
+- **Wat er gebeurt:** `aanvraag.php` controleert alles opnieuw en maakt een ouder met status "nieuw" (zonder wachtwoord) met de kinderen eronder. Gegevens die alleen in het formulier staan (voorletters, geslacht, groep, startdatum en dagen per kind, partner, hoe gevonden) staan versleuteld in de kolom `aanvraag` en zijn te zien bij de ouder onder "Gegevens uit het aanmeldformulier". Allergieën komen in de bijzonderheden van het kind. De ouder krijgt meteen een bevestiging per e-mail (voorlopige tekst, TODO) met een link om direct een wachtwoord voor Mijn BSO te kiezen (een week geldig; bij een Engelse aanmelding is de wachtwoordpagina Engels), het team een melding zonder persoonsgegevens. Via die link is ook het e-mailadres bevestigd. Een ouder met status "nieuw" kan inloggen en ziet "Zo gaat het verder" (en kan de machtiging al geven), maar kiest pas dagen als het team het account heeft geactiveerd. Een wachtwoordveld in het formulier zelf zit er bewust niet in: dan kan iemand een account maken op andermans e-mailadres, en een tikfout in het adres maakt het account onbereikbaar.
+- **Afronden:** na de kennismaking controleert het team het gezag, zet de kinderen in een groep en activeert het account. Heeft de ouder nog geen wachtwoord, dan krijgt die opnieuw een link (een week geldig), anders een welkomstmail; daarna vraagt Mijn BSO om de machtiging voor automatische incasso. De partner nodig je eventueel uit als verzorger in het dossier van het kind.
 - **Onthouden:** wat een ouder invult, bewaart de browser op dat apparaat (localStorage), zodat de ouder later verder kan. Na het versturen wordt het gewist.
 - **Meten:** per stap telt `aanvraag.php` anoniem hoe vaak die is bereikt (zonder cookies of persoonsgegevens). Bij Ouders → Nieuwe aanmeldingen staat het overzicht van de afgelopen 30 dagen. De tellingen blijven een jaar.
 - **Zonder JavaScript** is het één lang formulier dat gewoon verstuurd kan worden. `aanmelden.php` (de oude aanmeldpagina) stuurt door naar het nieuwe formulier.
@@ -118,13 +119,29 @@ Op de pagina **Proefdag** (`proefdag.html`) kiezen ouders zelf een moment voor e
 
 ## E-mails aanpassen
 
-Onder **Instellingen → E-mails aanpassen** (recht Instellingen) staan alle 33 e-mails die Mijn BSO verstuurt: 13 aan ouders, sollicitanten en andere bezoekers, 11 aan het team (meldingen en uitnodigingen voor collega's), de ondertekening onder elke e-mail en 8 Engelse versies (zie [De Engelse website](#de-engelse-website)). Per e-mail zie je wanneer hij gaat.
+Onder **E-mails** (een eigen onderdeel in het menu, recht E-mails; wie het recht Instellingen had, kreeg het erbij) staan alle 33 e-mails die Mijn BSO verstuurt: 13 aan ouders, sollicitanten en andere bezoekers, 11 aan het team (meldingen en uitnodigingen voor collega's), de ondertekening onder elke e-mail en 8 Engelse versies (zie [De Engelse website](#de-engelse-website)). Per e-mail zie je wanneer hij gaat.
 
 - **Aanpassen:** onderwerp en tekst, als gewone tekst zonder opmaak. Invulvelden tussen accolades, zoals `{voornaam}` of `{link}`, vult Mijn BSO bij het versturen in. Per e-mail staat welke velden er zijn, met een voorbeeld.
 - **Controle bij opslaan:** een invulveld dat niet bestaat (een tikfout als `{vornaam}`) wordt geweigerd, en verplichte velden, zoals de link om een wachtwoord te kiezen of de afmeldlink, moeten blijven staan.
 - **Voorbeeld en testmail:** "Voorbeeld bekijken" toont de e-mail met voorbeeldgegevens; "Testmail naar mij" stuurt hem naar je eigen adres. Beide zonder op te slaan.
 - **Terug naar de standaard:** met één klik, en het overzicht laat zien welke e-mails zijn aangepast (met datum). Elke wijziging staat in het logboek.
+- **Verplichte link in een oude tekst:** ontbreekt een verplicht veld in een tekst die eerder is aangepast (zoals `{link}` in de aanmeldmail, verplicht sinds november 2026), dan zet Mijn BSO de waarde er onderaan bij. Bij de volgende keer opslaan vraagt de controle om het veld zelf in de tekst te zetten.
 - **Techniek:** de standaardteksten staan in `beheer/inc/mailteksten.php` (`MAILTEKSTEN`), een aangepaste tekst in de tabel `mail_teksten` (migratie 14). Verstuur een e-mail altijd met `stuur_mailtekst()` of `mail_team_tekst()`; `npm test` controleert dat er geen e-mail buiten deze lijst om gaat en dat de standaardteksten kloppen.
+
+### Verzonden e-mails
+
+Onder **E-mails → Verzonden e-mails** (`verzonden-emails.php`) staat elke e-mail die Mijn BSO verstuurt: wanneer, aan wie, welke e-mail (met een link naar de tekst) en de uitkomst. Filter op uitkomst, zoek op adres of onderwerp, of klik op een adres voor alle e-mails aan dat adres. In het overzicht van de e-mails staat per e-mail hoe vaak hij de afgelopen 30 dagen ging, en bij elke e-mail de laatste vijf keer.
+
+| Uitkomst | Betekenis |
+|---|---|
+| Verstuurd | De mailserver heeft de e-mail aangenomen. Komt hij niet aan, dan staat hij vaak bij de ongewenste e-mail. |
+| Mislukt | Niet verstuurd, met de reden van de mailserver (bijvoorbeeld een verkeerd wachtwoord, of een servernaam die niet bij het certificaat past). |
+| Testmodus | Koppelingen → E-mail versturen staat op Testmodus: er gaat niets de deur uit, de e-mail staat alleen in `data/mail.log`. |
+| Overgeslagen | Bewust niet verstuurd: er gingen binnen een kwartier al 3 e-mails naar hetzelfde adres (de grens tegen misbruik van de formulieren, `te_veel_mails_naar()`). Een aanmelding wordt dan wel bewaard, een proefdag en Blijf op de hoogte niet. |
+
+- **Waarschuwing:** staat e-mail in testmodus, of mislukte er het afgelopen etmaal een e-mail zonder dat er daarna een lukte, dan staat er een waarschuwing op Vandaag en bij E-mails (voor wie het recht E-mails of Koppelingen heeft).
+- **Privacy:** de inhoud wordt niet bewaard (daar staan links in om een wachtwoord te kiezen); de tekst zie je bij de e-mail zelf. Bewaartermijn: zie [Bewaartermijnen](#bewaartermijnen). Bij het wissen van een ouder verdwijnen ook de verzonden e-mails aan dat adres, en een inzageverzoek bevat ze.
+- **Techniek:** tabel `mail_log` (migratie 26), vastgelegd in `stuur_mail()` (`inc/mail.php`); `mail_overgeslagen()` voor bewust overgeslagen e-mails, `mail_waarschuwing()` voor de waarschuwing.
 
 ## De Engelse website
 
@@ -132,7 +149,7 @@ Sinds november 2026 staat de hele website ook in het Engels (`/en/`, zie [`docs/
 
 - **Welke formulieren:** Kom bij de club (`aanvraag.php`), proefdag (`proefdag.php`), Blijf op de hoogte (`op-de-hoogte.php`, ook de pagina's om te bevestigen en af te melden) en solliciteren (`solliciteren.php`). De Engelse formulieren sturen `taal=en` mee.
 - **Wat er Engels is:** foutmeldingen, de pagina na versturen en de bevestigingsmail, met een Engelse ondertekening en een link naar de Engelse site. Updates aan de lijst Op de hoogte gaan naar Engelse inschrijvers met de Engelse ondertekening en afmeldpagina; de tekst van de update zelf schrijf je één keer (Interesse toont hoeveel inschrijvers Engels zijn). Meldingen aan het team blijven Nederlands.
-- **Engelse e-mails aanpassen:** onder Instellingen → E-mails aanpassen, groep "In het Engels". Pas je een Nederlandse tekst aan, pas dan de Engelse ook aan.
+- **Engelse e-mails aanpassen:** onder E-mails, groep "In het Engels". Pas je een Nederlandse tekst aan, pas dan de Engelse ook aan.
 - **Waar je het ziet:** bij de ouder ("Aangemeld via de Engelse website"), bij proefdagen, sollicitaties en Op de hoogte (label "Engels").
 - **Techniek:** `taal()`, `t()` en `website_pagina()` in `beheer/inc/helpers.php`; de taal staat bij de aanvraag (versleuteld, in `aanvraag`) en in de kolom `taal` van `interesse`, `proefdag_boekingen` en `sollicitaties` (migratie 20). De Engelse mailteksten hebben dezelfde sleutel met `_en` erachter; `stuur_mailtekst()` kiest ze vanzelf. `npm test` controleert dat elke Engelse e-mail dezelfde invulvelden heeft als de Nederlandse.
 
@@ -221,6 +238,7 @@ De beheerder stelt de termijnen in onder **Instellingen → Bewaartermijnen**. D
 | Account en contactgegevens van gestopte klanten | 3 maanden na vertrek | Gewist; naam en adres blijven bij de facturen |
 | Financiële administratie (facturen, betalingen, opvangdagen, boekingen en bonnetjes onder Financiën) | 7 jaar | Verwijderd. Korter dan 7 jaar kan niet (fiscale bewaarplicht) |
 | Logboek | 24 maanden | Verwijderd |
+| Verzonden e-mails (wanneer, aan wie, welke e-mail, uitkomst; zonder inhoud) | 3 maanden | Verwijderd |
 | Sollicitaties (gegevens, cv en motivatie) | 4 weken na afronden (geen plek of aangenomen); met toestemming van de sollicitant een jaar na binnenkomst; nog niet afgerond: na 3 maanden (met toestemming na een jaar) | Verwijderd, ook het cv. Vaste termijnen, zoals in de privacyverklaring |
 | Proefdagen (boekingen) | 4 weken na de proefdag | Verwijderd. Vaste termijn, zoals in de privacyverklaring |
 | Exports voor een inzageverzoek | 30 dagen | Verwijderd |
@@ -228,7 +246,7 @@ De beheerder stelt de termijnen in onder **Instellingen → Bewaartermijnen**. D
 
 Het bewaarbeleid draait dagelijks via cron (`php beheer/cli/onderhoud.php`). Zonder cron draait het vanzelf bij het eerste bezoek van de dag.
 
-Om per ongeluk (of kwaadwillig) massaal wissen te voorkomen, heeft elke termijn een minimum: 1 maand, het logboek 12 maanden en de financiële administratie 7 jaar. Een termijn korter maken vraagt om je eigen wachtwoord en komt in het logboek.
+Om per ongeluk (of kwaadwillig) massaal wissen te voorkomen, heeft elke termijn een minimum: 1 maand (ook de verzonden e-mails), het logboek 12 maanden en de financiële administratie 7 jaar. Een termijn korter maken vraagt om je eigen wachtwoord en komt in het logboek.
 
 ## Logboek
 
@@ -262,7 +280,7 @@ Na de back-up stuurt `backup.php` het versleutelde bestand naar objectopslag bij
 - **Niet te wissen:** zet bij de aanbieder object lock aan (modus "compliance", standaard 30 dagen). Dan kan niemand een back-up eerder verwijderen of overschrijven, ook iemand met de sleutel van de server niet.
 - **Toch op tijd weg:** laat de aanbieder bestanden na 31 dagen automatisch verwijderen. Zo verdwijnen gewiste gegevens ook daar, net als op de server.
 - **Een sleutel die alleen mag uploaden:** geef Mijn BSO geen sleutel waarmee hij kan lezen of wissen.
-- **Mislukt het?** Dan krijgt het team een e-mail (tekst aan te passen onder E-mails aanpassen), staat de fout onder Koppelingen en in de Beveiligingsstatus, en stopt `backup.php` met code 2, zodat ook cron een melding geeft.
+- **Mislukt het?** Dan krijgt het team een e-mail (tekst aan te passen onder E-mails), staat de fout onder Koppelingen en in de Beveiligingsstatus, en stopt `backup.php` met code 2, zodat ook cron een melding geeft.
 - Techniek: `beheer/inc/externe_backup.php`, S3 met AWS Signature Version 4, zonder extra software.
 
 ## Meerdere organisaties

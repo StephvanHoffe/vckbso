@@ -662,6 +662,26 @@ function migreer(PDO $pdo): void
         // melding dat de naam niet helemaal klopt. Het IBAN zelf staat bewust niet in de code: Sporty vult het in
         // bij Instellingen, dan staat het alleen in de database van Mijn BSO.
         25 => "INSERT OR IGNORE INTO instellingen (sleutel, waarde) VALUES ('iban_naam', 'BSO Sporty');",
+
+        // Verzonden e-mails (november 2026): per e-mail wanneer, aan wie, welke e-mail, en of hij is verstuurd,
+        // mislukt (met de foutmelding), alleen in testmodus stond, of is overgeslagen. Geen inhoud: daar staan
+        // links in om een wachtwoord te kiezen. E-mails is een eigen onderdeel in het menu (teksten en verzonden).
+        26 => <<<'SQL'
+            CREATE TABLE mail_log (
+                id INTEGER PRIMARY KEY,
+                tijd TEXT NOT NULL,
+                aan TEXT NOT NULL,
+                onderwerp TEXT NOT NULL DEFAULT '',
+                sleutel TEXT NOT NULL DEFAULT '',
+                methode TEXT NOT NULL DEFAULT '',
+                status TEXT NOT NULL,
+                fout TEXT NOT NULL DEFAULT ''
+            );
+            CREATE INDEX mail_log_tijd ON mail_log(tijd);
+            CREATE INDEX mail_log_aan ON mail_log(aan);
+            INSERT OR IGNORE INTO instellingen (sleutel, waarde) VALUES ('bewaar_maillog_maanden', '3');
+            INSERT OR IGNORE INTO team_rechten (gebruiker_id, recht) SELECT gebruiker_id, 'emails' FROM team_rechten WHERE recht = 'instellingen';
+            SQL,
     ];
 
     $versie = (int) $pdo->query('PRAGMA user_version')->fetchColumn();

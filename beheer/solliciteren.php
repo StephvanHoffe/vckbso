@@ -152,6 +152,8 @@ if (!te_veel_mails_naar($waarden['email'])) {
             ? t('Je gaf ons toestemming om je sollicitatie een jaar te bewaren, voor als er later een plek vrijkomt. Wil je dat niet meer? Stuur ons dan even een mailtje.', "You gave us permission to keep your application for a year, in case a place opens up later. Changed your mind? Just send us an email.")
             : t('Is er geen plek voor je, dan verwijderen we je gegevens uiterlijk 4 weken nadat we je dat hebben laten weten.', "If there's no place for you, we'll delete your details no later than 4 weeks after letting you know."),
     ]);
+} else {
+    mail_overgeslagen($waarden['email'], mailtekst_in_taal('sollicitatie_ontvangen'), MAIL_REDEN_TE_VEEL);
 }
 
 sollicitatie_antwoord($alsJson, 200);

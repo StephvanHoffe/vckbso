@@ -120,6 +120,31 @@ foreach ([1 => 42, 2 => 31, 3 => 29, 4 => 27, 5 => 22, 6 => 19, 7 => 17, 8 => 14
     q('INSERT INTO aanvraag_stappen (datum, stap, aantal) VALUES (?, ?, ?)', [date('Y-m-d', strtotime('-3 days')), $stap, $aantal]);
 }
 
+// Verzonden e-mails: de demo doet alsof e-mail via de eigen mailserver gaat, met een paar verstuurde e-mails,
+// één die mislukte (daarna ging het weer goed) en één die is overgeslagen
+koppeling_zet('mail.methode', 'smtp', $beheerder);
+koppeling_zet('smtp.host', 'web0097.zxcs.nl', $beheerder);
+koppeling_zet('smtp.gebruiker', 'info@bsosporty.nl', $beheerder);
+koppeling_zet('smtp.wachtwoord', 'demo-wachtwoord', $beheerder);
+q('DELETE FROM mail_log');
+foreach ([
+    [2880, 'oma.joke@demo.bsosporty.nl', 'wachtwoord_vergeten', 'mislukt', 'De mailserver weigerde het inloggen: 535 5.7.8 Error: authentication failed'],
+    [2870, 'oma.joke@demo.bsosporty.nl', 'wachtwoord_vergeten', 'verstuurd', ''],
+    [1500, 'interesse1@demo.bsosporty.nl', 'op_de_hoogte_bevestigen', 'verstuurd', ''],
+    [1490, 'info@bsosporty.nl', 'team_op_de_hoogte', 'verstuurd', ''],
+    [1200, 'interesse3@demo.bsosporty.nl', 'op_de_hoogte_bevestigen', 'overgeslagen', MAIL_REDEN_TE_VEEL . ' De aanmelding voor Blijf op de hoogte is niet opgeslagen.'],
+    [180, 'proefdag@demo.bsosporty.nl', 'proefdag_bevestiging', 'verstuurd', ''],
+    [179, 'info@bsosporty.nl', 'team_proefdag', 'verstuurd', ''],
+    [60, 'sam.de.jong@demo.bsosporty.nl', 'nieuw_bericht', 'verstuurd', ''],
+    [6, 'lisa.bos@demo.bsosporty.nl', 'aanmelding_ontvangen', 'verstuurd', ''],
+    [6, 'info@bsosporty.nl', 'team_aanmelding', 'verstuurd', ''],
+] as [$minuten, $aan, $sleutel, $status, $fout]) {
+    q("INSERT INTO mail_log (tijd, aan, onderwerp, sleutel, methode, status, fout) VALUES (?, ?, ?, ?, 'smtp', ?, ?)", [
+        date('Y-m-d H:i:s', time() - $minuten * 60), $aan, str_replace(['{bedrijfsnaam}', '{naam}'], ['Sporty', 'Lisa Bos'], (string) MAILTEKSTEN[$sleutel]['onderwerp']), $sleutel, $status, $fout,
+    ]);
+}
+instelling_zet('mail_laatst_verstuurd', date('Y-m-d H:i:s', time() - 360));
+
 // Facturen van vorige maand; de meeste betaald
 [$aantal] = maak_facturen(date('Y-m', strtotime('first day of last month')));
 q("UPDATE facturen SET status = 'betaald', betaald_op = ? WHERE id IN (SELECT id FROM facturen ORDER BY id LIMIT 3)", [nu()]);

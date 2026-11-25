@@ -51,6 +51,7 @@
       <li><a href="beheerder-interesse.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>Op de hoogte <span class="teller">1<span class="visually-hidden"> wachten op hun pakket</span></span></a></li>
       <li><a href="beheerder-sollicitaties.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"></use></svg>Sollicitaties <span class="teller">1<span class="visually-hidden"> nieuw</span></span></a></li>
       <li><a href="beheerder-verzoeken.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken <span class="teller">1<span class="visually-hidden"> open</span></span></a></li>
+      <li><a href="beheerder-mailteksten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>E-mails</a></li>
       <li><a href="beheerder-koppelingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Koppelingen</a></li>
       <li><a href="beheerder-instellingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
     </ul>
@@ -63,7 +64,7 @@
     <section class="panel" aria-labelledby="gegevens-titel">
       <h2 id="gegevens-titel">Gegevens</h2>
       <dl class="gegevens">
-        <dt>Geboortedatum</dt><dd>15 oktober 2015</dd>
+        <dt>Geboortedatum</dt><dd>16 oktober 2015</dd>
         <dt>School</dt><dd>-</dd>
         <dt>Bijzonderheden</dt><dd>Geen</dd>
         <dt>Mag opgehaald worden door</dt><dd>Alleen de ouders</dd>
@@ -80,7 +81,7 @@
             <div class="field"><label for="achternaam">Achternaam</label><input id="achternaam" name="achternaam" value="Mulder"></div>
           </div>
           <div class="form__row">
-            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2015-10-15"></div>
+            <div class="field"><label for="geboortedatum">Geboortedatum</label><input id="geboortedatum" name="geboortedatum" type="date" required value="2015-10-16"></div>
             <div class="field"><label for="groep">Groep</label><select id="groep" name="groep"><option value="">Nog geen groep</option><option value="1">De Bengels</option><option value="2" selected>De Kanjers</option></select></div>
           </div>
           <div class="field"><label for="school">Basisschool</label><input id="school" name="school" value=""></div>
@@ -134,7 +135,7 @@
             <div class="kindrij__naam">Kees Mulder <span class="badge">Ouder</span> <span class="badge">Contracthouder</span>              <span class="badge badge--geldig">Gezag gecontroleerd</span></div>
             <div class="kindrij__info">
               <span>Rechten: dagen kiezen en afmelden, gegevens en gedeelde observaties inzien, foto&#039;s ontvangen, berichten over het kind</span>
-<span>Vastgelegd op 24 november 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
+<span>Vastgelegd op 25 november 2026 via uittreksel gezagsregister door Demo Beheerder</span>            </div>
           </div>
           <details class="uitklap">
             <summary>Gezag en rechten van Kees Mulder</summary>
@@ -205,7 +206,7 @@
         <form class="form" method="post" action="#">
           <input type="hidden" name="csrf" value="voorbeeld">          <input type="hidden" name="actie" value="observatie">
           <div class="form__row">
-            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-11-24" required value="2026-11-24"></div>
+            <div class="field"><label for="obs_datum">Datum</label><input id="obs_datum" name="datum" type="date" max="2026-11-25" required value="2026-11-25"></div>
             <div class="field"><label for="obs_gebied">Ontwikkelgebied</label><select id="obs_gebied" name="gebied">
               <option value="sociaal">Sociaal-emotioneel</option>
               <option value="motoriek">Sport en bewegen</option>
@@ -228,12 +229,12 @@
     <section class="panel" aria-labelledby="komend-titel">
       <h2 id="komend-titel">Binnenkort</h2>
       <ul class="kindlijst">
-        <li class="kindrij"><span>Dinsdag 24 november</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Donderdag 26 november</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Dinsdag 1 december</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Donderdag 3 december</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Dinsdag 8 december</span><span class="badge badge--bevestigd">Komt</span></li>
         <li class="kindrij"><span>Donderdag 10 december</span><span class="badge badge--bevestigd">Komt</span></li>
+        <li class="kindrij"><span>Dinsdag 15 december</span><span class="badge badge--bevestigd">Komt</span></li>
       </ul>
     </section>
     <section class="panel" aria-labelledby="geweest-titel">
@@ -242,6 +243,7 @@
         <table>
           <thead><tr><th scope="col">Dag</th><th scope="col">Status</th><th scope="col">Binnen</th><th scope="col">Opgehaald</th></tr></thead>
           <tbody>
+            <tr><td>di 24 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>do 19 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>di 17 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>do 12 nov</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
@@ -251,7 +253,6 @@
             <tr><td>do 29 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>di 27 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
             <tr><td>do 22 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
-            <tr><td>di 20 okt</td><td><span class="badge badge--bevestigd">Komt</span></td><td></td><td></td></tr>
           </tbody>
         </table>
       </div>

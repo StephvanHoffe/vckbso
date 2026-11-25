@@ -51,6 +51,7 @@
       <li><a href="beheerder-interesse.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>Op de hoogte <span class="teller">1<span class="visually-hidden"> wachten op hun pakket</span></span></a></li>
       <li><a href="beheerder-sollicitaties.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"></use></svg>Sollicitaties <span class="teller">1<span class="visually-hidden"> nieuw</span></span></a></li>
       <li><a href="beheerder-verzoeken.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken <span class="teller">1<span class="visually-hidden"> open</span></span></a></li>
+      <li><a href="beheerder-mailteksten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>E-mails</a></li>
       <li><a href="beheerder-koppelingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Koppelingen</a></li>
       <li><a href="beheerder-instellingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
     </ul>
@@ -157,6 +158,11 @@
             <span class="schakel__uitleg" id="p2-verzoeken-uitleg">Privacyverzoeken van ouders afhandelen</span>
           </li>
           <li class="schakel">
+            <input type="checkbox" id="p2-emails" name="rechten[]" value="emails" data-begeleider="0" aria-describedby="p2-emails-uitleg">
+            <label for="p2-emails"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>E-mails</label>
+            <span class="schakel__uitleg" id="p2-emails-uitleg">Alle e-mails die Mijn BSO verstuurt: de teksten aanpassen en zien wat er is verstuurd (en wat niet lukte)</span>
+          </li>
+          <li class="schakel">
             <input type="checkbox" id="p2-koppelingen" name="rechten[]" value="koppelingen" data-begeleider="0" aria-describedby="p2-koppelingen-uitleg">
             <label for="p2-koppelingen"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Koppelingen</label>
             <span class="schakel__uitleg" id="p2-koppelingen-uitleg">Stripe en e-mail koppelen, met sleutels en wachtwoorden (alleen voor wie dat echt nodig heeft)</span>
@@ -211,7 +217,7 @@
           <span class="badge">Beheerder: alles</span>
         </div>
       </div>
-      <p class="collega__onderdelen">Vandaag · Agenda · Kinderen · Ouders · Berichten · Foto&#039;s · Groepen · Facturen · Financiën · Team · Proefdagen · Op de hoogte · Sollicitaties · Privacyverzoeken · Koppelingen · Instellingen · alle groepen</p>
+      <p class="collega__onderdelen">Vandaag · Agenda · Kinderen · Ouders · Berichten · Foto&#039;s · Groepen · Facturen · Financiën · Team · Proefdagen · Op de hoogte · Sollicitaties · Privacyverzoeken · E-mails · Koppelingen · Instellingen · alle groepen</p>
       <details class="uitklap">
         <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-key"></use></svg>Rechten en groepen<span class="visually-hidden"> van Demo Beheerder</span></summary>
         <form class="form" method="post" action="#" data-rechten-form>
@@ -294,6 +300,11 @@
             <input type="checkbox" id="p1-verzoeken" name="rechten[]" value="verzoeken" checked data-begeleider="0" aria-describedby="p1-verzoeken-uitleg">
             <label for="p1-verzoeken"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken</label>
             <span class="schakel__uitleg" id="p1-verzoeken-uitleg">Privacyverzoeken van ouders afhandelen</span>
+          </li>
+          <li class="schakel">
+            <input type="checkbox" id="p1-emails" name="rechten[]" value="emails" checked data-begeleider="0" aria-describedby="p1-emails-uitleg">
+            <label for="p1-emails"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>E-mails</label>
+            <span class="schakel__uitleg" id="p1-emails-uitleg">Alle e-mails die Mijn BSO verstuurt: de teksten aanpassen en zien wat er is verstuurd (en wat niet lukte)</span>
           </li>
           <li class="schakel">
             <input type="checkbox" id="p1-koppelingen" name="rechten[]" value="koppelingen" checked data-begeleider="0" aria-describedby="p1-koppelingen-uitleg">
@@ -420,6 +431,11 @@
             <input type="checkbox" id="nieuw-verzoeken" name="rechten[]" value="verzoeken" data-begeleider="0" aria-describedby="nieuw-verzoeken-uitleg">
             <label for="nieuw-verzoeken"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken</label>
             <span class="schakel__uitleg" id="nieuw-verzoeken-uitleg">Privacyverzoeken van ouders afhandelen</span>
+          </li>
+          <li class="schakel">
+            <input type="checkbox" id="nieuw-emails" name="rechten[]" value="emails" data-begeleider="0" aria-describedby="nieuw-emails-uitleg">
+            <label for="nieuw-emails"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>E-mails</label>
+            <span class="schakel__uitleg" id="nieuw-emails-uitleg">Alle e-mails die Mijn BSO verstuurt: de teksten aanpassen en zien wat er is verstuurd (en wat niet lukte)</span>
           </li>
           <li class="schakel">
             <input type="checkbox" id="nieuw-koppelingen" name="rechten[]" value="koppelingen" data-begeleider="0" aria-describedby="nieuw-koppelingen-uitleg">

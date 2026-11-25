@@ -5,7 +5,7 @@ Sinds november 2026 staat de hele website ook in het Engels, onder `/en/` (op ve
 - **Welke pagina bij welke hoort:** `tools/site/talen.mjs`. De taalknop in de kop, de `hreflang`-links en de sitemap komen daaruit.
 - **Kop en voet:** `tools/site/kop.en.html` en `tools/site/voet.en.html`, ingevuld met `npm run kop-en-voet` (net als de Nederlandse).
 - **Teksten in scripts** (formulieren, rekentool, proefdagagenda): de scripts kijken naar `<html lang="en">` en kiezen dan de Engelse tekst.
-- **Formulieren:** de Engelse formulieren sturen `taal=en` mee. Mijn BSO antwoordt dan in het Engels (foutmeldingen en de pagina na versturen) en stuurt de Engelse bevestigingsmail. Die mails staan in Mijn BSO onder Instellingen → E-mails aanpassen, met "(Engels)" in de naam.
+- **Formulieren:** de Engelse formulieren sturen `taal=en` mee. Mijn BSO antwoordt dan in het Engels (foutmeldingen en de pagina na versturen) en stuurt de Engelse bevestigingsmail. Die mails staan in Mijn BSO onder E-mails, met "(Engels)" in de naam.
 - **Nieuwe of gewijzigde tekst:** pas altijd beide talen aan. `npm test` controleert dat elke pagina een Engelse tegenhanger heeft en dat de links kloppen.
 
 ## Woordenlijst

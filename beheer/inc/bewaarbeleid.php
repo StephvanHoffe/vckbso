@@ -24,6 +24,7 @@ const BEWAARTERMIJNEN = [
     'bewaar_financieel_jaren' => ['Financiële administratie: facturen, betalingen, de opvangdagen waarop ze zijn gebaseerd, en de boekingen en bonnetjes onder Financiën', 'jaar', 'fiscale bewaarplicht'],
     'bewaar_interesse_maanden' => ['Blijf op de hoogte: naam, e-mail, telefoon, naam van het kind en adres van ouders met interesse', 'maanden', 'na aanmelden (afmelden kan altijd eerder; wie de aanmelding niet bevestigt: na 14 dagen; het adres 30 dagen nadat het pakket is verstuurd)'],
     'bewaar_logboek_maanden' => ['Logboek: inzage, wijzigingen, exports en inloggen', 'maanden', ''],
+    'bewaar_maillog_maanden' => ['Verzonden e-mails: wanneer, aan wie, welke e-mail en of het lukte (zonder de inhoud)', 'maanden', 'na verzenden'],
 ];
 
 /** Ondergrens per termijn: zo kan niemand met één instelling alle foto's, berichten of het logboek laten wissen. */
@@ -37,6 +38,7 @@ const BEWAAR_MINIMUM = [
     'bewaar_financieel_jaren' => 7,
     'bewaar_interesse_maanden' => 1,
     'bewaar_logboek_maanden' => 12,
+    'bewaar_maillog_maanden' => 1,
 ];
 
 function bewaartermijn(string $sleutel): int
@@ -138,6 +140,9 @@ function voer_bewaarbeleid_uit(): array
     // 9. Logboek
     $telling['logboek'] = q('DELETE FROM logboek WHERE aangemaakt_op < ?', [grens(bewaartermijn('bewaar_logboek_maanden'))])->rowCount();
 
+    // 9b. Verzonden e-mails
+    $telling['verzonden_emails'] = q('DELETE FROM mail_log WHERE tijd < ?', [grens(bewaartermijn('bewaar_maillog_maanden'))])->rowCount();
+
     // 10. Kortlevende gegevens: links, inlogpogingen, exports, e-maillog
     q('DELETE FROM tokens WHERE verloopt_op < ? OR gebruikt = 1', [nu()]);
     q('DELETE FROM inlogpogingen WHERE tijd < ?', [date('Y-m-d H:i:s', time() - 86400)]);
@@ -228,6 +233,7 @@ function wis_oudergegevens(array $ouder, string $reden = 'handmatig', bool $regi
         wis_kinddossier((int) $kind['id'], $reden, $registreer);
     }
     transactie(function () use ($ouder) {
+        q('DELETE FROM mail_log WHERE lower(aan) = lower(?)', [$ouder['email']]);
         q('DELETE FROM kind_verzorgers WHERE gebruiker_id = ?', [$ouder['id']]);
         q('DELETE FROM berichten WHERE ouder_id = ?', [$ouder['id']]);
         q('DELETE FROM tokens WHERE gebruiker_id = ?', [$ouder['id']]);
@@ -251,6 +257,7 @@ function verwijder_account_volledig(int $gebruikerId): void
             wis_kinddossier((int) $kind['id'], 'aanmelding verlopen', false);
             q('DELETE FROM kinderen WHERE id = ?', [$kind['id']]);
         }
+        q('DELETE FROM mail_log WHERE lower(aan) = lower((SELECT email FROM gebruikers WHERE id = ?))', [$gebruikerId]);
         q('DELETE FROM gebruikers WHERE id = ? AND NOT EXISTS (SELECT 1 FROM facturen f WHERE f.ouder_id = ?)', [$gebruikerId, $gebruikerId]);
     });
     registreer_verwijdering('account', $gebruikerId, 'aanmelding verlopen');

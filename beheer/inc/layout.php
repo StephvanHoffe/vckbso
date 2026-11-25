@@ -8,6 +8,29 @@ function icoon(string $naam, string $extraKlasse = ''): string
     return '<svg class="icon' . ($extraKlasse ? ' ' . e($extraKlasse) : '') . '" aria-hidden="true" focusable="false"><use href="#i-' . e($naam) . '"></use></svg>';
 }
 
+/**
+ * Waarschuwing bovenaan als e-mail niet werkt (testmodus, of e-mails die net mislukten), alleen voor wie er
+ * iets aan kan doen (recht E-mails of Koppelingen). Anders een lege tekst.
+ */
+function mail_waarschuwing_html(array $gebruiker): string
+{
+    if (!team_mag('emails', $gebruiker) && !team_mag('koppelingen', $gebruiker)) {
+        return '';
+    }
+    $waarschuwing = mail_waarschuwing();
+    if (!$waarschuwing) {
+        return '';
+    }
+    $links = [];
+    if (team_mag('koppelingen', $gebruiker)) {
+        $links[] = '<a href="koppelingen.php#email">Naar Koppelingen</a>';
+    }
+    if (team_mag('emails', $gebruiker)) {
+        $links[] = '<a href="verzonden-emails.php' . ($waarschuwing[0] === 'mislukt' ? '?status=mislukt' : '') . '">Bekijk de verzonden e-mails</a>';
+    }
+    return '<div class="melding melding--fout" role="status">' . icoon('alert') . '<p>' . e($waarschuwing[1]) . ' ' . implode(' · ', $links) . '</p></div>';
+}
+
 /** Menu-items per rol: [bestand, label, icoon]. */
 function menu_items(array $gebruiker): array
 {

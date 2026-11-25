@@ -120,6 +120,7 @@ if ($fouten) {
 }
 
 if (te_veel_mails_naar($waarden['email'])) {
+    mail_overgeslagen($waarden['email'], mailtekst_in_taal('proefdag_bevestiging'), MAIL_REDEN_TE_VEEL . ' De proefdag is niet geboekt; de ouder kreeg de melding het over een kwartier opnieuw te proberen.');
     proefdag_antwoord($alsJson, 429, [], [], t('We hebben net al een paar mails naar dit e-mailadres gestuurd. Probeer het over een kwartier nog eens, of bel ons even.', "We've just sent a few emails to this address. Please try again in 15 minutes, or give us a call."));
 }
 
@@ -154,7 +155,7 @@ $wanneerBezoeker = proefdag_omschrijving($moment, taal()); // voor de ouder in d
 $adres = 'Sporty, Voorlandpad 17, 1098 TZ Amsterdam (Sportpark Middenmeer)';
 // Melding voor het team (zonder persoonsgegevens) en een bevestiging voor de ouder
 mail_team_tekst('team_proefdag', ['wanneer' => $wanneer, 'link' => app_url('proefdagen.php')]);
-// TODO: tekst van de bevestigingsmail laten controleren door Sporty (aan te passen onder Instellingen → E-mails)
+// TODO: tekst van de bevestigingsmail laten controleren door Sporty (aan te passen onder E-mails)
 stuur_mailtekst($waarden['email'], 'proefdag_bevestiging', [
     'voornaam' => explode(' ', $waarden['naam'])[0], 'kind' => explode(' ', $waarden['kind_naam'])[0], 'wanneer' => $wanneerBezoeker, 'adres' => $adres,
 ]);

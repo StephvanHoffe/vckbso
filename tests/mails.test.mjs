@@ -1,4 +1,4 @@
-// Alle e-mails van Mijn BSO zijn aan te passen onder Instellingen → E-mails (beheer/mailteksten.php).
+// Alle e-mails van Mijn BSO zijn aan te passen onder E-mails (beheer/mailteksten.php).
 // Draaien met: npm test
 import { test } from "node:test";
 import assert from "node:assert/strict";

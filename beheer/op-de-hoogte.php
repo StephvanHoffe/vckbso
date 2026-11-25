@@ -152,6 +152,7 @@ if ($fouten) {
 
 // Te veel mails naar dit adres: doe alsof het gelukt is (zo verklappen we niets), maar stuur niets
 if (te_veel_mails_naar($email)) {
+    mail_overgeslagen($email, mailtekst_in_taal('op_de_hoogte_bevestigen'), MAIL_REDEN_TE_VEEL . ' De aanmelding voor Blijf op de hoogte is niet opgeslagen.');
     op_de_hoogte_antwoord($alsJson, 200);
 }
 

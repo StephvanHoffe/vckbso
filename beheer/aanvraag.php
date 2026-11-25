@@ -30,7 +30,7 @@ function aanvraag_antwoord(bool $alsJson, int $code, array $fouten = [], string 
     echo '<div class="auth"><div class="panel">';
     if ($code < 300) {
         echo '<h1>' . e(t('Gelukt! Je aanmelding is binnen.', 'Done! Your sign-up is in.')) . '</h1>';
-        echo '<div class="melding melding--succes" role="status">' . icoon('check') . '<p>' . e(t('Bedankt voor je aanmelding. We bekijken de mogelijkheden en nemen contact met je op. Je ontvangt ook een bevestiging per e-mail.', "Thanks for signing up. We'll look at the options and get in touch. You'll also receive a confirmation by email.")) . '</p></div>';
+        echo '<div class="melding melding--succes" role="status">' . icoon('check') . '<p>' . e(t('Bedankt voor je aanmelding! Check je mail: daarin staat een link om meteen je wachtwoord voor Mijn BSO aan te maken. Geen mail binnen een paar minuten? Kijk dan ook even bij je ongewenste e-mail. We bekijken de mogelijkheden en nemen binnen 24 uur contact met je op.', "Thanks for signing up! Check your inbox: we've sent you a link to create your password for Mijn BSO straight away. No email within a few minutes? Have a look in your spam folder too. We'll look at the options and get in touch within 24 hours.")) . '</p></div>';
     } else {
         echo '<h1>' . e(t('Je aanmelding is nog niet verstuurd', "Your sign-up hasn't been sent yet")) . '</h1>';
         echo '<div class="melding melding--fout" role="alert">' . icoon('alert') . '<p>' . e($melding ?: t('Er ging iets niet goed:', 'Something went wrong:')) . '</p></div>';
@@ -85,10 +85,9 @@ if ($fouten) {
     aanvraag_antwoord($alsJson, 422, $fouten, count($fouten) === 1 ? t('Er is nog 1 veld niet goed ingevuld.', "1 field isn't filled in correctly yet.") : t('Er zijn nog ' . count($fouten) . ' velden niet goed ingevuld.', count($fouten) . " fields aren't filled in correctly yet."));
 }
 
-// Hooguit 3 aanmeldingen per kwartier naar hetzelfde e-mailadres (geen mailbom via ons formulier)
-if (te_veel_mails_naar($aanvraag['ouder']['email'])) {
-    aanvraag_antwoord($alsJson, 200);
-}
+// Hooguit 3 e-mails per kwartier naar hetzelfde adres (geen mailbom via ons formulier). De aanmelding zelf
+// bewaren we wel; alleen de e-mail slaan we dan over (te zien onder E-mails → Verzonden).
+$mailMag = !te_veel_mails_naar($aanvraag['ouder']['email']);
 
 // Bekend e-mailadres: niets opnieuw opslaan, wel een mail naar dat adres. Op de website zie je
 // hetzelfde antwoord als bij een nieuwe aanmelding, zodat niemand kan uitproberen wie er klant is.
@@ -96,7 +95,11 @@ $bekend = rij('SELECT id, email FROM gebruikers WHERE email = ?', [$aanvraag['ou
 if ($bekend) {
     tel_aanvraagstap(8);
     log_actie('Aanmelding met een bekend e-mailadres', 'niet opnieuw opgeslagen', (int) $bekend['id'], 'wijziging', 'gebruiker:' . $bekend['id']);
-    stuur_mailtekst($bekend['email'], 'aanmelding_bestaand_account', ['inloggen' => app_url('inloggen.php'), 'wachtwoord' => app_url('wachtwoord-vergeten.php')]);
+    if ($mailMag) {
+        stuur_mailtekst($bekend['email'], 'aanmelding_bestaand_account', ['inloggen' => app_url('inloggen.php'), 'wachtwoord' => app_url('wachtwoord-vergeten.php')]);
+    } else {
+        mail_overgeslagen($bekend['email'], mailtekst_in_taal('aanmelding_bestaand_account'), MAIL_REDEN_TE_VEEL);
+    }
     aanvraag_antwoord($alsJson, 200);
 }
 
@@ -110,13 +113,21 @@ tel_aanvraagstap(8);
 $aantal = count($aanvraag['kinderen']);
 log_actie('Aangemeld via de website', $aantal . ' kind(eren)', $ouderId, 'wijziging', 'gebruiker:' . $ouderId);
 
-// Melding voor het team (zonder persoonsgegevens) en een bevestiging voor de ouder
+// Melding voor het team (zonder persoonsgegevens) en meteen een bevestiging voor de ouder, met een link om
+// direct een wachtwoord voor Mijn BSO te kiezen (een week geldig; daarna via "Wachtwoord vergeten", en bij het
+// activeren stuurt Mijn BSO opnieuw een link als er nog geen wachtwoord is). Via de e-mail weten we ook zeker
+// dat het adres klopt. Inloggen kan dan meteen; dagen kiezen pas als het team het account heeft geactiveerd.
 mail_team_tekst('team_aanmelding', ['aantal' => $aantal . ' ' . ($aantal === 1 ? 'kind' : 'kinderen'), 'link' => app_url('ouder.php?id=' . $ouderId)]);
 $namen = array_map(fn ($k) => $k['voornaam'], $aanvraag['kinderen']);
-// TODO: tekst van de bevestigingsmail volgt van Sporty (nu een voorlopige tekst). Sporty past hem zelf aan onder Instellingen → E-mails.
-stuur_mailtekst($aanvraag['ouder']['email'], 'aanmelding_ontvangen', [
-    'voornaam' => $aanvraag['ouder']['voornaam'],
-    'kinderen' => count($namen) > 1 ? implode(', ', array_slice($namen, 0, -1)) . t(' en ', ' and ') . end($namen) : $namen[0],
-]);
+// TODO: tekst van de bevestigingsmail volgt van Sporty (nu een voorlopige tekst). Sporty past hem zelf aan onder E-mails.
+if ($mailMag) {
+    stuur_mailtekst($aanvraag['ouder']['email'], 'aanmelding_ontvangen', [
+        'voornaam' => $aanvraag['ouder']['voornaam'],
+        'kinderen' => count($namen) > 1 ? implode(', ', array_slice($namen, 0, -1)) . t(' en ', ' and ') . end($namen) : $namen[0],
+        'link' => maak_wachtwoordlink($ouderId, 24 * 7) . (taal() === 'en' ? '&taal=en' : ''),
+    ]);
+} else {
+    mail_overgeslagen($aanvraag['ouder']['email'], mailtekst_in_taal('aanmelding_ontvangen'), MAIL_REDEN_TE_VEEL);
+}
 
 aanvraag_antwoord($alsJson, 200);

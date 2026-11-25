@@ -51,6 +51,7 @@
       <li><a href="beheerder-interesse.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>Op de hoogte <span class="teller">1<span class="visually-hidden"> wachten op hun pakket</span></span></a></li>
       <li><a href="beheerder-sollicitaties.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-briefcase"></use></svg>Sollicitaties <span class="teller">1<span class="visually-hidden"> nieuw</span></span></a></li>
       <li><a href="beheerder-verzoeken.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Privacyverzoeken <span class="teller">1<span class="visually-hidden"> open</span></span></a></li>
+      <li><a href="beheerder-mailteksten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-send"></use></svg>E-mails</a></li>
       <li><a href="beheerder-koppelingen.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Koppelingen</a></li>
       <li><a href="beheerder-instellingen.html" aria-current="page"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-gear"></use></svg>Instellingen</a></li>
     </ul>
@@ -58,7 +59,7 @@
 </header>
 <main id="inhoud" class="app-main">
   <p class="demo-balk"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-info"></use></svg>Demo-modus: Stripe is nog niet gekoppeld, er wordt niets echt afgeschreven. <a href="beheerder-koppelingen.html">Stripe koppelen</a></p>
-<div class="pagina-kop"><div><h1>Instellingen</h1><p class="lead">Gegevens voor de facturen, het tarief, afmelden, beveiliging en bewaartermijnen.</p></div><div class="btn-group"><a class="btn btn--secondary btn--small" href="beheerder-mailteksten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>E-mails aanpassen</a><a class="btn btn--secondary btn--small" href="beheerder-beveiliging.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Beveiligingsstatus</a><a class="btn btn--secondary btn--small" href="beheerder-logboek.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-book"></use></svg>Logboek</a></div></div><form class="form" method="post">
+<div class="pagina-kop"><div><h1>Instellingen</h1><p class="lead">Gegevens voor de facturen, het tarief, afmelden, beveiliging en bewaartermijnen.</p></div><div class="btn-group"><a class="btn btn--secondary btn--small" href="beheerder-mailteksten.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-mail"></use></svg>E-mails</a><a class="btn btn--secondary btn--small" href="beheerder-beveiliging.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shield"></use></svg>Beveiligingsstatus</a><a class="btn btn--secondary btn--small" href="beheerder-logboek.html"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-book"></use></svg>Logboek</a></div></div><form class="form" method="post">
   <input type="hidden" name="csrf" value="voorbeeld">  <div class="kolommen kolommen--gelijk">
     <section class="panel" aria-labelledby="bedrijf-titel">
       <h2 id="bedrijf-titel">Gegevens op de facturen</h2>
@@ -191,12 +192,16 @@
           <label for="bewaar_logboek_maanden">Logboek: inzage, wijzigingen, exports en inloggen <span class="field__hint">(maanden)</span></label>
           <input id="bewaar_logboek_maanden" name="bewaar_logboek_maanden" type="number" min="12" max="240" style="max-width: 8rem" value="24">
                   </div>
+        <div class="field">
+          <label for="bewaar_maillog_maanden">Verzonden e-mails: wanneer, aan wie, welke e-mail en of het lukte (zonder de inhoud) <span class="field__hint">(maanden, na verzenden)</span></label>
+          <input id="bewaar_maillog_maanden" name="bewaar_maillog_maanden" type="number" min="1" max="240" style="max-width: 8rem" value="3">
+                  </div>
       </div>
       <div class="field">
         <label for="bevestig_wachtwoord">Je eigen wachtwoord <span class="field__hint">(alleen nodig als je een bewaartermijn korter maakt)</span></label>
         <input id="bevestig_wachtwoord" name="bevestig_wachtwoord" type="password" autocomplete="current-password" style="max-width: 20rem">
               </div>
-      <p class="muted">Laatst uitgevoerd: vandaag 14:20.</p>
+      <p class="muted">Laatst uitgevoerd: vandaag 20:19.</p>
     </section>
     <section class="panel" aria-labelledby="mfa-titel">
       <h2 id="mfa-titel">Tweestapsverificatie</h2>
