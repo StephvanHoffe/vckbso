@@ -11,6 +11,9 @@
  * - Engelse pagina's (en/): dezelfde opbouw, met de BSO in het Engels op de homepage, Locaties en Contact,
  *   en op Contact de Engelse veelgestelde vragen.
  * - Elke pagina krijgt hreflang-links naar zijn Nederlandse en Engelse versie (tools/site/talen.mjs).
+ * - De binnenkort-pagina's (binnenkort.html, en/coming-soon.html), die Google zolang op / en /en/ ziet: de BSO
+ *   en de website, zodat Google de website aan het Bedrijfsprofiel koppelt. Hun hreflang-links blijven zoals ze
+ *   zijn, en ze staan niet in de sitemap (die heeft tijdens binnenkort sitemap-binnenkort.xml).
  *
  * - sitemap.xml: alle pagina's met hun taalversies. De datum (lastmod) verandert alleen als de inhoud van een
  *   pagina echt verandert (titel, description of <main>); de vingerafdrukken staan in tools/site/lastmod.json.
@@ -30,8 +33,11 @@ import { ENGELS, NEDERLANDS, adres } from "./site/talen.mjs";
 export const SITE = "https://bsosporty.nl";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 
+// Het Google Bedrijfsprofiel van Sporty ("BSO Sporty", Voorlandpad 17; link van de klant, 26 november 2026),
+// met het vaste nummer (cid) van de plek in Google Maps. Ook de kaartlinks op Contact en Locaties gaan hierheen.
+export const GOOGLE_PROFIEL = "https://www.google.com/maps?cid=13327461318213216379";
+
 // Gegevens van de BSO. Houd deze gelijk aan wat op de website staat.
-// TODO: het Google Bedrijfsprofiel aan sameAs toevoegen zodra het er is.
 // Openingstijden op schooldagen: vanaf het ophalen van school (14.00 uur, zie Een middag bij Sporty) tot 18.30 uur;
 // tot 12 juli 2027 op dinsdag en donderdag, daarna maandag t/m vrijdag (beheer/inc/openingsdagen.php).
 // Vakantie- en studiedagen (08.00–18.30 uur) vallen op wisselende datums en staan er daarom niet in.
@@ -50,14 +56,14 @@ export const BSO = {
   address: { "@type": "PostalAddress", streetAddress: "Voorlandpad 17", postalCode: "1098 TZ", addressLocality: "Amsterdam", addressCountry: "NL" },
   // Dezelfde plek als de kaart op de locatiepagina (tools/kaart.mjs)
   geo: { "@type": "GeoCoordinates", latitude: 52.3481547, longitude: 4.9535974 },
-  hasMap: "https://www.google.com/maps/search/?api=1&query=Sporty%2C+Voorlandpad+17%2C+1098+TZ+Amsterdam",
+  hasMap: GOOGLE_PROFIEL,
   priceRange: "€ 9,75 – € 12 per uur",
   // Feedback 2.0 (november 2026): LRK, KvK, social media en de brancheorganisatie
   identifier: [
     { "@type": "PropertyValue", propertyID: "LRK", name: "Landelijk Register Kinderopvang", value: "236315389" },
     { "@type": "PropertyValue", propertyID: "KvK", name: "Kamer van Koophandel", value: "42064267" },
   ],
-  sameAs: ["https://www.instagram.com/bso.sporty/", "https://www.tiktok.com/@bso.sporty", "https://www.facebook.com/profile.php?id=61596047927666"],
+  sameAs: ["https://www.instagram.com/bso.sporty/", "https://www.tiktok.com/@bso.sporty", "https://www.facebook.com/profile.php?id=61596047927666", GOOGLE_PROFIEL],
   memberOf: { "@type": "Organization", name: "Brancheorganisatie Kinderopvang" },
   openingHoursSpecification: [
     { "@type": "OpeningHoursSpecification", dayOfWeek: ["Tuesday", "Thursday"], opens: "14:00", closes: "18:30", validFrom: "2027-01-04", validThrough: "2027-07-11" },
@@ -211,6 +217,15 @@ export function bijgewerkt(pagina, html) {
   return uit.replace(SCRIPT, "").replace("</head>", `<script type="application/ld+json">${json}</script>\n</head>`);
 }
 
+/** De binnenkort-pagina's: alleen de BSO (en de website), verder niets aan de pagina veranderen. */
+export const BINNENKORT = { "binnenkort.html": "nl", "en/coming-soon.html": "en" };
+
+export function binnenkortBijgewerkt(pagina, html) {
+  const graaf = BINNENKORT[pagina] === "en" ? [BSO_EN] : [BSO, WEBSITE];
+  const json = JSON.stringify({ "@context": "https://schema.org", "@graph": graaf }).replace(/</g, "\\u003c");
+  return html.replace(SCRIPT, "").replace("</head>", `<script type="application/ld+json">${json}</script>\n</head>`);
+}
+
 /* ---------- Sitemap ---------- */
 
 // Prioriteit per pagina (Google kijkt er niet naar, andere zoekmachines soms wel); de Engelse iets lager
@@ -258,6 +273,18 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     const html = readFileSync(pad, "utf8");
     const nieuw = bijgewerkt(pagina, html);
     htmlPerPagina[pagina] = nieuw;
+    if (nieuw === html) continue;
+    verouderd++;
+    if (alleenControleren) console.error(`Verouderd: ${pagina}`);
+    else {
+      writeFileSync(pad, nieuw);
+      console.log(`Bijgewerkt: ${pagina}`);
+    }
+  }
+  for (const pagina of Object.keys(BINNENKORT)) {
+    const pad = ROOT + pagina;
+    const html = readFileSync(pad, "utf8");
+    const nieuw = binnenkortBijgewerkt(pagina, html);
     if (nieuw === html) continue;
     verouderd++;
     if (alleenControleren) console.error(`Verouderd: ${pagina}`);

@@ -128,3 +128,18 @@ test("sitemap-binnenkort.xml noemt precies de binnenkort-pagina's, en die zijn i
     assert.doesNotMatch(html, /<meta name="robots" content="[^"]*noindex/, `${pagina} staat in de sitemap en mag geen noindex hebben`);
   }
 });
+
+test("binnenkort: Google ziet de BSO en het Bedrijfsprofiel ook op de binnenkort-pagina's", async () => {
+  const { GOOGLE_PROFIEL } = await import("../tools/structured-data.mjs");
+  for (const [pagina, taal] of [["binnenkort.html", "nl"], ["en/coming-soon.html", "en"]]) {
+    const html = readFileSync(new URL("../" + pagina, import.meta.url), "utf8");
+    const blokken = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+    assert.equal(blokken.length, 1, `${pagina}: één blok met gegevens voor Google`);
+    const bso = JSON.parse(blokken[0][1])["@graph"].find((g) => g["@type"] === "ChildCare");
+    assert.ok(bso, `${pagina}: de BSO staat erin`);
+    assert.equal(bso.hasMap, GOOGLE_PROFIEL);
+    assert.ok(bso.sameAs.includes(GOOGLE_PROFIEL), `${pagina}: het Bedrijfsprofiel staat bij sameAs`);
+    assert.equal(bso.alternateName, "BSO Sporty");
+    assert.match(html, taal === "nl" ? /hreflang="en" href="https:\/\/bsosporty\.nl\/en\/"/ : /hreflang="nl" href="https:\/\/bsosporty\.nl\/"/, `${pagina}: de taallinks blijven staan`);
+  }
+});
