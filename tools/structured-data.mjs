@@ -97,8 +97,10 @@ const WEBSITE = {
   "@type": "WebSite",
   "@id": `${SITE}/#website`,
   url: `${SITE}/`,
-  name: "Sporty",
-  alternateName: "BSO Sporty",
+  // De naam die Google boven het zoekresultaat zet (in plaats van "bsosporty.nl"): BSO Sporty, zoals het
+  // Google Bedrijfsprofiel; "Sporty" alleen is te algemeen (26 november 2026)
+  name: "BSO Sporty",
+  alternateName: ["Sporty", "bsosporty.nl"],
   inLanguage: "nl-NL",
   publisher: { "@id": BSO["@id"] },
 };

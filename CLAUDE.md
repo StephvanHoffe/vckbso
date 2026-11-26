@@ -305,6 +305,7 @@ Geen tekst aangeleverd: schrijf de tekst op basis van deze briefing. Beantwoord 
 - E-mail: info@bsosporty.nl (als `mailto:`-link; gewijzigd op 13 november 2026, eerder info@sporty.nl en daarvoor info@vckbso.nl)
 - Telefoon: 06 18 26 67 06 (als `tel:`-link `tel:+31618266706`; feedback 2.0, november 2026; eerder het tijdelijke 0612345678). Hetzelfde nummer als WhatsApp.
 - IBAN (aangeleverd op 25 november 2026): alleen in Mijn BSO, op de facturen, t.n.v. **BSO Sporty**. Het nummer staat bewust niet in de code; Sporty vult het in bij Instellingen (`iban`). De naam op de rekening (`iban_naam`, migratie 25) wijkt af van de statutaire naam, en ouders die overmaken moeten precies die naam gebruiken. Niet op de openbare website.
+- Naam in de zoekresultaten van Google: **BSO Sporty** (26 november 2026, zoals het Google Bedrijfsprofiel; `og:site_name` en `WebSite` in `tools/structured-data.mjs`). Het Bedrijfsprofiel: `GOOGLE_PROFIEL` in `tools/structured-data.mjs` (kaartlinks op Contact en Locaties, `hasMap` en `sameAs`).
 - WhatsApp: +31 6 18266706 (24 november 2026; als `https://wa.me/31618266706`-link): de zwevende WhatsApp-knop rechtsonder op elke pagina (in `tools/site/voet.html` en `voet.en.html`), de knop op Contact en de link in het aanmeldformulier.
 
 - Adres: Sporty, Voorlandpad 17, 1098 TZ Amsterdam (clubhuis op Sportpark Middenmeer, Watergraafsmeer; teksten van november 2026)

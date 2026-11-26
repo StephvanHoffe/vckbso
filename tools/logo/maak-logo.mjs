@@ -11,7 +11,7 @@
  * aan het eind staat precies het logo.
  *
  * Gebruik: npm run logo
- * Schrijft favicon.svg, apple-touch-icon.png, icon-192.png, icon-512.png, icon-maskable-512.png en
+ * Schrijft favicon.svg, favicon-96.png, apple-touch-icon.png, icon-192.png, icon-512.png, icon-maskable-512.png en
  * sporty-logo-512.png naar assets/img/, favicon.ico naar de hoofdmap, en de intro in index.html en en/index.html.
  * Letters: Pacifico (de S van het icoon), SIL Open Font License (assets/fonts/OFL.txt).
  */
@@ -146,6 +146,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   writeFileSync(IMG + "icon-192.png", await png(maakIcoon({ vorm: "vierkant" }), 192));
   writeFileSync(IMG + "icon-512.png", await png(maakIcoon({ vorm: "vierkant" }), 512));
   writeFileSync(IMG + "icon-maskable-512.png", await png(maakIcoon({ vorm: "vierkant", marge: 0.3 }), 512));
+  // Voor Google (het icoontje bij de zoekresultaten): rond, 96 pixels. Google wil een veelvoud van 48 pixels.
+  writeFileSync(IMG + "favicon-96.png", await png(maakIcoon(), 96));
 
   // favicon.ico met 16, 32 en 48 pixels (PNG in een ICO-bestand)
   const maten = [16, 32, 48];
