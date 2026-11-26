@@ -59,8 +59,9 @@ if (is_post()) {
         try {
             redirect(start_machtiging($ouder));
         } catch (RuntimeException $fout) {
-            error_log('Machtiging starten: ' . $fout->getMessage());
-            flash('fout', 'Het lukte even niet om naar je bank te gaan. Probeer het later nog een keer of neem contact met ons op.');
+            // De echte melding (met uitleg) staat voor het team bij Koppelingen en op Vandaag; de ouder krijgt een vriendelijke melding
+            stripe_fout_vastleggen('Machtiging starten', $fout->getMessage());
+            flash('fout', 'Het lukte even niet om naar je bank te gaan. Wij zien de melding ook. Probeer het later nog een keer of neem contact met ons op.');
             redirect('machtiging.php');
         }
     }

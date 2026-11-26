@@ -9,17 +9,22 @@ function icoon(string $naam, string $extraKlasse = ''): string
 }
 
 /**
- * Waarschuwing bovenaan als e-mail niet werkt (testmodus, of e-mails die net mislukten), alleen voor wie er
- * iets aan kan doen (recht E-mails of Koppelingen). Anders een lege tekst.
+ * Waarschuwing bovenaan als e-mail niet werkt (testmodus, of e-mails die net mislukten) of als er bij Stripe
+ * iets misging (bijvoorbeeld een machtiging die niet kon starten), alleen voor wie er iets aan kan doen
+ * (recht E-mails of Koppelingen). Anders een lege tekst.
  */
 function mail_waarschuwing_html(array $gebruiker): string
 {
     if (!team_mag('emails', $gebruiker) && !team_mag('koppelingen', $gebruiker)) {
         return '';
     }
+    $html = '';
+    if (team_mag('koppelingen', $gebruiker) && ($stripe = stripe_waarschuwing())) {
+        $html .= '<div class="melding melding--fout" role="status">' . icoon('alert') . '<p>' . e($stripe) . ' <a href="koppelingen.php#stripe">Naar Koppelingen</a></p></div>';
+    }
     $waarschuwing = mail_waarschuwing();
     if (!$waarschuwing) {
-        return '';
+        return $html;
     }
     $links = [];
     if (team_mag('koppelingen', $gebruiker)) {
@@ -28,7 +33,7 @@ function mail_waarschuwing_html(array $gebruiker): string
     if (team_mag('emails', $gebruiker)) {
         $links[] = '<a href="verzonden-emails.php' . ($waarschuwing[0] === 'mislukt' ? '?status=mislukt' : '') . '">Bekijk de verzonden e-mails</a>';
     }
-    return '<div class="melding melding--fout" role="status">' . icoon('alert') . '<p>' . e($waarschuwing[1]) . ' ' . implode(' · ', $links) . '</p></div>';
+    return $html . '<div class="melding melding--fout" role="status">' . icoon('alert') . '<p>' . e($waarschuwing[1]) . ' ' . implode(' · ', $links) . '</p></div>';
 }
 
 /** Menu-items per rol: [bestand, label, icoon]. */

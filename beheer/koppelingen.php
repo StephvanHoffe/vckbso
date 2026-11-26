@@ -104,9 +104,25 @@ if (is_post()) {
     if ($actie === 'stripe_testen') {
         try {
             $modus = stripe_test_sleutel(stripe_geheim());
-            flash('succes', 'De verbinding met Stripe werkt (' . ($modus === 'live' ? 'live' : 'testmodus') . ').');
         } catch (RuntimeException $fout) {
-            flash('fout', 'De verbinding met Stripe werkt niet. ' . $fout->getMessage());
+            stripe_fout_vastleggen('Verbinding testen', $fout->getMessage());
+            flash('fout', 'De verbinding met Stripe werkt niet. ' . $fout->getMessage() . ' ' . stripe_fout_uitleg($fout->getMessage()));
+            redirect('koppelingen.php#stripe');
+        }
+        // Ook een machtiging klaarzetten (zonder klant) en meteen weer sluiten: zo blijkt of de betaalmethoden aan staan
+        $methoden = implode(' en ', array_map(fn ($m) => STRIPE_KEUZES_MACHTIGING[$m][0], stripe_methoden('machtiging'))) ?: 'de betaalmethoden uit het dashboard van Stripe';
+        try {
+            $sessie = stripe('POST', 'checkout/sessions', machtiging_sessie_data(null, ['soort' => 'test']));
+            try {
+                stripe('POST', 'checkout/sessions/' . rawurlencode((string) $sessie['id']) . '/expire');
+            } catch (RuntimeException) {
+                // Verloopt anders vanzelf na 24 uur
+            }
+            instelling_zet('stripe_laatst_gelukt', nu());
+            flash('succes', 'De verbinding met Stripe werkt (' . ($modus === 'live' ? 'live' : 'testmodus') . '), en een machtiging kan worden gestart met ' . $methoden . '.');
+        } catch (RuntimeException $fout) {
+            stripe_fout_vastleggen('Machtiging testen', $fout->getMessage());
+            flash('fout', 'De verbinding met Stripe werkt (' . ($modus === 'live' ? 'live' : 'testmodus') . '), maar een machtiging starten lukt niet. Stripe zei: "' . $fout->getMessage() . '" ' . stripe_fout_uitleg($fout->getMessage()));
         }
         redirect('koppelingen.php#stripe');
     }
@@ -362,13 +378,16 @@ pagina_kop('Koppelingen', 'Hier koppel je Mijn BSO aan andere diensten. Sleutels
     </details>
     <dl class="gegevens">
       <dt>Laatste melding van Stripe</dt><dd><?= $ontvangen ? e(moment_nl($ontvangen)) : 'Nog geen. Die komt zodra er iets gebeurt, bijvoorbeeld een machtiging in testmodus.' ?></dd>
+<?php if ($stripeFout = (string) instelling('stripe_laatste_fout')): ?>
+      <dt>Laatste fout</dt><dd><?php if (substr($stripeFout, 0, 19) > (string) instelling('stripe_laatst_gelukt')): ?><span class="let-op"><?= icoon('alert') ?><span><?= e(moment_nl(substr($stripeFout, 0, 19))) ?>, <?= e(substr($stripeFout, 20)) ?><br><?= e(stripe_fout_uitleg($stripeFout)) ?></span></span><?php else: ?><span class="muted"><?= e(moment_nl(substr($stripeFout, 0, 19))) ?>, <?= e(substr($stripeFout, 20)) ?>. Daarna is het weer gelukt.</span><?php endif; ?></dd>
+<?php endif; ?>
 <?php if ($geweigerd && $geweigerd >= $ontvangen): ?>
       <dt>Geweigerde melding</dt><dd><span class="let-op"><?= icoon('alert') ?><span><?= e(moment_nl($geweigerd)) ?>: de handtekening klopte niet. Controleer het webhookgeheim (test- en live-webhooks hebben elk een eigen geheim).</span></span></dd>
 <?php endif; ?>
     </dl>
 <?php if (stripe_actief()): ?>
     <div class="btn-group">
-      <form method="post" action="koppelingen.php#stripe"><?= csrf_veld() ?><input type="hidden" name="actie" value="stripe_testen"><button class="btn btn--secondary btn--small" type="submit"><?= icoon('check') ?>Verbinding testen</button></form>
+      <form method="post" action="koppelingen.php#stripe"><?= csrf_veld() ?><input type="hidden" name="actie" value="stripe_testen"><button class="btn btn--secondary btn--small" type="submit"><?= icoon('check') ?>Verbinding en machtiging testen</button></form>
     </div>
 <?php if (!koppeling_in_config('stripe.geheime_sleutel')): ?>
     <details class="uitklap">

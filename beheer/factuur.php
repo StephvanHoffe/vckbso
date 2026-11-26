@@ -30,7 +30,7 @@ if (is_post() && is_ouder($gebruiker)) {
         try {
             redirect(start_eenmalige_betaling($factuur));
         } catch (RuntimeException $fout) {
-            error_log('Losse betaling starten: ' . $fout->getMessage());
+            stripe_fout_vastleggen('Losse betaling starten', $fout->getMessage());
             flash('fout', 'Het lukte even niet om de betaling te starten. Probeer het later opnieuw.');
         }
     }

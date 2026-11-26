@@ -77,7 +77,7 @@
       <summary><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-link"></use></svg>Webhook instellen bij Stripe</summary>
       <p>Maak in het dashboard van Stripe onder <strong>Ontwikkelaars → Webhooks</strong> een webhook aan naar dit adres:</p>
       <label class="legend-label" for="webhook-url">Adres van de webhook</label>
-      <input id="webhook-url" class="koppeling__kopieer" readonly value="http://127.0.0.1:45261/beheer/stripe-webhook.php">
+      <input id="webhook-url" class="koppeling__kopieer" readonly value="http://127.0.0.1:41955/beheer/stripe-webhook.php">
       <p>Met deze gebeurtenissen:</p>
       <ul class="koppeling__events"><li><code>checkout.session.completed</code></li><li><code>checkout.session.async_payment_succeeded</code></li><li><code>checkout.session.async_payment_failed</code></li><li><code>checkout.session.expired</code></li><li><code>payment_intent.processing</code></li><li><code>payment_intent.succeeded</code></li><li><code>payment_intent.payment_failed</code></li><li><code>payment_intent.canceled</code></li><li><code>charge.refunded</code></li><li><code>charge.dispute.created</code></li><li><code>mandate.updated</code></li></ul>
       <p>Zet daarna het ondertekeningsgeheim (whsec_…) hierboven bij Webhookgeheim.</p>
@@ -102,7 +102,7 @@
             </select>
           </div>
         </div>
-        <div class="field"><label for="gebruiker">Gebruikersnaam</label><input id="gebruiker" name="gebruiker" value="info@bsosporty.nl" aria-describedby="gebruiker-hint" autocomplete="off" spellcheck="false"><p class="field__hint" id="gebruiker-hint">Meestal het volledige e-mailadres van de mailbox.</p></div>        <div class="field"><label for="smtp_wachtwoord">Wachtwoord</label><input id="smtp_wachtwoord" name="smtp_wachtwoord" type="password" autocomplete="new-password" spellcheck="false" placeholder="" aria-describedby="smtp_wachtwoord-hint"><p class="field__hint" id="smtp_wachtwoord-hint">Nu: <code>••••••••</code>. Opgeslagen 25 november 2026 om 20:19 door Demo Beheerder. Laat leeg om te houden. Gebruikt jullie provider tweestapsverificatie? Maak dan een app-wachtwoord aan en vul dat hier in.</p></div>      </fieldset>
+        <div class="field"><label for="gebruiker">Gebruikersnaam</label><input id="gebruiker" name="gebruiker" value="info@bsosporty.nl" aria-describedby="gebruiker-hint" autocomplete="off" spellcheck="false"><p class="field__hint" id="gebruiker-hint">Meestal het volledige e-mailadres van de mailbox.</p></div>        <div class="field"><label for="smtp_wachtwoord">Wachtwoord</label><input id="smtp_wachtwoord" name="smtp_wachtwoord" type="password" autocomplete="new-password" spellcheck="false" placeholder="" aria-describedby="smtp_wachtwoord-hint"><p class="field__hint" id="smtp_wachtwoord-hint">Nu: <code>••••••••</code>. Opgeslagen 26 november 2026 om 12:40 door Demo Beheerder. Laat leeg om te houden. Gebruikt jullie provider tweestapsverificatie? Maak dan een app-wachtwoord aan en vul dat hier in.</p></div>      </fieldset>
       <div class="field">
         <label for="bevestig_wachtwoord_mail">Je eigen wachtwoord <span class="field__hint">(nodig bij elke wijziging; niet voor alleen een testmail)</span></label>
         <input id="bevestig_wachtwoord_mail" name="bevestig_wachtwoord" type="password" autocomplete="current-password">
@@ -113,7 +113,7 @@
       </div>
     </form>
     <dl class="gegevens">
-      <dt>Laatst verstuurd</dt><dd>vandaag 20:13</dd>
+      <dt>Laatst verstuurd</dt><dd>vandaag 12:34</dd>
     </dl>
   </section>
 </div>

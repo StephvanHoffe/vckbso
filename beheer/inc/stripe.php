@@ -25,6 +25,13 @@ declare(strict_types=1);
 if (!defined('STRIPE_API')) {
     define('STRIPE_API', 'https://api.stripe.com/v1/');
 }
+/*
+ * De versie van de Stripe API waarvoor deze code is geschreven (met payment_method_types bij Checkout).
+ * Zonder vaste versie gebruikt Stripe de standaardversie van het account, en een nieuw account krijgt de
+ * nieuwste; daarin kan een veld anders heten, en dan weigert Stripe het verzoek (november 2026: een
+ * machtiging starten lukte niet). Een andere versie kan in config.php met 'stripe' => ['api_versie' => '…'].
+ */
+const STRIPE_API_VERSIE = '2024-06-20';
 const STRIPE_WEBHOOK_MARGE = 300; // seconden verschil met de tijd in de handtekening
 
 /** Betaalmethoden die je onder Koppelingen kunt kiezen (zet ze ook aan in het dashboard van Stripe). */
@@ -133,9 +140,7 @@ function stripe(string $methode, string $pad, array $data = [], ?string $sleutel
         $url .= '?' . $velden;
     }
     $koppen = ['Authorization: Bearer ' . ($geheim ?? stripe_geheim()), 'Accept: application/json'];
-    if ($versie = (string) cfg('stripe.api_versie', '')) {
-        $koppen[] = 'Stripe-Version: ' . $versie;
-    }
+    $koppen[] = 'Stripe-Version: ' . ((string) cfg('stripe.api_versie', '') ?: STRIPE_API_VERSIE);
     if ($sleutel !== null) {
         $koppen[] = 'Idempotency-Key: ' . $sleutel;
     }
@@ -202,17 +207,57 @@ function stripe_handtekening_ok(string $inhoud, string $kop, string $geheim, ?in
     return false;
 }
 
-function stripe_klant(array $ouder): string
+/**
+ * Uitleg in gewone taal bij een foutmelding van Stripe, voor het team (Koppelingen en Vandaag).
+ * Ouders zien deze uitleg niet: zij krijgen een vriendelijke melding.
+ */
+function stripe_fout_uitleg(string $melding): string
 {
-    if (!empty($ouder['stripe_klant_id'])) {
+    $m = strtolower($melding);
+    return match (true) {
+        str_contains($m, 'no such customer') => 'De klant bij Stripe bestaat niet (meer), bijvoorbeeld na het wisselen van de testsleutel naar de livesleutel. Mijn BSO maakt dan vanzelf een nieuwe klant aan; probeer het gewoon opnieuw.',
+        str_contains($m, 'payment method type') || str_contains($m, 'payment_method_types') || str_contains($m, 'payment method') && (str_contains($m, 'activat') || str_contains($m, 'enable')) =>
+            'Een betaalmethode staat niet aan bij Stripe. Zet in het dashboard van Stripe onder Instellingen → Betaalmethoden iDEAL | Wero en SEPA-incasso aan (in de testmodus én in de livemodus, dat zijn aparte schakelaars). Of zet hieronder bij "Ouders geven de machtiging af via" alleen aan wat bij Stripe aan staat.',
+        str_contains($m, 'live charges') || str_contains($m, 'activate your account') || str_contains($m, 'account') && str_contains($m, 'not') && str_contains($m, 'activ') =>
+            'Je Stripe-account is nog niet klaar voor echte betalingen. Rond de activering af in het dashboard van Stripe (bedrijfsgegevens, identiteit en bankrekening), of gebruik voorlopig de testsleutel (sk_test_…).',
+        str_contains($m, 'invalid api key') || str_contains($m, 'expired api key') || str_contains($m, 'http 401') =>
+            'De geheime sleutel klopt niet (meer). Maak in het dashboard van Stripe onder Ontwikkelaars → API-sleutels een nieuwe aan en vul die hieronder in.',
+        str_contains($m, 'niet bereikbaar') =>
+            'De server van Mijn BSO kon Stripe niet bereiken. Probeer het over een paar minuten opnieuw. Blijft het mislukken, vraag Vimexx dan of verbindingen naar api.stripe.com zijn toegestaan.',
+        default => 'Stuur deze melding gerust door aan de ontwikkelaar.',
+    };
+}
+
+/** Bewaart de laatste fout van Stripe (met waar het gebeurde), voor Koppelingen en de waarschuwing op Vandaag. */
+function stripe_fout_vastleggen(string $waar, string $melding): void
+{
+    error_log('Stripe, ' . $waar . ': ' . $melding);
+    instelling_zet('stripe_laatste_fout', nu() . ' ' . $waar . ': ' . mb_substr($melding, 0, 400));
+    log_actie('Stripe gaf een fout', $waar . ': ' . mb_substr($melding, 0, 200), null, 'wijziging');
+}
+
+/** Waarschuwing voor het team als er de afgelopen week iets misging bij Stripe en daarna nog niets lukte, of null. */
+function stripe_waarschuwing(): ?string
+{
+    $fout = (string) instelling('stripe_laatste_fout');
+    if (!stripe_actief() || $fout === '' || substr($fout, 0, 19) < date('Y-m-d H:i:s', time() - 7 * 86400) || substr($fout, 0, 19) <= (string) instelling('stripe_laatst_gelukt')) {
+        return null;
+    }
+    return 'Bij Stripe ging ' . moment_nl(substr($fout, 0, 19)) . ' iets mis (' . substr($fout, 20) . '). ' . stripe_fout_uitleg($fout);
+}
+
+function stripe_klant(array $ouder, bool $opnieuw = false): string
+{
+    if (!$opnieuw && !empty($ouder['stripe_klant_id'])) {
         return $ouder['stripe_klant_id'];
     }
+    // Opnieuw (de oude klant bestaat niet meer bij Stripe): een andere sleutel, anders geeft Stripe de oude klant terug
     $klant = stripe('POST', 'customers', [
         'name' => $ouder['naam'],
         'email' => $ouder['email'],
         'preferred_locales' => ['nl'],
         'metadata' => ['gebruiker_id' => (int) $ouder['id']],
-    ], stripe_sleutel('klant', (string) $ouder['id']));
+    ], stripe_sleutel('klant', (string) $ouder['id'], ...($opnieuw ? ['opnieuw', (string) time()] : [])));
     q('UPDATE gebruikers SET stripe_klant_id = ? WHERE id = ?', [$klant['id'], $ouder['id']]);
     return $klant['id'];
 }
@@ -225,25 +270,42 @@ function registreer_betaling(string $externId, string $soort, int $gebruikerId, 
 }
 
 /** Start de pagina van Stripe waarop de ouder de machtiging afgeeft. Geeft de URL van die pagina terug. */
-function start_machtiging(array $ouder): string
+/** De gegevens voor een Checkout-sessie voor een machtiging (ook gebruikt door "Verbinding testen" op Koppelingen). */
+function machtiging_sessie_data(?string $klant, array $metadata): array
 {
     $omschrijving = 'Machtiging automatische incasso ' . instelling('bedrijfsnaam', 'Sporty');
-    $metadata = ['soort' => 'machtiging', 'gebruiker_id' => (int) $ouder['id']];
     $data = [
         'mode' => 'setup',
-        'customer' => stripe_klant($ouder),
         'locale' => 'nl',
         'success_url' => app_url('machtiging.php?terug=1&sessie={CHECKOUT_SESSION_ID}'),
         'cancel_url' => app_url('machtiging.php?afgebroken=1'),
         'metadata' => $metadata,
         'setup_intent_data' => ['description' => $omschrijving, 'metadata' => $metadata],
     ];
+    if ($klant !== null) {
+        $data['customer'] = $klant;
+    }
     if ($methoden = stripe_methoden('machtiging')) {
         $data['payment_method_types'] = $methoden;
     } else {
-        $data['currency'] = 'eur';
+        $data['currency'] = 'eur'; // zonder vaste betaalmethoden vraagt Stripe om de munteenheid
     }
-    $sessie = stripe('POST', 'checkout/sessions', $data);
+    return $data;
+}
+
+function start_machtiging(array $ouder): string
+{
+    $metadata = ['soort' => 'machtiging', 'gebruiker_id' => (int) $ouder['id']];
+    try {
+        $sessie = stripe('POST', 'checkout/sessions', machtiging_sessie_data(stripe_klant($ouder), $metadata));
+    } catch (RuntimeException $fout) {
+        // De klant bestaat niet (meer) bij Stripe, bijvoorbeeld na het wisselen van test- naar livesleutel: nieuwe klant, één keer opnieuw
+        if (!str_contains(strtolower($fout->getMessage()), 'no such customer')) {
+            throw $fout;
+        }
+        $sessie = stripe('POST', 'checkout/sessions', machtiging_sessie_data(stripe_klant($ouder, true), $metadata));
+    }
+    instelling_zet('stripe_laatst_gelukt', nu());
     registreer_betaling($sessie['id'], 'machtiging', (int) $ouder['id'], null, 0, 'open');
     q("UPDATE gebruikers SET mandaat_status = 'in_behandeling' WHERE id = ? AND mandaat_status IN ('geen', 'ingetrokken')", [$ouder['id']]);
     log_actie('Machtiging gestart', 'Stripe ' . $sessie['id'], (int) $ouder['id']);
@@ -315,7 +377,16 @@ function start_eenmalige_betaling(array $factuur): string
     if ($methoden = stripe_methoden('betalen')) {
         $data['payment_method_types'] = $methoden;
     }
-    $sessie = stripe('POST', 'checkout/sessions', $data);
+    try {
+        $sessie = stripe('POST', 'checkout/sessions', $data);
+    } catch (RuntimeException $fout) {
+        if (!$ouder || !str_contains(strtolower($fout->getMessage()), 'no such customer')) {
+            throw $fout;
+        }
+        $data['customer'] = stripe_klant($ouder, true);
+        $sessie = stripe('POST', 'checkout/sessions', $data);
+    }
+    instelling_zet('stripe_laatst_gelukt', nu());
     registreer_betaling($sessie['id'], 'eenmalig', (int) $factuur['ouder_id'], (int) $factuur['id'], (int) $factuur['bedrag_cent'], 'open');
     return (string) $sessie['url'];
 }
