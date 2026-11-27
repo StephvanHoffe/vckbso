@@ -115,7 +115,10 @@ test("vercel.json: dezelfde beveiligingskoppen als .htaccess, en de formulieren 
   const htaccess = lees(".htaccess");
   const hashes = (tekst) => [...tekst.matchAll(/'sha256-[^']+'/g)].map((m) => m[0]).sort();
   assert.deepEqual(hashes(csp), hashes(htaccess.match(/Content-Security-Policy "([^"]+)"/)[1]), "de vingerafdrukken van de scripts in de pagina's");
-  assert.match(csp, /connect-src 'self' https:\/\/formspree\.io https:\/\/mijn\.bsosporty\.nl;/);
+  assert.match(csp, /connect-src 'self' https:\/\/formspree\.io https:\/\/mijn\.bsosporty\.nl[ ;]/);
+  // Google Tag Manager (na toestemming, js/cookies.js): hetzelfde in vercel.json en .htaccess
+  const google = (tekst) => [...tekst.matchAll(/https:\/\/[^\s;"]*(?:google|doubleclick|gstatic)[^\s;"]*/g)].map((m) => m[0]).sort();
+  assert.deepEqual(google(csp), google(htaccess.match(/Content-Security-Policy "([^"]+)"/)[1]), "dezelfde diensten van Google");
   assert.match(csp, /form-action 'self' https:\/\/formspree\.io https:\/\/mijn\.bsosporty\.nl mailto:;/);
   assert.equal(koppen["X-Content-Type-Options"], "nosniff");
   assert.equal(koppen["X-Frame-Options"], "SAMEORIGIN");

@@ -170,7 +170,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'sha256-KzGFexfVLN/ySbAPeJk3zsWkGLyjvn9+5XL739iDx6Q=' 'sha256-UDxZfYFDuMCHL0jf/obV6XX364umnZx7SE+es5Oq4TY='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io https://mijn.bsosporty.nl; form-action 'self' https://formspree.io https://mijn.bsosporty.nl mailto:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' 'sha256-KzGFexfVLN/ySbAPeJk3zsWkGLyjvn9+5XL739iDx6Q=' 'sha256-UDxZfYFDuMCHL0jf/obV6XX364umnZx7SE+es5Oq4TY=' https://*.googletagmanager.com https://tagmanager.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com; style-src 'self' 'unsafe-inline' https://tagmanager.google.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://googleads.g.doubleclick.net https://www.google.com https://www.google.nl https://ssl.gstatic.com https://www.gstatic.com; font-src 'self'; connect-src 'self' https://formspree.io https://mijn.bsosporty.nl https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://www.google.nl; form-action 'self' https://formspree.io https://mijn.bsosporty.nl mailto:; frame-src 'self' https://*.googletagmanager.com https://td.doubleclick.net; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
         }
       ]
     },

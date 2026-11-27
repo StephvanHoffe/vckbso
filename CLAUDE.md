@@ -31,7 +31,7 @@ Bouw een statische website met semantische HTML, moderne CSS (custom properties,
 - Toegankelijk (WCAG 2.1 AA): voldoende contrast, alt-teksten in het Nederlands, zichtbare focus, alles bruikbaar met het toetsenbord, logische kopstructuur.
 - Nederlandstalig: `lang="nl"`, datums en telefoonnummers in Nederlandse notatie.
 - SEO-basis: unieke `<title>` en meta description per pagina, Open Graph-tags, `sitemap.xml`, `robots.txt` en schema.org `LocalBusiness`-gegevens (naam, adres, telefoon, openingstijden).
-- Privacy: geen tracking-cookies, lettertypen lokaal hosten (niet via de servers van Google laden), geen externe kaarten op de pagina (de kaart is een eigen plaatje dat naar Google Maps linkt, zie Functies).
+- Privacy: tracking-cookies alleen na toestemming (sinds 27 november 2026 Google Tag Manager, container GTM-K9XSMB74, op verzoek van de klant: laadt pas na "Akkoord" in de cookiemelding, `js/cookies.js`, met Google Consent Mode, de link "Cookie-instellingen" in de footer en de CSP in `vercel.json` en `.htaccess`; nooit in Mijn BSO; zie "Google Tag Manager en cookies" in `docs/seo.md`; eerder: geen tracking-cookies), lettertypen lokaal hosten (niet via de servers van Google laden), geen externe kaarten op de pagina (de kaart is een eigen plaatje dat naar Google Maps linkt, zie Functies).
 - Design tokens staan in `design/tokens.css`: gebruik die variabelen in plaats van losse kleurcodes of maten.
 
 ## Ontwerp

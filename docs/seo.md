@@ -67,6 +67,17 @@ Op volgorde: eerst wat vóór de livegang moet, dan wat het meeste oplevert.
 9. **Vermeldingen en links van anderen**: scholen in de buurt (website of nieuwsbrief), de verenigingen op Sportpark Middenmeer, wijkwebsites en -kranten van de Watergraafsmeer en Amsterdam-Oost, en overzichtssites van kinderopvang. Overal dezelfde naam, hetzelfde adres en telefoonnummer.
 10. **Na de opening** (4 januari 2027): laat "Nieuw … open vanaf 4 januari 2027" op de homepage en in de description aanpassen (TODO in `index.html` en `en/index.html`), en zet de openingstijden in het Google Bedrijfsprofiel goed voor de periode tot en vanaf 12 juli 2027.
 
+## Google Tag Manager en cookies (27 november 2026)
+
+Sporty wil Google Tag Manager op de website (container **GTM-K9XSMB74**). Daarmee kan Sporty zelf in Tag Manager bijvoorbeeld Google Analytics 4 of het meten van Google Ads instellen, zonder de website aan te passen.
+
+- **Pas na toestemming.** Tag Manager kan cookies van Google plaatsen, en daarvoor is in Nederland eerst toestemming nodig. `js/cookies.js` laat daarom een melding zien ("Koekje erbij?", met "Akkoord" en "Liever niet", even groot) en laadt Tag Manager pas na "Akkoord". De keuze staat 12 maanden in de cookie `sporty_cookiekeuze`. "Cookie-instellingen" in de footer (en in de privacyverklaring) opent de melding weer; intrekken haalt de cookies van Google weg.
+- **Google Consent Mode:** standaard staat alles op `denied`; na akkoord `analytics_storage`, `ad_storage` en `ad_user_data` op `granted`. `ad_personalization` (advertenties tonen aan eerdere bezoekers, remarketing) blijft uit: zet die pas aan als de melding en de privacyverklaring dat ook zeggen (TODO in `js/cookies.js`).
+- **Alleen op bsosporty.nl**, niet op het testadres bij Vercel of lokaal. **Niet in Mijn BSO**: daar staan de gegevens van kinderen.
+- **Beveiligingsbeleid (CSP)** in `vercel.json` en `.htaccess`: Google Tag Manager, Google Analytics, Google Ads (meten) en de voorbeeldmodus van Tag Manager mogen laden. Een tag **"Aangepaste HTML"** of een **aangepaste JavaScript-variabele** in Tag Manager werkt niet: de CSP staat geen ingebouwde scripts of `eval` toe, en dat houden we zo. Gebruik de kant-en-klare tags van Google. Een tag van een andere partij (bijvoorbeeld Meta of TikTok) heeft een aanpassing van de CSP nodig, en een zin erover in de melding en de privacyverklaring.
+- **In Tag Manager:** zet bij elke tag de ingebouwde toestemmingscontrole aan (Beheerder → Containerinstellingen → Overzicht toestemming inschakelen). In Google Analytics: Beheer → Gegevensverzameling → Google-signalen uit laten (anders persoonlijke advertenties), en de bewaartermijn op 2 maanden. Accepteer de gegevensverwerkingsvoorwaarden van Google (Beheer → Accountinstellingen).
+- **Testen:** Tag Manager → Voorbeeld op `https://bsosporty.nl`, eerst "Akkoord" klikken in de melding.
+
 ## Extra pagina's voor zoektermen (advies)
 
 - **Eén pagina per school: alleen met echte, eigen inhoud.** Bijna dezelfde pagina's waarin alleen de schoolnaam verandert, ziet Google als "doorway pages" (spam). Begin daarom met één pagina **"Ophalen van school"**: per school een blok met hoe het ophalen werkt. Groeit dat per school uit tot een flinke eigen tekst, dan kan een school een eigen pagina krijgen.

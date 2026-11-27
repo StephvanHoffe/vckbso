@@ -3,7 +3,7 @@
  * Verschijnt één keer als iemand ongeveer 30 seconden op de site is (opgeteld over de pagina's van dit bezoek).
  * Eerst 10 seconden; op 25 november 2026 op verzoek van de klant 30 seconden ("hij komt wel erg snel").
  * - Weggeklikt? Dan pas na OPNIEUW_NA_DAGEN dagen weer. Aangemeld? Dan nooit meer.
- * - Niet tijdens de intro op de homepage, niet als het menu open is, niet terwijl iemand een veld invult en niet tijdens een filmpje met geluid.
+ * - Niet tijdens de intro op de homepage, niet als het menu of de cookiemelding open is, niet terwijl iemand een veld invult en niet tijdens een filmpje met geluid.
  * - Zonder opslag in de browser (bijvoorbeeld een privévenster dat dat blokkeert) verschijnt hij niet,
  *   anders zou hij op elke pagina opnieuw opduiken.
  * - Een <dialog> met showModal(): de focus blijft in de pop-up, Esc sluit hem, en daarna gaat de focus terug.
@@ -51,7 +51,9 @@
     var typt = actief && actief !== document.body && actief.matches("input, select, textarea, [contenteditable]");
     // Kijkt iemand een filmpje met geluid (zoals op de homepage)? Dan niet storen; de stille juichfilmpjes tellen niet mee.
     var kijkt = Array.prototype.some.call(document.querySelectorAll("video"), function (video) { return !video.paused && !video.muted; });
-    return root.classList.contains("intro-speelt") || Boolean(document.querySelector("dialog[open], .site-header.is-open")) || typt || kijkt;
+    // De cookiemelding (js/cookies.js) staat nog open: eerst die keuze
+    var cookies = Boolean(document.querySelector("[data-cookie-melding]:not([hidden])"));
+    return root.classList.contains("intro-speelt") || Boolean(document.querySelector("dialog[open], .site-header.is-open")) || typt || kijkt || cookies;
   };
 
   var toon = function () {

@@ -85,8 +85,10 @@ ErrorDocument 404 /404.html
   # Alleen scripts van de site zelf, plus de twee kleine scripts in de pagina's (via hun vingerafdruk).
   # Pas je zo'n script aan, zet dan de nieuwe sha256 hier: npm test meldt welke (tests/csp.test.mjs).
   # formspree.io is de formulierendienst van het contactformulier (nog in te stellen, zie contact.html).
+  # Google (googletagmanager.com, google-analytics.com, doubleclick.net, google.com) voor Google Tag Manager, Analytics en Ads.
+  # Die laden alleen na toestemming in de cookiemelding (js/cookies.js, 27 november 2026). Zelfde beleid als in vercel.json.
   <If "%{REQUEST_URI} !~ m#^/beheer/#">
-    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-KzGFexfVLN/ySbAPeJk3zsWkGLyjvn9+5XL739iDx6Q=' 'sha256-UDxZfYFDuMCHL0jf/obV6XX364umnZx7SE+es5Oq4TY='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; form-action 'self' https://formspree.io mailto:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-KzGFexfVLN/ySbAPeJk3zsWkGLyjvn9+5XL739iDx6Q=' 'sha256-UDxZfYFDuMCHL0jf/obV6XX364umnZx7SE+es5Oq4TY=' https://*.googletagmanager.com https://tagmanager.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://www.google.com; style-src 'self' 'unsafe-inline' https://tagmanager.google.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://googleads.g.doubleclick.net https://www.google.com https://www.google.nl https://ssl.gstatic.com https://www.gstatic.com; font-src 'self'; connect-src 'self' https://formspree.io https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.g.doubleclick.net https://www.google.com https://www.google.nl; form-action 'self' https://formspree.io mailto:; frame-src 'self' https://*.googletagmanager.com https://td.doubleclick.net; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; upgrade-insecure-requests"
   </If>
 </IfModule>
 

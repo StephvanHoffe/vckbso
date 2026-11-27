@@ -12,7 +12,7 @@ Statische website voor **Sporty**, buitenschoolse opvang in Amsterdam (statutair
 - Mobile-first en getest op 360, 768 en 1280 px breed, zonder horizontaal scrollen.
 - Lighthouse (mobiel, 22 oktober 2026, met stockfoto's): prestaties 92–93 op de homepage (met de intro), 94 op team en 96 op programma; toegankelijkheid, best practices en SEO 100.
 - Automatische toegankelijkheidstest (axe, WCAG 2.1 AA): geen overtredingen op alle pagina's.
-- Privacy: geen tracking, lettertypen lokaal, en de kaart is een eigen plaatje (OpenStreetMap, `npm run kaart`) dat naar Google Maps linkt: er laadt niets van Google.
+- Privacy: lettertypen lokaal, en de kaart is een eigen plaatje (OpenStreetMap, `npm run kaart`) dat naar Google Maps linkt. Google Tag Manager (GTM-K9XSMB74) laadt alleen na toestemming in de cookiemelding (`js/cookies.js`, 27 november 2026; zie `docs/seo.md`); zonder toestemming laadt er niets van Google.
 
 ## Bekijken
 
