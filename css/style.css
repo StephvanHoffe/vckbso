@@ -7569,3 +7569,30 @@ html:has(.pop-up[open]) {
     display: none !important;
   }
 }
+
+/* Een middag bij Sporty: handgeschreven krabbel onder een foto, met het lachje eronder (stap 4: "+ Fruitpauze", 27 november 2026) */
+.middag-stap__notitie {
+  margin: var(--space-l) 0 0;
+  color: var(--color-text);
+  font-family: var(--font-slogan);
+  font-size: clamp(1.75rem, 1.45rem + 1vw, 2.5rem);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  rotate: -3deg;
+}
+
+.middag-stap__notitie .hl {
+  color: var(--color-primary-deep); /* groot en handgeschreven: 3,6:1 op wit */
+}
+
+.middag-stap__notitie::after {
+  content: "";
+  display: block;
+  margin: 0.1em auto 0;
+  width: 2.4em;
+  height: 0.45em;
+  background: var(--color-primary);
+  -webkit-mask: var(--glimlach) center / contain no-repeat;
+  mask: var(--glimlach) center / contain no-repeat;
+}
